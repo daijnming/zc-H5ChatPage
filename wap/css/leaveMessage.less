@@ -1,0 +1,328 @@
+/* 弹窗 */
+.zcDialog {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: 1050;
+	text-align: center;
+}
+.zcDialog .zcDialog-header {
+	font-size: 20px;
+	padding: 10px 0;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
+.zcDialog .zcDialog-header .header-left {
+	float: left;
+	color: #FFFFFF;
+}
+.zcDialog .zcDialog-header .header-right {
+	float: right;
+}
+.zcDialog .zcDialog-body {
+	font-size: 16px;
+	padding: 20px 0;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	position: relative;
+	background-color: #FFFFFF;
+}
+.zcDialog .zcDialog-body .errorMsg {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	background-color: salmon;
+	color: #FFFFFF;
+	font-size: 14px;
+	line-height: 14px;
+	box-sizing: border-box;
+	padding: 10px 20px;
+	display: none;
+}
+.zcDialog .zcDialog-body .errorMsg .errorMsgText {
+	float: left;
+}
+.zcDialog .zcDialog-body .errorMsg .errorMsgBtn {
+	float: right;
+	line-height: 0;
+}
+
+.zcDialog .zcDialog-body .errorMsg .errorMsgBtn a{width: 11px;height: 11px;background-image: url('../images/bglist.png');display: inline-block;vertical-align: middle;background-repeat: no-repeat;margin-right: 5px;}
+.zcDialog .zcDialog-body .errorMsg .errorMsgBtn .zhichiClose {
+	background-position: -30px -29px;
+}
+.zcDialog .zcDialog-footer {
+	font-size: 18px;
+	border-top: 1px solid #d9d9d9;
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+}
+.zcDialog .zcDialog-footer:hover {
+	background-color: #f0f0f0;
+}
+.zcDialog .zcDialog-footer .zcDialog-btn {
+	width: 50%;
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 5px 0;
+	margin: 5px 0;
+}
+.zcDialog .zcDialog-footer .zcDialog-btn:link {
+	color: #FFFFFF;
+}
+.zcDialog .zcDialog-footer .zcDialog-btn:hover {
+	background-color: #f0f0f0;
+}
+.zcDialog .zcDialog-footer .zcDialog-btn:nth-child(2) {
+	border-left: 1px solid #d9d9d9;
+}
+/* 遮罩 */
+.zcBackdrop {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: 1040;
+	background-color: rgba(0, 0, 0, .6);
+}
+/* modal */
+.zcDialog .zcDialog-modal {
+	/*position: relative;
+	margin: 80px auto 0;*/
+	width: 90%;
+	background-color: #FFFFFF;
+	border-radius: 2px;
+	box-sizing: border-box;
+	display: inline-block;
+	vertical-align: middle;
+}
+.zcDialog .zcDialog-vertical {
+	height: 100%;
+	width: 1px;
+	background-color: transparent;
+	color: transparent;
+	border: none;
+	box-sizing: border-box;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* alert */
+.zcDialog .zcDialog-alert {
+	position: relative;
+	margin: 0 auto;
+}
+
+/* 全屏弹窗 */
+.zcDialog-full {
+
+}
+.zcDialog-full .zcDialog-modal {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	margin-left: -1px;
+	padding: 0;
+}
+.zcDialog-full .zcDialog-modal .zcDialog-header {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.zcDialog-full .zcDialog-modal .zcDialog-header .header-right a{
+	width: 20px;
+	height: 20px;
+	line-height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 5px;
+	box-sizing: border-box;
+}
+.zcDialog-full .zcDialog-modal .zcDialog-header .header-right a span {
+	width: 10px;
+	height: 10px;
+	display: inline-block;
+	background-image: url('../images/bglist.png');
+	background-repeat: no-repeat;
+}
+
+.zcDialog-full .zcDialog-modal .zcDialog-header .header-right .zhichiClose span{
+	background-position: -30px -29px;
+}
+.zcDialog-full .zcDialog-modal .zcDialog-header .header-right .zhichiMin span{
+	background-position: -70px -30px;
+}
+
+/* 留言弹窗 */
+.zcDialog-leaveMessage {
+	background-color: #F3F4F6;
+	overflow-y: scroll;
+}
+.zcDialog-leaveMessage .zcDialog-modal{
+	background-color: #F3F4F6;
+}
+.zcDialog-leaveMessage .zcDialog-body {
+	background-color: #F3F4F6;
+	padding: 20px 0 10px;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox {
+	width: 100%;
+	display: inline-block;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-icon {
+	width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	text-align: center;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-icon img {
+
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-title {
+	/*width: 100%;*/
+	/*display: inline-block;*/
+	/*-webkit-box-sizing: border-box;*/
+	/*box-sizing: border-box;*/
+	padding: 10px;
+	/*text-align: left;*/
+	width: 90%;
+	height: 100px;
+	overflow-y: auto;
+	border: 1px solid #e2e2e2;
+	display: inline-block;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	text-align: left;
+	margin-bottom: 20px;
+	color:#939799;
+
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-title > p {
+	font-size: 14px;
+	max-height: 80px;
+	overflow: hidden;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-form {
+	width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 0 20px;
+	text-align: left;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-form .linebox {
+	width: 100%;
+	/*height: 40px;
+	line-height: 40px;*/
+	display: inline-block;
+	box-sizing: border-box;
+	border: 1px solid #d9d9d9;
+	border-radius: 2px;
+	margin: 8px 0;
+	background-color: #FFFFFF;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-form input {
+	display: inline-block;
+	box-sizing: border-box;
+	border: none;
+	padding: 0 20px;
+	margin: 10px 0;
+	width: 100%;
+	height: 20px;
+	line-height: 20px;
+	outline: none;
+	font-size:14px;
+}
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .leaveMessage-form textarea {
+	display: inline-block;
+	box-sizing: border-box;
+	border: none;
+	padding: 10px 20px;
+	width: 100%;
+	height: 140px;
+	resize: none;
+	outline: none;
+	font-size:14px;
+}
+
+.zcDialog-leaveMessage .zcDialog-body .leaveMessageBox .errorMsg {
+	display: none;
+	color: #ff0000;
+	font-size: 16px;
+}
+.zcDialog-leaveMessage .zcDialog-footer {
+	border: none;
+}
+.zcDialog-leaveMessage .zcDialog-footer .zcDialog-btn {
+	width: 80%;
+}
+
+
+/* 留言成功 */
+.zcDialog-leaveMessageSuccess {
+
+}
+.zcDialog-leaveMessageSuccess .zcDialog-body .leaveMessageSuccessBox {
+	width: 100%;
+	display: inline-block;
+}
+.zcDialog-leaveMessageSuccess .zcDialog-body .leaveMessageSuccessBox .leaveMessageSuccessBox-title {
+	width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 5px;
+	text-align: center;
+	font-size: 24px;
+}
+.icon-img {
+	display: inline-block;
+	vertical-align: middle;
+	width: 30px;
+	height: 30px;
+	font-size: 0;
+	border-radius: 50%;
+	overflow: hidden;
+	margin-right: 10px;
+}
+.icon-img span {
+	display: inline-block;
+	vertical-align: middle;
+	width: 30px;
+	height: 30px;
+	font-size: 0;
+	background-image: url("../images/bglist.png");
+	background-position: -394px 0;
+}
+.icon-text {
+	display: inline-block;
+	vertical-align: middle;
+}
+.zcDialog-leaveMessageSuccess .zcDialog-body .leaveMessageSuccessBox .leaveMessageSuccessBox-info {
+	width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 5px;
+	text-align: center;
+	font-size: 14px;
+}
+.zcDialog-leaveMessageSuccess .zcDialog-body .leaveMessageSuccessBox .leaveMessageSuccessBox-btn {
+	width: 100%;
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 5px;
+	text-align: center;
+	font-size: 14px;
+}
+.zcDialog-leaveMessageSuccess .zcDialog-body .leaveMessageSuccessBox .leaveMessageSuccessBox-btn .recreateLeaveMessage{
+	display: inline-block;
+	box-sizing: border-box;
+	padding: 5px;
+	text-align: center;
+	cursor: pointer;
+}
