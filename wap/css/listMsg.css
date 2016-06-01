@@ -1,0 +1,109 @@
+
+.wrap{
+  width:100%;
+  height: 100%;
+  font-size: 14px;
+}
+.chatMsgList {
+  width:85%;
+  margin:  0 auto;
+
+}
+p{
+  padding: 0;
+  margin: 0;
+}
+.msgwrap{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.chatMsgList .leftMsg{
+  float: left;
+  width: 100%;
+  position: relative;
+}
+.chatMsgList .leftMsg p.r-name{
+  position: absolute;
+  top:0;
+  left:50px;
+}
+.chatMsgList .leftMsg .header {
+  float: left;
+  width:12%;
+  height: 40px;
+}
+.chatMsgList .leftMsg .msgOuter{
+  float: left;
+  max-width: 75%;
+}
+
+.header img{
+  width:40px;
+  height: 40px;
+  border-radius: 5px;
+  margin: 0 auto;
+  display: block;
+}
+
+.chatMsgList .leftMsg  .msg-name{
+  width:100%;
+  height: 30px;
+}
+.chatMsgList .leftMsg  .msgOuter{
+  background-color: #fff;
+  margin-left: 4%;
+  margin-top: 25px;
+}
+.msgOuter{
+  position: relative;
+  display: inline-block;
+  border-radius: 3px;
+}
+.chatMsgList .leftMsg  .msgOuter::before{
+  content: "";
+  position: absolute;
+  border-color: transparent #fff;
+  border-style: solid;
+  border-width: 10px 14px 10px 0;
+  top:9px;
+  left:-12px;
+}
+ .msgOuter{
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  display: inline-block;
+}
+.msgOuter p{
+  line-height: 20px;
+  word-wrap: break-word;
+}
+.rightMsg{
+  float: right;
+  color:#fff;
+  max-width: 100%;
+}
+.rightMsg .msgOuter{
+  float: right;
+  background-color:#09aeb0;
+  position: relative;
+  max-width: 75%;
+  margin-right: 4%;
+  /*margin-right: 3%;*/
+}
+.rightMsg .msgOuter::before{
+  content: "";
+  width:0;
+  position: absolute;
+  top:12px;
+  right:-12px;
+  border-style: solid;
+  border-color: transparent #09aeb0;
+  border-width: 8px 0 8px 12px;
+}
+.rightMsg .header{
+  float: right;
+  width:40px;
+  height: 40px;
+}
