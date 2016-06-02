@@ -76,5 +76,4 @@ var Comm = {
         //return link;
     }
 };
-
-module.exports = Comm;
+// module.exports = Comm;
