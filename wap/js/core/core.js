@@ -1,10 +1,8 @@
 
 var Core = function(){
     var that = {};
-    // var initConfig = require('../listMsg/initConfig.js');
-    // var comm = require('../util/comm.js');
-    // that.initConfig = initConfig;
-    // that.comm = comm;
+    var initConfig = require('../listMsg/initConfig.js')();
+    that.initConfig = initConfig;
     return that;
 };
 module.exports = Core;
