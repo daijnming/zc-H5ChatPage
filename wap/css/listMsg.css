@@ -29,7 +29,7 @@ p{
 }
 .chatMsgList .leftMsg .header {
   float: left;
-  width:12%;
+  width:40px;
   height: 40px;
 }
 .chatMsgList .leftMsg .msgOuter{
@@ -106,4 +106,30 @@ p{
   float: right;
   width:40px;
   height: 40px;
+}
+.sysMsg{
+  text-align: center;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+.sysMsg .sysMsgText{
+  color:#b1b5b5;
+  padding: 0 10px 0 10px;
+  background-color: #e3e5e5;
+  border-radius: 12px;
+  display: inline-block;
+  text-align: center;
+  font-size: 12px;
+}
+.sysMsg .sysMsgText .sysInfo{
+  color:red;
+}
+.sysData{
+  text-align: center;
+  color:#676e6f;
+  margin: 10px 0 10px 0;
+  font-size: 13px;
+  padding: 5px 0 5px 0;
+  width:100%;
+  display: inline-block;
 }
