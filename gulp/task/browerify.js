@@ -2,7 +2,7 @@ var gulp = require("gulp");
 var browserify = require('gulp-browserify');
 var notify = require('gulp-notify');
 gulp.task('browserify',function(){
-return	gulp.src('./**/entrance.js').
+return	gulp.src(['./wap/js.entrance.js','./pc/js/entrance.js']).
 	pipe(browserify({
 		'insertGlobals':false
 	})).
