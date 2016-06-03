@@ -36,7 +36,7 @@ var initConfig = function() {
         },
         //FIXME 初始化UA参数
         initUA : function() {
-            var that = That.cacheInfo.initUA = {};
+            var that = That.cacheInfo.UAInfo = {};
             // FIXME 是否添加魅族机器'mz'还需验证。
             uaList = ['mz','xiaomi','android','ipad','iphone'],
             pcUaList = ['windows','linux','mac'],
@@ -104,7 +104,7 @@ var initConfig = function() {
         },
         //FIXME 初始化浏览器信息
         initBrowser : function() {
-            var that = That.cacheInfo.initBrowser = {};
+            var that = That.cacheInfo.browser = {};
             var browserList = ['mqqbrowser',// QQ浏览器(注意mqqbrowser和qq的顺序)
             'qq',// 手机qq
             'micromessenger',// 微信浏览器
@@ -132,7 +132,7 @@ var initConfig = function() {
         },
         //FIXME 初始化语言设置
         initLanguage : function() {
-            var that = That.cacheInfo.initLanguage = {};
+            var that = That.cacheInfo.language = {};
             //如果打开就显示系统提示
             if(language.isOpen) {
                 that.open = true;
@@ -143,12 +143,12 @@ var initConfig = function() {
         },
         //FIXME 初始化Event类型
         initEventType : function() {
-            var that = That.cacheInfo.initEventType = {};
-            if(That.cacheInfo.initUA.UA == 'xiaomi') {
+            var that = That.cacheInfo.eventType = {};
+            if(That.cacheInfo.UAInfo.UA == 'xiaomi') {
                 //小米是mousedown事件
                 that.type = 'mousedown';
                 //  return 'mousedown';
-            } else if(That.cacheInfo.initUA.UA != 'pc') {
+            } else if(That.cacheInfo.UAInfo.UA != 'pc') {
                 var isTouchPad = (/hp-tablet/gi).test(navigator.appVersion),
                     hasTouch = 'ontouchstart' in window && !isTouchPad;
                 that.type = hasTouch ? 'touchstart' : 'mousedown';
@@ -169,7 +169,7 @@ var initConfig = function() {
             if(urlParams['back'] && urlParams['back'] == 1) {
                 $(headerBack).addClass('show');
             }
-            That.cacheInfo.initUserInfo = {
+            That.cacheInfo.userInfo = {
                 source : sourceData >= 0 ? sourceData : oSource,
                 tel : urlParams['tel'] ? urlParams['tel'] : '',
                 uname : urlParams['uname'] ? urlParams['uname'] : '',
@@ -182,7 +182,7 @@ var initConfig = function() {
         },
         //FIXME 初始化SysNum系统 id
         initSysNum : function() {
-            That.cacheInfo.initSysNum = Comm.getQueryParam()['sysNum'];
+            That.cacheInfo.sysNum = Comm.getQueryParam()['sysNum'];
         }
     };
     //初始化Dom元素
@@ -210,8 +210,8 @@ var initConfig = function() {
                 url : '/chat/user/config.action',
                 dataType : "json",
                 data : {
-                    sysNum : That.cacheInfo.initSysNum,
-                    source : That.cacheInfo.initUserInfo.source
+                    sysNum : That.cacheInfo.sysNum,
+                    source : That.cacheInfo.userInfo.source
                 },
                 success : (function(data) {
                     That.cacheInfo.apiConfig = data;
@@ -223,7 +223,7 @@ var initConfig = function() {
                         $(userChatBox).css('background-color',color);
                         $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '}');
                         //初始化企业名称
-                        titleName.text(data.companyName);
+                        titleName.text(data.companyName.length>15?data.companyName.substr(0,15)+'..':data.companyName);
                     })(data);
                     promise.resolve();
                 })
@@ -235,15 +235,15 @@ var initConfig = function() {
                 url : '/chat/user/init.action',
                 dataType : "json",
                 data : {
-                    sysNum : That.cacheInfo.initSysNum,
-                    source : That.cacheInfo.initUserInfo.source,
-                    partnerId : That.cacheInfo.initUserInfo.partnerId,
-                    tel : That.cacheInfo.initUserInfo.tel,
-                    email : That.cacheInfo.initUserInfo.email,
-                    uname : That.cacheInfo.initUserInfo.uname,
-                    visitTitle : That.cacheInfo.initUserInfo.visitTitle,
-                    visitUrl : That.cacheInfo.initUserInfo.visitUrl,
-                    face : That.cacheInfo.initUserInfo.face
+                    sysNum : That.cacheInfo.sysNum,
+                    source : That.cacheInfo.userInfo.source,
+                    partnerId : That.cacheInfo.userInfo.partnerId,
+                    tel : That.cacheInfo.userInfo.tel,
+                    email : That.cacheInfo.userInfo.email,
+                    uname : That.cacheInfo.userInfo.uname,
+                    visitTitle : That.cacheInfo.userInfo.visitTitle,
+                    visitUrl : That.cacheInfo.userInfo.visitUrl,
+                    face : That.cacheInfo.userInfo.face
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;

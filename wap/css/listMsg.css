@@ -7,7 +7,7 @@
 .chatMsgList {
   width:85%;
   margin:  0 auto;
-
+  margin-top: 50px;
 }
 p{
   padding: 0;
@@ -140,6 +140,10 @@ p{
   background-color: rgb(9, 174, 176);
   font-size: 16px;
   display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  z-index: 10000;
 }
 .wrap .header-back.show{
   display: block;

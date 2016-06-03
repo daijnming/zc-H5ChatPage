@@ -6,7 +6,8 @@
     };
 
     var initPlugins = function() {
-        listMsg($(".wrap"),core,window);
+        
+        listMsg($(".wrap"));
 
     };
     var bindListener = function() {
