@@ -1,7 +1,7 @@
 
 var Core = function(){
     var that = {};
-    var initConfig = require('../listMsg/initConfig.js')();
+    var initConfig = require('../../../common/initConfig.js')();
     that.initConfig = initConfig;
     return that;
 };
