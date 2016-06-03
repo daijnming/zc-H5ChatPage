@@ -1,17 +1,20 @@
 var initConfig = function() {
 
     //引用外部js
-    var Comm = require('../util/comm.js');
-    var Promise = require('../util/promise.js');
-    var api = require('../../../common/index.js');
+    var Comm = require('./comm.js');
+    var Promise = require('./util/promise.js');
 
+    var outerPromise = new Promise();
     //存储数据对象
     var That = {};
     That.cacheInfo = {};
     //Dom元素
     var headerBack,//返回条颜色
         userChatBox,//用户聊天内容背景色
-        chatMsgList;//聊天窗体
+        setStyle,//首页样式
+        chatMsgList,//聊天窗体
+        titleName;
+    //显示标题
 
     //暂时系统支持英语、中文系统提示
     var language = {
@@ -33,7 +36,7 @@ var initConfig = function() {
         },
         //FIXME 初始化UA参数
         initUA : function() {
-            var that = That.cacheInfo.initUA = {};
+            var that = That.cacheInfo.UAInfo = {};
             // FIXME 是否添加魅族机器'mz'还需验证。
             uaList = ['mz','xiaomi','android','ipad','iphone'],
             pcUaList = ['windows','linux','mac'],
@@ -101,7 +104,7 @@ var initConfig = function() {
         },
         //FIXME 初始化浏览器信息
         initBrowser : function() {
-            var that = That.cacheInfo.initBrowser = {};
+            var that = That.cacheInfo.browser = {};
             var browserList = ['mqqbrowser',// QQ浏览器(注意mqqbrowser和qq的顺序)
             'qq',// 手机qq
             'micromessenger',// 微信浏览器
@@ -129,7 +132,7 @@ var initConfig = function() {
         },
         //FIXME 初始化语言设置
         initLanguage : function() {
-            var that = That.cacheInfo.initLanguage = {};
+            var that = That.cacheInfo.language = {};
             //如果打开就显示系统提示
             if(language.isOpen) {
                 that.open = true;
@@ -140,12 +143,12 @@ var initConfig = function() {
         },
         //FIXME 初始化Event类型
         initEventType : function() {
-            var that = That.cacheInfo.initEventType = {};
-            if(That.cacheInfo.initUA.UA == 'xiaomi') {
+            var that = That.cacheInfo.eventType = {};
+            if(That.cacheInfo.UAInfo.UA == 'xiaomi') {
                 //小米是mousedown事件
                 that.type = 'mousedown';
                 //  return 'mousedown';
-            } else if(That.cacheInfo.initUA.UA != 'pc') {
+            } else if(That.cacheInfo.UAInfo.UA != 'pc') {
                 var isTouchPad = (/hp-tablet/gi).test(navigator.appVersion),
                     hasTouch = 'ontouchstart' in window && !isTouchPad;
                 that.type = hasTouch ? 'touchstart' : 'mousedown';
@@ -166,7 +169,7 @@ var initConfig = function() {
             if(urlParams['back'] && urlParams['back'] == 1) {
                 $(headerBack).addClass('show');
             }
-            That.cacheInfo.initUserInfo = {
+            That.cacheInfo.userInfo = {
                 source : sourceData >= 0 ? sourceData : oSource,
                 tel : urlParams['tel'] ? urlParams['tel'] : '',
                 uname : urlParams['uname'] ? urlParams['uname'] : '',
@@ -179,46 +182,95 @@ var initConfig = function() {
         },
         //FIXME 初始化SysNum系统 id
         initSysNum : function() {
-            That.cacheInfo.initSysNum = Comm.getQueryParam()['sysNum'];
+            That.cacheInfo.sysNum = Comm.getQueryParam()['sysNum'];
         }
     };
     //初始化Dom元素
     var paramsDom = function() {
         headerBack = $('.js-header-back');
         userChatBox = $('.js-userMsgOuter');
+        setStyle = $('.setStyle');
         chatMsgList = $('.js-chatMsgList');
+        titleName = $('.js-header-back .js-title');
+
     };
     //promise方法
-    var promiseHandler = function(){
-        Promise.when(function(){
-          var promise = new Promise();
-          config.initUA();
-          config.initParams();
-          config.initLanguage();
-          config.initSysNum();
-          config.initBrowser();
-          config.initUserInfo();
-          config.initEventType();
-          promise.resolve();
-          return promise;
-        }).then(function(){
-          var _api = api(That.cacheInfo.initSysNum,That.cacheInfo.initUserInfo);
-          _api.config(function(data){
-            console.log(data);
-          });
-          alert();
+    var promiseHandler = function() {
+        Promise.when(function() {
+            var promise = new Promise();
+            config.initUA();
+            config.initParams();
+            config.initLanguage();
+            config.initSysNum();
+            config.initBrowser();
+            config.initUserInfo();
+            config.initEventType();
+            $.ajax({
+                type : "get",
+                url : '/chat/user/config.action',
+                dataType : "json",
+                data : {
+                    sysNum : That.cacheInfo.sysNum,
+                    source : That.cacheInfo.userInfo.source
+                },
+                success : (function(data) {
+                    That.cacheInfo.apiConfig = data;
+                    //FIXME  页面配置设置
+                    (function(data) {
+                        //初始化主题色
+                        var color = data.color ? data.color : 'rgb(9, 174, 176)';
+                        $(headerBack).css('background-color',color);
+                        $(userChatBox).css('background-color',color);
+                        $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '}');
+                        //初始化企业名称
+                        titleName.text(data.companyName.length>15?data.companyName.substr(0,15)+'..':data.companyName);
+                    })(data);
+                    promise.resolve();
+                })
+            });
+            return promise;
+        }).then(function() {
+            $.ajax({
+                type : "get",
+                url : '/chat/user/init.action',
+                dataType : "json",
+                data : {
+                    sysNum : That.cacheInfo.sysNum,
+                    source : That.cacheInfo.userInfo.source,
+                    partnerId : That.cacheInfo.userInfo.partnerId,
+                    tel : That.cacheInfo.userInfo.tel,
+                    email : That.cacheInfo.userInfo.email,
+                    uname : That.cacheInfo.userInfo.uname,
+                    visitTitle : That.cacheInfo.userInfo.visitTitle,
+                    visitUrl : That.cacheInfo.userInfo.visitUrl,
+                    face : That.cacheInfo.userInfo.face
+                },
+                success : function(res) {
+                    var data = res.data ? res.data : res;
+                    That.cacheInfo.apiInit = data;
+                    (function(data) {
+                        //FIXME 初始化类型
+                        //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
+                        if(data.ustatus == 1 || data.ustatus == -2) {
+                            //更新会话保持标识
+                            That.cacheInfo.iskeepSessions = true;
+                        } else if(data.ustatus == -1) {
+                            //拉取会话记录
+                        } else {
+                            //处理客服类型 机器人、人工、邀请模式
+                        }
+                    })(data);
+                    outerPromise.resolve(That.cacheInfo);
+                }
+            });
         });
-    };
-    var initPlagsin = function() {
-        promiseHandler();
     };
     var init = function() {
         paramsDom();
-        initPlagsin();
+        promiseHandler();
     };
     init();
-
-    return That.cacheInfo;
+    return outerPromise;
 
 };
 module.exports = initConfig;

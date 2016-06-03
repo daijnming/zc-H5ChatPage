@@ -1,8 +1,9 @@
-
-var Core = function(){
+var Core = function() {
     var that = {};
-    var initConfig = require('../listMsg/initConfig.js')();
-    that.initConfig = initConfig;
+    var promise = require('../../../common/initConfig.js')();
+    promise.then(function(data) {
+        $(document.body).trigger("core.onload",[{data:data}]);
+    });
     return that;
 };
 module.exports = Core;
