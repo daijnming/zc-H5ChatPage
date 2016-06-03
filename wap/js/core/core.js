@@ -1,5 +1,4 @@
-
-var Core = function(){
+var Core = function() {
     var that = {};
     var initConfig = require('../../../common/initConfig.js')();
     that.initConfig = initConfig;
