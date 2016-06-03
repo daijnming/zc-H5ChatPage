@@ -1,29 +1,23 @@
 var initConfig = function() {
+
+    //引用外部js
+    var Comm = require('../util/comm.js');
+    var Promise = require('../util/promise.js');
+    var api = require('../../../common/index.js');
+
     //存储数据对象
     var That = {};
     That.cacheInfo = {};
     //Dom元素
     var headerBack,//返回条颜色
         userChatBox,//用户聊天内容背景色
-        chatMsgList,//聊天窗体
-        pullDown;
-    //下拉刷新
+        chatMsgList;//聊天窗体
 
-    //暂时系统支持英语中文，英文提示语
+    //暂时系统支持英语、中文系统提示
     var language = {
         'isOpen' : true,
         'lan' : 'zh'
     };
-
-    //api
-    var api = {
-        config_url : '/chat/user/config.action',
-        init_url : '/chat/user/init.action'
-    };
-
-    //引用外部js
-    var Comm = require('../util/comm.js');
-    var Promise = require('../util/promise.js');
 
     //初始化配置信息
     var config = {
@@ -188,79 +182,36 @@ var initConfig = function() {
             That.cacheInfo.initSysNum = Comm.getQueryParam()['sysNum'];
         }
     };
-    //FIXME 初始化接口参数
-    var initBasicInfo = function() {
-        Promise.when(function() {
-            var promise = new Promise();
-            $.ajax({
-                'url' : api.init_url,
-                'data' : {
-                },
-                'dataType' : 'json'
-            }).success(function(ret) {
-                promise.resolve({
-                    'token' : ret.token
-                });
-            }).fail(function(ret) {
-                promise.reject({
-                    'token' : null
-                });
-            });
-            return promise;
-        }).then(basicInfoHandler,basicInfoHandler).then(function(value,promise) {
-            $.ajax({
-                'url' : '/chat/admin/connect.action',
-                'dataType' : 'json',
-                'type' : 'get',
-                'data' : {
-                    'uid' : queryParam.id,
-                    'way' : 1,
-                    'st' : queryParam.st || 1,
-                    'lt' : queryParam.lt || new Date().getTime(),
-                    'token' : token
-                }
-            }).done(function(ret) {
-                if(ret.status == 1 || ret.status == 2) {
-                    for(var el in ret) {
-                        global[el] = ret[el];
-                    }
-                    global.baseUrl = location.protocol + "//" + location.host + "/chat/" + ((!value.success) ? 'admins/' : '');
-                    if(!value.success) {
-                        global.scriptPath = "//static.sobot.com/chat/admins/";
-                    } else {
-                        global.scriptPath = global.baseUrl;
-                    }
-                    $(".js-loading-layer").hide();
-                    promise.resolve(ret);
-                } else {
-                    $(window).unbind("beforeunload");
-                    window.close();
-                    window.location.href = "/console/login";
-                }
-            });
-        }).then(function(value,promise) {
-            new HearBeat(that).start();
-            $body.trigger("core.onload",[global]);
-            getMessage();
-        });
-    };
     //初始化Dom元素
     var paramsDom = function() {
         headerBack = $('.js-header-back');
         userChatBox = $('.js-userMsgOuter');
         chatMsgList = $('.js-chatMsgList');
-        pullDown = $('.js-pullDown');
+    };
+    //promise方法
+    var promiseHandler = function(){
+        Promise.when(function(){
+          var promise = new Promise();
+          config.initUA();
+          config.initParams();
+          config.initLanguage();
+          config.initSysNum();
+          config.initBrowser();
+          config.initUserInfo();
+          config.initEventType();
+          promise.resolve();
+          return promise;
+        }).then(function(){
+          var _api = api(That.cacheInfo.initSysNum,That.cacheInfo.initUserInfo);
+          _api.config(function(data){
+            console.log(data);
+          });
+          alert();
+        });
     };
     var initPlagsin = function() {
-        config.initUA();
-        config.initParams();
-        config.initLanguage();
-        config.initSysNum();
-        config.initBrowser();
-        config.initUserInfo();
-        config.initEventType();
+        promiseHandler();
     };
-
     var init = function() {
         paramsDom();
         initPlagsin();
