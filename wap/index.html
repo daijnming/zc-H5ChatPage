@@ -50,13 +50,22 @@
         <meta name="x5-page-mode" content="app">
         <!-- windows phone 点击无高光 -->
         <meta name="msapplication-tap-highlight" content="no">
+	<!-- build:css(wap) //static.sobot.com/wap/css/style.css -->
         <link rel="stylesheet" href="css/style.css" charset="utf-8">
         <link rel="stylesheet" href="css/listMsg.css" charset="utf-8">
         <link rel="stylesheet" href="css/textArea.css" charset="utf-8">
+	<!-- endbuild -->
     </head>
     <body>
         <div class="wrap">
-            <div class="chatMsgList">
+          <div class="js-header-back header-back">
+            <span class="back "><i></i>返回</span>
+            <span class="title ">小丁智能</span>
+          </div>
+            <div class="chatMsgList js-chatMsgList">
+              <div class="pullDown js-pullDown">
+                <span class="pullDownLabel js-pullDownLabel">下拉显示更多</span>
+              </div>
                 <p class="sysData">
                     2016-05-31 16:05
                 </p>
@@ -112,7 +121,7 @@
                     <div class="header">
                         <img src="http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG" alt="" />
                     </div>
-                    <div class="msgOuter">
+                    <div class="msgOuter js-userMsgOuter">
                         <p>
                             asdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdf
                         </p>
@@ -122,7 +131,7 @@
                     <div class="header">
                         <img src="http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG" alt="" />
                     </div>
-                    <div class="msgOuter">
+                    <div class="msgOuter js-userMsgOuter">
                         <p>
                             asdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdf
                         </p>
@@ -132,7 +141,7 @@
                     <div class="header">
                         <img src="http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG" alt="" />
                     </div>
-                    <div class="msgOuter">
+                    <div class="msgOuter js-userMsgOuter">
                         <p>
                             asdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdf
                         </p>
@@ -142,7 +151,7 @@
                     <div class="header">
                         <img src="http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG" alt="" />
                     </div>
-                    <div class="msgOuter">
+                    <div class="msgOuter js-userMsgOuter">
                         <p>
                             asdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdfasdfasdfadsfasdfasdfasdasdf
                         </p>
@@ -165,9 +174,15 @@
         <!--FIXME 测试使用 正式开发不用此 END-->
     </body>
    <!-- build:js(wap) //static.sobot.com/wap/js/lib.js  -->
-    <script src="js/jquery-1.10.2.min.js" charset="utf-8"></script>
+    <script src="js/lib/zepto.min.js" charset="utf-8"></script>
     <script src="js/lib/doT.min.js" charset="utf-8"></script>
-    <!-- endbuild -->
+    <script src="js/util/iscroll.js" charset="utf-8"></script>
 
-    <script src="dest/js/entrance.js" charset="utf-8"></script>
+    <!-- <script src="js/util/comm.js" charset="utf-8"></script>
+    <script src="js/util/browserDiff.js" charset="utf-8"></script>
+    <script src="js/listMsg/index.js" charset="utf-8"></script>
+    <script src="js/listMsg/initConfig.js" charset="utf-8"></script> -->
+
+    <!-- endbuild -->
+    <script src="/dest/wap/js/entrance.js" charset="utf-8"></script>
 </html>

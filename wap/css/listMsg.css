@@ -133,3 +133,52 @@ p{
   width:100%;
   display: inline-block;
 }
+/****返回菜单栏****/
+.wrap .header-back{
+  width:100%;
+  height: 50px;
+  background-color: rgb(9, 174, 176);
+  font-size: 16px;
+  display: none;
+}
+.wrap .header-back.show{
+  display: block;
+}
+.wrap .header-back .back{
+  color:#fff;
+  line-height: 50px;
+  text-align: center;
+  position: relative;
+  width:20%;
+  display: inline-block;
+  float: left;
+}
+.wrap .header-back .back i::before{
+  content: "";
+  position: absolute;
+  width:0;
+  border-width: 6px 12px 10px 0;
+  border-color: transparent #fff;
+  border-style: solid;
+  top:16px;
+  left:9px;
+}
+.wrap .header-back .title{
+  text-align: center;
+  vertical-align: middle;
+  width:50%;
+  color:#f0f0f0;
+  line-height: 50px;
+  width: 60%;
+  height: 50px;
+  display: inline-block;
+  float: left;
+}
+/******end*******/
+.wrap .pullDown{
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+  color:#676e6f;
+}
