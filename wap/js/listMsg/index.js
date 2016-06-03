@@ -12,7 +12,5 @@ console.log(core);
 
   //。。。
 
-
-
 };
 module.exports = ListMsg;

@@ -13,10 +13,9 @@ var initConfig = function(){
   var language ={'isOpen':true,'lan':'zh'};
 
   //api
-  var host = 'http://test.sobot.com/chat';
   var api={
-    config_url:host+'/user/config.action',
-    init_url:host+'/user/init.action'
+    config_url:'/chat/user/config.action',
+    init_url:'/chat/user/init.action'
   };
 
   //引用外部js
