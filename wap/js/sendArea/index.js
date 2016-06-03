@@ -105,14 +105,16 @@
     var showAddHandler=function(){
         if($(".js-chatAdd").hasClass("showChatAdd")){
             $(".js-chatAdd").removeClass("showChatAdd");
-            $(".js-chatAdd").animate({height:"1px"})
-            //$(".js-chatAdd").css({height:"1px"})
+            $(".js-chatAdd").animate({height:"1px"},200);
         }else{
             $(".js-chatAdd").addClass("showChatAdd");
-            $(".js-chatAdd").animate({height:"215px"})
-            // $(".js-chatAdd").css({height:"215px"})
+            $(".js-chatAdd").animate({height:"215px"},200)
         }
         
+    };
+    var hideChatAddHandler=function(){
+        $(".js-chatAdd").removeClass("showChatAdd");
+        $(".js-chatAdd").animate({height:"1px"},200);
     };
     var bindLitener = function() {
         //$(document.body).on("core.onload",onloadHandler);
@@ -124,8 +126,9 @@
          qq表情
          */
         //$node.find(".js-emotion").on("click",onEmotionClickHandler);
-        $(".js-textarea").on("keyup",showSendBtnHandler)
-        $(".js-add").on("click",showAddHandler)
+        $(".js-textarea").on("keyup",showSendBtnHandler);
+        $(".js-textarea").on("focus",hideChatAddHandler);
+        $(".js-add").on("click",showAddHandler);
     };
     var initFace = function() {
         /*
