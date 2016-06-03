@@ -6,13 +6,15 @@ var initConfig = function() {
 
     //存储数据对象
     var That = {};
+    var outerPromise = new Promise();
     That.cacheInfo = {};
     //Dom元素
     var headerBack,//返回条颜色
         userChatBox,//用户聊天内容背景色
         setStyle,//首页样式
         chatMsgList,//聊天窗体
-        titleName;//显示标题
+        titleName;
+    //显示标题
 
     //暂时系统支持英语、中文系统提示
     var language = {
@@ -193,73 +195,74 @@ var initConfig = function() {
 
     };
     //promise方法
-    var promiseHandler = function(){
-        Promise.when(function(){
-          var promise = new Promise();
-          config.initUA();
-          config.initParams();
-          config.initLanguage();
-          config.initSysNum();
-          config.initBrowser();
-          config.initUserInfo();
-          config.initEventType();
-          $.ajax({
-            type: "get",
-            url: '/chat/user/config.action',
-            dataType: "json",
-            data: {
-                sysNum: That.cacheInfo.initSysNum,
-                source: That.cacheInfo.initUserInfo.source
-            },
-            success:(function(data){
-              promise.resolve();
-              That.cacheInfo.apiConfig = data;
-              //FIXME  页面配置设置
-              (function(data){
-                //初始化主题色
-                  var color = data.color ?data.color:'rgb(9, 174, 176)';
-                  $(headerBack).css('background-color',color);
-                  $(userChatBox).css('background-color',color);
-                  $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent '+color+'}');
-                //初始化企业名称
-                  titleName.text( data.companyName);
-              })(data);
-            })
-          });
-          return promise;
-        }).then(function(){
-          $.ajax({
-            type: "get",
-            url: '/chat/user/init.action',
-            dataType: "json",
-            data: {
-        		    sysNum: That.cacheInfo.initSysNum,
-                source: That.cacheInfo.initUserInfo.source,
-                partnerId: That.cacheInfo.initUserInfo.partnerId,
-                tel: That.cacheInfo.initUserInfo.tel,
-                email: That.cacheInfo.initUserInfo.email,
-                uname: That.cacheInfo.initUserInfo.uname,
-                visitTitle:That.cacheInfo.initUserInfo.visitTitle,
-                visitUrl:That.cacheInfo.initUserInfo.visitUrl,
-                face:That.cacheInfo.initUserInfo.face
-            },
-            success:function(res){
-                var data = res.data?res.data:res;
-                That.cacheInfo.apiInit=data;
-                (function(data){
-                  //FIXME 初始化类型
-                  //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
-                  if(data.ustatus==1||data.ustatus==-2){
-                      //更新会话保持标识
-                      That.cacheInfo.iskeepSessions = true;
-                  }else if(data.ustatus == -1){
-                    //拉取会话记录
-                  }else{
-                    //处理客服类型 机器人、人工、邀请模式
-                  }
-                })(data);
-            }
-          });
+    var promiseHandler = function() {
+        Promise.when(function() {
+            var promise = new Promise();
+            config.initUA();
+            config.initParams();
+            config.initLanguage();
+            config.initSysNum();
+            config.initBrowser();
+            config.initUserInfo();
+            config.initEventType();
+            $.ajax({
+                type : "get",
+                url : '/chat/user/config.action',
+                dataType : "json",
+                data : {
+                    sysNum : That.cacheInfo.initSysNum,
+                    source : That.cacheInfo.initUserInfo.source
+                },
+                success : (function(data) {
+                    That.cacheInfo.apiConfig = data;
+                    //FIXME  页面配置设置
+                    (function(data) {
+                        //初始化主题色
+                        var color = data.color ? data.color : 'rgb(9, 174, 176)';
+                        $(headerBack).css('background-color',color);
+                        $(userChatBox).css('background-color',color);
+                        $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '}');
+                        //初始化企业名称
+                        titleName.text(data.companyName);
+                    })(data);
+                    promise.resolve();
+                })
+            });
+            return promise;
+        }).then(function() {
+            $.ajax({
+                type : "get",
+                url : '/chat/user/init.action',
+                dataType : "json",
+                data : {
+                    sysNum : That.cacheInfo.initSysNum,
+                    source : That.cacheInfo.initUserInfo.source,
+                    partnerId : That.cacheInfo.initUserInfo.partnerId,
+                    tel : That.cacheInfo.initUserInfo.tel,
+                    email : That.cacheInfo.initUserInfo.email,
+                    uname : That.cacheInfo.initUserInfo.uname,
+                    visitTitle : That.cacheInfo.initUserInfo.visitTitle,
+                    visitUrl : That.cacheInfo.initUserInfo.visitUrl,
+                    face : That.cacheInfo.initUserInfo.face
+                },
+                success : function(res) {
+                    var data = res.data ? res.data : res;
+                    That.cacheInfo.apiInit = data;
+                    (function(data) {
+                        //FIXME 初始化类型
+                        //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
+                        if(data.ustatus == 1 || data.ustatus == -2) {
+                            //更新会话保持标识
+                            That.cacheInfo.iskeepSessions = true;
+                        } else if(data.ustatus == -1) {
+                            //拉取会话记录
+                        } else {
+                            //处理客服类型 机器人、人工、邀请模式
+                        }
+                    })(data);
+                    outerPromise.resolve(That.cacheInfo);
+                }
+            });
         });
     };
     var initPlagsin = function() {
@@ -270,7 +273,7 @@ var initConfig = function() {
         initPlagsin();
     };
     init();
-    return That.cacheInfo;
+    return outerPromise;
 
 };
 module.exports = initConfig;
