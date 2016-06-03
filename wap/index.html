@@ -160,16 +160,26 @@
             </div>
         </div>
         <!--FIXME 测试使用 正式开发不用此 START-->
-        <div class="sendarea">
-            <div class="textarea" contenteditable="true">
+        <div class="chatArea">
+            <div class="sendarea">
+                <div class="textarea js-textarea" contenteditable="true">
+                    
+                </div>
+                <span class="add js-add">
+                    +
+                </span>
+                <span class="sendBtn js-sendBtn">
+                    发 送
+                </span>
                 
+                <!-- <textarea class="js-hideTextarea" style="display:none;"></textarea> -->
             </div>
-            <span class="add">
-                +
-            </span>
-            <span class="sendBtn">
-                发 送
-            </span>
+            <div class="chatAdd js-chatAdd">
+                <ul class="addList js-addList">
+                    <li style="width:60px;height:60px;background:#999;margin:10px;"></li>
+                    <li style="width:60px;height:60px;background:#999;margin:10px;"></li>
+                </ul>
+            </div>
         </div>
         <!--FIXME 测试使用 正式开发不用此 END-->
     </body>
@@ -185,4 +195,5 @@
 
     <!-- endbuild -->
     <script src="/dest/wap/js/entrance.js" charset="utf-8"></script>
+    <script src="js/sendArea/index.js" charset="utf-8"></script>
 </html>
