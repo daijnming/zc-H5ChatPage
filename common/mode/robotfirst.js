@@ -2,7 +2,7 @@
  * @author Treagzhao
  */
 var RobotFirst = function(global) {
-
+        
     var init = function() {
     };
 
