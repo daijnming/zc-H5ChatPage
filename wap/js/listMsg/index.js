@@ -8,9 +8,14 @@ var ListMsg = function(node){
       chatMsgList,//聊天窗体
       titleName; //显示标题
 
+  //api接口
+  var api = {
+    keepDetail_url:'/chat/user/getChatDetailByCid.action'
+  };
   var Chat={};//初始化数据
 
   var onCoreLoad = function(evn,data){
+    alert();
     Chat.data = data.data;
     initConfig();
     initHistoryMsg();
@@ -37,6 +42,7 @@ var ListMsg = function(node){
         $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '}');
         //初始化企业名称
         titleName.text(Chat.data.apiConfig.companyName.length>12?Chat.data.apiConfig.companyName.substr(0,12)+'..':Chat.data.apiConfig.companyName);
+
   };
   //初始化Dom元素
   var paramsDom = function() {

@@ -9,8 +9,7 @@ var initConfig = function() {
     //api接口
     var api={
       config_url:'/chat/user/config.action',
-      init_url:'/chat/user/init.action',
-      keepDetail_url:'/chat/user/getChatDetailByCid.action'
+      init_url:'/chat/user/init.action'
     };
     //存储数据对象
     var That = {};
@@ -282,28 +281,6 @@ var initConfig = function() {
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
-                        //FIXME 初始化类型
-                        //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
-                        if(data.ustatus == 1 || data.ustatus == -2) {
-                            //更新会话保持标识
-                            That.cacheInfo.flags.isKeepSessions = true;
-                        } else if(data.ustatus == -1) {
-                            //拉取会话记录
-                            $.ajax({
-                              type : "post",
-                              url : api.keepDetail_url,
-                              dataType : "json",
-                              data: {
-                                  cid: data.cid,
-                                  uid: data.uid
-                              },
-                              success:function(data){
-                                That.cacheInfo.historyMsg = 'historyMsg';
-                              }
-                            });
-                        } else {
-                            //处理客服类型 机器人、人工、邀请模式
-                        }
                     outerPromise.resolve(That.cacheInfo);
                 }
             });
