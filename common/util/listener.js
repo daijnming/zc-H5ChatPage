@@ -28,10 +28,12 @@ var off = function(channel,fn) {
                 i = len - 1;i >= 0;i--) {
                 var listener = list[i];
                 if(listener == fn) {
-                    
+
                 }
             }
         }
+    } else {
+        delete cache[channel];
     }
 };
 
