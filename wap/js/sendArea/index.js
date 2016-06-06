@@ -117,6 +117,10 @@
         $(".js-chatAdd").animate({height:"1px"},200);
     };
     var bindLitener = function() {
+
+        $(document.body).on('core.onload',function(data){
+            console.log(data);
+        })
         //$(document.body).on("core.onload",onloadHandler);
         //发送按钮
         //$node.find(".js-sendBtn").on("click",onbtnSendHandler);
