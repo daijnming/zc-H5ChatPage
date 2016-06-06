@@ -5,11 +5,15 @@ var Core = function() {
     var manager;
     var $evtDom;
     var global;
+    var listener = require('../../../common/util/listener.js');
 
     var parseDOM = function() {
     };
 
     var bindListener = function() {
+        listener.on("system.send", function(data) {
+            console.log(data);
+        });
     };
 
     var initPlugins = function() {
@@ -58,6 +62,7 @@ var Core = function() {
         }
     };
     promise.then(function(data) {
+        global = data;
         initConfig(data);
         $(document.body).trigger("core.onload",[{
             data : data
