@@ -6,9 +6,7 @@
     };
 
     var initPlugins = function() {
-        
         listMsg($(".wrap"));
-
     };
     var bindListener = function() {
         $(window).on("resize", function(e) {
