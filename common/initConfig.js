@@ -3,30 +3,86 @@ var initConfig = function() {
     //引用外部js
     var Comm = require('./comm.js');
     var Promise = require('./util/promise.js');
+    var historyForWap = require('./historyForWap.js');
 
     var outerPromise = new Promise();
+    //api接口
+    var api={
+      config_url:'/chat/user/config.action',
+      init_url:'/chat/user/init.action',
+      keepDetail_url:'/chat/user/getChatDetailByCid.action'
+    };
     //存储数据对象
     var That = {};
     That.cacheInfo = {};
-    //Dom元素
-    var headerBack,//返回条颜色
-        userChatBox,//用户聊天内容背景色
-        setStyle,//首页样式
-        chatMsgList,//聊天窗体
-        titleName;
-    //显示标题
 
-    //暂时系统支持英语、中文系统提示
-    var language = {
-        'isOpen' : true,
-        'lan' : 'zh'
+    That.cacheInfo.flags={
+      status : 'enabled',
+      isLoaded : false,
+      pageNow : 1,
+      pageSize : 15,
+      noMoreHistroy : false,
+      isConnected : false,// 是否已建立会话连接
+      isEnableManual : false,// 客服是否可用
+      isEnableOnInput : true,// 是否可以显示客服输入状态
+      isGetCustomConfig : false,// 设的一个标识用来判断是否是否已走getCustomConfig
+      isEnableBigImg : true,// 默认可以放大图片
+      isPeopleModel : false,// 人工模式是否可用
+      isWaitModel : false,// 是否处于等待模式
+      isTimeLine : false,// 是否显示时间线，默认不显示
+      isUserTalked : false,// 是否已聊过
+      isSurveyed : false,// 是否已评价
+      isKeepSessions : false,// 是否保持会话
+      isOutOneMinute : false // 是否已超时一分钟
     };
+    //是否开启系统提示语
+    var isLanOpen = true,
+        lanType='CN';// 语言设置 系统提示语言 'CN' 中文   ‘EN’ 英文  ‘JP’ 日文
 
+
+
+    var lanConfig = function (lanType){
+        switch (lanType) {
+          case 'ZC':
+            return{
+              'L10001' : '暂时无法转接人工客服',
+               'L10002' : '您好,{0}接受了您的请求',// 注意多个替换点从0开始
+               'L10003' : '您已经与服务器断开连接,{0}',
+               'L10004' : '排队中，您在队伍中的第{0}个',
+               'L10005' : '您在思考人生？有问题请随时提问哦',
+               'L10006': '<a href="javascript: window.location.reload();">重新接入</a>',
+               'L10007' : '{0}有事离开了{1}',
+               'L10008' : '您与{0}的会话已结束{1}',
+               'L10009' : '{0}结束了本次会话',
+               'L10010' : '您长时间没有说话，本次会话已结束。{0}',
+               'L10011' : '{0}您已打开新聊天窗口{1}',
+               'L10012' : '没有更多记录',
+               'L10013' : '抱歉，您无法接入在线客服',
+               'L10014' : '图片过大',
+               'L10015' : '格式不支持',
+               'L10016' : '正在加载...',
+               'L10017' : '正在加载...',
+               'L10018' : '下拉显示更多',
+               'L10019' : '客服{0}发起了会话',
+               'L10020' : '{0}正在输入',
+               'L10021' : '本次会话结束{0}',
+               'L10022' : '{0} 您可以<a href="javascript: void(0);" id="systemMsgLeaveMessage">留言</a>',
+               'L10023' : '{0} <span  id="systemMsgLeaveMsg">请等待</span>'
+            };
+          case 'EN':
+            return{'L10001' : 'Sorry!',
+             'L10002' : 'Hello,{0}Plase holdon'
+            };
+          case "JP":
+            break;
+
+        }
+    };
     //初始化配置信息
     var config = {
         //FIXME 初始化url参数
         initParams : function() {
-            var that = That.cacheInfo.initParams = {};
+            var that = That.cacheInfo.urlParams = {};
             var _urlParams = Comm.getQueryParam();
             if(_urlParams) {
                 for(var item in _urlParams) {
@@ -134,9 +190,9 @@ var initConfig = function() {
         initLanguage : function() {
             var that = That.cacheInfo.language = {};
             //如果打开就显示系统提示
-            if(language.isOpen) {
+            if(isLanOpen) {
                 that.open = true;
-                that.lan = language.lan;
+                that.lan = lanConfig(lanType);
             } else {
                 that.open = false;
             }
@@ -165,10 +221,6 @@ var initConfig = function() {
             var oSource = 1,// 用户来源 0：PC 1：微信 2：APP 3：微博 4：WAP FIXME 0：PC 1：移动端 2：APP
                 urlParams = Comm.getQueryParam(),
                 sourceData = urlParams['source'];
-            //若有back参数就显示返回状态栏
-            if(urlParams['back'] && urlParams['back'] == 1) {
-                $(headerBack).addClass('show');
-            }
             That.cacheInfo.userInfo = {
                 source : sourceData >= 0 ? sourceData : oSource,
                 tel : urlParams['tel'] ? urlParams['tel'] : '',
@@ -185,15 +237,7 @@ var initConfig = function() {
             That.cacheInfo.sysNum = Comm.getQueryParam()['sysNum'];
         }
     };
-    //初始化Dom元素
-    var paramsDom = function() {
-        headerBack = $('.js-header-back');
-        userChatBox = $('.js-userMsgOuter');
-        setStyle = $('.setStyle');
-        chatMsgList = $('.js-chatMsgList');
-        titleName = $('.js-header-back .js-title');
 
-    };
     //promise方法
     var promiseHandler = function() {
         Promise.when(function() {
@@ -206,8 +250,8 @@ var initConfig = function() {
             config.initUserInfo();
             config.initEventType();
             $.ajax({
-                type : "get",
-                url : '/chat/user/config.action',
+                type : "post",
+                url : api.config_url,
                 dataType : "json",
                 data : {
                     sysNum : That.cacheInfo.sysNum,
@@ -215,24 +259,14 @@ var initConfig = function() {
                 },
                 success : (function(data) {
                     That.cacheInfo.apiConfig = data;
-                    //FIXME  页面配置设置
-                    (function(data) {
-                        //初始化主题色
-                        var color = data.color ? data.color : 'rgb(9, 174, 176)';
-                        $(headerBack).css('background-color',color);
-                        $(userChatBox).css('background-color',color);
-                        $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '}');
-                        //初始化企业名称
-                        titleName.text(data.companyName.length>15?data.companyName.substr(0,15)+'..':data.companyName);
-                    })(data);
                     promise.resolve();
                 })
             });
             return promise;
         }).then(function() {
             $.ajax({
-                type : "get",
-                url : '/chat/user/init.action',
+                type : "post",
+                url : api.init_url,
                 dataType : "json",
                 data : {
                     sysNum : That.cacheInfo.sysNum,
@@ -248,25 +282,35 @@ var initConfig = function() {
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
-                    (function(data) {
                         //FIXME 初始化类型
                         //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
                         if(data.ustatus == 1 || data.ustatus == -2) {
                             //更新会话保持标识
-                            That.cacheInfo.iskeepSessions = true;
+                            That.cacheInfo.flags.isKeepSessions = true;
                         } else if(data.ustatus == -1) {
                             //拉取会话记录
+                            $.ajax({
+                              type : "post",
+                              url : api.keepDetail_url,
+                              dataType : "json",
+                              data: {
+                                  cid: data.cid,
+                                  uid: data.uid
+                              },
+                              success:function(data){
+                                That.cacheInfo.historyMsg = 'historyMsg';
+                              }
+                            });
                         } else {
                             //处理客服类型 机器人、人工、邀请模式
                         }
-                    })(data);
                     outerPromise.resolve(That.cacheInfo);
                 }
             });
         });
     };
+
     var init = function() {
-        paramsDom();
         promiseHandler();
     };
     init();
