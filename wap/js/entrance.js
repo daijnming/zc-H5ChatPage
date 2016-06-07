@@ -6,7 +6,7 @@
     };
 
     var initPlugins = function() {
-        listMsg($(".wrap"));
+        listMsg();//会话列表
     };
     var bindListener = function() {
         $(window).on("resize", function(e) {
