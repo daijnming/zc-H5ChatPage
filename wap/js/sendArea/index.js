@@ -5,15 +5,17 @@
 function TextArea(node,core,window) {
     //var global = core.getGlobal();
     //var that = {};
+    var global;
+    var listener = require("../../../common/util/listener.js");
     var loadFile = require('../../../common/util/load.js')();
     //表情
-    var ZC_Face = require('./qqFace.js');
+    // var ZC_Face = require('./qqFace.js');
     //上传附件
     /*var uploadImg = require('./uploadImg.js');
-    var inputCache = {};
-    //模板引擎
-    var template = require('./template.js');*/
-   
+     var inputCache = {};
+     //模板引擎
+     var template = require('./template.js');*/
+
     var global;
     var $node;
     var currentCid,
@@ -23,73 +25,79 @@ function TextArea(node,core,window) {
     var parseDOM = function() {
         //$node = $(node);
         $sendBtn = $(".js-sendBtn");
-        $textarea=$(".js-textarea");
-        $add=$(".js-add");
-        $chatAdd=$(".js-chatAdd");
-        $emotion=$(".js-emotion");
-       console.log($chatAdd);
+        $textarea = $(".js-textarea");
+        $add = $(".js-add");
+        $chatAdd = $(".js-chatAdd");
+        $emotion = $(".js-emotion");
+        console.log($chatAdd);
     };
     var onImageUpload = function(evt,data) {
         //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         /*$(document.body).trigger('textarea.send',[{
-            'answer' : answer,
-            'uid' : data.uid,
-            'cid' : data.cid,
-            //时间戳
-            'date' : +new Date()
-        }]);*/
+         'answer' : answer,
+         'uid' : data.uid,
+         'cid' : data.cid,
+         //时间戳
+         'date' : +new Date()
+         }]);*/
     };
-    var showSendBtnHandler=function(evt){
-        var _text=$textarea.html();
+    var showSendBtnHandler = function(evt) {
+        var _text = $textarea.html();
         //console.log(_text);
         //var reg=/^(\<div\>\<br\>\<\/div\>)$/g;
         /*if(reg.test(_text)){
-            $(".js-sendBtn").hide();
-            $(".js-add").show();
-            $(".js-textarea").css("width","80%")
-        }*/
+         $(".js-sendBtn").hide();
+         $(".js-add").show();
+         $(".js-textarea").css("width","80%")
+         }*/
         /*if(evt.keyCode == 13) {return false;
-                 
-        }*/
+
+         }*/
         /*$(".js-hideTextarea").val(_text);
          console.log(_text);
-        _text=$(".js-hideTextarea").val();*/
-        if(_text){
+         _text=$(".js-hideTextarea").val();*/
+        if(_text) {
             $sendBtn.show();
             $add.hide();
             $textarea.css("width","83%")
-        }else{
+        } else {
             $sendBtn.hide();
             $add.show();
             $textarea.css("width","85%")
         }
-        
+
         //var reg=/&nbsp;/g;
         //var _text=_text.replace(reg,"");
         //console.log(_text);
-        
+
     };
-    
-    var showAddHandler=function(){
-        if($chatAdd.hasClass("showChatAdd")){
+
+    var showAddHandler = function() {
+        if($chatAdd.hasClass("showChatAdd")) {
             $chatAdd.removeClass("showChatAdd");
-            $chatAdd.animate({height:"1px"},200);
-        }else{
+            $chatAdd.animate({
+                height : "1px"
+            },200);
+        } else {
             $chatAdd.addClass("showChatAdd");
-            $chatAdd.animate({height:"215px"},200)
+            $chatAdd.animate({
+                height : "215px"
+            },200)
         }
-        
+
     };
-    var hideChatAddHandler=function(){
+    var hideChatAddHandler = function() {
         $chatAdd.removeClass("showChatAdd");
-        $chatAdd.animate({height:"1px"},200);
+        $chatAdd.animate({
+            height : "1px"
+        },200);
     };
     var bindLitener = function() {
 
-        $(document.body).on('core.onload',function(data){
-            console.log(data);
-        })
+        listener.on("core.onload", function(data) {
+            global = data;
+        });
         //$(document.body).on("core.onload",onloadHandler);
         //发送按钮
         //$node.find(".js-sendBtn").on("click",onbtnSendHandler);
