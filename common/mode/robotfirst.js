@@ -32,6 +32,10 @@ var RobotFirst = function(global) {
         return promise;
     };
     var bindListener = function() {
+        $(".js-sendBtn").click(function(evt) {
+            console.log($(".js-textarea").text());
+            listener.trigger();
+        });
     };
 
     var initPlugins = function() {
