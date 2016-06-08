@@ -1,8 +1,8 @@
 (function(node) {
     var core = require('./core/core.js')(window);
-    var listMsg = require('./listMsg/index.js');
+    var listMsg = require('./listMsg/main.js');
     var sendArea = require('./sendArea/index.js');
-
+    alert();
     var parseDOM = function() {
 
     };
