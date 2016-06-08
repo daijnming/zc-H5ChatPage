@@ -17,8 +17,7 @@ var Core = function(window) {
 
     var initPlugins = function() {
         manager = ManagerFactory(global);
-        manager(global);
-        initWap = initWap(global);
+        //initWap = initWap(global);
 
     };
     var temp = function() {
@@ -34,9 +33,9 @@ var Core = function(window) {
         $(document.body).trigger("core.onload",[{
             data : data
         }]);
-      global = data;
-      init();
-      listener.trigger('core.onload',[global]);
+        global = data;
+        init();
+        listener.trigger('core.onload',[global]);
     });
 };
 module.exports = Core;
