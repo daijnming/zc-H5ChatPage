@@ -18,7 +18,7 @@ var Core = function(window) {
     var initPlugins = function() {
         manager = ManagerFactory(global);
         manager(global);
-        initWap = initWap(global);
+        // initWap = initWap(global);
 
     };
     var temp = function() {
