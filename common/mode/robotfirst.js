@@ -6,7 +6,9 @@ var RobotFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var _self = this;
+    var $transferBtn;
     var parseDOM = function() {
+        $transferBtn = $(".temp_test");
     };
 
     var getWelcome = function(value,promise) {
@@ -15,7 +17,6 @@ var RobotFirst = function(global) {
             value = [];
         }
         var now = new Date();
-        console.log(global);
         var obj = {
             "date" : DateUtil.formatDate(now),
             "content" : [{
@@ -25,7 +26,6 @@ var RobotFirst = function(global) {
                 'ts' : DateUtil.formatDate(now,true)
             }]
         };
-        console.log(obj);
         setTimeout(function() {
             promise.resolve(value);
         },0);
@@ -35,10 +35,9 @@ var RobotFirst = function(global) {
     };
 
     var initPlugins = function() {
+        $transferBtn.show();
         //首先发送机器人欢迎语
-        listener.trigger("welcomeword", {
-            'word' : ''
-        });
+
     };
 
     var init = function() {
