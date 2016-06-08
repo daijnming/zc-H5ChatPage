@@ -1,7 +1,7 @@
 (function(node) {
     var core = require('./core/core.js')(window);
     var listMsg = require('./listMsg/main.js');
-
+alert();
     var parseDOM = function() {
     };
 
