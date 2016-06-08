@@ -5,7 +5,6 @@
 var loadFile = require('./load.js')();
 var weixinJson = require('./face/weixin.json');
 var weixinSymbol = require('./face/weixinsymbol.json');
-var unicode = require('./unicode.js');
 function ZC_Face(node,core,window) {
    var initConfig = function() {//将表情集合预加载
         var reg = require('./face/Reg.js');
