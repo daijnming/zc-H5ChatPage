@@ -29,6 +29,9 @@ var Core = function() {
       initPlugins();
     };
     promise.then(function(data) {
+        $(document.body).trigger("core.onload",[{
+          data:data
+        }]);
       global = data;
       init();
       listener.trigger('core.onload',[global]);
