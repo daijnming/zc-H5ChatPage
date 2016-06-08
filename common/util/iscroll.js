@@ -102,8 +102,7 @@ var utils = (function () {
 	});
 
 	me.hasClass = function (e, c) {
-		var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
-		return re.test(e.className);
+		return ((" "+e.className+" ").indexOf(" "+c+" ") == -1)?false:true;
 	};
 
 	me.addClass = function (e, c) {
@@ -515,6 +514,7 @@ IScroll.prototype = {
 		this._translate(newX, newY);
 
 /* REPLACE START: _move */
+
 		if ( timestamp - this.startTime > 300 ) {
 			this.startTime = timestamp;
 			this.startX = this.x;
@@ -530,6 +530,16 @@ IScroll.prototype = {
 		}
 /* REPLACE END: _move */
 
+	},
+
+	silieUpDown:function(){
+		var y = this.y;
+
+		if ( !this.hasVerticalScroll || y > 0 ) {
+			this._execEvent('slideDown');
+		} else if ( y < this.maxScrollY ) {
+			this._execEvent('slideUp');
+		}
 	},
 
 	_end: function (e) {
@@ -558,6 +568,7 @@ IScroll.prototype = {
 
 		// reset if we are outside of the boundaries
 		if ( this.resetPosition(this.options.bounceTime) ) {
+			this.silieUpDown();
 			return;
 		}
 
@@ -1545,7 +1556,6 @@ IScroll.prototype = {
 		this.isAnimating = true;
 		step();
 	},
-
 	handleEvent: function (e) {
 		switch ( e.type ) {
 			case 'touchstart':

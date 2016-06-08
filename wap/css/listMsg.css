@@ -4,10 +4,39 @@
   height: 100%;
   font-size: 14px;
 }
+.wrap .chatPanel {
+  position: absolute;
+  top:0px;
+  left: 0px;
+  bottom: 0px;
+  width:100%;
+  overflow: hidden;
+}
+.chatPanelList{
+  padding: 0 20px 0 20px;
+  overflow-x: hidden;
+}
 .chatMsgList {
-  width:90%;
-  margin:  0 auto;
-  margin-top: 50px;
+  width:100%;
+  /*margin:  0 auto;*/
+  /*margin-top: 50px;*/
+  position: absolute;
+  z-index: 1;
+  -webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
 }
 p,ul,li{
   padding: 0;

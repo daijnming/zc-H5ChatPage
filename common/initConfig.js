@@ -3,7 +3,6 @@ var initConfig = function() {
     //引用外部js
     var Comm = require('./comm.js');
     var Promise = require('./util/promise.js');
-    var historyForWap = require('./historyForWap.js');
 
     var outerPromise = new Promise();
     //api接口
@@ -20,7 +19,7 @@ var initConfig = function() {
       isLoaded : false,
       pageNow : 1,
       pageSize : 15,
-      noMoreHistroy : false,
+      moreHistroy : false,
       isConnected : false,// 是否已建立会话连接
       isEnableManual : false,// 客服是否可用
       isEnableOnInput : true,// 是否可以显示客服输入状态
@@ -37,12 +36,9 @@ var initConfig = function() {
     //是否开启系统提示语
     var isLanOpen = true,
         lanType='CN';// 语言设置 系统提示语言 'CN' 中文   ‘EN’ 英文  ‘JP’ 日文
-
-
-
     var lanConfig = function (lanType){
         switch (lanType) {
-          case 'ZC':
+          case 'CN':
             return{
               'L10001' : '暂时无法转接人工客服',
                'L10002' : '您好,{0}接受了您的请求',// 注意多个替换点从0开始
