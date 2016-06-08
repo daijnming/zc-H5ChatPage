@@ -3,7 +3,6 @@
  * @author daijm
  */
 function TextArea(node,core,window) {
-    //var global = core.getGlobal();
     //var that = {};
     var global;
     var listener = require("../../../common/util/listener.js");
@@ -23,13 +22,11 @@ function TextArea(node,core,window) {
         answer;
     //传给聊天的url
     var parseDOM = function() {
-        //$node = $(node);
         $sendBtn = $(".js-sendBtn");
         $textarea = $(".js-textarea");
         $add = $(".js-add");
         $chatAdd = $(".js-chatAdd");
         $emotion = $(".js-emotion");
-        console.log($chatAdd);
     };
     var onImageUpload = function(evt,data) {
         //onFileTypeHandler(data);
@@ -73,15 +70,14 @@ function TextArea(node,core,window) {
 
     };
      var onbtnSendHandler = function(evt) {
-        var str = =$textarea.html();
-        //ZC_Face.convertToEmoji($sendMessage.val());
+        var str =$textarea.html();
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $sendMessage.val("")
             return false;
         } else {
             //通过textarea.send事件将用户的数据传到显示台
-            $(document.body).trigger('textarea.send',[{
+            $(document.body).trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
                 'cid' : currentCid,
@@ -112,12 +108,8 @@ function TextArea(node,core,window) {
         },200);
     };
     var bindLitener = function() {
-        listener.on("core.onload", function(data) {
-            global = data;
-        });
-        //$(document.body).on("core.onload",onloadHandler);
         //发送按钮
-        $node.find(".js-sendBtn").on("click",onbtnSendHandler);
+        $sendBtn.on("click",onbtnSendHandler);
         /*
          *
          qq表情
@@ -128,12 +120,12 @@ function TextArea(node,core,window) {
         $add.on("click",showAddHandler);
     };
     var initFace = function() {
-        ZC_Face();
+       // ZC_Face(); 
     };
     var onEmotionClickHandler = function() {
-        ZC_Face.show();
+      //  ZC_Face.show();
     };
-    var initPlugsin = function() {//插件
+    var initPlugsin = function() {//插件 
 
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
@@ -144,12 +136,17 @@ function TextArea(node,core,window) {
     };
     var init = function() {
         parseDOM();
-        bindLitener();
         initPlugsin();
-
+        bindLitener();
     };
+    listener.on("core.onload", function(data) {
+        global = data;
+        currentUid=global.uid;
+        currentCid=global.cid;
+        console.log(data);
+        init();
+    });
 
-    init();
 
 }
 
