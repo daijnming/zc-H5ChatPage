@@ -77,7 +77,7 @@ function TextArea(node,core,window) {
             return false;
         } else {
             //通过textarea.send事件将用户的数据传到显示台
-            $(document.body).trigger('sendArea.send',[{
+            listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
                 'cid' : currentCid,
