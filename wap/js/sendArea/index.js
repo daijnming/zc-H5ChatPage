@@ -7,7 +7,7 @@ function TextArea(node,core,window) {
     //var that = {};
     var loadFile = require('../../../common/util/load.js')();
     //表情
-    var ZC_Face = require('./qqFace.js');
+    //var ZC_Face = require('./qqFace.js');
     //上传附件
     /*var uploadImg = require('./uploadImg.js');
     var inputCache = {};
@@ -70,7 +70,25 @@ function TextArea(node,core,window) {
         //console.log(_text);
         
     };
-    
+     var onbtnSendHandler = function(evt) {
+        var str = =$textarea.html();
+        //ZC_Face.convertToEmoji($sendMessage.val());
+        //判断输入框是否为空
+        if(str.length == 0 || /^\s+$/g.test(str)) {
+            $sendMessage.val("")
+            return false;
+        } else {
+            //通过textarea.send事件将用户的数据传到显示台
+            $(document.body).trigger('textarea.send',[{
+                'answer' : str,
+                'uid' : currentUid,
+                'cid' : currentCid,
+                'date' : +new Date()
+            }]);
+        }
+        $sendMessage.val("");
+        //清空待发送框
+    };
     var showAddHandler=function(){
         if($chatAdd.hasClass("showChatAdd")){
             $chatAdd.removeClass("showChatAdd");
@@ -90,10 +108,9 @@ function TextArea(node,core,window) {
         $(document.body).on('core.onload',function(data){
             console.log(data);
         })
-        //$(document.body).on("core.onload",onloadHandler);
+         
         //发送按钮
-        //$node.find(".js-sendBtn").on("click",onbtnSendHandler);
-        //回车发送
+        $node.find(".js-sendBtn").on("click",onbtnSendHandler);
         /*
          *
          qq表情
