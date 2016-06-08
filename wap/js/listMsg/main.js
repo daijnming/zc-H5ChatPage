@@ -222,7 +222,7 @@ var ListMsgHandler = function() {
                     uid : global.apiInit.uid
                 },
                 success : function(data) {
-                    showHistoryMsg(data);
+
                     promise.resolve(data);
                 }
             });
@@ -240,8 +240,8 @@ var ListMsgHandler = function() {
         initScroll();
         initBrowserDiff();
         manager = ManagerFactory(global);
-        manager.getWelcome().then(function() {
-
+        manager.getWelcome().then(function(data,promise) {
+            showHistoryMsg(data);
         });
 
     };
