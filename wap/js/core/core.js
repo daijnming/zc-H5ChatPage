@@ -1,8 +1,6 @@
 var Core = function() {
     var promise = require('../../../common/initConfig.js')();
-    var initWap = require('../listMsg/initWap.js');
     var ManagerFactory = require('../../../common/mode/mode.js');
-    var fnEvent = require('../../../common/util/listener.js');
     var manager;
     var $evtDom;
     var global;
@@ -19,9 +17,6 @@ var Core = function() {
 
     var initPlugins = function() {
         manager = ManagerFactory(global);
-        initWap = initWap(global);
-        //
-        //
 
     };
     var temp = function() {
@@ -36,7 +31,7 @@ var Core = function() {
     promise.then(function(data) {
       global = data;
       init();
-      fnEvent.trigger('core.onload',[global]);
+      listener.trigger('core.onload',[global]);
     });
 };
 module.exports = Core;
