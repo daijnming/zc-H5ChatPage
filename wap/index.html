@@ -69,6 +69,7 @@
         <link rel="stylesheet" href="css/style.css" charset="utf-8">
         <link rel="stylesheet" href="css/listMsg.css" charset="utf-8">
         <link rel="stylesheet" href="css/textArea.css" charset="utf-8">
+        <link rel="stylesheet" href="css/qqFace.css" charset="utf-8">
         <!-- endbuild -->
         <style class="setStyle" >
         </style>
@@ -155,8 +156,20 @@
                         <input class="js-upload" type="file" style="position:absolute;left:0;top:0;width:70px;height:70px;opacity:0" value="">
                         上传附件
                     </li>
-                    <li style="width:70px;height:70px;background:#999;margin:10px;color:#fff;text-align:center;line-height:70px;font-size:13px;"></li>
+                    <li class="js-emotion" style="width:70px;height:70px;background:#999;margin:10px;color:#fff;text-align:center;line-height:70px;font-size:13px;"></li>
                 </ul>
+                <div id="faceGroupTarea" style="display:none;">
+                    <div id="faceGroup" class="groupChildren item"></div>
+                    <div id="emojiGroup" class="groupChildren item" style="display:none"></div>
+                    <ul class="GroupTab">
+                        <li class="firsticoLi icoLi active" data-tab="#faceGroup">
+                            默认表情
+                        </li>
+                        <li class="icoLi" data-tab="#emojiGroup">
+                            符号表情
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="temp_test">
@@ -175,6 +188,5 @@
 
     <!-- endbuild -->
     <script src="/dest/wap/js/entrance.js" charset="utf-8"></script>
-    <script src="js/sendArea/index.js" charset="utf-8"></script>
     <script src="js/sendArea/uploadFile.js" charset="utf-8"></script>
 </html>
