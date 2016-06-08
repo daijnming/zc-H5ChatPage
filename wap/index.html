@@ -203,19 +203,21 @@
             </div>
             <div class="chatAdd js-chatAdd">
                 <ul class="addList js-addList">
-                    <li style="width:60px;height:60px;background:#999;margin:10px;color:#fff;text-align:center;line-height:60px;font-size:13px;">上传附件</li>
-                    <li style="width:60px;height:60px;background:#999;margin:10px;color:#fff;text-align:center;line-height:60px;font-size:13px;"></li>
+                  <li style="position:relative;width:70px;height:70px;line-height:70px;background:#999;margin:10px;color:#fff;text-align:center;font-size:13px;">
+                    <input class="js-upload" type="file" style="position:absolute;left:0;top:0;width:70px;height:70px;opacity:0" value="">上传附件</li>
+                  <li style="width:70px;height:70px;background:#999;margin:10px;color:#fff;text-align:center;line-height:70px;font-size:13px;"></li>
                 </ul>
             </div>
         </div>
         <!--FIXME 测试使用 正式开发不用此 END-->
     </body>
    <!-- build:js(wap) //static.sobot.com/wap/js/lib.js  -->
-    <script src="./js/lib/zepto.min.js" charset="utf-8"></script>
-    <!-- <script src="../common/util/jquery.js" charset="utf-8"></script> -->
-    <script src="../common/util/doT.min.js" charset="utf-8"></script>
     <script src="../common/util/iscroll.js" charset="utf-8"></script>
-
+   <!-- <script src="./js/lib/jquery-1.8.3.min.js" charset="utf-8"></script> -->
+    <!-- <script src="../common/util/jquery.js" charset="utf-8"></script> -->
+    <script src="./js/lib/zepto.min.old.js" charset="utf-8"></script>
+    <script src="../common/util/iscroll.js" charset="utf-8"></script>
+    
     <!-- <script src="js/util/comm.js" charset="utf-8"></script>
     <script src="js/util/browserDiff.js" charset="utf-8"></script>
     <script src="js/listMsg/index.js" charset="utf-8"></script>
@@ -224,4 +226,5 @@
     <!-- endbuild -->
     <script src="/wap/js/entrance.js" charset="utf-8"></script>
     <script src="js/sendArea/index.js" charset="utf-8"></script>
+    <script src="js/sendArea/uploadFile.js" charset="utf-8"></script>
 </html>

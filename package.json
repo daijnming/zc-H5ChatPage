@@ -30,5 +30,8 @@
     "url": "ssh://git@101.200.200.21:31013/SobotFe/ChatClient.git"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^13.0.1"
+  }
 }

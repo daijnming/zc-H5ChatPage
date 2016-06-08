@@ -102,6 +102,7 @@
         //console.log(_text);
         
     };
+    
     var showAddHandler=function(){
         if($(".js-chatAdd").hasClass("showChatAdd")){
             $(".js-chatAdd").removeClass("showChatAdd");
