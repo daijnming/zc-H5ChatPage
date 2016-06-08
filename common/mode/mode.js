@@ -1,6 +1,7 @@
 /**
  * @author Treagzhao
  */
+var manager = null;
 function ModeEntranceFactroy(global) {
     var ROBOT_FIRST = 3,
         HUMAN_FIRST = 4,
@@ -8,12 +9,15 @@ function ModeEntranceFactroy(global) {
         HUMAN_ONLY = 2;
     var type;
     var robotFirst = require('./robotfirst.js');
-    var manager = null;
+    if(!!manager) {
+        return manager;
+    }
     switch(global.apiConfig.type) {
         case 3:
             manager = robotFirst;
             break;
     }
+
     return manager;
 };
 

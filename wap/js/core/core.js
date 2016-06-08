@@ -1,4 +1,4 @@
-var Core = function() {
+var Core = function(window) {
     var promise = require('../../../common/initConfig.js')();
     var ManagerFactory = require('../../../common/mode/mode.js');
     var manager;
@@ -17,20 +17,22 @@ var Core = function() {
 
     var initPlugins = function() {
         manager = ManagerFactory(global);
+        manager(global);
+        initWap = initWap(global);
 
     };
     var temp = function() {
     };
     //FIXME 通过initConfig初始化后再针对H5进行配置
-    var init = function(){
-      temp();
-      parseDOM();
-      bindListener();
-      initPlugins();
+    var init = function() {
+        temp();
+        parseDOM();
+        bindListener();
+        initPlugins();
     };
     promise.then(function(data) {
         $(document.body).trigger("core.onload",[{
-          data:data
+            data : data
         }]);
       global = data;
       init();
