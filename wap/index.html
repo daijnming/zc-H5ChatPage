@@ -140,36 +140,28 @@
           <!-- </div> -->
         </div>
         <!--FIXME 测试使用 正式开发不用此 START-->
-        <div class="chatArea">
+        <div class="chatArea js-chatArea">
             <div class="sendarea">
                 <div class="textarea js-textarea" contenteditable="true">
 
                 </div>
-                <span class="add js-add"> + </span>
+                <span class="qqFaceTip js-emotion js-tab" data-id="#chatEmotion"> /:) </span>
+                <span class="add js-add js-tab" data-id="#chatAdd"> + </span>
                 <span class="sendBtn js-sendBtn"> 发 送 </span>
 
                 <!-- <textarea class="js-hideTextarea" style="display:none;"></textarea> -->
             </div>
-            <div class="chatAdd js-chatAdd">
+            <div id="chatEmotion" class="chatEmotion tab-active">
+                <div id="faceGroup" class="faceGroup js-faceGroup"></div>
+            </div>
+            <div id="chatAdd" class="chatAdd js-chatAdd tab-active">
                 <ul class="addList js-addList">
                     <li style="position:relative;width:70px;height:70px;line-height:70px;background:#999;margin:10px;color:#fff;text-align:center;font-size:13px;">
                         <input class="js-upload" type="file" style="position:absolute;left:0;top:0;width:70px;height:70px;opacity:0" value="">
                         上传附件
                     </li>
-                    <li class="js-emotion" style="width:70px;height:70px;background:#999;margin:10px;color:#fff;text-align:center;line-height:70px;font-size:13px;"></li>
+                    <li style="width:70px;height:70px;background:#999;margin:10px;color:#fff;text-align:center;line-height:70px;font-size:13px;"></li>
                 </ul>
-                <div id="faceGroupTarea" style="display:none;">
-                    <div id="faceGroup" class="groupChildren item"></div>
-                    <div id="emojiGroup" class="groupChildren item" style="display:none"></div>
-                    <ul class="GroupTab">
-                        <li class="firsticoLi icoLi active" data-tab="#faceGroup">
-                            默认表情
-                        </li>
-                        <li class="icoLi" data-tab="#emojiGroup">
-                            符号表情
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
         <div class="temp_test">
