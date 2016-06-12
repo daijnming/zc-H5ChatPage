@@ -8,7 +8,7 @@
 
     var initPlugins = function() {
         listMsg();//会话列表
-        sendArea();
+        sendArea(window);
     };
     var bindListener = function() {
         $(window).on("resize", function(e) {

@@ -50,23 +50,23 @@ li {
     height: 35px;
     line-height: 32px;
     width: 35px;
-    border: 1px solid #cecece;
-    border-radius: 50%;
     text-align: center;
     margin-left: 2%;
     color: #878787;
     font-size: 24px;
+    background: url(../images/icoGroup.png) -74px -3px;
+    background-size: 274px 246px;
 }
 .qqFaceTip {
     height: 35px;
     line-height: 32px;
     width: 35px;
-    border: 1px solid #cecece;
-    border-radius: 50%;
     text-align: center;
     margin-left: 2%;
     color: #878787;
     font-size: 24px;
+    background: url(../images/icoGroup.png) -4px -3px;
+    background-size: 274px 246px;
 }
 .chatAdd {
     overflow: hidden;

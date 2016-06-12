@@ -2,7 +2,7 @@
  *
  * @author daijm
  */
-function TextArea(node,core,window) {
+function TextArea(window) {
     //var that = {};
     var global;
     var listener = require("../../../common/util/listener.js");
@@ -30,6 +30,7 @@ function TextArea(node,core,window) {
         $chatAdd = $(".js-chatAdd");
         $emotion = $(".js-emotion");
         $tab=$(".js-tab");
+        oTxt = document.getElementById("js-textarea");
     };
     var onImageUpload = function(evt,data) {
         //onFileTypeHandler(data);
@@ -117,60 +118,70 @@ function TextArea(node,core,window) {
         $(id).show();
     };
      //定位光标
-    var gotoxyHandler=function(evt,data){
-        console.log(data);
-        var src=data.answer;
+    var gotoxyHandler=function(data){
+        //表情img标签
+        var src=data[0].answer;
          //将新表情追加到待发送框里
-        var oTxt1 = document.getElementById("js-textarea");
-        var cursurPosition=-1;
-        if(oTxt1.selectionStart||oTxt1.selectionStart==0){//非IE浏览器
-            cursurPosition= oTxt1.selectionStart;
-        }else{//IE
-           var range = document.selection.createRange();
-            range.moveStart("character",-oTxt1.value.length);
-            cursurPosition=range.text.length;
+        oTxt.focus();
+        var selection= window.getSelection ? window.getSelection() : document.selection;
+        var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+        if (!window.getSelection){
+            oTxt.focus();
+            var selection= window.getSelection ? window.getSelection() : document.selection;
+
+            var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+            //range.pasteHTML(src);
+            range.collapse(false);
+            range.select();
+        }else{ 
+            oTxt.focus();
+            range.collapse(false);
+            var hasR = range.createContextualFragment(src);
+            var hasR_lastChild = hasR.lastChild;
+            while (hasR_lastChild && hasR_lastChild.nodeName.toLowerCase() == "br" && hasR_lastChild.previousSibling && hasR_lastChild.previousSibling.nodeName.toLowerCase() == "br") {
+            var e = hasR_lastChild;
+            hasR_lastChild = hasR_lastChild.previousSibling;
+            hasR.removeChild(e)
+            }                                
+            range.insertNode(hasR);
+            if (hasR_lastChild) {
+            range.setEndAfter(hasR_lastChild);
+            range.setStartAfter(hasR_lastChild)
+            }
+            //console.log(range)
+            //console.log(range.commonAncestorContainer.innerHTML.length);
+            selection.removeAllRanges();
+            selection.addRange(range)
         }
-        var currentSaytextBefore=$textarea.html().substring(0,cursurPosition);
-        var currentSaytextAfter=$textarea.html().substring(cursurPosition);
-        var currentSaytext=currentSaytextBefore+src+currentSaytextAfter;
-        $($sendMessage).val(currentSaytext);
-        //定位光标
-        var pos=(currentSaytextBefore+src).length;
-        if(oTxt1.setSelectionRange)
-            {
-                oTxt1.setSelectionRange(pos,pos);
-                oTxt1.focus();
-            }
-            else if (oTxt1.createTextRange) {
-                var range = oTxt1.createTextRange();
-                range.collapse(true);
-                range.moveEnd('character', pos);
-                range.moveStart('character', pos);
-                range.select();
-            }
     };
+    //模拟退格
+    var backDeleteHandler=function(){
+        var _text=$textarea.html();
+        _text=_text.substring(0,_text.length-1);
+        $textarea.focus();
+        $textarea.html("");
+        $textarea.html(_text)
+    }
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
         //qq表情
         $emotion.on("click",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
-        $textarea.on("focus",hideChatAreaHandler);
+        //$textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAreaHandler);
         $emotion.on("click",showChatAreaHandler);
         $tab.on("click",tabChatAreaHandler)
         //定位光标
-        listener.on("textarea.gotoxy",gotoxyHandler);
-    };
-    var initFace = function() {
-       //ZC_Face(); 
+        listener.on("sendArea.gotoxy",gotoxyHandler);
+        //模拟退格
+        listener.on("sendArea.backDelete",backDeleteHandler);
+        
     };
     var onEmotionClickHandler = function() {
-       //ZC_Face.show();
        listener.trigger('sendArea.faceShow');
     };
     var initPlugsin = function() {//插件 
-        initFace();
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
 

@@ -21,20 +21,24 @@ li, ul, div, p, h1 {
     height: 203px;
 }
 .faceGroup .face {/* height:178px;overflow-y: hidden; outline: none; */
+    width:100%;
+}
+.faceGroup .face ul{ 
+    width:100%;
 }
 .faceGroup li {
     float: left;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
     cursor: pointer;
 }
-.faceGroup li .faceIco {
+.faceGroup .faceIco {
+    float:left;
+    overflow:hidden;
     width: 24px;
     height: 24px;
+    padding:3% 4%;
 }
-.faceGroup li:hover {
+.faceGroup img:hover {
     background: #edeff0;
 }
+.faceimg{width:24px;height:24px;}
 .tab-active{display:none;}
