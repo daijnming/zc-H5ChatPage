@@ -48,7 +48,7 @@ var ListMsgHandler = function(){
       //记录页面高度
       $(wrapScroll).height($(window).height()-$('.back').height()-$('.chatArea').height());
     },200);
-    global.flags.scroll.refresh();
+    // global.flags.scroll.refresh();
   });
   //初始化滚动插件
   var initScroll = function(){
