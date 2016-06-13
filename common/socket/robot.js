@@ -35,6 +35,11 @@ function Robot(global) {
             }
         });
     };
+
+    var destroy = function() {
+        listener.off("sendArea.send",onsend);
+    };
+
     var bindListener = function() {
         listener.on("sendArea.send",onsend);
     };
@@ -42,6 +47,8 @@ function Robot(global) {
         parseDOM();
         bindListener();
     };
+
+    this.destroy = destroy;
 
     init();
 };
