@@ -64,22 +64,30 @@ function TextArea(window) {
             $emotion.show();
             $add.hide();
             hideChatAreaHandler();
-            $textarea.css("width","65%")
+            $textarea.css("width","65%");
+            listener.trigger('sendArea.autoSize',[{
+                'height' : "263px"
+            }]);
         } else {
             $sendBtn.hide();
             $emotion.hide();
             hideChatAreaHandler();
             $add.show();
-            $textarea.css("width","85%")
+            $textarea.css("width","85%");
+            listener.trigger('sendArea.autoSize',[{
+                'height' : "48px"
+            }]);
         }
 
+        
         //var reg=/&nbsp;/g;
         //var _text=_text.replace(reg,"");
         //console.log(_text);
 
     };
     var onbtnSendHandler = function(evt) {
-        var str = $textarea.html();
+        var str = $textarea.text();
+        console.log(str);
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
