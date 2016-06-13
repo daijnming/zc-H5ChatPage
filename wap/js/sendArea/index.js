@@ -139,7 +139,7 @@ function TextArea(window) {
             range.collapse(false);
             range.select();
         }else{ 
-            //oTxt.focus();
+            oTxt.focus();
             range.collapse(false);
             var hasR = range.createContextualFragment(src);
             var hasR_lastChild = hasR.lastChild;
@@ -202,8 +202,8 @@ function TextArea(window) {
     };
     listener.on("core.onload", function(data) {
         global = data;
-        currentUid=global.uid;
-        currentCid=global.cid;
+        currentUid=global[0].apiInit.uid;
+        currentCid=global[0].apiInit.cid;
         init();
     });
 
