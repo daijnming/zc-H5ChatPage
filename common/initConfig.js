@@ -224,7 +224,7 @@ var initConfig = function() {
                 email : urlParams['email'] ? urlParams['email'] : '',
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
-                face : urlParams['face'] ? urlParams['face'] : '',
+                face : urlParams['face'] ? urlParams['face'] : 'http://img.sobot.com/console/common/face/user.png',//默认用户头像
                 back:urlParams['back']?urlParams['back']:''
             };
         },

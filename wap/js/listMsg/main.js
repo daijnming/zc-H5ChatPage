@@ -17,6 +17,13 @@ var ListMsgHandler = function() {
         chatPanelList,//滚动列表
         wrapBox;//页面
 
+    //消息状态
+    var MSGSTATUS={
+      MSG_LOADING:'发送中',
+      MSG_LSSUED:'已发送',
+      MSG_SERVED:'已送达',
+      MSG_FAIL:'发送失败'
+    };
 
     //api接口
     var api = {
@@ -213,21 +220,80 @@ var ListMsgHandler = function() {
     };
     //core加载完成
     var onCoreOnload = function(data) {
-
         global = data[0];
+        console.log(global);
         initConfig();//配置参数
         initScroll();//初始化scroll
         manager = ManagerFactory(global);
         manager.getWelcome().then(function(data,promise) {
             showHistoryMsg(data);
         });
-        fnEvent.on('sendArea.autoSize',onAutoSize);
-        fnEvent.on('core.onreceive',onReceive);
+        fnEvent.on('sendArea.autoSize',onAutoSize);//窗体聊天内容可视范围
+        fnEvent.on('sendArea.send',onSend);//发送内容
+        fnEvent.on('core.onreceive',onReceive);//接收回复
 
     };
+    //发送消息绑定到页面
+    /*
+    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息
+    */
+    var bindMsg = function(msgType,data){
+      var msgHtml,
+          comf;
+      if(data){
+        switch (msgType) {
+          case 0:
+              comf = $.extend({
+                  userLogo : global.userInfo.face,
+                  userMsg : data[0]['answer'].trim()
+              });
+              msgHtml = doT.template(msgTemplate.rightMsg)(comf);
+            break;
+          case 1:
+              //FIXME 类型判断  answerType=4 相关搜索 另形判断
+              var _data = JSON.parse(data);
+              if(_data.answerType=='4'){
+                //相关搜索
+                msgHtml = sugguestionsSearch(_data);
+              }else{
+                comf = $.extend({
+                  customLogo : global.apiConfig.robotLogo,
+                  customName : global.apiConfig.robotName,
+                  customMsg : JSON.parse(data).answer
+                });
+                msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+              }
+            break;
+          case 2:
+            break;
+        }
+        chatPanelList.children().last().after(msgHtml);
+        scroll.refresh();//刷新
+      }
+    };
+    //相关搜索方法
+    var sugguestionsSearch = function(data){
+      if(data){
+        var list = data.sugguestions;
+        var comf = $.extend({
+          list:list,
+          stripe:data.stripe
+        });
+        return doT.template(msgTemplate.listSugguestionsMsg)(comf);
+      }
+      return '非常对不起哦，不知道怎么回答这个问题呢，我会努力学习的。';
+    };
+    //发送消息
+    var onSend = function(data){
+      console.log(data);
+      bindMsg(0,data);
+    };
+    //接收回复
     var onReceive = function(data){
       console.log(data);
+      bindMsg(1,data);
     };
+
     ///处理移动端浏览器差异性
     var initBrowserDiff = function() {
 
