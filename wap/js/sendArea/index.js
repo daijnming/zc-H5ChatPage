@@ -106,11 +106,13 @@ function TextArea(window) {
             $chatArea.animate({
                 bottom : "-215px"
             },200);
+            listener.trigger('sendArea.autoSize',48);
         } else {
             $chatArea.addClass("showChatArea");
             $chatArea.animate({
                 bottom : "0px"
             },200)
+            listener.trigger('sendArea.autoSize',263);
         }
     };
     var hideChatAreaHandler = function() {
@@ -118,6 +120,7 @@ function TextArea(window) {
         $chatArea.animate({
             bottom : "-215px"
         },200);
+        listener.trigger('sendArea.autoSize',48);
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -132,36 +135,7 @@ function TextArea(window) {
         //表情img标签
         var src=data[0].answer;
          //将新表情追加到待发送框里
-        oTxt.focus();
-        var selection= window.getSelection ? window.getSelection() : document.selection;
-        var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-        if (!window.getSelection){//兼容处理
-            oTxt.focus();
-            var selection= window.getSelection ? window.getSelection() : document.selection;
-            var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-            //range.pasteHTML(src);
-            range.collapse(false);
-            range.select();
-        }else{ 
-            oTxt.focus();
-            range.collapse(false);
-            var hasR = range.createContextualFragment(src);
-            var hasR_lastChild = hasR.lastChild;
-            while (hasR_lastChild && hasR_lastChild.nodeName.toLowerCase() == "br" && hasR_lastChild.previousSibling && hasR_lastChild.previousSibling.nodeName.toLowerCase() == "br") {
-            var e = hasR_lastChild;
-            hasR_lastChild = hasR_lastChild.previousSibling;
-            hasR.removeChild(e)
-            }                                
-            range.insertNode(hasR);
-            if (hasR_lastChild) {
-            range.setEndAfter(hasR_lastChild);
-            range.setStartAfter(hasR_lastChild)
-            }
-            //console.log(range)
-            //console.log(range.commonAncestorContainer.innerHTML.length);
-            selection.removeAllRanges();
-            selection.addRange(range)
-        }
+        //$textarea.text()
     };
     //模拟退格
     var backDeleteHandler=function(){
