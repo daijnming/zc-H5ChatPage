@@ -213,7 +213,7 @@ var initConfig = function() {
         initUserInfo : function() {
             //工单来源，0客服提交，1 PC普通用户留言提交，2 H5普通用户留言提交，3普通用户微信提交，4普通用户APP提交
             // 用户来源，PC 0,微信 1 ,APP 2,WAP 4
-            var oSource = 1,// 用户来源 0：PC 1：微信 2：APP 3：微博 4：WAP FIXME 0：PC 1：移动端 2：APP
+            var oSource = 4,// 用户来源 0：PC 1：微信 2：APP 3：微博 4：WAP FIXME 0：PC 1：移动端 2：APP
                 urlParams = Comm.getQueryParam(),
                 sourceData = urlParams['source'];
             That.cacheInfo.userInfo = {
@@ -224,7 +224,8 @@ var initConfig = function() {
                 email : urlParams['email'] ? urlParams['email'] : '',
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
-                face : urlParams['face'] ? urlParams['face'] : ''
+                face : urlParams['face'] ? urlParams['face'] : '',
+                back:urlParams['back']?urlParams['back']:''
             };
         },
         //FIXME 初始化SysNum系统 id
