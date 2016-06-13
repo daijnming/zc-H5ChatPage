@@ -42,7 +42,7 @@ function ZC_Face() {
             for(var a in tip) {  
                 flag+=1;
                 if(flag==28){
-                    str+='<img class="backDelete" src="'+path+'backDelete.jpg" />'
+                    str+='<span class="backDelete"></span>'
                 }else{
                     str+='<img class="faceIco" src="'+path+tip[a]+'.gif" data-src="'+a+'" />';
                 }

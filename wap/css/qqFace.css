@@ -30,15 +30,24 @@ li, ul, div, p, h1 {
     float: left;
     cursor: pointer;
 }
-.faceGroup .faceIco {
+.faceGroup .faceIco{
     float:left;
     overflow:hidden;
     width: 24px;
     height: 24px;
     padding:3% 4%;
 }
+.faceGroup .backDelete{
+    float:left;
+    overflow:hidden;
+    width: 24px;
+    height: 20px;
+    margin:4% 3%;
+    background: url(../images/icoGroup.png) -178px -1px;
+    background-size: 229px 168px;
+}
 .faceGroup img:hover {
     background: #edeff0;
 }
-.faceimg{width:24px;height:24px;}
+.faceimg{width:24px;height:24px;margin:0 2px;}
 .tab-active{display:none;}

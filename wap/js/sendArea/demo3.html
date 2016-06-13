@@ -36,14 +36,7 @@ function _insertimg(str){
 	console.log(window.getSelection());
 var selection= window.getSelection ? window.getSelection() : document.selection;
 var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-if (!window.getSelection){
-document.getElementById('o').focus();
-var selection= window.getSelection ? window.getSelection() : document.selection;
-var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-range.pasteHTML(str);
-range.collapse(false);
-range.select();
-}else{
+
 document.getElementById('o').focus();
 range.collapse(false);
 var hasR = range.createContextualFragment(str);
@@ -60,7 +53,7 @@ range.setStartAfter(hasR_lastChild)
 }
 selection.removeAllRanges();
 selection.addRange(range)
-}
+
 }
 
 </script>

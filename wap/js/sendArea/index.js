@@ -60,10 +60,15 @@ function TextArea(window) {
          _text=$(".js-hideTextarea").val();*/
         if(_text) {
             $sendBtn.show();
+            //表情按钮
+            $emotion.show();
             $add.hide();
-            $textarea.css("width","83%")
+            hideChatAreaHandler();
+            $textarea.css("width","65%")
         } else {
             $sendBtn.hide();
+            $emotion.hide();
+            hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%")
         }
@@ -103,7 +108,6 @@ function TextArea(window) {
                 bottom : "0px"
             },200)
         }
-
     };
     var hideChatAreaHandler = function() {
         $chatArea.removeClass("showChatArea");
@@ -113,6 +117,8 @@ function TextArea(window) {
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
+        //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
+        $chatAdd.addClass("tab-active")
         var id=$(this).attr("data-id");
         $(".tab-active").hide();
         $(id).show();
@@ -125,16 +131,15 @@ function TextArea(window) {
         oTxt.focus();
         var selection= window.getSelection ? window.getSelection() : document.selection;
         var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-        if (!window.getSelection){
+        if (!window.getSelection){//兼容处理
             oTxt.focus();
             var selection= window.getSelection ? window.getSelection() : document.selection;
-
             var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
             //range.pasteHTML(src);
             range.collapse(false);
             range.select();
         }else{ 
-            oTxt.focus();
+            //oTxt.focus();
             range.collapse(false);
             var hasR = range.createContextualFragment(src);
             var hasR_lastChild = hasR.lastChild;
@@ -171,6 +176,7 @@ function TextArea(window) {
         //$textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAreaHandler);
         $emotion.on("click",showChatAreaHandler);
+        //表情、加号切换
         $tab.on("click",tabChatAreaHandler)
         //定位光标
         listener.on("sendArea.gotoxy",gotoxyHandler);
