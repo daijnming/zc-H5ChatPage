@@ -4,7 +4,6 @@
 
 var Theme = function(global,node){
 
-  var Comm = require('../../../common/comm.js');
   var topTitleBar,//顶部返回栏
       userMsgBg,//用户聊天背景
       chatWrap,//聊天窗体
@@ -13,8 +12,7 @@ var Theme = function(global,node){
 
   //是否显示顶部状态栏
   var isShowTopTitleBar = function(){
-    var urlParams = Comm.getQueryParam();
-    if(urlParams['back'] && urlParams['back'] === 1) {
+    if(global.userInfo.back && global.userInfo.back === 1) {
         $(topTitleBar).addClass('show');
         $(chatWrap).addClass('addTop');
     } else {

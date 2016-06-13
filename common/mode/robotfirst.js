@@ -5,8 +5,10 @@ var RobotFirst = function(global) {
     var listener = require("../util/listener.js");
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
+    var Robot = require('../socket/robot.js');
     var _self = this;
     var $transferBtn;
+    var manager;
     var parseDOM = function() {
         $transferBtn = $(".temp_test");
     };
@@ -38,6 +40,7 @@ var RobotFirst = function(global) {
     var initPlugins = function() {
         $transferBtn.show();
         //首先发送机器人欢迎语
+        manager = new Robot(global);
 
     };
 
