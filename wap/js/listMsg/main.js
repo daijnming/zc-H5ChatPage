@@ -5,6 +5,7 @@ var ListMsgHandler = function() {
     var msgTemplate = require('./template.js');
     var ManagerFactory = require('../../../common/mode/mode.js');
     var Promise = require('../../../common/util/promise.js');
+    var theme = require('./theme.js');
     //Dom元素
     var headerBack,//返回条颜色
         userChatBox,//用户聊天内容背景色
@@ -24,55 +25,40 @@ var ListMsgHandler = function() {
 
     //初始化h5页面配置信息
     var initConfig = function() {
-        //若有back参数就显示返回状态栏
-        var urlParams = Comm.getQueryParam();
-        if(urlParams['back'] && urlParams['back'] === 1) {
-            $(headerBack).addClass('show');
-            $('.js-wrapper').css('top','50px');
-        } else {
-            $('.js-wrapper').css('top','0px');
-        }
-        //FIXME  页面配置设置 初始化主题色
-        var color = global.apiConfig.color ? global.apiConfig.color : 'rgb(9, 174, 176)';
-        $(headerBack).css('background-color',color);
-        // $(userChatBox).css('background-color',color);
-        $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + '} .rightMsg .msgOuter{background-color:' + color + '}');
-        //初始化企业名称
-        titleName.text(global.apiConfig.companyName.length > 12 ? global.apiConfig.companyName.substr(0,12) + '..' : global.apiConfig.companyName);
+        theme(global,$('.wrap'));//主题设置
         $(wrapScroll).height($(window).height() - $('.back').height() - $('.chatArea').height());
     };
-
-    $(window).on('resize', function() {
-        setTimeout(function() {
-            //记录页面高度
-            $(wrapScroll).height($(window).height() - $('.back').height() - $('.chatArea').height());
-        },200);
-        global.flags.scroll.refresh();
-    });
-    //初始化滚动插件
-    var initScroll = function() {
-        if(global.flags.scroll) {
-            return;
-        } else {
-            global.flags.scroll = new IScroll(wrapScroll[0], {
-                // probeType：1对性能没有影响。在滚动事件被触发时，滚动轴是不是忙着做它的东西。
-                // probeType：2总执行滚动，除了势头，反弹过程中的事件。这类似于原生的onscroll事件。
-                // probeType：3发出的滚动事件与到的像素精度。注意，滚动被迫requestAnimationFrame（即：useTransition：假）。
-                probeType : 3,
-                tap : true,
-                click : true,// 是否支持点击事件 FIXME 需要设置为TRUE 否则重新接入无法点击
-                mouseWheel : true,// 是否支持鼠标滚轮
-                useTransition : true,
-                useTransform : true,
-                snap : false,
-                scrollbars : false,// 是否显示滚动条
-                bounce : true,// 边界反弹
-                momentum : true// 是否惯性滑动
-                // startY : -($(pullDown).height())
-            });
-        }
-        //下拉刷新
-        pullDownRefresh();
+  $(window).on('resize',function(){
+    setTimeout(function(){
+      //记录页面高度
+      $(wrapScroll).height($(window).height()-$('.back').height()-$('.chatArea').height());
+    },200);
+    // global.flags.scroll.refresh();
+  });
+  //初始化滚动插件
+  var initScroll = function(){
+    if(global.flags.scroll){
+      return;
+    }else{
+      global.flags.scroll = new IScroll(wrapScroll[0], {
+          // probeType：1对性能没有影响。在滚动事件被触发时，滚动轴是不是忙着做它的东西。
+          // probeType：2总执行滚动，除了势头，反弹过程中的事件。这类似于原生的onscroll事件。
+          // probeType：3发出的滚动事件与到的像素精度。注意，滚动被迫requestAnimationFrame（即：useTransition：假）。
+          probeType : 3,
+          tap : true,
+          click : true,// 是否支持点击事件 FIXME 需要设置为TRUE 否则重新接入无法点击
+          mouseWheel : true,// 是否支持鼠标滚轮
+          useTransition : true,
+          useTransform : true,
+          snap : false,
+          scrollbars : false,// 是否显示滚动条
+          bounce : true,// 边界反弹
+          momentum : true// 是否惯性滑动
+          // startY : -($(pullDown).height())
+      });
+    }
+    //下拉刷新
+    pullDownRefresh();
     };
     //下拉刷新
     var pullDownRefresh = function() {

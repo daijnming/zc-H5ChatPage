@@ -214,3 +214,13 @@ p,ul,li{
   font-size: 12px;
   color:#676e6f;
 }
+
+/******theme start ******/
+.themeStyle{
+  background-color: rgb(9, 174, 176);
+}
+.wrap .chatPanel.addTop{
+  top:50px;
+}
+
+/******theme end ******/
