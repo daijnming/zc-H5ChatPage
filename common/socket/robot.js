@@ -14,8 +14,6 @@ function Robot(global) {
     var onsend = function(args) {
         var data = args[0];
         var token = createToken(data);
-        console.log(data);
-        console.log(global);
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
