@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<script type="text/javascript" src="http://www.w3school.com.cn/jquery/jquery.js
+"></script>
+<style>
+p{ margin:0; padding:0;}
+img{ outline:none;}
+#o{ width:300px!important; height:auto!important; border:1px solid #333; 
+overflow-x: hidden;word-wrap: break-word;outline:0px; min-height:220px;}
+</style>
+<script>
+$(function(){
+$('#btn').click(function(){
+$('#o').focus();
+var str="<img src='img1/1.png' width='191' height='259' />";
+//$(str).appendTo($('#o'));
+_insertimg(str);
+});
+$('#t').click(function(){
+
+$('#div1').html($('#o').html());
+});	
+
+$('#ttbtn').click(function(){
+alert($('#tt').val());	
+});
+$("#img").click(function(){
+
+});
+});
+//锁定编辑器中鼠标光标位置。。
+function _insertimg(str){
+	console.log(window.getSelection());
+var selection= window.getSelection ? window.getSelection() : document.selection;
+var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+if (!window.getSelection){
+document.getElementById('o').focus();
+var selection= window.getSelection ? window.getSelection() : document.selection;
+var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
+range.pasteHTML(str);
+range.collapse(false);
+range.select();
+}else{
+document.getElementById('o').focus();
+range.collapse(false);
+var hasR = range.createContextualFragment(str);
+var hasR_lastChild = hasR.lastChild;
+while (hasR_lastChild && hasR_lastChild.nodeName.toLowerCase() == "br" && hasR_lastChild.previousSibling && hasR_lastChild.previousSibling.nodeName.toLowerCase() == "br") {
+var e = hasR_lastChild;
+hasR_lastChild = hasR_lastChild.previousSibling;
+hasR.removeChild(e)
+}                                
+range.insertNode(hasR);
+if (hasR_lastChild) {
+range.setEndAfter(hasR_lastChild);
+range.setStartAfter(hasR_lastChild)
+}
+selection.removeAllRanges();
+selection.addRange(range)
+}
+}
+
+</script>
+</head>
+
+<body>
+<div id="o" contenteditable="true"></div>
+    <input type="button" value="查看" id="btn"/>
+    <div id="div1"></div>
+    <textarea id="tt" style="width:200px; height:200px;"></textarea>
+    <input type="button" id="ttbtn" / value="测试"></body>
+    
+</body>
+
+
+
+
+</html>

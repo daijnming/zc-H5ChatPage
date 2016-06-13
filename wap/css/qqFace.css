@@ -3,63 +3,42 @@ li, ul, div, p, h1 {
     padding: 0;
     margin: 0;
 }
-#faceGroupTarea {
-    position: absolute;
+/* #faceGroupTarea {
+   
+    border: 1px solid #e7e7e7;
+   box-shadow: 1px 1px 0.5px #999
+} */
+.faceGroup {
+    /* position: absolute;
     top: -207px;
     left: 10px;
-    z-index: 1000;
-    width: 390px;
+    z-index: 1000; */
+    overflow:hidden;
+    width: 100%;
     height: 217px;
-    border: 1px solid #e7e7e7;
-    box-shadow: 1px 1px 0.5px #999
-}
-.GroupTab {
-    width: 390px;
-    height: 28px;
-    background: #f2f4f5;
-    border: 1px solid #e7e7e7;
-    margin-left: -1px;
-}
-.GroupTab li {
-    float: left;
-    padding: 4px 15px;
-    background: #fff;
-    color: #929292;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid #e7e7e7;
-    border-right: none;
-    border-top: 1px solid #fff;
-    font-size: 12px;
-}
-.GroupTab li.active {
-    background: #fff;
-    color: #383a3b;
-    border-top: #fff 2px solid;
-    margin-top: -1px;
-}
-.GroupTab li:first-child {
-    border-left: none;
-}
-#faceGroupTarea .groupChildren {
     padding: 6px;
     background: #fff;
-    height: 190px;
+    height: 203px;
 }
-#faceGroupTarea .groupChildren .face {/* height:178px;overflow-y: hidden; outline: none; */
+.faceGroup .face {/* height:178px;overflow-y: hidden; outline: none; */
+    width:100%;
 }
-#faceGroupTarea .groupChildren li {
+.faceGroup .face ul{ 
+    width:100%;
+}
+.faceGroup li {
     float: left;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
     cursor: pointer;
 }
-#faceGroupTarea .groupChildren li .faceIco {
+.faceGroup .faceIco {
+    float:left;
+    overflow:hidden;
     width: 24px;
     height: 24px;
+    padding:3% 4%;
 }
-#faceGroupTarea .groupChildren li:hover {
+.faceGroup img:hover {
     background: #edeff0;
 }
+.faceimg{width:24px;height:24px;}
+.tab-active{display:none;}

@@ -8,7 +8,7 @@ var load = function(url,promise) {
     var promise = promise || new Promise();
     if(!cache[url]) {
         var promise = Promise.when(function() {
-            $.ajax({
+            /*$.ajax({
                 'url' : url,
                 'dataType' : 'text',
                 'type' : 'get'
@@ -17,7 +17,7 @@ var load = function(url,promise) {
                 cache[url] = ret;
             }).fail(function(ret) {
                 promise.reject(ret);
-            });
+            });*/
             return promise;
         });
         return promise;

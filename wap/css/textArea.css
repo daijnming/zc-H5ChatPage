@@ -4,7 +4,7 @@ li {
 .chatArea {
     width: 100%;
     position: fixed;
-    bottom: 0;
+    bottom:0px;
     left: 0;
     background: #fff;
     z-index: 10;
@@ -19,7 +19,7 @@ li {
     display: flex;
     border-top: 1px solid #cacaca;
     border-bottom: 1px solid #cacaca;
-    margin-bottom: -1px;
+    
 }
 .textarea {
     background-color: #ddd;
@@ -30,7 +30,7 @@ li {
     font-size: 14px;
     word-wrap: break-word;
     word-break: break-all;
-    max-height: 100px;
+    max-height: 120px;
     min-height: 25px;
     overflow: auto;
 }
@@ -50,17 +50,28 @@ li {
     height: 35px;
     line-height: 32px;
     width: 35px;
-    border: 1px solid #cecece;
-    border-radius: 50%;
     text-align: center;
     margin-left: 2%;
     color: #878787;
     font-size: 24px;
+    background: url(../images/icoGroup.png) -74px -3px;
+    background-size: 274px 246px;
+}
+.qqFaceTip {
+    height: 35px;
+    line-height: 32px;
+    width: 35px;
+    text-align: center;
+    margin-left: 2%;
+    color: #878787;
+    font-size: 24px;
+    background: url(../images/icoGroup.png) -4px -3px;
+    background-size: 274px 246px;
 }
 .chatAdd {
     overflow: hidden;
     width: 100%;
-    height: 1px;
+    height: 215px;
 }
 .addList li {
     float: left;
