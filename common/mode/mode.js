@@ -14,10 +14,9 @@ function ModeEntranceFactroy(global) {
     }
     switch(global.apiConfig.type) {
         case 3:
-            manager = robotFirst;
+            manager = new robotFirst(global);
             break;
     }
-
     return manager;
 };
 

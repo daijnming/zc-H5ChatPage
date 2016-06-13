@@ -1,0 +1,44 @@
+li, ul, div, p, h1 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+/* #faceGroupTarea {
+   
+    border: 1px solid #e7e7e7;
+   box-shadow: 1px 1px 0.5px #999
+} */
+.faceGroup {
+    /* position: absolute;
+    top: -207px;
+    left: 10px;
+    z-index: 1000; */
+    overflow:hidden;
+    width: 100%;
+    height: 217px;
+    padding: 6px;
+    background: #fff;
+    height: 203px;
+}
+.faceGroup .face {/* height:178px;overflow-y: hidden; outline: none; */
+    width:100%;
+}
+.faceGroup .face ul{ 
+    width:100%;
+}
+.faceGroup li {
+    float: left;
+    cursor: pointer;
+}
+.faceGroup .faceIco {
+    float:left;
+    overflow:hidden;
+    width: 24px;
+    height: 24px;
+    padding:3% 4%;
+}
+.faceGroup img:hover {
+    background: #edeff0;
+}
+.faceimg{width:24px;height:24px;}
+.tab-active{display:none;}

@@ -1,9 +1,80 @@
-li{list-style: none;}
-.chatArea{width:100%;position:fixed;bottom:0;left:0;background: #fff;}
-.sendarea{padding:4px 10px;min-height: 35px;padding-top:5px;-webkit-box-align: center;-webkit-align-items: center;align-items: center;    display: flex; border-top: 1px solid #cacaca;border-bottom: 1px solid #cacaca;margin-bottom: -1px;}
-.textarea{background-color:#ddd; line-height:25px;padding:5px;width:85%;border-radius:4px;font-size:14px;word-wrap: break-word;word-break: break-all;max-height:100px;min-height:25px;overflow:auto;}
-.sendBtn{display:none;background-color:#09aeb0;width:18%;height:37px; line-height:37px;margin-left:1%; border-radius:4px;color:#fff;font-size:14px;text-align:center;}
-.add{height: 35px;line-height: 32px; width: 35px; border: 1px solid #cecece;border-radius: 50%;text-align: center;margin-left: 2%; color: #878787;font-size: 24px;}
-.chatAdd{overflow:hidden;width:100%;height:1px;}
-.addList li{float:left;}
-.showChatAdd{/* display:block; */}
+li {
+    list-style: none;
+}
+.chatArea {
+    width: 100%;
+    position: fixed;
+    bottom:0px;
+    left: 0;
+    background: #fff;
+    z-index: 10;
+}
+.sendarea {
+    padding: 4px 10px;
+    min-height: 35px;
+    padding-top: 5px;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    display: flex;
+    border-top: 1px solid #cacaca;
+    border-bottom: 1px solid #cacaca;
+    
+}
+.textarea {
+    background-color: #ddd;
+    line-height: 25px;
+    padding: 5px;
+    width: 85%;
+    border-radius: 4px;
+    font-size: 14px;
+    word-wrap: break-word;
+    word-break: break-all;
+    max-height: 120px;
+    min-height: 25px;
+    overflow: auto;
+}
+.sendBtn {
+    display: none;
+    background-color: #09aeb0;
+    width: 18%;
+    height: 37px;
+    line-height: 37px;
+    margin-left: 1%;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+.add {
+    height: 35px;
+    line-height: 32px;
+    width: 35px;
+    text-align: center;
+    margin-left: 2%;
+    color: #878787;
+    font-size: 24px;
+    background: url(../images/icoGroup.png) -74px -3px;
+    background-size: 274px 246px;
+}
+.qqFaceTip {
+    height: 35px;
+    line-height: 32px;
+    width: 35px;
+    text-align: center;
+    margin-left: 2%;
+    color: #878787;
+    font-size: 24px;
+    background: url(../images/icoGroup.png) -4px -3px;
+    background-size: 274px 246px;
+}
+.chatAdd {
+    overflow: hidden;
+    width: 100%;
+    height: 215px;
+}
+.addList li {
+    float: left;
+}
+.showChatAdd {/* display:block; */
+}
