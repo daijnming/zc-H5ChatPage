@@ -12,7 +12,7 @@ var Theme = function(global,node){
 
   //是否显示顶部状态栏
   var isShowTopTitleBar = function(){
-    if(global.userInfo.back && global.userInfo.back === 1) {
+    if(global.userInfo.back && global.userInfo.back == 1) {
         $(topTitleBar).addClass('show');
         $(chatWrap).addClass('addTop');
     } else {
@@ -34,11 +34,11 @@ var Theme = function(global,node){
     companyTitle.text(title);
   };
   var parseDom = function(){
-    topTitleBar = $(node).find('.js-header-back');
-    userMsgBg = $(node).find('.js-userMsgOuter');
-    chatWrap = $(node).find('.js-wrapper');
+    topTitleBar = node.find('.js-header-back');
+    userMsgBg = node.find('.js-userMsgOuter');
+    chatWrap = node.find('.js-wrapper');
     setStyle = $('.js-setStyle');
-    companyTitle = $(node).find('.js-title');
+    companyTitle = node.find('.js-title');
   };
   var initPlugins = function(){
     isShowTopTitleBar();
