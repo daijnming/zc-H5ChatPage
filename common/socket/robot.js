@@ -30,7 +30,7 @@ function Robot(global) {
             },
             'type' : 'post',
             'success' : function(ret) {
-                console.log(ret);
+                listener.trigger("core.onreceive",ret);
             },
             'fail' : function(ret) {
                 console.log(ret);
