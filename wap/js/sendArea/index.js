@@ -75,7 +75,7 @@ function TextArea(window) {
             listener.trigger('sendArea.autoSize',48);
         }
 
-        
+
         //var reg=/&nbsp;/g;
         //var _text=_text.replace(reg,"");
         //console.log(_text);
@@ -135,7 +135,7 @@ function TextArea(window) {
         //表情img标签
         var src=data[0].answer;
          //将新表情追加到待发送框里
-        //$textarea.text()
+ 
     };
     //模拟退格
     var backDeleteHandler=function(){
@@ -160,12 +160,12 @@ function TextArea(window) {
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
         listener.on("sendArea.backDelete",backDeleteHandler);
-        
+
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
     };
-    var initPlugsin = function() {//插件 
+    var initPlugsin = function() {//插件
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
 
