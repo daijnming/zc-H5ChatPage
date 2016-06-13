@@ -49,14 +49,16 @@ var RobotFirst = function(global) {
                 },
                 'success' : function(ret) {
                     if(ret.status == 2) {
+                        listener.trigger("core.system",global.apiConfig.adminNonelineTitle);
                         //暂无客服在线
                         console.log(global);
                     } else if(ret.status == 1) {
                         //排队
+                        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+                        listener.trigger("core.system",str);
                     } else if(status == 1) {
                         manager.destroy();
-                        console.log(global);
-                        listener.trigger("core.system");
+                        listener.trigger("core.system",global.apiConfig.adminHelloWord);
                     }
                 },
                 'fail' : function() {
