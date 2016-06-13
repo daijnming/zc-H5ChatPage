@@ -16,13 +16,17 @@ function Robot(global) {
         var token = createToken(data);
         console.log(data);
         console.log(global);
-        return;
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
             'data' : {
                 'requestText' : data.answer,
-                '' : ''
+                'question' : data.answer,
+                'sysNum' : global.sysNum,
+                'uid' : global.apiInit.uid,
+                'cid' : global.apiInit.cid,
+                'source' : global.userInfo.source,
+                'questionFlag' : 0
             },
             'type' : 'post',
             'success' : function(ret) {
