@@ -69,8 +69,8 @@ function TextArea(node,core,window) {
         //console.log(_text);
 
     };
-     var onbtnSendHandler = function(evt) {
-        var str =$textarea.html();
+    var onbtnSendHandler = function(evt) {
+        var str = $textarea.html();
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $sendMessage.val("")
@@ -87,8 +87,8 @@ function TextArea(node,core,window) {
         $sendMessage.val("");
         //清空待发送框
     };
-    var showAddHandler=function(){
-        if($chatAdd.hasClass("showChatAdd")){
+    var showAddHandler = function() {
+        if($chatAdd.hasClass("showChatAdd")) {
             $chatAdd.removeClass("showChatAdd");
             $chatAdd.animate({
                 height : "1px"
@@ -120,12 +120,12 @@ function TextArea(node,core,window) {
         $add.on("click",showAddHandler);
     };
     var initFace = function() {
-       // ZC_Face(); 
+        // ZC_Face();
     };
     var onEmotionClickHandler = function() {
-      //  ZC_Face.show();
+        //  ZC_Face.show();
     };
-    var initPlugsin = function() {//插件 
+    var initPlugsin = function() {//插件
 
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
@@ -141,12 +141,11 @@ function TextArea(node,core,window) {
     };
     listener.on("core.onload", function(data) {
         global = data;
-        currentUid=global.uid;
-        currentCid=global.cid;
+        currentUid = global.uid;
+        currentCid = global.cid;
         console.log(data);
         init();
     });
-
 
 }
 
