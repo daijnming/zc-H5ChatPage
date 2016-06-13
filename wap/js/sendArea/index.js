@@ -65,21 +65,17 @@ function TextArea(window) {
             $add.hide();
             hideChatAreaHandler();
             $textarea.css("width","65%");
-            listener.trigger('sendArea.autoSize',[{
-                'height' : "263px"
-            }]);
+            listener.trigger('sendArea.autoSize',263);
         } else {
             $sendBtn.hide();
             $emotion.hide();
             hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%");
-            listener.trigger('sendArea.autoSize',[{
-                'height' : "48px"
-            }]);
+            listener.trigger('sendArea.autoSize',48);
         }
 
-        
+
         //var reg=/&nbsp;/g;
         //var _text=_text.replace(reg,"");
         //console.log(_text);
@@ -110,11 +106,13 @@ function TextArea(window) {
             $chatArea.animate({
                 bottom : "-215px"
             },200);
+            listener.trigger('sendArea.autoSize',48);
         } else {
             $chatArea.addClass("showChatArea");
             $chatArea.animate({
                 bottom : "0px"
             },200)
+            listener.trigger('sendArea.autoSize',263);
         }
     };
     var hideChatAreaHandler = function() {
@@ -122,6 +120,7 @@ function TextArea(window) {
         $chatArea.animate({
             bottom : "-215px"
         },200);
+        listener.trigger('sendArea.autoSize',48);
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -136,36 +135,7 @@ function TextArea(window) {
         //表情img标签
         var src=data[0].answer;
          //将新表情追加到待发送框里
-        oTxt.focus();
-        var selection= window.getSelection ? window.getSelection() : document.selection;
-        var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-        if (!window.getSelection){//兼容处理
-            oTxt.focus();
-            var selection= window.getSelection ? window.getSelection() : document.selection;
-            var range= selection.createRange ? selection.createRange() : selection.getRangeAt(0);
-            //range.pasteHTML(src);
-            range.collapse(false);
-            range.select();
-        }else{ 
-            oTxt.focus();
-            range.collapse(false);
-            var hasR = range.createContextualFragment(src);
-            var hasR_lastChild = hasR.lastChild;
-            while (hasR_lastChild && hasR_lastChild.nodeName.toLowerCase() == "br" && hasR_lastChild.previousSibling && hasR_lastChild.previousSibling.nodeName.toLowerCase() == "br") {
-            var e = hasR_lastChild;
-            hasR_lastChild = hasR_lastChild.previousSibling;
-            hasR.removeChild(e)
-            }                                
-            range.insertNode(hasR);
-            if (hasR_lastChild) {
-            range.setEndAfter(hasR_lastChild);
-            range.setStartAfter(hasR_lastChild)
-            }
-            //console.log(range)
-            //console.log(range.commonAncestorContainer.innerHTML.length);
-            selection.removeAllRanges();
-            selection.addRange(range)
-        }
+ 
     };
     //模拟退格
     var backDeleteHandler=function(){
@@ -190,12 +160,12 @@ function TextArea(window) {
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
         listener.on("sendArea.backDelete",backDeleteHandler);
-        
+
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
     };
-    var initPlugsin = function() {//插件 
+    var initPlugsin = function() {//插件
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
 
