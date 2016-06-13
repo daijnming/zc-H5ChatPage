@@ -14,8 +14,6 @@ function Robot(global) {
     var onsend = function(args) {
         var data = args[0];
         var token = createToken(data);
-        console.log(data);
-        console.log(global);
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
@@ -37,6 +35,11 @@ function Robot(global) {
             }
         });
     };
+
+    var destroy = function() {
+        listener.off("sendArea.send",onsend);
+    };
+
     var bindListener = function() {
         listener.on("sendArea.send",onsend);
     };
@@ -44,6 +47,8 @@ function Robot(global) {
         parseDOM();
         bindListener();
     };
+
+    this.destroy = destroy;
 
     init();
 };

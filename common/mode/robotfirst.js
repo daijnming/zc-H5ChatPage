@@ -6,6 +6,7 @@ var RobotFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
+    var transfer = require('./transfer.js');
     var _self = this;
     var $transferBtn;
     var manager;
@@ -33,8 +34,42 @@ var RobotFirst = function(global) {
         },0);
         return promise;
     };
-    var bindListener = function() {
 
+    var transferBtnClickHandler = function() {
+        transfer(global).then(function(groupId,promise) {
+            $.ajax({
+                'url' : '/chat/user/chatconnect.action',
+                'type' : 'post',
+                'dataType' : 'json',
+                'data' : {
+                    'sysNum' : global.sysNum,
+                    'uid' : global.apiInit.uid,
+                    'way' : 1,
+                    'groupId' : groupId
+                },
+                'success' : function(ret) {
+                    if(ret.status == 2) {
+                        listener.trigger("core.system",global.apiConfig.adminNonelineTitle);
+                        //暂无客服在线
+                        console.log(global);
+                    } else if(ret.status == 1) {
+                        //排队
+                        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+                        listener.trigger("core.system",str);
+                    } else if(status == 1) {
+                        manager.destroy();
+                        listener.trigger("core.system",global.apiConfig.adminHelloWord);
+                    }
+                },
+                'fail' : function() {
+                }
+            });
+        });
+
+    };
+
+    var bindListener = function() {
+        $transferBtn.on("click",transferBtnClickHandler);
     };
 
     var initPlugins = function() {
