@@ -6,6 +6,7 @@ var RobotFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
+    var transfer = require('./transfer.js');
     var _self = this;
     var $transferBtn;
     var manager;
@@ -33,8 +34,30 @@ var RobotFirst = function(global) {
         },0);
         return promise;
     };
-    var bindListener = function() {
 
+    var transferBtnClickHandler = function() {
+        transfer(global).then(function(groupId,promise) {
+            $.ajax({
+                'url' : '/chat/user/chatconnect.action',
+                'type' : 'post',
+                'dataType' : 'json',
+                'data' : {
+                    'sysNum' : global.sysNum,
+                    'uid' : global.apiInit.uid,
+                    'way' : 1,
+                    'groupId' : groupId
+                },
+                'success' : function() {
+                },
+                'fail' : function() {
+                }
+            });
+        });
+
+    };
+
+    var bindListener = function() {
+        $transferBtn.on("click",transferBtnClickHandler);
     };
 
     var initPlugins = function() {
