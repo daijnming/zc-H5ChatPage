@@ -79,7 +79,7 @@ function TextArea(window) {
             }]);
         }
 
-        
+
         //var reg=/&nbsp;/g;
         //var _text=_text.replace(reg,"");
         //console.log(_text);
@@ -146,7 +146,7 @@ function TextArea(window) {
             //range.pasteHTML(src);
             range.collapse(false);
             range.select();
-        }else{ 
+        }else{
             oTxt.focus();
             range.collapse(false);
             var hasR = range.createContextualFragment(src);
@@ -155,7 +155,7 @@ function TextArea(window) {
             var e = hasR_lastChild;
             hasR_lastChild = hasR_lastChild.previousSibling;
             hasR.removeChild(e)
-            }                                
+            }
             range.insertNode(hasR);
             if (hasR_lastChild) {
             range.setEndAfter(hasR_lastChild);
@@ -190,12 +190,12 @@ function TextArea(window) {
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
         listener.on("sendArea.backDelete",backDeleteHandler);
-        
+
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
     };
-    var initPlugsin = function() {//插件 
+    var initPlugsin = function() {//插件
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
 

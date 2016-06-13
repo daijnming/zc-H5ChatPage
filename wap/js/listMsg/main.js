@@ -7,11 +7,10 @@ var ListMsgHandler = function() {
     var Promise = require('../../../common/util/promise.js');
     var theme = require('./theme.js');
     //Dom元素
-    var headerBack,//返回条颜色
+
+    var topTitleBar,//顶部栏
         userChatBox,//用户聊天内容背景色
-        setStyle,//首页样式
         chatMsgList,//聊天窗体
-        titleName,//显示标题
         wrapScroll,//滚动窗体
         pullDown,//下拉刷新
         chatPanelList;
@@ -33,7 +32,6 @@ var ListMsgHandler = function() {
       //记录页面高度
       $(wrapScroll).height($(window).height()-$('.back').height()-$('.chatArea').height());
     },200);
-    // global.flags.scroll.refresh();
   });
   //初始化滚动插件
   var initScroll = function(){
@@ -208,7 +206,6 @@ var ListMsgHandler = function() {
                     uid : global.apiInit.uid
                 },
                 success : function(data) {
-
                     promise.resolve(data);
                 }
             });
@@ -235,12 +232,15 @@ var ListMsgHandler = function() {
     var initBrowserDiff = function() {
 
     };
+    //输入栏高度变化设置
+    var onAutoSize = function(data){
+        console.log(data);
+        // $(wrapScroll).height($(window).height() - $('.back').height() - $('.chatArea').height());
+    };
     var parseDOM = function() {
-        headerBack = $('.js-header-back');
+        topTitleBar = $('.js-header-back');
         userChatBox = $('.js-userMsgOuter');
-        setStyle = $('.setStyle');
         chatMsgList = $('.js-chatMsgList');
-        titleName = $('.js-header-back .js-title');
         wrapScroll = $('.js-wrapper');
         pullDown = $('.js-pullDownLabel');
         chatPanelList = $('.js-chatPanelList');
@@ -248,6 +248,7 @@ var ListMsgHandler = function() {
 
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
+        fnEvent.on('sendArea.autoSize',onAutoSize);
     };
 
     var initPlugins = function() {
