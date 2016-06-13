@@ -4,9 +4,24 @@
 function transfer(global,promise) {
     var Promise = require('../util/promise.js');
     var promise = promise || new Promise();
-
-    var showGroups = function() {
-
+    var template = require('./template.js');
+    var layer;
+    var showGroups = function(ret) {
+        var _html = doT.template(template.groupTemplate)({
+            'list' : ret
+        });
+        var layer = $(_html);
+        $(".js-wrapBox").append(layer);
+        layer.delegate(".js-item",'click', function(e) {
+            var elm = e.currentTarget;
+            var groupId = $(elm).attr("data-id");
+            promise.resolve(groupId);
+            layer.remove();
+        });
+        layer.find(".js-cancel-btn").on("click", function() {
+            promise.reject();
+            layer.remove();
+        });
     };
     var init = function() {
         if(global.apiConfig.groupflag === 0) {
@@ -32,6 +47,7 @@ function transfer(global,promise) {
                         var item = ret[0];
                         promise.resolve(item.groupId);
                     } else {
+                        showGroups(ret);
                     }
                 },
                 'fail' : function() {
