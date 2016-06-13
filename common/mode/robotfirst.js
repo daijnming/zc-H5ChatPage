@@ -47,7 +47,17 @@ var RobotFirst = function(global) {
                     'way' : 1,
                     'groupId' : groupId
                 },
-                'success' : function() {
+                'success' : function(ret) {
+                    if(ret.status == 2) {
+                        //暂无客服在线
+                        console.log(global);
+                    } else if(ret.status == 1) {
+                        //排队
+                    } else if(status == 1) {
+                        manager.destroy();
+                        console.log(global);
+                        listener.trigger("core.system");
+                    }
                 },
                 'fail' : function() {
                 }
