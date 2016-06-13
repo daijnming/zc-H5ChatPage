@@ -135,7 +135,8 @@ function TextArea(window) {
         //表情img标签
         var src=data[0].answer;
          //将新表情追加到待发送框里
- 
+        var _html=$textarea.html()+src;
+        $textarea.html(_html);
     };
     //模拟退格
     var backDeleteHandler=function(){
@@ -151,7 +152,7 @@ function TextArea(window) {
         //qq表情
         $emotion.on("click",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
-        //$textarea.on("focus",hideChatAreaHandler);
+        $textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAreaHandler);
         $emotion.on("click",showChatAreaHandler);
         //表情、加号切换
