@@ -24,15 +24,15 @@ var ListMsgHandler = function() {
 
     //初始化h5页面配置信息
     var initConfig = function() {
-        theme(global,$('.wrap'));//主题设置
-        $(wrapScroll).height($(window).height() - $('.back').height() - $('.chatArea').height());
+        theme(global,wrapScroll);//主题设置
+        onAutoSize(48);//默认 设置屏幕高度
     };
-  $(window).on('resize',function(){
-    setTimeout(function(){
-      //记录页面高度
-      $(wrapScroll).height($(window).height()-$('.back').height()-$('.chatArea').height());
-    },200);
-  });
+  // $(window).on('resize',function(){
+  //   setTimeout(function(){
+  //     //记录页面高度
+  //     $(wrapScroll).height($(window).height()-$('.back').height()-$('.chatArea').height());
+  //   },200);
+  // });
   //初始化滚动插件
   var initScroll = function(){
     if(global.flags.scroll){
@@ -233,9 +233,8 @@ var ListMsgHandler = function() {
 
     };
     //输入栏高度变化设置
-    var onAutoSize = function(data){
-        console.log(data);
-        // $(wrapScroll).height($(window).height() - $('.back').height() - $('.chatArea').height());
+    var onAutoSize = function(height){
+        $(wrapScroll).height($(window).height() - $(topTitleBar).height() - height);
     };
     var parseDOM = function() {
         topTitleBar = $('.js-header-back');
