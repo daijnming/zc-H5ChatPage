@@ -65,18 +65,14 @@ function TextArea(window) {
             $add.hide();
             hideChatAreaHandler();
             $textarea.css("width","65%");
-            listener.trigger('sendArea.autoSize',[{
-                'height' : "263px"
-            }]);
+            listener.trigger('sendArea.autoSize',263);
         } else {
             $sendBtn.hide();
             $emotion.hide();
             hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%");
-            listener.trigger('sendArea.autoSize',[{
-                'height' : "48px"
-            }]);
+            listener.trigger('sendArea.autoSize',48);
         }
 
         
