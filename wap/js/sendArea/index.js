@@ -78,8 +78,8 @@ function TextArea(window) {
         //console.log(_text);
 
     };
-     var onbtnSendHandler = function(evt) {
-        var str =$textarea.html();
+    var onbtnSendHandler = function(evt) {
+        var str = $textarea.html();
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
@@ -206,7 +206,6 @@ function TextArea(window) {
         currentCid=global[0].apiInit.cid;
         init();
     });
-
 
 }
 

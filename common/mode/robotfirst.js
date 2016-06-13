@@ -32,6 +32,7 @@ var RobotFirst = function(global) {
         return promise;
     };
     var bindListener = function() {
+
     };
 
     var initPlugins = function() {
