@@ -156,16 +156,15 @@ var ListMsgHandler = function() {
         global = data[0];
         initConfig();//配置参数
         initScroll();//初始化&配置scroll
-        //manager = ManagerFactory(global);
-        // manager.getWelcome().then(function(data,promise) {
-        //     showHistoryMsg(data);
-        // });
+        manager = ManagerFactory(global);
+        manager.getWelcome().then(function(data,promise) {
+            showHistoryMsg(data);
+        });
         //FIXME bindListener
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
-
     };
     var initScroll = function(){
       scrollHanlder.scroll.on('slideDown',onPullDown);
