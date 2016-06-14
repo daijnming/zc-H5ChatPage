@@ -31,7 +31,7 @@ var listSugguestionsMsg =
                       '<ul class="sugguestions">'+
                       '{{for(var i=0;i<it.list.length;i++){ }}'+
                         '<li>'+
-                          '<a href="#0" class="answerBtn" style="color:#596273" data-docid="{{=it.list[i]["docId"]}}">{{=i+1}}: {{=it.list[i]["question"]}}</a>'+
+                          '<a href="#0" class="js-answerBtn" style="color:#596273" data-docid="{{=it.list[i]["docId"]}}">{{=i+1}}: {{=it.list[i]["question"]}}</a>'+
                         '</li>'+
                       '{{ } }}'+
                       '</ul>'+
