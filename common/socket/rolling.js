@@ -4,7 +4,7 @@
 function Rolling(puid) {
     this.puid = puid;
     var listener = require('../util/listener.js');
-
+    var socketType = 'human';
     var onSend = function(args) {
         var data = args[0];
         $.ajax({
@@ -41,7 +41,10 @@ function Rolling(puid) {
                         var item = JSON.parse(ret[i]);
                         arr.push(item);
                     }
-                    listener.trigger("core.onreceive",arr);
+                    listener.trigger("core.onreceive", {
+                        'type' : socketType,
+                        'list' : arr
+                    });
                 }
             },
             'fail' : function() {

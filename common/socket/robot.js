@@ -4,6 +4,7 @@
 function Robot(global) {
     var _self = this;
     var listener = require('../util/listener.js');
+    var socketType = 'robot';
     var parseDOM = function() {
     };
 
@@ -29,7 +30,10 @@ function Robot(global) {
             'type' : 'post',
             'success' : function(ret) {
                 var item = JSON.parse(ret);
-                listener.trigger("core.onreceive",[item]);
+                listener.trigger("core.onreceive", {
+                    'list' : [item],
+                    'type' : socketType
+                });
             },
             'fail' : function(ret) {
                 console.log(ret);
