@@ -1,6 +1,7 @@
 var ListMsgHandler = function() {
     var global,
-        scrollHanlder;
+        scrollHanlder,
+        timer;//输入框高度延迟处理 解决与弹出键盘冲突
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
     var msgTemplate = require('./template.js');
@@ -156,6 +157,7 @@ var ListMsgHandler = function() {
         global = data[0];
         initConfig();//配置参数
         initScroll();//初始化&配置scroll
+        //加载历史记录
         manager = ManagerFactory(global);
         manager.getWelcome().then(function(data,promise) {
             showHistoryMsg(data);
@@ -202,9 +204,11 @@ var ListMsgHandler = function() {
                   msgHtml = msgHander.sugguestionsSearch(_data);
                 }else{
                   comf = $.extend({
-                    customLogo : global.apiConfig.robotLogo,
-                    customName : global.apiConfig.robotName,
-                    customMsg : _data.answer
+                    // customLogo : global.apiConfig.robotLogo,
+                    // customName : global.apiConfig.robotName,
+                    customLogo : _data.aface,
+                    customName : _data.aname,
+                    customMsg : _data.content
                   });
                   msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                 }
@@ -229,11 +233,15 @@ var ListMsgHandler = function() {
       },
       //输入栏高度变化设置
       onAutoSize : function(node){
+        clearInterval(timer);
+        timer =  setTimeout(function(){
           var offsetTop = node.offset().top-$(topTitleBar).height();
-          // console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
-          // console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
+          console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
+          console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
+        },300);
+
       }
     };
     //包装消息相关方法
@@ -253,10 +261,12 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
+        console.log(data);
         bindMsg(0,data);
       },
       //接收回复
      onReceive : function(data){
+       console.log(data);
         bindMsg(1,data);
       },
       //相关搜索答案点击事件
