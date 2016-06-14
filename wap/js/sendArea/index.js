@@ -10,8 +10,8 @@ function TextArea(window) {
     var ZC_Face = require('./qqFace.js')();
 
     //上传附件
-    /*var uploadImg = require('./uploadImg.js');
-     var inputCache = {};
+    var uploadImg = require('./uploadImg.js')(); 
+    /* var inputCache = {};
      //模板引擎
      var template = require('./template.js');*/
 
@@ -33,32 +33,20 @@ function TextArea(window) {
         $tab=$(".js-tab");
         oTxt = document.getElementById("js-textarea");
     };
-    var onImageUpload = function(evt,data) {
-        //onFileTypeHandler(data);
+    var onImageUpload = function(data) {
+        //onFileTypeHandler(data); 
         //通过textarea.send事件将用户的数据传到显示台
-        /*$(document.body).trigger('textarea.send',[{
-         'answer' : answer,
-         'uid' : data.uid,
-         'cid' : data.cid,
+        var date= currentUid + +new Date();
+        listener.trigger('sendArea.send',[{
+         'answer' : data[0].url,
+         'uid' : currentUid,
+         'cid' : currentCid,
          //时间戳
-         'date' : +new Date()
-         }]);*/
+         'date' : date
+         }]);
     };
     var showSendBtnHandler = function(evt) {
         var _text = $textarea.text();
-        //console.log(_text);
-        //var reg=/^(\<div\>\<br\>\<\/div\>)$/g;
-        /*if(reg.test(_text)){
-         $(".js-sendBtn").hide();
-         $(".js-add").show();
-         $(".js-textarea").css("width","80%")
-         }*/
-        /*if(evt.keyCode == 13) {return false;
-
-         }*/
-        /*$(".js-hideTextarea").val(_text);
-         console.log(_text);
-         _text=$(".js-hideTextarea").val();*/
         if(_text) {
             $sendBtn.show();
             //表情按钮
@@ -82,16 +70,18 @@ function TextArea(window) {
             return false;
         } else {
             //通过textarea.send事件将用户的数据传到显示台
+            var date= currentUid + +new Date();
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
                 'cid' : currentCid,
-                'date' : +new Date()
+                'date' : date
             }]);
             
         }
         //清空待发送框
-        $textarea.html("");     
+        $textarea.html("");
+        autoSizePhone();    
     };
     var showChatAddHandler=function(){
         //与键盘优化
@@ -106,7 +96,7 @@ function TextArea(window) {
                 $chatArea.animate({
                     bottom : "0"
                 },200);
-                autoSizeAndrond();
+                autoSizePhone();
             }
         },200)
         
@@ -117,7 +107,7 @@ function TextArea(window) {
             $chatArea.animate({
                 bottom : "-215px"
             },200);
-            autoSizeAndrond();
+            autoSizePhone();
          },200);
         
     };
@@ -136,6 +126,7 @@ function TextArea(window) {
          //将新表情追加到待发送框里
         var _html=$textarea.html()+src;
         $textarea.html(_html);
+        autoSizePhone();
     };
     //模拟退格
     var backDeleteHandler=function(){
@@ -145,27 +136,15 @@ function TextArea(window) {
         }else{
             _html=_html.substring(0,_html.length-1);
         }
-       
         $textarea.html("");
-        $textarea.html(_html)
+        $textarea.html(_html);
+        autoSizePhone();
     };
-    //宽高自适应安卓
-    var autoSizeAndrond=function(){
+    //宽高自适应手机
+    var autoSizePhone=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
-        console.log("出发了");
         listener.trigger('sendArea.autoSize',$chatArea);
-        /*$chatArea.resize(function(){
-            var _height=$chatArea.height()+$chatAdd.height()+$chatEmotion.height();
-            console.log(_height);
-            listener.trigger('sendArea.autoSize',_height);
-        })*/
-        /*$(window).resize(function() {
-          var _height=$(window).height()-($chatArea.height()+$chatAdd.height()+$chatEmotion.height());
-          console.log(_height);
-           
-          listener.trigger('sendArea.autoSize',_height);
-        });*/
     };
     var bindLitener = function() {
         //发送按钮
@@ -182,6 +161,8 @@ function TextArea(window) {
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
         listener.on("sendArea.backDelete",backDeleteHandler);
+        //发送图片
+        listener.on("sendArea.uploadImgUrl",onImageUpload);
 
     };
     var onEmotionClickHandler = function() {
@@ -190,7 +171,7 @@ function TextArea(window) {
     var initPlugsin = function() {//插件
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
-        autoSizeAndrond();
+        autoSizePhone();
     };
     var init = function() {
         parseDOM();
