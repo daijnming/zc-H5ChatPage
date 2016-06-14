@@ -6,6 +6,7 @@ var RobotFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
+    var WebSocket = require('../socket/websocket.js');
     var transfer = require('./transfer.js');
     var _self = this;
     var $transferBtn;
@@ -48,17 +49,22 @@ var RobotFirst = function(global) {
                     'groupId' : groupId
                 },
                 'success' : function(ret) {
+                    console.log(ret);
+                    //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
-                        listener.trigger("core.system",global.apiConfig.adminNonelineTitle);
+                        listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
                         //暂无客服在线
-                        console.log(global);
-                    } else if(ret.status == 1) {
+                        console.log('暂无客服在线');
+                    } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
-                        listener.trigger("core.system",str);
+                        console.log('排队');
+                        listener.trigger("core.system",[str]);
                     } else if(status == 1) {
                         manager.destroy();
-                        listener.trigger("core.system",global.apiConfig.adminHelloWord);
+                        console.log('成功');
+                        manager = new WebSocket(ret.puid);
+                        listener.trigger("core.system",[global.apiConfig.adminHelloWord,ret]);
                     }
                 },
                 'fail' : function() {
