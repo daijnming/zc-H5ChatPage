@@ -18,7 +18,6 @@ function Rolling(puid) {
             'dataType' : 'json',
             'type' : "get",
             'success' : function(ret) {
-                console.log(ret);
             }
         });
     };

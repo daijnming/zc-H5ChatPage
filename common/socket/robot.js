@@ -29,7 +29,6 @@ function Robot(global) {
             'type' : 'post',
             'success' : function(ret) {
                 var item = JSON.parse(ret);
-                console.log(item);
                 listener.trigger("core.onreceive",[item]);
             },
             'fail' : function(ret) {

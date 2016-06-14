@@ -29,11 +29,13 @@ var HumanFirst = function(global) {
                     if(ret.status == 2) {
                         listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
                         //暂无客服在线
+                        manager = new Robot(global);
                         console.log('暂无客服在线');
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
                         console.log('排队');
+                        manager = new Robot(global);
                         listener.trigger("core.system",[str]);
                     } else if(ret.status == 1) {
                         console.log('成功');
