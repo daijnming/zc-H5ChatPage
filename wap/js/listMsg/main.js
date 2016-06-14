@@ -231,7 +231,7 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.autoSize',onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.send',onSend);//发送内容
         fnEvent.on('core.onreceive',onReceive);//接收回复
-
+        $('.js-chatPanelList').delegate('.js-answerBtn','click',onSugguestionsEvent);//相关搜索答案点击事件
     };
     //发送消息绑定到页面
     /*
@@ -279,7 +279,8 @@ var ListMsgHandler = function() {
           list:list,
           stripe:data.stripe
         });
-        return doT.template(msgTemplate.listSugguestionsMsg)(comf);
+        var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
+        return msg;
       }
       return '非常对不起哦，不知道怎么回答这个问题呢，我会努力学习的。';
     };
@@ -304,6 +305,21 @@ var ListMsgHandler = function() {
         if(scroll){
           scroll.refresh();
         }
+    };
+    //相关搜索答案点击事件
+    var onSugguestionsEvent= function(){
+      console.log(this);
+      var _txt = $(this).text();
+      if(_txt){
+        //获取点击内容
+        var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
+        fnEvent.trigger('sendArea.send',[{
+                'answer' : _msg,
+                'uid' : global.apiConfig.uid,
+                'cid' : global.apiConfig.cid,
+                'date' : +new Date()
+            }]);
+      }
     };
     var parseDOM = function() {
         topTitleBar = $('.js-header-back');
