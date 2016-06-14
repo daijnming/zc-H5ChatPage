@@ -14,6 +14,7 @@ var leftMsg =
                           '{{=it.customMsg}}'+
                       '</p>'+
                   '</div>'+
+                  // '<span class="msgStatus statusLeft"></span>'+
               '</div>';
 
 var listSugguestionsMsg =
@@ -36,6 +37,7 @@ var listSugguestionsMsg =
                       '{{ } }}'+
                       '</ul>'+
                   '</div>'+
+                  // '<span class="msgStatus statusLeft"></span>'+
               '</div>';
 
 var rightMsg =
@@ -48,6 +50,7 @@ var rightMsg =
                               '{{=it.userMsg}}'+
                           '</p>'+
                       '</div>'+
+                      '<span class="msgStatus statusRight"></span>'+
                   '</div>'+
               '</div>';
 

@@ -251,17 +251,20 @@ var ListMsgHandler = function() {
             break;
           case 1:
               //FIXME 类型判断  answerType=4 相关搜索 另形判断
-              var _data = JSON.parse(data);
-              if(_data.answerType=='4'){
-                //相关搜索
-                msgHtml = sugguestionsSearch(_data);
-              }else{
-                comf = $.extend({
-                  customLogo : global.apiConfig.robotLogo,
-                  customName : global.apiConfig.robotName,
-                  customMsg : JSON.parse(data).answer
-                });
-                msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+              for(var i=0;i<data.length;i++){
+                var _data = data[i];
+                // var _data = JSON.parse(item);
+                if(_data.answerType=='4'){
+                  //相关搜索
+                  msgHtml = sugguestionsSearch(_data);
+                }else{
+                  comf = $.extend({
+                    customLogo : global.apiConfig.robotLogo,
+                    customName : global.apiConfig.robotName,
+                    customMsg : _data.answer
+                  });
+                  msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                }
               }
             break;
           case 2:
@@ -294,11 +297,6 @@ var ListMsgHandler = function() {
       console.log(data);
       bindMsg(1,data);
     };
-
-    ///处理移动端浏览器差异性
-    var initBrowserDiff = function() {
-
-    };
     //输入栏高度变化设置
     var onAutoSize = function(height){
         $(wrapScroll).height($(window).height() - $(topTitleBar).height() - height);
@@ -317,7 +315,7 @@ var ListMsgHandler = function() {
                 'answer' : _msg,
                 'uid' : global.apiConfig.uid,
                 'cid' : global.apiConfig.cid,
-                'date' : +new Date()
+                'date' : +global.apiConfig.uid + new Date()
             }]);
       }
     };
