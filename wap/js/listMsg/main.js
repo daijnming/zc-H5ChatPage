@@ -181,7 +181,6 @@ var ListMsgHandler = function() {
         }else{
           //没有历史记录
           global.flags.moreHistroy = false;
-          $(pullDown).text('没有更多记录');
         }
 
       });
@@ -204,18 +203,31 @@ var ListMsgHandler = function() {
             break;
           case 1:
               //FIXME 类型判断  answerType=4 相关搜索 另形判断
-              for(var i=0;i<data.length;i++){
-                var _data = data[i];
+              var _logo,_name,_msg,_type,_list;
+              _type=data.type,
+              _list=data.list;
+
+              for(var i=0;i<_list.length;i++){
+                var _data = _list[i];
                 if(_data.answerType=='4'){
                   //相关搜索
                   msgHtml = msgHander.sugguestionsSearch(_data);
                 }else{
+                  //判断是机器人还是客服回复
+                  if(_type=='robot'){
+                    _logo =global.apiConfig.robotLogo;
+                    _name = global.apiConfig.robotName;
+                    _msg =_data.answer;
+                  }else if(_type=='human'){
+                    _logo=_data.aface;
+                    _name=_data.aname;
+                    _msg=_data.content;
+                  }
                   comf = $.extend({
-                    // customLogo : global.apiConfig.robotLogo,
-                    // customName : global.apiConfig.robotName,
-                    customLogo : _data.aface,
-                    customName : _data.aname,
-                    customMsg : _data.content
+                    customLogo : _logo,
+                    customName : _name,
+                    customMsg : _msg
+
                   });
                   msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                 }
@@ -231,6 +243,8 @@ var ListMsgHandler = function() {
           chatPanelList.append(msgHtml);
         }
       scrollHanlder.scroll.refresh();//刷新
+      scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
+      // document.getElementById('.js-scroller').scrollIntoView(false);
       }
     };
     //包装系统和配置方法

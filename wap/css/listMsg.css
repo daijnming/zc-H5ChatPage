@@ -129,6 +129,7 @@ p,ul,li{
 .rightMsg{
   float: right;
   color:#fff;
+  width:100%;
   max-width: 100%;
 }
 .rightMsg .msgOuter{
