@@ -1,14 +1,18 @@
 var ListMsgHandler = function() {
     var global,
-        scroll;
+        scrollHanlder;
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
     var msgTemplate = require('./template.js');
     var ManagerFactory = require('../../../common/mode/mode.js');
     var Promise = require('../../../common/util/promise.js');
     var theme = require('./theme.js');
-    //Dom元素
+    var Scroll = require('./scroll.js');
 
+    var msgHander = {},//包装消息相关方法
+        sysHander = {};//包装系统和配置方法
+
+    //Dom元素
     var topTitleBar,//顶部栏
         userChatBox,//用户聊天内容背景色
         chatMsgList,//聊天窗体
@@ -31,77 +35,6 @@ var ListMsgHandler = function() {
         url_detail : '/chat/user/chatdetail.action'
     };
 
-    //初始化h5页面配置信息
-    var initConfig = function() {
-        theme(global,wrapBox);//主题设置
-        onAutoSize(48);//默认 设置屏幕高度
-    };
-
-  //初始化滚动插件
-  var initScroll = function(){
-
-    if(scroll){
-      return;
-    }else{
-      scroll = new IScroll(wrapScroll[0], {
-      // probeType：1对性能没有影响。在滚动事件被触发时，滚动轴是不是忙着做它的东西。
-      // probeType：2总执行滚动，除了势头，反弹过程中的事件。这类似于原生的onscroll事件。
-      // probeType：3发出的滚动事件与到的像素精度。注意，滚动被迫requestAnimationFrame（即：useTransition：假）。
-      probeType : 3,
-      tap : true,
-      click : true,// 是否支持点击事件 FIXME 需要设置为TRUE 否则重新接入无法点击
-      mouseWheel : true,// 是否支持鼠标滚轮
-      useTransition : true,
-      useTransform : true,
-      snap : false,
-      scrollbars : false,// 是否显示滚动条
-      bounce : true,// 边界反弹
-      momentum : true// 是否惯性滑动
-      // startY : -($(pullDown).height())
-      });
-    }
-    //下拉刷新
-    pullDownRefresh();
-    };
-    //下拉刷新
-    var pullDownRefresh = function() {
-        scroll.on('scroll', function() {
-            var y = this.y,
-                maxY = this.maxScrollY - y;
-            // downHasClass = downIcon.hasClass("reverse_icon");
-
-            if(y >= 40) {
-                $(pullDown).text('放手开始加载');
-                // !downHasClass && downIcon.addClass("reverse_icon");
-                // return "";
-            } else if(y < 40 && y > 0) {
-                if(global.flags.moreHistroy)
-                    $(pullDown).text('下拉刷新..');
-                else
-                    $(pullDown).text('暂无数据..');
-                // downHasClass && downIcon.removeClass("reverse_icon");
-                // return "";
-            }
-        });
-        scroll.on('slideDown', function() {
-            if(this.y > 40) {
-                $.ajax({
-                    type : "post",
-                    url : api.url_detail,
-                    dataType : "json",
-                    data : {
-                        uid : global.apiInit.uid,
-                        pageNow : global.flags.pageNow,
-                        pageSize : global.flags.pageSize
-                    },
-                    success : function(data) {
-                        showHistoryMsg(data);
-                        global.flags.moreHistroy = true;
-                    }
-                });
-            }
-        });
-    };
     //展示历史记录
     var showHistoryMsg = function(data) {
         // msgTemplate
@@ -159,7 +92,7 @@ var ListMsgHandler = function() {
             global.flags.moreHistroy = false;
         }
         //刷新
-        scroll.refresh();
+        scrollHanlder.scroll.refresh();
     };
     //更新聊天信息列表
     var updateChatList = function(tmpHtml,isHistory,isPullDown) {
@@ -221,17 +154,29 @@ var ListMsgHandler = function() {
     //core加载完成
     var onCoreOnload = function(data) {
         global = data[0];
-        console.log(global);
         initConfig();//配置参数
-        initScroll();//初始化scroll
-        manager = ManagerFactory(global);
-        manager.getWelcome().then(function(data,promise) {
-            showHistoryMsg(data);
-        });
-        fnEvent.on('sendArea.autoSize',onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('sendArea.send',onSend);//发送内容
-        fnEvent.on('core.onreceive',onReceive);//接收回复
-        $('.js-chatPanelList').delegate('.js-answerBtn','click',onSugguestionsEvent);//相关搜索答案点击事件
+        initScroll();//初始化&配置scroll
+        //manager = ManagerFactory(global);
+        // manager.getWelcome().then(function(data,promise) {
+        //     showHistoryMsg(data);
+        // });
+        //FIXME bindListener
+        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
+        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
+        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
+        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
+
+    };
+    var initScroll = function(){
+      scrollHanlder.scroll.on('slideDown',onPullDown);
+      global.flags.moreHistroy = true;
+    };
+    //下拉刷新
+    var onPullDown = function(){
+      scrollHanlder.pullDown(function(data){
+        showHistoryMsg(data);
+        global.flags.moreHistroy = true;
+      });
     };
     //发送消息绑定到页面
     /*
@@ -253,10 +198,9 @@ var ListMsgHandler = function() {
               //FIXME 类型判断  answerType=4 相关搜索 另形判断
               for(var i=0;i<data.length;i++){
                 var _data = data[i];
-                // var _data = JSON.parse(item);
                 if(_data.answerType=='4'){
                   //相关搜索
-                  msgHtml = sugguestionsSearch(_data);
+                  msgHtml = msgHander.sugguestionsSearch(_data);
                 }else{
                   comf = $.extend({
                     customLogo : global.apiConfig.robotLogo,
@@ -270,55 +214,81 @@ var ListMsgHandler = function() {
           case 2:
             break;
         }
-        chatPanelList.children().last().after(msgHtml);
-        scroll.refresh();//刷新
-      }
-    };
-    //相关搜索方法
-    var sugguestionsSearch = function(data){
-      if(data){
-        var list = data.sugguestions;
-        var comf = $.extend({
-          list:list,
-          stripe:data.stripe
-        });
-        var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
-        return msg;
-      }
-      return '非常对不起哦，不知道怎么回答这个问题呢，我会努力学习的。';
-    };
-    //发送消息
-    var onSend = function(data){
-      console.log(data);
-      bindMsg(0,data);
-    };
-    //接收回复
-    var onReceive = function(data){
-      console.log(data);
-      bindMsg(1,data);
-    };
-    //输入栏高度变化设置
-    var onAutoSize = function(height){
-        $(wrapScroll).height($(window).height() - $(topTitleBar).height() - height);
-        if(scroll){
-          scroll.refresh();
+        if(chatPanelList.children().length>0){
+          chatPanelList.children().last().after(msgHtml);
+        }else{
+          //有聊天记录就加到最后一项
+          chatPanelList.append(msgHtml);
         }
-    };
-    //相关搜索答案点击事件
-    var onSugguestionsEvent= function(){
-      console.log(this);
-      var _txt = $(this).text();
-      if(_txt){
-        //获取点击内容
-        var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
-        fnEvent.trigger('sendArea.send',[{
-                'answer' : _msg,
-                'uid' : global.apiConfig.uid,
-                'cid' : global.apiConfig.cid,
-                'date' : +global.apiConfig.uid + new Date()
-            }]);
+      scrollHanlder.scroll.refresh();//刷新
       }
     };
+    //包装系统和配置方法
+    sysHander = {
+      helloMsg:function(){
+        //首次进入提示语
+      },
+      //输入栏高度变化设置
+      onAutoSize : function(height){
+          $(wrapScroll).height($(window).height() - $(topTitleBar).height() - height);
+          if(scroll){
+            scrollHanlder.scroll.refresh();
+          }
+      }
+    };
+    //包装消息相关方法
+    msgHander = {
+      //相关搜索方法
+      sugguestionsSearch:function(data){
+        if(data){
+          var list = data.sugguestions;
+          var comf = $.extend({
+            list:list,
+            stripe:data.stripe
+          });
+          var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
+          return msg;
+        }
+        return '非常对不起哦，不知道怎么回答这个问题呢，我会努力学习的。';
+      },
+      //发送消息
+      onSend : function(data){
+        bindMsg(0,data);
+      },
+      //接收回复
+     onReceive : function(data){
+        bindMsg(1,data);
+      },
+      //相关搜索答案点击事件
+     onSugguestionsEvent : function(){
+        var _txt = $(this).text();
+        if(_txt){
+          //获取点击内容
+          var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
+          fnEvent.trigger('sendArea.send',[{
+                  'answer' : _msg,
+                  'uid' : global.apiConfig.uid,
+                  'cid' : global.apiConfig.cid,
+                  'date' : global.apiConfig.uid + new Date()
+              }]);
+        }
+      }
+    };
+
+    /********************************************************************************/
+    /********************************************************************************/
+    /*************************************基本配置**********************************/
+    /********************************************************************************/
+    /********************************************************************************/
+
+    //初始化h5页面配置信息
+    var initConfig = function() {
+        theme(global,wrapBox);//主题设置
+        scrollHanlder = Scroll(global,wrapBox);//初始化scroll
+        sysHander.onAutoSize(48);//默认 设置屏幕高度
+        sysHander.helloMsg();//接入提示语
+    };
+    //初始化Dom
     var parseDOM = function() {
         topTitleBar = $('.js-header-back');
         userChatBox = $('.js-userMsgOuter');
