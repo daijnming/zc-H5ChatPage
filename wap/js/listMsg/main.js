@@ -229,11 +229,12 @@ var ListMsgHandler = function() {
         //首次进入提示语
       },
       //输入栏高度变化设置
-      onAutoSize : function(height){
-          $(wrapScroll).height($(window).height() - $(topTitleBar).height() - height);
-          if(scroll){
-            scrollHanlder.scroll.refresh();
-          }
+      onAutoSize : function(node){
+          var offsetTop = node.offset().top-$(topTitleBar).height();
+          // console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
+          // console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
+          $(wrapScroll).height(offsetTop);
+          scrollHanlder.scroll.refresh();
       }
     };
     //包装消息相关方法
@@ -285,7 +286,7 @@ var ListMsgHandler = function() {
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
-        sysHander.onAutoSize(48);//默认 设置屏幕高度
+        // sysHander.onAutoSize(48);//默认 设置屏幕高度
         sysHander.helloMsg();//接入提示语
     };
     //初始化Dom
