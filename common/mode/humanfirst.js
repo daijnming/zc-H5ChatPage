@@ -9,11 +9,10 @@ var HumanFirst = function(global) {
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
-
+    var $transferBtn;
     var transferConnect = function() {
         var promise = new Promise();
         transfer(global,promise).then(function(groupId,promise) {
-            console.log(groupId);
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
                 'type' : 'post',
@@ -30,12 +29,14 @@ var HumanFirst = function(global) {
                         listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
                         //暂无客服在线
                         manager = new Robot(global);
+                        $transferBtn.show();
                         console.log('暂无客服在线');
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
                         console.log('排队');
                         manager = new Robot(global);
+                        $transferBtn.show();
                         listener.trigger("core.system",[str]);
                     } else if(ret.status == 1) {
                         console.log('成功');
@@ -76,7 +77,12 @@ var HumanFirst = function(global) {
         return promise;
     };
 
+    var parseDOM = function() {
+        $transferBtn = $(".temp_test");
+    };
+
     var bindListener = function() {
+        $transferBtn.on("click",transferConnect);
     };
 
     var initPlugins = function() {
@@ -85,6 +91,7 @@ var HumanFirst = function(global) {
     };
 
     var init = function() {
+        parseDOM();
         bindListener();
         initPlugins();
     };
