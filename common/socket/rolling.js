@@ -42,6 +42,7 @@ function Rolling(puid) {
                         var item = JSON.parse(ret[i]);
                         arr.push(item);
                     }
+                    console.log(arr);
                     listener.trigger("core.onreceive",arr);
                 }
             },

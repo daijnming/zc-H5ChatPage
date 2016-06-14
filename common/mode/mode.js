@@ -8,13 +8,18 @@ function ModeEntranceFactroy(global) {
         ROBOT_ONLY = 1,
         HUMAN_ONLY = 2;
     var type;
+    var humanFirst = require('./humanfirst.js');
     var robotFirst = require('./robotfirst.js');
     if(!!manager) {
         return manager;
     }
+    console.log(global.apiConfig.type)
     switch(global.apiConfig.type) {
-        case 3:
+        case ROBOT_FIRST:
             manager = new robotFirst(global);
+            break;
+        case HUMAN_FIRST:
+            manager = new humanFirst(global);
             break;
     }
     return manager;
