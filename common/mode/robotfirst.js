@@ -9,6 +9,7 @@ var RobotFirst = function(global) {
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
+    var initSession = require('./initsession.js');
     var _self = this;
     var $transferBtn;
     var manager;
@@ -16,24 +17,38 @@ var RobotFirst = function(global) {
         $transferBtn = $(".temp_test");
     };
 
+    var socketFactory = function(ret) {
+        var manager;
+        if(WebSocket && false) {
+            manager = new WebSocket(ret.puid);
+        } else {
+            manager = new Rolling(ret.puid);
+        }
+        return manager;
+    };
+
     var getWelcome = function(value,promise) {
         var promise = promise || new Promise();
-        if(!value) {
-            value = [];
-        }
-        var now = new Date();
-        var obj = {
-            "date" : DateUtil.formatDate(now),
-            "content" : [{
-                'senderType' : 2,
-                't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true)
-            }]
-        };
-        setTimeout(function() {
-            promise.resolve(value);
-        },0);
+        initSession(global,promise).then(function(value,promise) {
+            if(!value) {
+                value = [];
+            }
+            var now = new Date();
+            var obj = {
+                "date" : DateUtil.formatDate(now),
+                "content" : [{
+                    'senderType' : 2,
+                    't' : +now,
+                    'msg' : global.apiConfig.robotHelloWord,
+                    'ts' : DateUtil.formatDate(now,true)
+                }]
+            };
+            value.push(obj);
+            setTimeout(function() {
+                promise.resolve(value);
+            },0);
+            return promise;
+        });
         return promise;
     };
 
@@ -61,13 +76,10 @@ var RobotFirst = function(global) {
                         console.log('排队');
                         listener.trigger("core.system",[str]);
                     } else if(ret.status == 1) {
-                        manager.destroy();
+                        if(manager)
+                            manager.destroy();
                         console.log('成功');
-                        if(WebSocket && false) {
-                            manager = new WebSocket(ret.puid);
-                        } else {
-                            manager = new Rolling(ret.puid);
-                        }
+                        manager = socketFactory(ret);
                         manager.start();
                         listener.trigger("core.system",[global.apiConfig.adminHelloWord,ret]);
                     }
@@ -75,6 +87,7 @@ var RobotFirst = function(global) {
                 'fail' : function() {
                 }
             });
+
         });
 
     };
@@ -86,7 +99,14 @@ var RobotFirst = function(global) {
     var initPlugins = function() {
         $transferBtn.show();
         //首先发送机器人欢迎语
-        manager = new Robot(global);
+        if(global.apiInit.ustatus == 0) {
+            manager = new Robot(global);
+        } else {
+            if(global.apiInit.ustatus == 1) {
+                transferBtnClickHandler();
+            }
+            //console.log(manager);
+        }
 
     };
 
