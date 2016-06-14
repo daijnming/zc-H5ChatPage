@@ -2,6 +2,7 @@
 var initSessions = function(global,promise) {
     var promise = promise || new Promise();
     //拉取会话记录
+    console.log(global.apiInit.ustatus)
     if(global.apiInit.ustatus == 0) {
         setTimeout(function() {
             promise.resolve([]);

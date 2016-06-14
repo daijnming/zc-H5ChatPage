@@ -30,6 +30,7 @@ var RobotFirst = function(global) {
     var getWelcome = function(value,promise) {
         var promise = promise || new Promise();
         initSession(global,promise).then(function(value,promise) {
+            console.log(value);
             if(!value) {
                 value = [];
             }
