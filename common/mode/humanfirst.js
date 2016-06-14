@@ -1,7 +1,7 @@
 /**
  * @author Treagzhao
  */
-var RobotFirst = function(global) {
+var HumanFirst = function(global) {
     var listener = require("../util/listener.js");
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
@@ -9,36 +9,10 @@ var RobotFirst = function(global) {
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
-    var _self = this;
     var $transferBtn;
-    var manager;
-    var parseDOM = function() {
-        $transferBtn = $(".temp_test");
-    };
-
-    var getWelcome = function(value,promise) {
-        var promise = promise || new Promise();
-        if(!value) {
-            value = [];
-        }
-        var now = new Date();
-        var obj = {
-            "date" : DateUtil.formatDate(now),
-            "content" : [{
-                'senderType' : 2,
-                't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true)
-            }]
-        };
-        setTimeout(function() {
-            promise.resolve(value);
-        },0);
-        return promise;
-    };
-
-    var transferBtnClickHandler = function() {
-        transfer(global).then(function(groupId,promise) {
+    var transferConnect = function() {
+        var promise = new Promise();
+        transfer(global,promise).then(function(groupId,promise) {
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
                 'type' : 'post',
@@ -54,14 +28,17 @@ var RobotFirst = function(global) {
                     if(ret.status == 2) {
                         listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
                         //暂无客服在线
+                        manager = new Robot(global);
+                        $transferBtn.show();
                         console.log('暂无客服在线');
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
                         console.log('排队');
+                        manager = new Robot(global);
+                        $transferBtn.show();
                         listener.trigger("core.system",[str]);
                     } else if(ret.status == 1) {
-                        manager.destroy();
                         console.log('成功');
                         if(WebSocket && false) {
                             manager = new WebSocket(ret.puid);
@@ -69,25 +46,48 @@ var RobotFirst = function(global) {
                             manager = new Rolling(ret.puid);
                         }
                         manager.start();
-                        listener.trigger("core.system",[global.apiConfig.adminHelloWord,ret]);
                     }
                 },
                 'fail' : function() {
                 }
             });
         });
+        return promise;
 
+    };
+
+    var getWelcome = function(value,promise) {
+        var promise = promise || new Promise();
+        if(!value) {
+            value = [];
+        }
+        var now = new Date();
+        var obj = {
+            "date" : DateUtil.formatDate(now),
+            "content" : [{
+                'senderType' : 2,
+                't' : +now,
+                'msg' : global.apiConfig.adminHelloWord,
+                'ts' : DateUtil.formatDate(now,true)
+            }]
+        };
+        setTimeout(function() {
+            promise.resolve(value);
+        },0);
+        return promise;
+    };
+
+    var parseDOM = function() {
+        $transferBtn = $(".temp_test");
     };
 
     var bindListener = function() {
-        $transferBtn.on("click",transferBtnClickHandler);
+        $transferBtn.on("click",transferConnect);
     };
 
     var initPlugins = function() {
-        $transferBtn.show();
-        //首先发送机器人欢迎语
-        manager = new Robot(global);
-
+        transferConnect().then(function(value,promise) {
+        });
     };
 
     var init = function() {
@@ -97,7 +97,9 @@ var RobotFirst = function(global) {
     };
 
     init();
+
     this.getWelcome = getWelcome;
+
 };
 
-module.exports = RobotFirst;
+module.exports = HumanFirst;

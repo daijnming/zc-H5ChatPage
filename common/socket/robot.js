@@ -28,7 +28,8 @@ function Robot(global) {
             },
             'type' : 'post',
             'success' : function(ret) {
-                listener.trigger("core.onreceive",ret);
+                var item = JSON.parse(ret);
+                listener.trigger("core.onreceive",[item]);
             },
             'fail' : function(ret) {
                 console.log(ret);
