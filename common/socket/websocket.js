@@ -3,13 +3,17 @@
  */
 function WebSocket(puid) {
     this.puid = puid;
-    console.log(WebSocket);
+
+    var destroy = function() {
+    };
+
     var start = function() {
     };
 
     var stop = function() {
     };
 
+    this.destroy = destroy;
     this.start = start;
     this.stop = stop;
 };

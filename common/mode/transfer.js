@@ -25,7 +25,12 @@ function transfer(global,promise) {
         });
     };
     var init = function() {
-        if(global.apiConfig.groupflag === 0) {
+        if(global.apiInit.ustatus !== 0) {
+            //存在会话保持
+            setTimeout(function() {
+                promise.resolve(null);
+            },0);
+        } else if(global.apiConfig.groupflag === 0) {
             setTimeout(function() {
                 promise.resolve(null);
             },0);
