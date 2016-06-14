@@ -79,6 +79,7 @@ p,ul,li{
   margin-top: 25px;
   float: left;
   max-width: 65%;
+  word-break: break-all;
 }
 .msgOuter{
   position: relative;
@@ -230,6 +231,32 @@ p,ul,li{
   line-height: 40px;
   font-size: 0.8em;
   color:#676e6f;
+}
+.wrap .pullDown .pullDownLabel{
+  position: relative;
+  display: inline-block;
+}
+.wrap .pullDown .pullDownLabel.up::after{
+  content: "";
+  position: absolute;
+  border-color: transparent #fff;
+  border-style: solid;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-top:12px solid #676e6f;
+  top:15px;
+  left:75px;
+}
+.wrap .pullDown .pullDownLabel.down::after{
+  content: "";
+  position: absolute;
+  border-color: transparent #fff;
+  border-style: solid;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-bottom:12px solid #676e6f;
+  top:11px;
+  left:75px;
 }
 .msgOuter ul.sugguestions{
   width:80%;

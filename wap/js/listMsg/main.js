@@ -175,8 +175,15 @@ var ListMsgHandler = function() {
     //下拉刷新
     var onPullDown = function(){
       scrollHanlder.pullDown(function(data){
-        showHistoryMsg(data);
-        global.flags.moreHistroy = true;
+        if(data.length>0){
+          showHistoryMsg(data);
+          global.flags.moreHistroy = true;
+        }else{
+          //没有历史记录
+          global.flags.moreHistroy = false;
+          $(pullDown).text('没有更多记录');
+        }
+
       });
     };
     //发送消息绑定到页面
@@ -236,8 +243,8 @@ var ListMsgHandler = function() {
         clearInterval(timer);
         timer =  setTimeout(function(){
           var offsetTop = node.offset().top-$(topTitleBar).height();
-          console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
-          console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
+          // console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
+          // console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
         },300);
