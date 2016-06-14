@@ -26,7 +26,8 @@
     "[鼓掌]": "guzhang",
     "[糗大了]": "qiudal",
     "[坏笑]": "huaixiao",
-    "[左哼哼]": "zuohengheng",
+    "backDelete":"backDelete"/*,*/
+    /*"[左哼哼]": "zuohengheng",
     "[右哼哼]": "youhengheng",
     "[哈欠]": "haqian",
     "[鄙视]": "bishi",
@@ -103,5 +104,5 @@
     "[乱舞]": "luanwu",
     "[献吻]": "xianwen",
     "[左太极]": "zuotaiji",
-    "[右太极]": "youtaiji"
+    "[右太极]": "youtaiji"*/
 }

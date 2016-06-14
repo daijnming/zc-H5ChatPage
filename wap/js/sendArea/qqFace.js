@@ -4,7 +4,6 @@
  */
 
 function ZC_Face() {
-    var loadFile = require('../../../common/util/load.js')();
     var listener = require("../../../common/util/listener.js");
     var weixinJson = require('./face/weixin.json');
     var weixinSymbol = require('./face/weixinsymbol.json');
@@ -62,7 +61,6 @@ function ZC_Face() {
             var elm = e.currentTarget;
             var src = $(elm).attr("data-src");
             var reg = /u([0-9A-Za-z]{5})/;
-            src=analysis(src);
             listener.trigger('sendArea.gotoxy',[{
                 'answer' : src
             }]

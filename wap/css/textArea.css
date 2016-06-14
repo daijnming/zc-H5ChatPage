@@ -3,6 +3,7 @@ li {
 }
 .chatArea {
     width: 100%;
+   /*  height:261px; */
     position: fixed;
     bottom:-215px;
     left: 0;

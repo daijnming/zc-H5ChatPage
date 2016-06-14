@@ -6,7 +6,6 @@ function TextArea(window) {
     //var that = {};
     var global;
     var listener = require("../../../common/util/listener.js");
-    var loadFile = require('../../../common/util/load.js')();
     //表情
     var ZC_Face = require('./qqFace.js')();
 
@@ -26,9 +25,11 @@ function TextArea(window) {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
         $textarea = $(".js-textarea");
+        $sendarea=$(".sendarea");
         $add = $(".js-add");
         $chatAdd = $(".js-chatAdd");
         $emotion = $(".js-emotion");
+        $chatEmotion = $(".js-chatEmotion");
         $tab=$(".js-tab");
         oTxt = document.getElementById("js-textarea");
     };
@@ -44,7 +45,7 @@ function TextArea(window) {
          }]);*/
     };
     var showSendBtnHandler = function(evt) {
-        var _text = $textarea.html();
+        var _text = $textarea.text();
         //console.log(_text);
         //var reg=/^(\<div\>\<br\>\<\/div\>)$/g;
         /*if(reg.test(_text)){
@@ -65,25 +66,16 @@ function TextArea(window) {
             $add.hide();
             hideChatAreaHandler();
             $textarea.css("width","65%");
-            listener.trigger('sendArea.autoSize',263);
         } else {
             $sendBtn.hide();
             $emotion.hide();
             hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%");
-            listener.trigger('sendArea.autoSize',48);
         }
-
-
-        //var reg=/&nbsp;/g;
-        //var _text=_text.replace(reg,"");
-        //console.log(_text);
-
     };
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
-        console.log(str);
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
@@ -96,36 +88,41 @@ function TextArea(window) {
                 'cid' : currentCid,
                 'date' : +new Date()
             }]);
+            
         }
-        $textarea.html("");
         //清空待发送框
+        $textarea.html("");     
     };
-    var showChatAreaHandler=function(){
-        if($chatArea.hasClass("showChatArea")){
-            $chatArea.removeClass("showChatArea");
+    var showChatAddHandler=function(){
+        //与键盘优化
+        setTimeout(function(){
+            if($chatArea.hasClass("showChatAdd")){
+                //隐藏
+               hideChatAreaHandler();
+
+            } else {
+                //显示
+                $chatArea.addClass("showChatAdd");
+                $chatArea.animate({
+                    bottom : "0"
+                },200);
+            }
+        },200)
+        autoSizeAndrond();
+    };
+    var hideChatAreaHandler = function() {
+        setTimeout(function(){
+            $chatArea.removeClass("showChatAdd");
             $chatArea.animate({
                 bottom : "-215px"
             },200);
-            listener.trigger('sendArea.autoSize',48);
-        } else {
-            $chatArea.addClass("showChatArea");
-            $chatArea.animate({
-                bottom : "0px"
-            },200)
-            listener.trigger('sendArea.autoSize',263);
-        }
-    };
-    var hideChatAreaHandler = function() {
-        $chatArea.removeClass("showChatArea");
-        $chatArea.animate({
-            bottom : "-215px"
-        },200);
-        listener.trigger('sendArea.autoSize',48);
+         },200);
+        autoSizeAndrond();
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
         //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
-        $chatAdd.addClass("tab-active")
+        $chatAdd.addClass("tab-active");
         var id=$(this).attr("data-id");
         $(".tab-active").hide();
         $(id).show();
@@ -140,12 +137,28 @@ function TextArea(window) {
     };
     //模拟退格
     var backDeleteHandler=function(){
-        var _text=$textarea.html();
-        _text=_text.substring(0,_text.length-1);
-        $textarea.focus();
+        var _html=$textarea.text();
+        _html=_html.substring(0,_html.length-1);
         $textarea.html("");
-        $textarea.html(_text)
-    }
+        $textarea.html(_html)
+    };
+    //宽高自适应安卓
+    var autoSizeAndrond=function(){
+        var _height=$(".chatArea").offset().top;
+        console.log(_height);
+        listener.trigger('sendArea.autoSize');
+        /*$chatArea.resize(function(){
+            var _height=$chatArea.height()+$chatAdd.height()+$chatEmotion.height();
+            console.log(_height);
+            listener.trigger('sendArea.autoSize',_height);
+        })*/
+        /*$(window).resize(function() {
+          var _height=$(window).height()-($chatArea.height()+$chatAdd.height()+$chatEmotion.height());
+          console.log(_height);
+           
+          listener.trigger('sendArea.autoSize',_height);
+        });*/
+    };
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
@@ -153,8 +166,8 @@ function TextArea(window) {
         $emotion.on("click",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
         $textarea.on("focus",hideChatAreaHandler);
-        $add.on("click",showChatAreaHandler);
-        $emotion.on("click",showChatAreaHandler);
+        $add.on("click",showChatAddHandler);
+        $emotion.on("click",showChatAddHandler);
         //表情、加号切换
         $tab.on("click",tabChatAreaHandler)
         //定位光标
@@ -169,10 +182,7 @@ function TextArea(window) {
     var initPlugsin = function() {//插件
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
-
-        //qq表情滚动插件
-        //$node.find(".item").perfectScrollbar();
-
+        autoSizeAndrond();
     };
     var init = function() {
         parseDOM();
