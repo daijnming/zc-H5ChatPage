@@ -146,9 +146,8 @@ function TextArea(window) {
     var autoSizeAndrond=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
-        listener.trigger('sendArea.autoSize',[{
-                'node' : $(".chatArea")
-            }]);
+        
+        listener.trigger('sendArea.autoSize',$(".chatArea"));
         /*$chatArea.resize(function(){
             var _height=$chatArea.height()+$chatAdd.height()+$chatEmotion.height();
             console.log(_height);
