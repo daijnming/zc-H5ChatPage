@@ -6,70 +6,72 @@ var initConfig = function() {
 
     var outerPromise = new Promise();
     //api接口
-    var api={
-      config_url:'/chat/user/config.action',
-      init_url:'/chat/user/init.action'
+    var api = {
+        config_url : '/chat/user/config.action',
+        init_url : '/chat/user/init.action'
     };
     //存储数据对象
     var That = {};
     That.cacheInfo = {};
 
-    That.cacheInfo.flags={
-      status : 'enabled',
-      isLoaded : false,
-      pageNow : 1,
-      pageSize : 15,
-      moreHistroy : false,
-      isConnected : false,// 是否已建立会话连接
-      isEnableManual : false,// 客服是否可用
-      isEnableOnInput : true,// 是否可以显示客服输入状态
-      isGetCustomConfig : false,// 设的一个标识用来判断是否是否已走getCustomConfig
-      isEnableBigImg : true,// 默认可以放大图片
-      isPeopleModel : false,// 人工模式是否可用
-      isWaitModel : false,// 是否处于等待模式
-      isTimeLine : false,// 是否显示时间线，默认不显示
-      isUserTalked : false,// 是否已聊过
-      isSurveyed : false,// 是否已评价
-      isKeepSessions : false,// 是否保持会话
-      isOutOneMinute : false // 是否已超时一分钟
+    That.cacheInfo.flags = {
+        status : 'enabled',
+        isLoaded : false,
+        pageNow : 1,
+        pageSize : 15,
+        moreHistroy : false,
+        isConnected : false,// 是否已建立会话连接
+        isEnableManual : false,// 客服是否可用
+        isEnableOnInput : true,// 是否可以显示客服输入状态
+        isGetCustomConfig : false,// 设的一个标识用来判断是否是否已走getCustomConfig
+        isEnableBigImg : true,// 默认可以放大图片
+        isPeopleModel : false,// 人工模式是否可用
+        isWaitModel : false,// 是否处于等待模式
+        isTimeLine : false,// 是否显示时间线，默认不显示
+        isUserTalked : false,// 是否已聊过
+        isSurveyed : false,// 是否已评价
+        isKeepSessions : false,// 是否保持会话
+        isOutOneMinute : false // 是否已超时一分钟
     };
     //是否开启系统提示语
     var isLanOpen = true,
-        lanType='CN';// 语言设置 系统提示语言 'CN' 中文   ‘EN’ 英文  ‘JP’ 日文
-    var lanConfig = function (lanType){
+        lanType = 'CN';
+    // 语言设置 系统提示语言 'CN' 中文   ‘EN’ 英文  ‘JP’ 日文
+    var lanConfig = function(lanType) {
         switch (lanType) {
-          case 'CN':
-            return{
-              'L10001' : '暂时无法转接人工客服',
-               'L10002' : '您好,{0}接受了您的请求',// 注意多个替换点从0开始
-               'L10003' : '您已经与服务器断开连接,{0}',
-               'L10004' : '排队中，您在队伍中的第{0}个',
-               'L10005' : '您在思考人生？有问题请随时提问哦',
-               'L10006': '<a href="javascript: window.location.reload();">重新接入</a>',
-               'L10007' : '{0}有事离开了{1}',
-               'L10008' : '您与{0}的会话已结束{1}',
-               'L10009' : '{0}结束了本次会话',
-               'L10010' : '您长时间没有说话，本次会话已结束。{0}',
-               'L10011' : '{0}您已打开新聊天窗口{1}',
-               'L10012' : '没有更多记录',
-               'L10013' : '抱歉，您无法接入在线客服',
-               'L10014' : '图片过大',
-               'L10015' : '格式不支持',
-               'L10016' : '正在加载...',
-               'L10017' : '正在加载...',
-               'L10018' : '下拉显示更多',
-               'L10019' : '客服{0}发起了会话',
-               'L10020' : '{0}正在输入',
-               'L10021' : '本次会话结束{0}',
-               'L10022' : '{0} 您可以<a href="javascript: void(0);" id="systemMsgLeaveMessage">留言</a>',
-               'L10023' : '{0} <span  id="systemMsgLeaveMsg">请等待</span>'
-            };
-          case 'EN':
-            return{'L10001' : 'Sorry!',
-             'L10002' : 'Hello,{0}Plase holdon'
-            };
-          case "JP":
-            break;
+            case 'CN':
+                return {
+                    'L10001' : '暂时无法转接人工客服',
+                    'L10002' : '您好,{0}接受了您的请求',// 注意多个替换点从0开始
+                    'L10003' : '您已经与服务器断开连接,{0}',
+                    'L10004' : '排队中，您在队伍中的第{0}个',
+                    'L10005' : '您在思考人生？有问题请随时提问哦',
+                    'L10006' : '<a href="javascript: window.location.reload();">重新接入</a>',
+                    'L10007' : '{0}有事离开了{1}',
+                    'L10008' : '您与{0}的会话已结束{1}',
+                    'L10009' : '{0}结束了本次会话',
+                    'L10010' : '您长时间没有说话，本次会话已结束。{0}',
+                    'L10011' : '{0}您已打开新聊天窗口{1}',
+                    'L10012' : '没有更多记录',
+                    'L10013' : '抱歉，您无法接入在线客服',
+                    'L10014' : '图片过大',
+                    'L10015' : '格式不支持',
+                    'L10016' : '正在加载...',
+                    'L10017' : '正在加载...',
+                    'L10018' : '下拉显示更多',
+                    'L10019' : '客服{0}发起了会话',
+                    'L10020' : '{0}正在输入',
+                    'L10021' : '本次会话结束{0}',
+                    'L10022' : '{0} 您可以<a href="javascript: void(0);" id="systemMsgLeaveMessage">留言</a>',
+                    'L10023' : '{0} <span  id="systemMsgLeaveMsg">请等待</span>'
+                };
+            case 'EN':
+                return {
+                    'L10001' : 'Sorry!',
+                    'L10002' : 'Hello,{0}Plase holdon'
+                };
+            case "JP":
+                break;
 
         }
     };
@@ -225,7 +227,7 @@ var initConfig = function() {
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
                 face : urlParams['face'] ? urlParams['face'] : 'http://img.sobot.com/console/common/face/user.png',//默认用户头像
-                back:urlParams['back']?urlParams['back']:''
+                back : urlParams['back'] ? urlParams['back'] : ''
             };
         },
         //FIXME 初始化SysNum系统 id
