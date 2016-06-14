@@ -28,7 +28,7 @@ function Robot(global) {
             },
             'type' : 'post',
             'success' : function(ret) {
-                listener.trigger("core.onreceive",ret);
+                listener.trigger("core.onreceive",[ret]);
             },
             'fail' : function(ret) {
                 console.log(ret);
