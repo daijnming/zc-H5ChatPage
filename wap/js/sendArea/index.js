@@ -106,9 +106,10 @@ function TextArea(window) {
                 $chatArea.animate({
                     bottom : "0"
                 },200);
+                autoSizeAndrond();
             }
         },200)
-        autoSizeAndrond();
+        
     };
     var hideChatAreaHandler = function() {
         setTimeout(function(){
@@ -116,8 +117,9 @@ function TextArea(window) {
             $chatArea.animate({
                 bottom : "-215px"
             },200);
+            autoSizeAndrond();
          },200);
-        autoSizeAndrond();
+        
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -138,7 +140,12 @@ function TextArea(window) {
     //模拟退格
     var backDeleteHandler=function(){
         var _html=$textarea.text();
-        _html=_html.substring(0,_html.length-1);
+        if(_html.length==1){
+            _html="";
+        }else{
+            _html=_html.substring(0,_html.length-1);
+        }
+       
         $textarea.html("");
         $textarea.html(_html)
     };
@@ -146,8 +153,8 @@ function TextArea(window) {
     var autoSizeAndrond=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
-        
-        listener.trigger('sendArea.autoSize',$(".chatArea"));
+        console.log("出发了");
+        listener.trigger('sendArea.autoSize',$chatArea);
         /*$chatArea.resize(function(){
             var _height=$chatArea.height()+$chatAdd.height()+$chatEmotion.height();
             console.log(_height);
