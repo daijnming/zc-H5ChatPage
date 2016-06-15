@@ -40,7 +40,7 @@ var RobotFirst = function(global) {
                 "content" : [{
                     'senderType' : 2,
                     't' : +now,
-                    'msg' : global.apiConfig.robotHelloWord,
+                    'answer' : global.apiConfig.robotHelloWord,
                     'ts' : DateUtil.formatDate(now,true)
                 }]
             };
@@ -127,7 +127,7 @@ var RobotFirst = function(global) {
             "content" : [{
                 'senderType' : 2,
                 't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
+                'answer' : global.apiConfig.robotHelloWord,
                 'ts' : DateUtil.formatDate(now,true)
             }]
         };
