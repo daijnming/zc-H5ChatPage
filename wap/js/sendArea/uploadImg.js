@@ -35,27 +35,50 @@ function uploadImg() {
         //清空文本域
         $(".js-upload").val("");
     }
+    //本地数据流展示
+    var fileReaderHandler=function(evt){
+        var evt = evt.originalEvent;
+        console.log(evt);
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+            var file = evt.target.result;
+            var blob = convertBase64ToBlob(file);
+            console.log(file);
+            //oData.append("file",blob);
+            /*var dialog = new Alert({
+                'title' : '您确定要上传这张图吗',
+                'text' : '<img src="' + file + '">',
+                'OK' : function() {
+                        //上传
+                        onAjaxUploadUpHandler(uid,cid,oData,extension,filename,filetype);
+                },
+            });*/
+            //dialog.show();
+
+        };
+        // reader.readAsDataURL(blob);
+    }
     var onAjaxUploadUpHandler=function(oData){
-            $.ajax({
-                url : "/wap/js/sendArea/fileupload.json",
-                type : "post",
-                data : oData,
-                'dataType' : 'json',
-                //告诉jQuery不要去处理发送的数据
-                processData : false,
-                contentType : false,
-            success:function(response) {
-                var url = response.url;
-                console.log(url);
-                listener.trigger('sendArea.uploadImgUrl',[{
-                    'url' : url
-                }]);
-                //通过textarea.uploadImgUrl事件将图片地址传到聊天窗体
-            },
-            fail:function(ret) {
-                console.log("上传失败");
-            }
-            });
+        fileReaderHandler(oData);
+        $.ajax({
+            url : "/wap/js/sendArea/fileupload.json",
+            type : "post",
+            data : oData,
+            'dataType' : 'json',
+            //告诉jQuery不要去处理发送的数据
+            processData : false,
+            contentType : false,
+        success:function(response) {
+            var url = response.url;
+            listener.trigger('sendArea.uploadImgUrl',[{
+                'url' : url
+            }]);
+            //通过textarea.uploadImgUrl事件将图片地址传到聊天窗体
+        },
+        fail:function(ret) {
+            console.log("上传失败");
+        }
+        });
     };
     
     var bindLitener = function() {
