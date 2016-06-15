@@ -2,8 +2,8 @@
 var initSessions = function(global,promise) {
     var Promise = require('../util/promise.js');
     var promise = promise || new Promise();
+    console.log(global.apiInit.ustatus);
     //拉取会话记录
-    console.log(global.apiInit.ustatus)
     if(global.apiInit.ustatus == 0) {
         setTimeout(function() {
             promise.resolve([]);
@@ -18,6 +18,7 @@ var initSessions = function(global,promise) {
                 uid : global.apiInit.uid
             },
             success : function(data) {
+                console.log('data',data);
                 promise.resolve(data);
             }
         });

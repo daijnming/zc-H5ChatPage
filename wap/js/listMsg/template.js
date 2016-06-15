@@ -54,6 +54,24 @@ var rightMsg =
                   '</div>'+
               '</div>';
 
+
+  var rightImg =
+                    '<div class="msgwrap rightMsg">'+
+                        '<div class="header">'+
+                            '<img src="{{=it.userLogo}}" alt="" />'+
+                        '</div>'+
+                        '<div class="msgOuter js-userMsgOuter">'+
+                            '<p>'+
+                              '<img src="{{=it.uploadImg}}"'+
+                            '</p>'+
+                            '<div class="shadowLayer" class="js-shadowLayer">'+
+                            '  <span class="progress js-progress">{{=it.progress}}</span>'+
+                            '</div>'+
+                        '</div>'+
+                        '<span class="msgStatus statusRight"></span>'+
+                    '</div>'+
+                '</div>';
+
 var systemMsg =
                   '<p class="sysMsg">'+
                       '{{=it.sysMsg}}'+

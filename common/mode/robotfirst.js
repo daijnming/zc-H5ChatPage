@@ -85,8 +85,9 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(global.apiConfig.adminNonelineTitle,ret);
                         } else {
+                            ret.content = global.apiConfig.adminNonelineTitle;
                             listener.trigger("core.system", {
-                                'word' : global.apiConfig.adminNonelineTitle,
+                                'type' : 'system',
                                 'data' : ret
                             });
                         }
@@ -99,8 +100,9 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(str,ret);
                         } else {
+                            ret.content = str;
                             listener.trigger("core.system", {
-                                'word' : str,
+                                'type' : 'system',
                                 'data' : ret
                             });
                         }
@@ -114,8 +116,9 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(global.apiConfig.adminHelloWord,ret);
                         } else {
+                            ret.content = global.apiConfig.adminHelloWord;
                             listener.trigger("core.system", {
-                                'word' : global.apiConfig.adminHelloWord,
+                                'type' : 'human',
                                 'data' : ret
                             });
                         }
@@ -145,6 +148,7 @@ var RobotFirst = function(global) {
         };
         value.push(obj);
         setTimeout(function() {
+            console.log(value);
             listener.trigger("core.initsession", {
                 'list' : value,
                 'type' : 'robot'
