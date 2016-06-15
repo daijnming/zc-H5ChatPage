@@ -3,7 +3,7 @@
  */
 function WebSocket(puid) {
     this.puid = puid;
-
+    var socketType = 'human';
     var destroy = function() {
     };
 

@@ -41,25 +41,28 @@ var ScrollHandler = function(global,node){
   var scrollStart = function(){
     var y = scroll.y,
         maxY = scroll.maxScrollY - y;
-    // downHasClass = downIcon.hasClass("reverse_icon");
-
-    if(y >= 40) {
-        $(pullDown).text('放手开始加载');
-        // !downHasClass && downIcon.addClass("reverse_icon");
-        // return "";
-    } else if(y < 40 && y > 0) {
-        if(global.flags.moreHistroy)
-            $(pullDown).text('下拉刷新..');
-        else
-            $(pullDown).text('暂无数据..');
-        // downHasClass && downIcon.removeClass("reverse_icon");
-        // return "";
+    if(global.flags.moreHistroy){
+      if(y >= 40) {
+          $(pullDown).text('放手加载更多');
+          $(pullDown).addClass('down');
+          $(pullDown).removeClass('up');
+          return "";
+      } else if(y < 40 && y > 0) {
+          $(pullDown).text('下拉加载更多');
+          $(pullDown).addClass('up');
+          $(pullDown).removeClass('down');
+          return "";
+      }
+    }else{
+      $(pullDown).text('没有更多消息');
+      $(pullDown).removeClass('up down');
     }
-
   };
   //下拉刷新
   That.pullDown = function(callback){
-    if(scroll.y > 40) {
+    //有更多历史记录
+    if(scroll.y > 40&&global.flags.moreHistroy) {
+      global.flags.pageNow+=1;//下拉刷新
         $.ajax({
             type : "post",
             url : api.url_detail,
@@ -70,10 +73,6 @@ var ScrollHandler = function(global,node){
                 pageSize : global.flags.pageSize
             },
             success:callback
-            // success : function(data) {
-            //     // showHistoryMsg(data);
-            //     global.flags.moreHistroy = true;
-            // }
         });
     }
   };

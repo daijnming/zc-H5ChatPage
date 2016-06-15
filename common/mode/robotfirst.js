@@ -30,11 +30,11 @@ var RobotFirst = function(global) {
     var getWelcome = function(value,promise) {
         var promise = promise || new Promise();
         initSession(global,promise).then(function(value,promise) {
-            console.log(value);
             if(!value) {
                 value = [];
             }
             var now = new Date();
+            console.log(value,global);
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
