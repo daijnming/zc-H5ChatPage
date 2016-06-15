@@ -9,8 +9,9 @@ var HumanFirst = function(global) {
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
+    var initSession = require('./initsession.js');
     var $transferBtn;
-    var transferConnect = function() {
+    var transferConnect = function(value,promise) {
         var promise = new Promise();
         transfer(global,promise).then(function(groupId,promise) {
             $.ajax({
@@ -86,8 +87,11 @@ var HumanFirst = function(global) {
     };
 
     var initPlugins = function() {
-        transferConnect().then(function(value,promise) {
-        });
+        var status = global.apiInit.ustatus;
+        if(status == 0 || status == 1) {
+            initSession(global).then(transferConnect).then(function(value,promise) {
+            });
+        }
     };
 
     var init = function() {
@@ -98,7 +102,8 @@ var HumanFirst = function(global) {
 
     init();
 
-    this.getWelcome = getWelcome;
+    this.getWelcome = function() {
+    };
 
 };
 

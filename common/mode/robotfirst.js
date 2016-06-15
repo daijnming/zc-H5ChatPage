@@ -13,6 +13,7 @@ var RobotFirst = function(global) {
     var _self = this;
     var $transferBtn;
     var manager;
+    var outerPromise = new Promise();
     var parseDOM = function() {
         $transferBtn = $(".temp_test");
     };
@@ -34,7 +35,6 @@ var RobotFirst = function(global) {
                 value = [];
             }
             var now = new Date();
-            console.log(value,global);
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
@@ -46,7 +46,7 @@ var RobotFirst = function(global) {
             };
             value.push(obj);
             setTimeout(function() {
-                promise.resolve(value);
+                listener.trigger("core.onreceive",value);
             },0);
             return promise;
         });
@@ -93,6 +93,25 @@ var RobotFirst = function(global) {
 
     };
 
+    var initRobotSession = function(value,promise) {
+        if(!value) {
+            value = [];
+        }
+        var now = new Date();
+        var obj = {
+            "date" : DateUtil.formatDate(now),
+            "content" : [{
+                'senderType' : 2,
+                't' : +now,
+                'msg' : global.apiConfig.robotHelloWord,
+                'ts' : DateUtil.formatDate(now,true)
+            }]
+        };
+        value.push(obj);
+        setTimeout(function() {
+            outerPromise.resolve(value);
+        },0);
+    };
     var bindListener = function() {
         $transferBtn.on("click",transferBtnClickHandler);
     };
@@ -102,9 +121,12 @@ var RobotFirst = function(global) {
         //首先发送机器人欢迎语
         if(global.apiInit.ustatus == 0) {
             manager = new Robot(global);
+            getWelcome();
         } else {
             if(global.apiInit.ustatus == 1) {
                 transferBtnClickHandler();
+            } else if(global.apiInit.ustatus == -1) {
+                initSession(global).then(initRobotSession);
             }
             //console.log(manager);
         }
@@ -118,7 +140,6 @@ var RobotFirst = function(global) {
     };
 
     init();
-    this.getWelcome = getWelcome;
 };
 
 module.exports = RobotFirst;
