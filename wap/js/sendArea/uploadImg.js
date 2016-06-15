@@ -5,6 +5,10 @@
 function uploadImg() {
     var global;
     var listener = require("../../../common/util/listener.js");
+    var iBytesUploaded = 0;
+    var iBytesTotal = 0;
+    var iPreviousBytesLoaded = 0;
+    var oTimer = 0;
     /*var global = core.getGlobal();
     //模板引擎
     var template = require('./template.js');*/
@@ -12,55 +16,39 @@ function uploadImg() {
     var parseDOM = function() {
     };
   
-    var onFormDataUpHandler=function(){
+    var onFormDataUpHandler=function(e){
         var oData = new FormData();
         var input = $(".js-upload")[0];
-        var files="";
-        //获取文件扩展名
-        var val = $(".js-upload").val();
         //创建请求头
-        for(var i = 0;i < input.files.length;i++) {
-            var file = input.files[i];
-            files += file;
-            oData.append("file",file);
+        var file = input.files[0];
+        //创建本地图片数据流
+        var reader = new FileReader();
+        reader.readAsDataURL(file); 
+        reader.onload = function(e){
+            //this.result 本地图片的数据流
+            //alert(this.result);
+            listener.trigger("sendArea.createUploadImg",this.result)
         }
+        oData.append("file",file);
         oData.append("type","msg");
-        
         oData.append("countTag",1);
         oData.append("source",0);
-
         //上传
         onAjaxUploadUpHandler(oData);
-        
         //清空文本域
         $(".js-upload").val("");
     }
-    //本地数据流展示
-    var fileReaderHandler=function(evt){
-        var evt = evt.originalEvent;
-        console.log(evt);
-        var reader = new FileReader();
-        reader.onload = function(evt) {
-            var file = evt.target.result;
-            var blob = convertBase64ToBlob(file);
-            console.log(file);
-            //oData.append("file",blob);
-            /*var dialog = new Alert({
-                'title' : '您确定要上传这张图吗',
-                'text' : '<img src="' + file + '">',
-                'OK' : function() {
-                        //上传
-                        onAjaxUploadUpHandler(uid,cid,oData,extension,filename,filetype);
-                },
-            });*/
-            //dialog.show();
-
-        };
-        // reader.readAsDataURL(blob);
+    function uploadProgress(e) { //进度上传过程
+        if (e.lengthComputable) {
+            var iPercentComplete = Math.round(e.loaded * 100 / e.total);
+            document.getElementById('progress_percent').innerHTML = iPercentComplete.toString() + '%';
+            document.getElementById('progress').style.width = (iPercentComplete * 4).toString() + 'px';
+        } else {
+            document.getElementById('progress').innerHTML = '无法计算';
+        }
     }
     var onAjaxUploadUpHandler=function(oData){
-        fileReaderHandler(oData);
-        $.ajax({
+        /*var oXHR=$.ajax({
             url : "/wap/js/sendArea/fileupload.json",
             type : "post",
             data : oData,
@@ -78,13 +66,32 @@ function uploadImg() {
         fail:function(ret) {
             console.log("上传失败");
         }
-        });
+        });*/
+       // var vFD = new FormData(); 
+        var oXHR = new XMLHttpRequest();
+        oXHR.upload.addEventListener('progress', uploadProgress, false);
+        oXHR.open('POST','/wap/js/sendArea/fileupload.json');  
+        oXHR.send(oData);
+        oXHR.onreadystatechange = function(req){
+        if(req.target.readyState == 4){ 
+                if(req.target.status == 200){
+                    var url = JSON.parse(req.target.response).url;
+                     console.log(req.target.response);
+                        //alert(url);
+                        listener.trigger('sendArea.uploadImgUrl',[{
+                            'url' : url
+                        }]);  
+                }else{
+                    alert("error");  
+                }  
+            }   
+        } 
+        var oProgress = document.getElementById('progress');
+        oProgress.style.display = 'block';
+        oProgress.style.width = '0px';
     };
-    
     var bindLitener = function() {
-        $(".js-upload").bind("change",function(){
-            onFormDataUpHandler();
-        })
+        $(".js-upload").on("change",onFormDataUpHandler)
     };
      
     var initPlugsin = function() {//插件
