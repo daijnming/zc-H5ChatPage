@@ -38,7 +38,7 @@ var RobotFirst = function(global) {
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
-                    'senderType' : 2,
+                    'senderType' : 1,
                     't' : +now,
                     'answer' : global.apiConfig.robotHelloWord,
                     'ts' : DateUtil.formatDate(now,true)
@@ -137,7 +137,7 @@ var RobotFirst = function(global) {
         var obj = {
             "date" : DateUtil.formatDate(now),
             "content" : [{
-                'senderType' : 2,
+                'senderType' : 1,
                 't' : +now,
                 'answer' : global.apiConfig.robotHelloWord,
                 'ts' : DateUtil.formatDate(now,true)
