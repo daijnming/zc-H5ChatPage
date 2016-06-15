@@ -8,7 +8,6 @@ function TextArea(window) {
     var listener = require("../../../common/util/listener.js");
     //表情
     var ZC_Face = require('./qqFace.js')();
-
     //上传附件
     var uploadImg = require('./uploadImg.js')(); 
     /* var inputCache = {};
@@ -42,7 +41,8 @@ function TextArea(window) {
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
-         'date' : date
+         'date' : date,
+         'token':data[0].token
          }]);
     };
     var showSendBtnHandler = function(evt) {
@@ -116,7 +116,6 @@ function TextArea(window) {
         //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
         $chatAdd.addClass("tab-active");
         var id=$(this).attr("data-id");
-        $(".tab-active").hide();
         $(id).show();
     };
      //定位光标
@@ -182,6 +181,8 @@ function TextArea(window) {
         global = data;
         currentUid=global[0].apiInit.uid;
         currentCid=global[0].apiInit.cid;
+        //将uid传入上传图片模块
+        listener.trigger('sendArea.sendInitConfig',currentUid)
         init();
     });
 

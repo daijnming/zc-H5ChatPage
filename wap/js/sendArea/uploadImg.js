@@ -5,10 +5,9 @@
 function uploadImg() {
     var global;
     var listener = require("../../../common/util/listener.js");
-    var iBytesUploaded = 0;
-    var iBytesTotal = 0;
-    var iPreviousBytesLoaded = 0;
-    var oTimer = 0;
+    //上传图片假消息时间戳
+    var token="",
+    currentUid
     /*var global = core.getGlobal();
     //模板引擎
     var template = require('./template.js');*/
@@ -16,26 +15,35 @@ function uploadImg() {
     var parseDOM = function() {
     };
   
-    var onFormDataUpHandler=function(e){
+    var onFormDataUpHandler=function(){
         var oData = new FormData();
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        console.log(file);
-        //创建本地图片数据流
-        var reader = new FileReader();
-        reader.readAsDataURL(file); 
-        reader.onload = function(e){
-            //this.result 本地图片的数据流
-            //alert(this.result);
-            listener.trigger("sendArea.createUploadImg",this.result)
+        //判断上传文件是否为图片
+        if(/^(image)/.test(file.type)){
+            //创建本地图片数据流
+            var reader = new FileReader();
+            reader.readAsDataURL(file); 
+            reader.onload = function(e){
+                token= currentUid + +new Date();
+                //this.result 本地图片的数据流
+                //alert(this.result);
+                listener.trigger("sendArea.createUploadImg",[{
+                    'result' : this.result,
+                    'token':token
+                }])
+            }
+            oData.append("file",file);
+            oData.append("type","msg");
+            oData.append("countTag",1);
+            oData.append("source",0);
+            //上传
+            onAjaxUploadUpHandler(oData);
+            
+        }else{
+            alert("请上传正确的图片格式")
         }
-        oData.append("file",file);
-        oData.append("type","msg");
-        oData.append("countTag",1);
-        oData.append("source",0);
-        //上传
-        onAjaxUploadUpHandler(oData);
         //清空文本域
         $(".js-upload").val("");
     }
@@ -83,7 +91,8 @@ function uploadImg() {
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
                         listener.trigger('sendArea.uploadImgUrl',[{
-                            'url' : url
+                            'url' : url,
+                            'token':token
                         }]);  
                 }else{
                     //alert("error");  
@@ -100,13 +109,15 @@ function uploadImg() {
      
     var initPlugsin = function() {//插件
     };
+    var initConfig=function(data){
+        currentUid=data;
+    };
     var init = function() {
         parseDOM();
         bindLitener();
         initPlugsin();
-
+        listener.on('sendArea.sendInitConfig',initConfig)
     };
-
     init();
 
 }
