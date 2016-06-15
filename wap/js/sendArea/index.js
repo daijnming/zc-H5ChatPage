@@ -42,7 +42,8 @@ function TextArea(window) {
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
-         'date' : date
+         'date' : date,
+         'token':data[0].token
          }]);
     };
     var showSendBtnHandler = function(evt) {
@@ -182,6 +183,8 @@ function TextArea(window) {
         global = data;
         currentUid=global[0].apiInit.uid;
         currentCid=global[0].apiInit.cid;
+        //将uid传入上传图片模块
+        listener.trigger('sendArea.sendInitConfig',currentUid)
         init();
     });
 
