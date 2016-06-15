@@ -298,7 +298,7 @@ var ListMsgHandler = function() {
       },
       //上传图片
       onUpLoadImg:function(data){
-        console.log(data);
+        // console.log(data);
       }
     };
     /********************************************************************************/
