@@ -20,24 +20,30 @@ function uploadImg() {
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        console.log(file);
-        //创建本地图片数据流
-        var reader = new FileReader();
-        reader.readAsDataURL(file); 
-        reader.onload = function(e){
-            token= currentUid + +new Date();
-            //this.result 本地图片的数据流
-            //alert(this.result);
-            listener.trigger("sendArea.createUploadImg",[{
-                'result' : this.result,
-            }])
+        //判断上传文件是否为图片
+        if(/^(image)/.test(file.type)){
+            //创建本地图片数据流
+            var reader = new FileReader();
+            reader.readAsDataURL(file); 
+            reader.onload = function(e){
+                token= currentUid + +new Date();
+                //this.result 本地图片的数据流
+                //alert(this.result);
+                listener.trigger("sendArea.createUploadImg",[{
+                    'result' : this.result,
+                    'token':token
+                }])
+            }
+            oData.append("file",file);
+            oData.append("type","msg");
+            oData.append("countTag",1);
+            oData.append("source",0);
+            //上传
+            onAjaxUploadUpHandler(oData);
+            
+        }else{
+            alert("请上传正确的图片格式")
         }
-        oData.append("file",file);
-        oData.append("type","msg");
-        oData.append("countTag",1);
-        oData.append("source",0);
-        //上传
-        onAjaxUploadUpHandler(oData);
         //清空文本域
         $(".js-upload").val("");
     }
@@ -105,7 +111,6 @@ function uploadImg() {
     };
     var initConfig=function(data){
         currentUid=data;
-        console.log(currentUid);
     };
     var init = function() {
         parseDOM();
