@@ -165,7 +165,7 @@ var ListMsgHandler = function() {
               for(var i=0;i<_list.length;i++){
                 var _content = _list[i].content;
                 for(var j=0;j<_content.length;j++){
-                  var _data = _content[i];
+                  var _data = _content[j];
                   if(_data.answerType=='4'){
                     //相关搜索
                     msgHtml = msgHander.sugguestionsSearch(_data);
