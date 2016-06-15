@@ -21,6 +21,7 @@ function uploadImg() {
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
+        console.log(file);
         //创建本地图片数据流
         var reader = new FileReader();
         reader.readAsDataURL(file); 
@@ -41,10 +42,15 @@ function uploadImg() {
     function uploadProgress(e) { //进度上传过程
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
-            document.getElementById('progress_percent').innerHTML = iPercentComplete.toString() + '%';
-            document.getElementById('progress').style.width = (iPercentComplete * 4).toString() + 'px';
+            var percentage=iPercentComplete.toString() + '%';
+            var _height= (iPercentComplete * 4).toString() + 'px';
+            listener.trigger('sendArea.uploadImgProcess',[{
+                'percentage' : percentage,
+                'height':_height
+            }]); 
         } else {
-            document.getElementById('progress').innerHTML = '无法计算';
+            alert("请上传正确的图片格式");
+            //document.getElementById('progress').innerHTML = '无法计算';
         }
     }
     var onAjaxUploadUpHandler=function(oData){
@@ -76,8 +82,6 @@ function uploadImg() {
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
-                     console.log(req.target.response);
-                        //alert(url);
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'url' : url
                         }]);  
