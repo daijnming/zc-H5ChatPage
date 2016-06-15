@@ -1,5 +1,6 @@
 //会话判断
 var initSessions = function(global,promise) {
+    var Promise = require('../util/promise.js');
     var promise = promise || new Promise();
     //拉取会话记录
     console.log(global.apiInit.ustatus)

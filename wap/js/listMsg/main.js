@@ -38,19 +38,19 @@ var ListMsgHandler = function() {
 
     //展示历史记录
     var showHistoryMsg = function(data) {
+      console.log(data);
         // msgTemplate
-        var comf = $.extend({
-            'sysMsg' : global.language.lan['L10012']//没有更多记录
-        });
-        var sysHtml = doT.template(msgTemplate.sysMsg)(comf),
+        var comf,
+            sysHtml ='',
             dataLen = data.length,
             item = '',
             itemLan = 0,
             itemChild = '',
             msgHtml = '',
-            userLogo = 'http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG',
-            customLogo = 'http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG',
+            userLogo = 'http://img.sobot.com/console/common/face/user.png',
+            customLogo = '',
             oldCid = '',
+            oldTime='',//上一次时间
             tempHtml = '';
         reg = /target="_self"/g;
         if(data && data.length > 0) {
@@ -62,28 +62,31 @@ var ListMsgHandler = function() {
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
-                            'userLogo' : userLogo,
+                            'userLogo' : itemChild.senderFace,
                             'userMsg' : itemChild.msg
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
-                        var _name,
-                            _msg;
-                        if(itemChild.senderType == 1) {
-                            _name = global.apiConfig.robotName;
-                            _msg = global.apiConfig.robotLogo;
-                        } else {
-                            _name = itemChild.senderName;
-                            _msg = itemChild.senderFace;
-                        }
                         comf = $.extend({
-                            'customLogo' : customLogo,
-                            'customName' : _name,
+                            'customLogo' : itemChild.senderFace,
+                            'customName' : itemChild.senderName,
                             'customMsg' : itemChild.msg
                         });
                         msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                     }
+                    //时间线显示
+                    var curTime = new Date();
+                    var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
+                    if(oldTime){
+                      var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
+                      if(Number(_m)>1){
+                        //大于一分钟  0 当天  1上一天 2更久历史
+                        var type = _t<=1?0:_t>1&&_t<=2?1:2;
+                        msgHtml += sysHander.getTimeLine(type,itemChild.ts);
+                      }
+                    }
+                    oldTime = itemChild.ts;
                     tempHtml=(tempHtml+msgHtml).replace(reg,'target="_blank"');
                 }
             }
@@ -101,13 +104,6 @@ var ListMsgHandler = function() {
         var _chatPanelList = chatPanelList,
             _chatPanelChildren = '',
             dom;
-        //是否显示时间线
-        if(global.flags.isTimeLine) {
-            var comf = $.extend({
-                'sysData' : new Date().Format('hh:mm')
-            });
-            $(_chatPanelList).append(doT.template(msgTemplate.sysData)(comf));
-        }
         //是否是历史记录
         if(isHistory) {
             _chatPanelChildren = _chatPanelList.children();
@@ -123,51 +119,7 @@ var ListMsgHandler = function() {
         return dom;
 
     };
-    //会话判断
-    var initSessions = function(promise) {
-        var promise = promise || new Promise();
-        global.apiInit.ustatus = -1;
-        //FIXME 初始化类型
-        //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
-        if(global.apiInit.ustatus == 1 || global.apiInit.ustatus == -2) {
-            //更新会话保持标识
-            global.flags.isKeepSessions = true;
-        } else if(global.apiInit.ustatus == -1) {
-            //拉取会话记录
-            $.ajax({
-                type : "post",
-                url : api.url_keepDetail,
-                dataType : "json",
-                data : {
-                    cid : global.apiInit.cid,
-                    uid : global.apiInit.uid
-                },
-                success : function(data) {
-                    promise.resolve(data);
-                }
-            });
-        } else {
-            //处理客服类型 机器人、人工、邀请模式
-            SwitchModel(global);
-        }
-        return promise;
-    };
-    //core加载完成
-    var onCoreOnload = function(data) {
-        global = data[0];
-        initConfig();//配置参数
-        initScroll();//初始化&配置scroll
-        //加载历史记录
-        manager = ManagerFactory(global);
-        manager.getWelcome().then(function(data,promise) {
-            showHistoryMsg(data);
-        });
-        //FIXME bindListener
-        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
-        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
-        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
-    };
+
     var initScroll = function(){
       scrollHanlder.scroll.on('slideDown',onPullDown);
       global.flags.moreHistroy = true;
@@ -176,6 +128,7 @@ var ListMsgHandler = function() {
     var onPullDown = function(){
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
+          console.log(data);
           showHistoryMsg(data);
           global.flags.moreHistroy = true;
         }else{
@@ -187,7 +140,7 @@ var ListMsgHandler = function() {
     };
     //发送消息绑定到页面
     /*
-    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息
+    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息  3系统時間
     */
     var bindMsg = function(msgType,data){
       var msgHtml,
@@ -234,6 +187,16 @@ var ListMsgHandler = function() {
               }
             break;
           case 2:
+            comf = $.extend({
+              sysMsg:data
+            });
+            msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+            break;
+          case 3:
+            comf = $.extend({
+              sysData:data
+            });
+            msgHtml = doT.template(msgTemplate.sysData)(comf);
             break;
         }
         if(chatPanelList.children().length>0){
@@ -249,8 +212,28 @@ var ListMsgHandler = function() {
     };
     //包装系统和配置方法
     sysHander = {
-      helloMsg:function(){
+      nowTimer:function(){
         //首次进入提示语
+        var _now = new Date();
+        var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
+        var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
+        var _timer =  '今天' + _hour+':'+_minutes;
+        bindMsg(3,_timer);// 3系统时间提示
+      },
+      //type 0 今天  1 昨天  2 更早在历史记录
+      getTimeLine:function(type,time){
+        //获取时间线显示
+        var _timer;
+        if(type==2){
+          _timer= time.substring(0,time.lastIndexOf(':'));
+        }else{
+          var t = type===0?'今天':'昨天';
+          _timer = t + time.substring(time.indexOf(' '),time.lastIndexOf(':'));
+        }
+        var comf = $.extend({
+          sysData:_timer
+        });
+        return  doT.template(msgTemplate.sysData)(comf);
       },
       //输入栏高度变化设置
       onAutoSize : function(node){
@@ -262,7 +245,16 @@ var ListMsgHandler = function() {
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
         },300);
-
+      },
+      //欢迎语
+      gitHello:function(data){
+        console.log(data);
+        bindMsg(1,data);
+      },
+      //转接人工
+      onSessionOpen:function(data){
+        console.log(data);
+        bindMsg(1,data);
       }
     };
     //包装消息相关方法
@@ -303,21 +295,38 @@ var ListMsgHandler = function() {
                   'date' : global.apiConfig.uid + new Date()
               }]);
         }
+      },
+      //上传图片
+      onUpLoadImg:function(data){
+        console.log(data);
       }
     };
-
     /********************************************************************************/
     /********************************************************************************/
     /*************************************基本配置**********************************/
     /********************************************************************************/
     /********************************************************************************/
-
+    //core加载完成
+    var onCoreOnload = function(data) {
+        global = data[0];
+        initConfig();//配置参数
+        initScroll();//初始化&配置scroll
+        //FIXME bindListener
+        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
+        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
+        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
+        fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
+        fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
+        fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
+        //FIXME EVENT
+        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
+    };
     //初始化h5页面配置信息
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         // sysHander.onAutoSize(48);//默认 设置屏幕高度
-        sysHander.helloMsg();//接入提示语
+        sysHander.nowTimer();//显示当前时间
     };
     //初始化Dom
     var parseDOM = function() {
