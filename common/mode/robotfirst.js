@@ -46,7 +46,7 @@ var RobotFirst = function(global) {
             };
             value.push(obj);
             setTimeout(function() {
-                listener.trigger("core.onreceive",value);
+                listener.trigger("core.initsession",value);
             },0);
             return promise;
         });
