@@ -38,6 +38,7 @@ var ListMsgHandler = function() {
 
     //展示历史记录
     var showHistoryMsg = function(data) {
+      console.log(data);
         // msgTemplate
         var comf,
             sysHtml ='',
@@ -118,37 +119,6 @@ var ListMsgHandler = function() {
         return dom;
 
     };
-
-    //会话判断
-    // var initSessions = function(promise) {
-    //     var promise = promise || new Promise();
-    //     global.apiInit.ustatus = -1;
-    //     //FIXME 初始化类型
-    //     //用户当前状态 -2 排队中； -1 机器人； 0 离线； 1 在线；
-    //     if(global.apiInit.ustatus == 1 || global.apiInit.ustatus == -2) {
-    //         //更新会话保持标识
-    //         global.flags.isKeepSessions = true;
-    //     } else if(global.apiInit.ustatus == -1) {
-    //         //拉取会话记录
-    //         $.ajax({
-    //             type : "post",
-    //             url : api.url_keepDetail,
-    //             dataType : "json",
-    //             data : {
-    //                 cid : global.apiInit.cid,
-    //                 uid : global.apiInit.uid
-    //             },
-    //             success : function(data) {
-    //                 promise.resolve(data);
-    //             }
-    //         });
-    //     } else {
-    //         //处理客服类型 机器人、人工、邀请模式
-    //         SwitchModel(global);
-    //     }
-    //     return promise;
-    // };
-
 
     var initScroll = function(){
       scrollHanlder.scroll.on('slideDown',onPullDown);
@@ -275,7 +245,16 @@ var ListMsgHandler = function() {
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
         },300);
-
+      },
+      //欢迎语
+      gitHello:function(data){
+        console.log(data);
+        bindMsg(1,data);
+      },
+      //转接人工
+      onSessionOpen:function(data){
+        console.log(data);
+        bindMsg(1,data);
       }
     };
     //包装消息相关方法
@@ -322,7 +301,6 @@ var ListMsgHandler = function() {
         console.log(data);
       }
     };
-
     /********************************************************************************/
     /********************************************************************************/
     /*************************************基本配置**********************************/
@@ -338,7 +316,9 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
-        fnEvent.on('core.initsession',showHistoryMsg);
+        fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
+        fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
+        //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
     };
     //初始化h5页面配置信息
