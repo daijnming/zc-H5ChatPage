@@ -109,7 +109,7 @@ var RobotFirst = function(global) {
         };
         value.push(obj);
         setTimeout(function() {
-            outerPromise.resolve(value);
+            listener.trigger("core.initsession",value);
         },0);
     };
     var bindListener = function() {
