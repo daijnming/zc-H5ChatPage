@@ -57,7 +57,10 @@ var RobotFirst = function(global) {
     };
 
     var initHumanSession = function(word,ret) {
-        console.log(word);
+        initSession(global).then(function(value,promise) {
+            console.log(value);
+        });
+
     };
     /**
      *
@@ -82,7 +85,10 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(global.apiConfig.adminNonelineTitle,ret);
                         } else {
-                            listener.trigger("core.system",[global.apiConfig.adminNonelineTitle,ret]);
+                            listener.trigger("core.system", {
+                                'word' : global.apiConfig.adminNonelineTitle,
+                                'data' : ret
+                            });
                         }
                         //暂无客服在线
                         console.log('暂无客服在线');
@@ -93,7 +99,10 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(str,ret);
                         } else {
-                            listener.trigger("core.system",[str,ret]);
+                            listener.trigger("core.system", {
+                                'word' : str,
+                                'data' : ret
+                            });
                         }
                     } else if(ret.status == 1) {
                         if(manager) {
@@ -105,7 +114,10 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(global.apiConfig.adminHelloWord,ret);
                         } else {
-                            listener.trigger("core.system",[global.apiConfig.adminHelloWord,ret]);
+                            listener.trigger("core.system", {
+                                'word' : global.apiConfig.adminHelloWord,
+                                'data' : ret
+                            });
                         }
                     }
                 },
