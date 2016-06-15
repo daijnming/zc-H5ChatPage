@@ -20,6 +20,8 @@ var ListMsgHandler = function() {
         wrapScroll,//滚动窗体
         pullDown,//下拉刷新
         chatPanelList,//滚动列表
+        progress,//上传图片进度
+        shadowLayer,//蒙板
         wrapBox;//页面
 
     //消息状态
@@ -140,7 +142,7 @@ var ListMsgHandler = function() {
     };
     //发送消息绑定到页面
     /*
-    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息  3系统時間
+    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
       var msgHtml,
@@ -150,7 +152,7 @@ var ListMsgHandler = function() {
           case 0:
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : data[0]['answer'].trim()
+                  userMsg : data[0]['answer']
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -161,29 +163,33 @@ var ListMsgHandler = function() {
               _list=data.list;
 
               for(var i=0;i<_list.length;i++){
-                var _data = _list[i];
-                if(_data.answerType=='4'){
-                  //相关搜索
-                  msgHtml = msgHander.sugguestionsSearch(_data);
-                }else{
-                  //判断是机器人还是客服回复
-                  if(_type=='robot'){
-                    _logo =global.apiConfig.robotLogo;
-                    _name = global.apiConfig.robotName;
-                    _msg =_data.answer;
-                  }else if(_type=='human'){
-                    _logo=_data.aface;
-                    _name=_data.aname;
-                    _msg=_data.content;
-                  }
-                  comf = $.extend({
-                    customLogo : _logo,
-                    customName : _name,
-                    customMsg : _msg
+                var _content = _list[i].content;
+                for(var j=0;j<_content.length;j++){
+                  var _data = _content[i];
+                  if(_data.answerType=='4'){
+                    //相关搜索
+                    msgHtml = msgHander.sugguestionsSearch(_data);
+                  }else{
+                    //判断是机器人还是客服回复
+                    if(_type=='robot'){
+                      _logo =global.apiConfig.robotLogo;
+                      _name = global.apiConfig.robotName;
+                      _msg =_data.answer;
+                    }else if(_type=='human'){
+                      _logo=_data.aface;
+                      _name=_data.aname;
+                      _msg=_data.content;
+                    }
+                    comf = $.extend({
+                      customLogo : _logo,
+                      customName : _name,
+                      customMsg : _msg
 
-                  });
-                  msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                    });
+                    msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                  }
                 }
+
               }
             break;
           case 2:
@@ -197,6 +203,13 @@ var ListMsgHandler = function() {
               sysData:data
             });
             msgHtml = doT.template(msgTemplate.sysData)(comf);
+            break;
+          case 4:
+             comf = $.extend({
+                userLogo : global.userInfo.face,
+                uploadImg : data[0]['base64']
+            });
+             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
         if(chatPanelList.children().length>0){
@@ -299,6 +312,11 @@ var ListMsgHandler = function() {
       //上传图片
       onUpLoadImg:function(data){
         // console.log(data);
+        var comf = $.extend({
+            userLogo : global.userInfo.face,
+            uploadImg : data[0]['base64']
+        });
+        var msgHtml = doT.template(msgTemplate.rightImg)(comf);
       }
     };
     /********************************************************************************/
@@ -337,6 +355,8 @@ var ListMsgHandler = function() {
         pullDown = $('.js-pullDownLabel');
         chatPanelList = $('.js-chatPanelList');
         wrapBox = $('.js-wrapBox');
+        shadowLayer = $('.js-shadowLayer');
+        progress = $('.js-progress');
     };
 
     var bindListener = function() {
