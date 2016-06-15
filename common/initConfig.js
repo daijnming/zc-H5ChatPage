@@ -18,7 +18,7 @@ var initConfig = function() {
         status : 'enabled',
         isLoaded : false,
         pageNow : 1,
-        pageSize : 15,
+        pageSize : 20,
         moreHistroy : false,
         isConnected : false,// 是否已建立会话连接
         isEnableManual : false,// 客服是否可用
