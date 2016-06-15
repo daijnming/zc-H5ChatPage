@@ -46,10 +46,7 @@ var RobotFirst = function(global) {
             };
             value.push(obj);
             setTimeout(function() {
-                listener.trigger("core.initsession", {
-                    'list' : value,
-                    'type' : 'robot'
-                });
+                listener.trigger("core.initsession",value);
             },0);
             return promise;
         });
@@ -149,10 +146,7 @@ var RobotFirst = function(global) {
         value.push(obj);
         setTimeout(function() {
             console.log(value);
-            listener.trigger("core.initsession", {
-                'list' : value,
-                'type' : 'robot'
-            });
+            listener.trigger("core.initsession",value);
         },0);
     };
     var bindListener = function() {
