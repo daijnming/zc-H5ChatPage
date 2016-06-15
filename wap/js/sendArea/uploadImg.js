@@ -73,7 +73,7 @@ function uploadImg() {
         oXHR.open('POST','/wap/js/sendArea/fileupload.json');  
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
-        if(req.target.readyState == 4){ 
+            if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
                      console.log(req.target.response);
@@ -82,7 +82,7 @@ function uploadImg() {
                             'url' : url
                         }]);  
                 }else{
-                    alert("error");  
+                    //alert("error");  
                 }  
             }   
         } 
