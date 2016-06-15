@@ -38,10 +38,12 @@ var RobotFirst = function(global) {
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
-                    'senderType' : 2,
+                    'senderType' : 1,
                     't' : +now,
-                    'answer' : global.apiConfig.robotHelloWord,
-                    'ts' : DateUtil.formatDate(now,true)
+                    'msg' : global.apiConfig.robotHelloWord,
+                    'ts' : DateUtil.formatDate(now,true),
+                    'senderFace' : global.apiConfig.robotLogo,
+                    'senderName' : global.apiConfig.robotName
                 }]
             };
             value.push(obj);
@@ -137,10 +139,12 @@ var RobotFirst = function(global) {
         var obj = {
             "date" : DateUtil.formatDate(now),
             "content" : [{
-                'senderType' : 2,
+                'senderType' : 1,
                 't' : +now,
-                'answer' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true)
+                'msg' : global.apiConfig.robotHelloWord,
+                'ts' : DateUtil.formatDate(now,true),
+                'senderFace' : global.apiConfig.robotLogo,
+                'senderName' : global.apiConfig.robotName
             }]
         };
         value.push(obj);

@@ -130,7 +130,7 @@ var ListMsgHandler = function() {
     var onPullDown = function(){
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
-          console.log(data);
+          // console.log(data);
           showHistoryMsg(data);
           global.flags.moreHistroy = true;
         }else{
@@ -142,7 +142,7 @@ var ListMsgHandler = function() {
     };
     //发送消息绑定到页面
     /*
-    *FIXME  msgType 0 是发送消息  1 是接入消息 2 系统消息  3系统時間 4 上传图片
+    *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
       var msgHtml,
@@ -152,7 +152,7 @@ var ListMsgHandler = function() {
           case 0:
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : data[0]['answer']
+                  userMsg : data[0]['answer'].trim()
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -161,15 +161,12 @@ var ListMsgHandler = function() {
               var _logo,_name,_msg,_type,_list;
               _type=data.type,
               _list=data.list;
-
               for(var i=0;i<_list.length;i++){
-                var _content = _list[i].content;
-                for(var j=0;j<_content.length;j++){
-                  var _data = _content[j];
-                  if(_data.answerType=='4'){
-                    //相关搜索
-                    msgHtml = msgHander.sugguestionsSearch(_data);
-                  }else{
+                var _data = _list[i];
+                if(_data.answerType=='4'){
+                  //相关搜索
+                  msgHtml = msgHander.sugguestionsSearch(_data);
+                }else{
                     //判断是机器人还是客服回复
                     if(_type=='robot'){
                       _logo =global.apiConfig.robotLogo;
@@ -184,19 +181,38 @@ var ListMsgHandler = function() {
                       customLogo : _logo,
                       customName : _name,
                       customMsg : _msg
-
                     });
                     msgHtml = doT.template(msgTemplate.leftMsg)(comf);
-                  }
                 }
-
               }
             break;
           case 2:
-            comf = $.extend({
-              sysMsg:data
-            });
-            msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+              var _type = data.type;
+              var _data = data.data;
+              //判断是否是系统回复
+              if(_type=='system'){
+                comf = $.extend({
+                  sysMsg:_data.content
+                });
+                msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+              }else{
+                //判断是机器人还是客服回复
+                if(_type=='robot'){
+                  _logo =global.apiConfig.robotLogo;
+                  _name = global.apiConfig.robotName;
+                  _msg =_data.answer;
+                }else if(_type=='human'){
+                  _logo=_data.aface;
+                  _name=_data.aname;
+                  _msg=_data.content;
+                }
+                comf = $.extend({
+                  customLogo : _logo,
+                  customName : _name,
+                  customMsg : _msg
+                });
+                msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+              }
             break;
           case 3:
             comf = $.extend({
@@ -207,7 +223,9 @@ var ListMsgHandler = function() {
           case 4:
              comf = $.extend({
                 userLogo : global.userInfo.face,
-                uploadImg : data[0]['base64']
+                uploadImg : data[0]['result'],
+                progress:0,
+                token:data[0]['token']
             });
              msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
@@ -219,7 +237,7 @@ var ListMsgHandler = function() {
           chatPanelList.append(msgHtml);
         }
       scrollHanlder.scroll.refresh();//刷新
-      scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
+      // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
       // document.getElementById('.js-scroller').scrollIntoView(false);
       }
     };
@@ -261,13 +279,13 @@ var ListMsgHandler = function() {
       },
       //欢迎语
       gitHello:function(data){
-        console.log(data);
+        // console.log(data);
         bindMsg(1,data);
       },
       //转接人工
       onSessionOpen:function(data){
         console.log(data);
-        bindMsg(1,data);
+        bindMsg(2,data);
       }
     };
     //包装消息相关方法
@@ -312,11 +330,10 @@ var ListMsgHandler = function() {
       //上传图片
       onUpLoadImg:function(data){
         // console.log(data);
-        var comf = $.extend({
-            userLogo : global.userInfo.face,
-            uploadImg : data[0]['base64']
-        });
-        var msgHtml = doT.template(msgTemplate.rightImg)(comf);
+        bindMsg(4,data);
+      },
+      onUpLoadImgProgress:function(data){
+        console.log(data);
       }
     };
     /********************************************************************************/
@@ -334,7 +351,9 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
-        fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
+        fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
+        // fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
+        fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件

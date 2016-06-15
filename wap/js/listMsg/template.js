@@ -56,7 +56,7 @@ var rightMsg =
 
 
   var rightImg =
-                    '<div class="msgwrap rightMsg">'+
+                    '<div class="msgwrap rightMsg" data-token="{{=it.token}}">'+
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
@@ -74,7 +74,9 @@ var rightMsg =
 
 var systemMsg =
                   '<p class="sysMsg">'+
+                  '<span class="sysMsgText"> '+
                       '{{=it.sysMsg}}'+
+                  '</span>'+
                   '</p>';
 
 
@@ -85,6 +87,7 @@ var systemData =
 
 template.leftMsg = leftMsg;
 template.rightMsg = rightMsg;
+template.rightImg = rightImg;
 template.sysMsg = systemMsg;
 template.sysData = systemData;
 template.listSugguestionsMsg = listSugguestionsMsg;
