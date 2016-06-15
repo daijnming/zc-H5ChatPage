@@ -104,9 +104,9 @@ function TextArea(window) {
     var hideChatAreaHandler = function() {
         setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
-            $chatArea.animate({
-                bottom : "-215px"
-            },200);
+            $chatArea.css({
+                "bottom" : "-215px"
+            });
             autoSizePhone();
          },200);
         

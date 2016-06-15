@@ -29,6 +29,8 @@ function uploadImg() {
                 token= currentUid + +new Date();
                 //this.result 本地图片的数据流
                 //alert(this.result);
+                $(".temp_test").html('<img src="' + this.result + '">');
+                console.log(this.result);
                 listener.trigger("sendArea.createUploadImg",[{
                     'result' : this.result,
                     'token':token
