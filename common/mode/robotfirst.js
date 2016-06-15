@@ -40,7 +40,7 @@ var RobotFirst = function(global) {
                 "content" : [{
                     'senderType' : 2,
                     't' : +now,
-                    'msg' : global.apiConfig.robotHelloWord,
+                    'answer' : global.apiConfig.robotHelloWord,
                     'ts' : DateUtil.formatDate(now,true)
                 }]
             };
@@ -56,7 +56,18 @@ var RobotFirst = function(global) {
         return promise;
     };
 
-    var transferBtnClickHandler = function() {
+    var initHumanSession = function(word,ret) {
+        initSession(global).then(function(value,promise) {
+            console.log(value);
+        });
+
+    };
+    /**
+     *
+     * @param {Object} init 是通过事件点击触发，还是自动触发
+     */
+    var transferBtnClickHandler = function(evt,init) {
+        var init = !!init;
         transfer(global).then(function(groupId,promise) {
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
@@ -71,21 +82,43 @@ var RobotFirst = function(global) {
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
-                        listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
+                        if(init) {
+                            initHumanSession(global.apiConfig.adminNonelineTitle,ret);
+                        } else {
+                            listener.trigger("core.system", {
+                                'word' : global.apiConfig.adminNonelineTitle,
+                                'data' : ret
+                            });
+                        }
                         //暂无客服在线
                         console.log('暂无客服在线');
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
                         console.log('排队');
-                        listener.trigger("core.system",[str]);
+                        if(init) {
+                            initHumanSession(str,ret);
+                        } else {
+                            listener.trigger("core.system", {
+                                'word' : str,
+                                'data' : ret
+                            });
+                        }
                     } else if(ret.status == 1) {
-                        if(manager)
+                        if(manager) {
                             manager.destroy();
+                        }
                         console.log('成功');
                         manager = socketFactory(ret);
                         manager.start();
-                        listener.trigger("core.system",[global.apiConfig.adminHelloWord,ret]);
+                        if(init) {
+                            initHumanSession(global.apiConfig.adminHelloWord,ret);
+                        } else {
+                            listener.trigger("core.system", {
+                                'word' : global.apiConfig.adminHelloWord,
+                                'data' : ret
+                            });
+                        }
                     }
                 },
                 'fail' : function() {
@@ -106,7 +139,7 @@ var RobotFirst = function(global) {
             "content" : [{
                 'senderType' : 2,
                 't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
+                'answer' : global.apiConfig.robotHelloWord,
                 'ts' : DateUtil.formatDate(now,true)
             }]
         };
@@ -130,7 +163,7 @@ var RobotFirst = function(global) {
             getWelcome();
         } else {
             if(global.apiInit.ustatus == 1) {
-                transferBtnClickHandler();
+                transferBtnClickHandler(null,true);
             } else if(global.apiInit.ustatus == -1) {
                 initSession(global).then(initRobotSession);
             }
