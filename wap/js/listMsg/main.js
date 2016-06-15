@@ -149,22 +149,7 @@ var ListMsgHandler = function() {
     //     return promise;
     // };
 
-    //core加载完成
-    var onCoreOnload = function(data) {
-        global = data[0];
-        initConfig();//配置参数
-        initScroll();//初始化&配置scroll
-        //加载历史记录
-        manager = ManagerFactory(global);
-        manager.getWelcome().then(function(data,promise) {
-            showHistoryMsg(data);
-        });
-        //FIXME bindListener
-        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
-        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
-        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
-    };
+
     var initScroll = function(){
       scrollHanlder.scroll.on('slideDown',onPullDown);
       global.flags.moreHistroy = true;
@@ -331,6 +316,10 @@ var ListMsgHandler = function() {
                   'date' : global.apiConfig.uid + new Date()
               }]);
         }
+      },
+      //上传图片
+      onUpLoadImg:function(data){
+        console.log(data);
       }
     };
 
@@ -339,7 +328,19 @@ var ListMsgHandler = function() {
     /*************************************基本配置**********************************/
     /********************************************************************************/
     /********************************************************************************/
-
+    //core加载完成
+    var onCoreOnload = function(data) {
+        global = data[0];
+        initConfig();//配置参数
+        initScroll();//初始化&配置scroll
+        //FIXME bindListener
+        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
+        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
+        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
+        fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
+        fnEvent.on('core.initsession',showHistoryMsg);
+        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
+    };
     //初始化h5页面配置信息
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
