@@ -113,7 +113,5 @@ li {
 .showChatAdd {/* display:block; */
 }
 .tab-active{
-    position:fixed;
-    bottom:-215px;
-    left:0;
+    display:none;
 }

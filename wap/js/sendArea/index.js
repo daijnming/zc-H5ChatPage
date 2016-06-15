@@ -116,6 +116,7 @@ function TextArea(window) {
         //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
         $chatAdd.addClass("tab-active");
         var id=$(this).attr("data-id");
+        $(".tab-active").hide();
         $(id).show();
     };
      //定位光标
