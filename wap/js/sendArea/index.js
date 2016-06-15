@@ -61,6 +61,7 @@ function TextArea(window) {
             $add.show();
             $textarea.css("width","85%");
         }
+
     };
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
@@ -81,6 +82,7 @@ function TextArea(window) {
         }
         //清空待发送框
         $textarea.html("");
+        $textarea.focus();
         autoSizePhone();    
     };
     var showChatAddHandler=function(){
@@ -144,7 +146,9 @@ function TextArea(window) {
     var autoSizePhone=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
+        //alert("asdf");
         listener.trigger('sendArea.autoSize',$chatArea);
+
     };
     var bindLitener = function() {
         //发送按钮
@@ -163,6 +167,7 @@ function TextArea(window) {
         listener.on("sendArea.backDelete",backDeleteHandler);
         //发送图片
         listener.on("sendArea.uploadImgUrl",onImageUpload);
+        $(document).on("keydown",autoSizePhone)
 
     };
     var onEmotionClickHandler = function() {

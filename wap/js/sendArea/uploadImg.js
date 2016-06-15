@@ -29,8 +29,6 @@ function uploadImg() {
                 token= currentUid + +new Date();
                 //this.result 本地图片的数据流
                 //alert(this.result);
-                $(".temp_test").html('<img src="' + this.result + '">');
-                console.log(this.result);
                 listener.trigger("sendArea.createUploadImg",[{
                     'result' : this.result,
                     'token':token
@@ -54,10 +52,7 @@ function uploadImg() {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString() + '%';
             var _height= (iPercentComplete * 4).toString() + 'px';
-            listener.trigger('sendArea.uploadImgProcess',[{
-                'percentage' : percentage,
-                'height':_height
-            }]); 
+            listener.trigger('sendArea.uploadImgProcess',percentage); 
         } else {
             alert("请上传正确的图片格式");
             //document.getElementById('progress').innerHTML = '无法计算';
