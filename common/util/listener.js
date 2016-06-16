@@ -17,7 +17,18 @@ var on = function(channel,fn) {
     if(!cache[channel]) {
         cache[channel] = [];
     }
-    cache[channel].push(fn);
+    var exists = false;
+    var list = cache[channel];
+    for(var i = 0,
+        len = list.length;i < len;i++) {
+        if(list[i] == fn) {
+            exists = true;
+            break;
+        }
+    }
+    if(!exists) {
+        cache[channel].push(fn);
+    }
 };
 
 var off = function(channel,fn) {
@@ -28,7 +39,8 @@ var off = function(channel,fn) {
                 i = len - 1;i >= 0;i--) {
                 var listener = list[i];
                 if(listener == fn) {
-
+                    list.splice(i,1);
+                    break;
                 }
             }
         }

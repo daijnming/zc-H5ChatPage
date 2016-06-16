@@ -112,6 +112,7 @@ var RobotFirst = function(global) {
                         console.log('成功');
                         manager = socketFactory(ret);
                         manager.start();
+                        console.log(init,manager);
                         if(init) {
                             initHumanSession(global.apiConfig.adminHelloWord,ret);
                         } else {
