@@ -86,7 +86,8 @@ function ZC_Face() {
                 str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
             }
         }
-        return str;
+        listener.trigger('sendArea.sendfaceStr',str)
+        //return str;
     };
 
     var hasEmotion = function(str) {//将文本框内的表情字符转化为表情
@@ -97,7 +98,6 @@ function ZC_Face() {
     var bindLitener = function() {
         listener.on("sendArea.faceShow",show);
         listener.on("listMsg.ConvertMsg",analysis);
-        
     };
      
     var initPlugsin = function() {//插件
