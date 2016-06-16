@@ -85,14 +85,18 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
-            //_html=ZC_Face.analysis(str)
+            _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
+            //console.log(str);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
                 'cid' : currentCid,
-                'date' : date
+                'date+uid' : date,
+                'date': +new Date(),
+                'token':""
+
             }]);
         };
         //清空待发送框
@@ -187,7 +191,8 @@ function TextArea(window) {
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
-         'date' : date,
+         'date+uid' : date,
+         'date': +new Date(),
          'token':data[0].token
          }]);
     };

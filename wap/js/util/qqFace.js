@@ -15,6 +15,7 @@ function ZC_Face() {
     qqfaceReg = reg.qqfaceReg,
     qqfaceReg2 = reg.qqfaceReg2;
     var path =  "/wap/images/qqarclist/";
+    var that = {};
     var initConfig = function() {//将表情集合预加载
         for(var a in tip) {
             var img = new Image();
@@ -79,15 +80,15 @@ function ZC_Face() {
         //将匹配到的结果放到icoAry这个数组里面，来获取长度
         if(icoAry) {
             for(var i = 0;i < icoAry.length;i++) {
-
                 var ico = qqfaceReg2.exec(str);
                 var pathname = tip2[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
                 str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
             }
         }
-        listener.trigger('sendArea.sendfaceStr',str)
-        //return str;
+        //console.log(str);
+        //listener.trigger('sendArea.sendfaceStr',str)
+        return str;
     };
 
     var hasEmotion = function(str) {//将文本框内的表情字符转化为表情
@@ -97,7 +98,7 @@ function ZC_Face() {
     
     var bindLitener = function() {
         listener.on("sendArea.faceShow",show);
-        listener.on("listMsg.ConvertMsg",analysis);
+       //listener.on("listMsg.ConvertMsg",analysis);
     };
      
     var initPlugsin = function() {//插件
@@ -111,7 +112,9 @@ function ZC_Face() {
     };
 
     init();
-
+  
+    that.analysis = analysis;
+    return that;
 }
 
 module.exports = ZC_Face;
