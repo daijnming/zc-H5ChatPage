@@ -111,7 +111,10 @@ function TextArea(window) {
             });
             autoSizePhone();
          },200);
+        //ico换成表情
+        $(".qqFaceTip").css("background-position","-2px -3px");
         
+        $textarea.focus();
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -120,6 +123,10 @@ function TextArea(window) {
         var id=$(this).attr("data-id");
         $(".tab-active").hide();
         $(id).show();
+        //ico换成键盘
+        if(id=="#chatEmotion"){
+            $(".qqFaceTip").css("background-position","-145px -3px")
+        }
     };
      //定位光标
     var gotoxyHandler=function(data){

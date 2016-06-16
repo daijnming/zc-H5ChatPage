@@ -7,8 +7,8 @@ function uploadImg() {
     var listener = require("../../../common/util/listener.js");
     //上传图片假消息时间戳
     var token="",
-    currentUid
-    /*var global = core.getGlobal();
+    currentUid;
+    /*
     //模板引擎
     var template = require('./template.js');*/
     //传给聊天的url
@@ -38,8 +38,9 @@ function uploadImg() {
             oData.append("type","msg");
             oData.append("countTag",1);
             oData.append("source",0);
-            //上传
-            onAjaxUploadUpHandler(oData);
+            //上传,延迟一毫秒，先让图片在页面加载
+            setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
+           
             
         }else{
             alert("请上传正确的图片格式")
@@ -51,7 +52,6 @@ function uploadImg() {
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString() + '%';
-            var _height= (iPercentComplete * 4).toString() + 'px';
             listener.trigger('sendArea.uploadImgProcess',percentage); 
         } else {
             alert("请上传正确的图片格式");
@@ -95,10 +95,7 @@ function uploadImg() {
                     //alert("error");  
                 }  
             }   
-        } 
-        var oProgress = document.getElementById('progress');
-        oProgress.style.display = 'block';
-        oProgress.style.width = '0px';
+        }
     };
     var bindLitener = function() {
         $(".js-upload").on("change",onFormDataUpHandler)

@@ -67,7 +67,8 @@ li {
     margin:0 2%;
     color: #878787;
     font-size: 24px;
-    background: url(../images/icoGroup.png) -2px -3px;
+    background-image: url(../images/icoGroup.png);
+    background-position:-2px -3px;
     background-size: 282px 246px;
 }
 .chatAdd {
