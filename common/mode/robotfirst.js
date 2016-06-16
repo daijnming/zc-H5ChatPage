@@ -149,6 +149,13 @@ var RobotFirst = function(global) {
                         if(init) {
                             initHumanSession(global.apiConfig.adminHelloWord,ret);
                         } else {
+                            listener.trigger("core.system", {
+                                'type' : 'system',
+                                'status' : "transfer",
+                                'data' : {
+                                    'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                                }
+                            });
                             ret.content = global.apiConfig.adminHelloWord;
                             listener.trigger("core.system", {
                                 'type' : 'human',

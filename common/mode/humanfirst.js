@@ -14,6 +14,7 @@ var HumanFirst = function(global) {
     var manager;
 
     var initHumanSession = function(value,ret,word) {
+        var success = !!word;
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
         var word = word || global.apiConfig.robotHelloWord;
@@ -154,9 +155,17 @@ var HumanFirst = function(global) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
                         } else {
+                            listener.trigger("core.system", {
+                                'type' : 'system',
+                                'status' : "transfer",
+                                'data' : {
+                                    'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                                }
+                            });
                             ret.content = global.apiConfig.adminHelloWord;
                             listener.trigger("core.system", {
                                 'type' : 'human',
+                                'status' : "transfer",
                                 'data' : ret
                             });
                         }
