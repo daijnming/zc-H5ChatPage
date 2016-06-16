@@ -4,7 +4,7 @@
  */
 
 function ZC_Face() {
-    var listener = require("../../../common/util/listener.js");
+    var listener = require("../../../common/listener.js");
     var weixinJson = require('./face/weixin.json');
     var weixinSymbol = require('./face/weixinsymbol.json');
     var reg = require('./face/Reg.js');

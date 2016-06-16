@@ -7,7 +7,7 @@ function TextArea(window) {
     var global;
     var listener = require("../../../common/util/listener.js");
     //表情
-    var ZC_Face = require('./qqFace.js')();
+    var ZC_Face = require('../util/qqFace.js')();
     //上传附件
     var uploadImg = require('./uploadImg.js')(); 
     /* var inputCache = {};
@@ -24,7 +24,6 @@ function TextArea(window) {
     //传给聊天的url
     
     var buttonChangeHandler=function(data){
-        console.log(data.action);
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
             //2为人工
@@ -75,6 +74,8 @@ function TextArea(window) {
             hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%");
+            $textarea.blur();
+            $textarea.focus();
         }
     };
     var onbtnSendHandler = function(evt) {
@@ -92,10 +93,10 @@ function TextArea(window) {
                 'cid' : currentCid,
                 'date' : date
             }]);
-            
         }
         //清空待发送框
         $textarea.html("");
+        $textarea.blur();
         $textarea.focus();
         autoSizePhone();    
     };
@@ -122,8 +123,7 @@ function TextArea(window) {
                 "bottom" : "-215px"
             });
             autoSizePhone();
-            $textarea.focus();
-            $(".qqFaceTip").css("background-position","-2px -3px");
+            
          },200);
     };
     //表情、加号切换
@@ -133,11 +133,19 @@ function TextArea(window) {
         var id=$(this).attr("data-id");
         $(".tab-active").hide();
         $(id).show();
-        //ico换成键盘
+        //icon换成键盘icon
         if(id=="#chatEmotion"){
-            $(".qqFaceTip").css("background-position","-145px -3px")
+            $emotion.addClass("keyboard");
+            $emotion.css("background-position","-145px -3px");
+            //$(".keyboard").on("click",keyboardHandler)
         }
     };
+    var keyboardHandler=function(){
+        $textarea.blur();
+        $textarea.focus();
+        $(".qqFaceTip").css("background-position","-2px -3px");
+        $emotion.removeClass("keyboard")
+    }
      //定位光标
     var gotoxyHandler=function(data){
         //表情img标签
