@@ -19,54 +19,63 @@ function TextArea(window) {
     var currentCid,
         currentUid,
         answer;
+        //1为机器人，2为人工
+    var transferFlag=1;
     //传给聊天的url
-    var parseDOM = function() {
-        $chatArea=$(".js-chatArea");
-        $sendBtn = $(".js-sendBtn");
-        $textarea = $(".js-textarea");
-        $sendarea=$(".sendarea");
-        //转人工按钮
-        $artificial=$(".js-artificial")
-        $add = $(".js-add");
-        $chatAdd = $(".js-chatAdd");
-        //上传图片按钮
-        $uploadImg=$(".js-uploadImg");
-        //表情按钮
-        $emotion = $(".js-emotion");
-        $chatEmotion = $(".js-chatEmotion");
-        $tab=$(".js-tab");
-        oTxt = document.getElementById("js-textarea");
-    };
-    var onImageUpload = function(data) {
-        //onFileTypeHandler(data); 
-        //通过textarea.send事件将用户的数据传到显示台
-        var date= currentUid + +new Date();
-        listener.trigger('sendArea.send',[{
-         'answer' : data[0].url,
-         'uid' : currentUid,
-         'cid' : currentCid,
-         //时间戳
-         'date' : date,
-         'token':data[0].token
-         }]);
-    };
+    
+    var buttonChangeHandler=function(data){
+        console.log(data.action);
+        //hide,转人工按钮隐藏,当前为人工模式
+        if(data.action=="hide"){
+            //2为人工
+            transferFlag=2;
+            $emotion.show();
+            $uploadImg.show();
+            $artificial.hide();
+            $add.css("margin-left",0)
+        }else{
+            transferFlag=1;
+            $emotion.hide();
+            $uploadImg.hide();
+            $artificial.show();
+            $add.css("margin-left","2%")
+        }
+    }
     var showSendBtnHandler = function(evt) {
+        //判断当前是否为人工模式
+        if(transferFlag==1){
+            robotmodeButton();
+        }else{
+            manualmodeButton();
+        }
+    };
+    var robotmodeButton=function(){
         var _text = $textarea.text();
         if(_text) {
             $sendBtn.show();
-            //表情按钮
-            $emotion.show();
             $add.hide();
             hideChatAreaHandler();
-            $textarea.css("width","65%");
+            $textarea.css("width","80%");
         } else {
             $sendBtn.hide();
-            $emotion.hide();
             hideChatAreaHandler();
             $add.show();
             $textarea.css("width","85%");
         }
-
+    };
+    var manualmodeButton=function(){
+        var _text = $textarea.text();
+        if(_text) {
+            $sendBtn.show();
+            $add.hide();
+            //hideChatAreaHandler();
+            $textarea.css("width","65%");
+        } else {
+            $sendBtn.hide();
+            hideChatAreaHandler();
+            $add.show();
+            $textarea.css("width","85%");
+        }
     };
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
@@ -95,7 +104,6 @@ function TextArea(window) {
         if($chatArea.hasClass("showChatAdd")){
             //隐藏
            hideChatAreaHandler();
-
         } else {
             setTimeout(function(){
                 //显示
@@ -117,9 +125,6 @@ function TextArea(window) {
             $textarea.focus();
             $(".qqFaceTip").css("background-position","-2px -3px");
          },200);
-        //ico换成表情
-       
-        
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -140,6 +145,9 @@ function TextArea(window) {
          //将新表情追加到待发送框里
         var _html=$textarea.html()+src;
         $textarea.html(_html);
+        //显示发送按钮
+        manualmodeButton()
+        //调整窗体高度
         autoSizePhone();
     };
     //模拟退格
@@ -148,11 +156,26 @@ function TextArea(window) {
         if(_html.length==1){
             _html="";
         }else{
-            _html=_html.substring(0,_html.length-1);
+            _html=$.trim(_html.substring(0,_html.length-1));
         }
-        $textarea.html("");
-        $textarea.html(_html);
+        //$textarea.html("");
+        $textarea.text(_html);
+        manualmodeButton();
         autoSizePhone();
+    };
+    var onImageUpload = function(data) {
+        //onFileTypeHandler(data); 
+        //通过textarea.send事件将用户的数据传到显示台
+        var date= currentUid + +new Date();
+        var img='<img src="'+data[0].url+'">';
+        listener.trigger('sendArea.send',[{
+         'answer' :img ,
+         'uid' : currentUid,
+         'cid' : currentCid,
+         //时间戳
+         'date' : date,
+         'token':data[0].token
+         }]);
     };
     var artificialHandler=function(){
         listener.trigger('sendArea.artificial');
@@ -165,20 +188,23 @@ function TextArea(window) {
         listener.trigger('sendArea.autoSize',$chatArea);
 
     };
-    var buttonChangeHandler=function(data){
-        console.log(data.action);
-        if(data.action=="hide"){
-            $emotion.show();
-            $uploadImg.show();
-            $artificial.hide();
-            $add.css("margin-left",0)
-        }else{
-            $emotion.hide();
-            $uploadImg.hide();
-            $artificial.show();
-            $add.css("margin-left","2%")
-        }
-    }
+   var parseDOM = function() {
+        $chatArea=$(".js-chatArea");
+        $sendBtn = $(".js-sendBtn");
+        $textarea = $(".js-textarea");
+        $sendarea=$(".sendarea");
+        //转人工按钮
+        $artificial=$(".js-artificial")
+        $add = $(".js-add");
+        $chatAdd = $(".js-chatAdd");
+        //上传图片按钮
+        $uploadImg=$(".js-uploadImg");
+        //表情按钮
+        $emotion = $(".js-emotion");
+        $chatEmotion = $(".js-chatEmotion");
+        $tab=$(".js-tab");
+        //oTxt = document.getElementById("js-textarea");
+    };
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
