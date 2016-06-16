@@ -36,7 +36,6 @@ function Robot(global) {
                 });
             },
             'fail' : function(ret) {
-                console.log(ret);
             }
         });
     };
