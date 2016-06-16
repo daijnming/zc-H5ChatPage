@@ -1,7 +1,9 @@
 var ListMsgHandler = function() {
     var global,
         scrollHanlder,
+        uploadImgToken,//锁定当前上传图片唯一标识
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
+
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
     var msgTemplate = require('./template.js');
@@ -221,15 +223,14 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.sysData)(comf);
             break;
           case 4:
-             comf = $.extend({
-                userLogo : global.userInfo.face,
-                uploadImg : data[0]['result'],
-                progress:0,
-                token:data[0]['token']
-            });
-             msgHtml = doT.template(msgTemplate.rightImg)(comf);
-             //触发上传事件
-             fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
+            uploadImgToken = data[0]['token'];
+            comf = $.extend({
+               userLogo : global.userInfo.face,
+               uploadImg : data[0]['result'],
+               progress:0,
+               token:data[0]['token']
+           });
+            msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
         if(chatPanelList.children().length>0){
@@ -336,6 +337,7 @@ var ListMsgHandler = function() {
       },
       onUpLoadImgProgress:function(data){
         console.log(data);
+        console.log($('#'+uploadImgToken));
         $(progress).text(data);
       }
     };
@@ -354,6 +356,7 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
+        fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
         // fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
         fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
