@@ -344,7 +344,7 @@ var ListMsgHandler = function() {
       },
       //接收回复
      onReceive : function(data){
-       console.log(data);
+      //  console.log(data);
         bindMsg(1,data);
       },
       //FIXME 发消息  过滤qq表情
