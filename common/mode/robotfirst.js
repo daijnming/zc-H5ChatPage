@@ -57,7 +57,26 @@ var RobotFirst = function(global) {
 
     var initHumanSession = function(word,ret) {
         initSession(global).then(function(value,promise) {
-            console.log(value);
+            if(!value) {
+                value = [];
+            }
+            var now = new Date();
+            var obj = {
+                "date" : DateUtil.formatDate(now),
+                "content" : [{
+                    'senderType' : 2,
+                    't' : +now,
+                    'msg' : global.apiConfig.adminHelloWord,
+                    'ts' : DateUtil.formatDate(now,true),
+                    'senderFace' : ret.aface,
+                    'senderName' : ret.aname
+                }]
+            };
+            value.push(obj);
+            setTimeout(function() {
+                listener.trigger("core.initsession",value);
+            },0);
+            return promise;
         });
 
     };
