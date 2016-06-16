@@ -22,8 +22,8 @@ var ListMsgHandler = function() {
         wrapScroll,//滚动窗体
         pullDown,//下拉刷新
         chatPanelList,//滚动列表
-        progress,//上传图片进度
-        shadowLayer,//蒙板
+        progress,//进度条
+        shadowLayer,//上传图片蒙板
         wrapBox;//页面
 
     //消息状态
@@ -249,6 +249,12 @@ var ListMsgHandler = function() {
             chatPanelList.append(msgHtml);
           }
         }
+        //如果是上传图片
+      if(uploadImgToken){
+        //获取上传图片相关信息
+        shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
+        progress = $('#'+uploadImgToken);
+      }
       scrollHanlder.scroll.refresh();//刷新
       // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
       // document.getElementById('.js-scroller').scrollIntoView(false);
@@ -346,9 +352,28 @@ var ListMsgHandler = function() {
         bindMsg(4,data);
       },
       onUpLoadImgProgress:function(data){
-        console.log(data);
-        // console.log($('#'+uploadImgToken));
-        $(progress).text(data);
+
+
+
+
+        var $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
+        var $progress = $('#'+uploadImgToken);
+        //蒙版高度随百分比改变
+        $progress.text(data+'%');
+        data = data/100;//获取小数
+
+        //蒙版高度
+        var h = $shadowLayer.height(),
+            cH = data * h,//获取计算后的高度值
+            margin=0;
+            //计算
+            h = h - cH;
+            margin = margin+cH;
+            $shadowLayer.height(h).css('margin-top',margin+'px');
+            if(data>=1){
+              $shadowLayer.remove();
+              $progress.remove();
+            }
       }
     };
     /********************************************************************************/
@@ -372,6 +397,20 @@ var ListMsgHandler = function() {
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
+
+        ///
+        var height = $('#uploadimg').find('.js-shadowLayer').height();
+        var margin=0;
+        var _t = setInterval(function(){
+          height = height - 10;
+          margin = margin+10;
+          $('#uploadimg').find('.js-shadowLayer').height(height);
+          $('#uploadimg').find('.js-shadowLayer').css('margin-top',margin+'px');
+          if(height<=0){
+            $('#uploadimg').find('.js-shadowLayer').remove();
+            clearInterval(_t);
+          }
+        },100);
     };
     //初始化h5页面配置信息
     var initConfig = function() {
@@ -389,8 +428,6 @@ var ListMsgHandler = function() {
         pullDown = $('.js-pullDownLabel');
         chatPanelList = $('.js-chatPanelList');
         wrapBox = $('.js-wrapBox');
-        shadowLayer = $('.js-shadowLayer');
-        progress = $('.js-progress');
     };
 
     var bindListener = function() {
