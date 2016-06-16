@@ -62,7 +62,7 @@ li {
     display:none;
     height: 35px;
     line-height: 32px;
-    width: 35px;
+    width: 37px;
     text-align: center;
     margin:0 2%;
     color: #878787;
@@ -88,6 +88,7 @@ li {
     margin:16px;
 }
 .addList .uploadImg{
+    display:none;
     background: url(../images/icoGroup.png) -151px -44px;
     background-size: 310px 274px;
 }
