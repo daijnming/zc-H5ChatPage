@@ -19,16 +19,15 @@ var Core = function(window) {
         manager = ManagerFactory(global);
         // initWap = initWap(global);
     };
-    var temp = function() {
-    };
+
     //FIXME 通过initConfig初始化后再针对H5进行配置
     var init = function() {
-        temp();
         parseDOM();
         bindListener();
         initPlugins();
     };
     promise.then(function(data) {
+        $(".white-layer").remove();
         $(document.body).trigger("core.onload",[{
             data : data
         }]);
