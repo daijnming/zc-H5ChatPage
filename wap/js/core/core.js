@@ -29,6 +29,7 @@ var Core = function(window) {
         initPlugins();
     };
     promise.then(function(data) {
+        $(".white-layer").remove();
         $(document.body).trigger("core.onload",[{
             data : data
         }]);
