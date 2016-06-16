@@ -169,6 +169,10 @@ var HumanFirst = function(global) {
                             manager = new Rolling(ret.puid);
                         }
                         manager.start();
+                        listener.trigger("core.buttonchange", {
+                            'type' : 'transfer',
+                            'action' : 'hide'
+                        });
                     }
                 },
                 'fail' : function() {
