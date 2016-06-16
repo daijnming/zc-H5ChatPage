@@ -47,13 +47,12 @@ var rightMsg =
                       '</div>'+
                       '<div class="msgOuter js-userMsgOuter">'+
                           '<p>'+
-                              '{{=it.userMsg}}'+
+                            '{{=it.userMsg}}'+
                           '</p>'+
                       '</div>'+
                       '<span class="msgStatus statusRight"></span>'+
                   '</div>'+
               '</div>';
-
 
   var rightImg =
                     '<div class="msgwrap rightMsg" id="{{=it.token}}" >'+
@@ -64,16 +63,18 @@ var rightMsg =
                             '<p>'+
                               '<img src="{{=it.uploadImg}}"'+
                             '</p>'+
-                            '<div class="shadowLayer" class="js-shadowLayer">'+
+                            '<div class="shadowLayer js-shadowLayer">'+
                             '</div>'+
-                              '  <span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
+                            '<div class="progressLayer">'+
+                              '<span id="prgoress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
+                            '</div>'+
                         '</div>'+
                         '<span class="msgStatus statusRight"></span>'+
                     '</div>'+
                 '</div>';
 
 var systemMsg =
-                  '<p class="sysMsg">'+
+                  '<p class="sysMsg" id={{=it.sysMsgSign}}>'+
                   '<span class="sysMsgText"> '+
                       '{{=it.sysMsg}}'+
                   '</span>'+
