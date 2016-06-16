@@ -14,7 +14,9 @@ var HumanFirst = function(global) {
     var manager;
 
     var initHumanSession = function(value,ret,word) {
-        console.log(word);
+        var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
+        var name = (!!word) ? ret.aname : global.apiConfig.robotName;
+        var word = word || global.apiConfig.robotHelloWord;
         if(!value) {
             value = [];
         }
@@ -26,8 +28,8 @@ var HumanFirst = function(global) {
                 't' : +now,
                 'msg' : word,
                 'ts' : DateUtil.formatDate(now,true),
-                'senderFace' : ret.aface,
-                'senderName' : ret.aname
+                'senderFace' : face,
+                'senderName' : name
             }]
         };
         value.push(obj);
