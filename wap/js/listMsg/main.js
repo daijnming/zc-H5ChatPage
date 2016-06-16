@@ -202,7 +202,7 @@ var ListMsgHandler = function() {
               //判断是否是系统回复
               if(_type=='system'){
                 comf = $.extend({
-                  sysMsg:$(_data.content).text()
+                  sysMsg:$(_data.content).text()?$(_data.content).text():_data.content
                 });
                 msgHtml = doT.template(msgTemplate.sysMsg)(comf);
               }else{
@@ -297,11 +297,6 @@ var ListMsgHandler = function() {
           scrollHanlder.scroll.refresh();
         },300);
       },
-      //欢迎语
-      gitHello:function(data){
-        // console.log(data);
-        bindMsg(1,data);
-      },
       //转接人工
       onSessionOpen:function(data){
         console.log(data);
@@ -388,8 +383,7 @@ var ListMsgHandler = function() {
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
-        // fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
-        fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语
+        fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语 调历史渲染接口
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
