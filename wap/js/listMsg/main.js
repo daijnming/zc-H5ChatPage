@@ -158,7 +158,7 @@ var ListMsgHandler = function() {
               var msg;
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : QQFace.analysis(data[0]['answer'].trim())
+                  userMsg : data
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -338,7 +338,7 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(data);
+        // console.log(data);
         fnEvent.trigger('listMsg.ConvertMsg',data[0]['answer'].trim());
         // bindMsg(0,data);
       },
@@ -346,6 +346,10 @@ var ListMsgHandler = function() {
      onReceive : function(data){
        console.log(data);
         bindMsg(1,data);
+      },
+      //FIXME 发消息  过滤qq表情
+      onSendFaceStr:function(data){
+        bindMsg(0,data);
       },
       //相关搜索答案点击事件
      onSugguestionsEvent : function(){
@@ -408,6 +412,7 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
+        fnEvent.on('sendArea.sendfaceStr',msgHandler.onSendFaceStr);//过滤qq表情
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
     };
