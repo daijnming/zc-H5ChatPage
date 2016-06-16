@@ -51,7 +51,7 @@ function uploadImg() {
     function uploadProgress(e) { //进度上传过程
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
-            var percentage=iPercentComplete.toString() + '%';
+            var percentage=iPercentComplete.toString();
             listener.trigger('sendArea.uploadImgProcess',percentage); 
         } else {
             alert("请上传正确的图片格式");
