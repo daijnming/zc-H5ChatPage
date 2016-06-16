@@ -85,6 +85,7 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
+            //_html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
             listener.trigger('sendArea.send',[{
@@ -93,7 +94,7 @@ function TextArea(window) {
                 'cid' : currentCid,
                 'date' : date
             }]);
-        }
+        };
         //清空待发送框
         $textarea.html("");
         $textarea.blur();
@@ -133,18 +134,23 @@ function TextArea(window) {
         var id=$(this).attr("data-id");
         $(".tab-active").hide();
         $(id).show();
-        //icon换成键盘icon
+       
         if(id=="#chatEmotion"){
-            $emotion.addClass("keyboard");
-            $emotion.css("background-position","-145px -3px");
-            //$(".keyboard").on("click",keyboardHandler)
+            $(".keyboard").on("click",keyboardHandler)
         }
     };
+     //icon换成键盘icon
     var keyboardHandler=function(){
+        //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
+        if($emotion.hasClass("keyboard")){
+            $emotion.removeClass("keyboard");
+            $emotion.css("background-position","-2px -3px");
+        }else{
+            $emotion.addClass("keyboard");
+            $emotion.css("background-position","-145px -3px");
+        }
         $textarea.blur();
         $textarea.focus();
-        $(".qqFaceTip").css("background-position","-2px -3px");
-        $emotion.removeClass("keyboard")
     }
      //定位光标
     var gotoxyHandler=function(data){
