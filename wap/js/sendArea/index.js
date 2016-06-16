@@ -25,6 +25,8 @@ function TextArea(window) {
         $sendBtn = $(".js-sendBtn");
         $textarea = $(".js-textarea");
         $sendarea=$(".sendarea");
+        //转人工按钮
+        $artificial=$(".js-artificial")
         $add = $(".js-add");
         $chatAdd = $(".js-chatAdd");
         $emotion = $(".js-emotion");
@@ -87,21 +89,20 @@ function TextArea(window) {
     };
     var showChatAddHandler=function(){
         //与键盘优化
-        setTimeout(function(){
-            if($chatArea.hasClass("showChatAdd")){
-                //隐藏
-               hideChatAreaHandler();
+        if($chatArea.hasClass("showChatAdd")){
+            //隐藏
+           hideChatAreaHandler();
 
-            } else {
+        } else {
+            setTimeout(function(){
                 //显示
                 $chatArea.addClass("showChatAdd");
                 $chatArea.animate({
                     bottom : "0"
                 },200);
                 autoSizePhone();
-            }
-        },200)
-        
+            },200)
+        }
     };
     var hideChatAreaHandler = function() {
         setTimeout(function(){
@@ -113,7 +114,7 @@ function TextArea(window) {
          },200);
         //ico换成表情
         $(".qqFaceTip").css("background-position","-2px -3px");
-        
+
         $textarea.focus();
     };
     //表情、加号切换
@@ -149,6 +150,9 @@ function TextArea(window) {
         $textarea.html(_html);
         autoSizePhone();
     };
+    var artificialHandler=function(){
+        listener.trigger('sendArea.artificial');
+    };
     //宽高自适应手机
     var autoSizePhone=function(){
         //var _height=$(".chatArea").offset().top;
@@ -175,6 +179,8 @@ function TextArea(window) {
         //发送图片
         listener.on("sendArea.uploadImgUrl",onImageUpload);
         $(window).on("resize",autoSizePhone);
+        //转人工
+        $artificial.on("click",artificialHandler)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
