@@ -186,6 +186,13 @@ var ListMsgHandler = function() {
                     });
                     msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                 }
+                //添加
+                if(chatPanelList.children().length>0){
+                  chatPanelList.children().last().after(msgHtml);
+                }else{
+                  //有聊天记录就加到最后一项
+                  chatPanelList.append(msgHtml);
+                }
               }
             break;
           case 2:
@@ -233,11 +240,14 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
-        if(chatPanelList.children().length>0){
-          chatPanelList.children().last().after(msgHtml);
-        }else{
-          //有聊天记录就加到最后一项
-          chatPanelList.append(msgHtml);
+        if(msgType != 1){
+          //回复消息不走此
+          if(chatPanelList.children().length>0){
+            chatPanelList.children().last().after(msgHtml);
+          }else{
+            //有聊天记录就加到最后一项
+            chatPanelList.append(msgHtml);
+          }
         }
       scrollHanlder.scroll.refresh();//刷新
       // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
@@ -337,7 +347,7 @@ var ListMsgHandler = function() {
       },
       onUpLoadImgProgress:function(data){
         console.log(data);
-        console.log($('#'+uploadImgToken));
+        // console.log($('#'+uploadImgToken));
         $(progress).text(data);
       }
     };
