@@ -11,7 +11,7 @@ var ListMsgHandler = function() {
     var Promise = require('../../../common/util/promise.js');
     var theme = require('./theme.js');
     var Scroll = require('./scroll.js');
-    // var qqFace = require('../util/qqFace.js');
+    var QQFace = require('../util/qqFace.js')();
 
     var msgHandler = {},//包装消息相关方法
         sysHander = {},//包装系统和配置方法
@@ -158,7 +158,7 @@ var ListMsgHandler = function() {
               var msg;
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : data[0]['answer'].trim()
+                  userMsg : QQFace.analysis(data[0]['answer'].trim())
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -339,7 +339,8 @@ var ListMsgHandler = function() {
       //发送消息
       onSend : function(data){
         console.log(data);
-        bindMsg(0,data);
+        fnEvent.trigger('listMsg.ConvertMsg',data[0]['answer'].trim());
+        // bindMsg(0,data);
       },
       //接收回复
      onReceive : function(data){
