@@ -61,7 +61,6 @@ var RobotFirst = function(global) {
                 value = [];
             }
             var now = new Date();
-            console.log(global.apiConfig);
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
