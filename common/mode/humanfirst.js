@@ -108,7 +108,14 @@ var HumanFirst = function(global) {
                         $transferBtn.show();
                         console.log('暂无客服在线');
                         if(init) {
-                            // initHumanSession(value,ret,global.apiConfig.adminNonelineTitle);
+                            initHumanSession(value,ret,null);
+                            setTimeout(function() {
+                                ret.content = global.apiConfig.adminNonelineTitle;
+                                listener.trigger("core.system", {
+                                    'type' : 'system',
+                                    'data' : ret
+                                });
+                            },1);
                         } else {
                             ret.content = global.apiConfig.adminNonelineTitle;
                             listener.trigger("core.system", {
@@ -121,7 +128,14 @@ var HumanFirst = function(global) {
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
                         console.log('排队');
                         if(init) {
-                            initHumanSession(value,ret,str);
+                            initHumanSession(value,ret,null);
+                            setTimeout(function() {
+                                ret.content = str;
+                                listener.trigger("core.system", {
+                                    'type' : 'system',
+                                    'data' : ret
+                                });
+                            },1);
                         } else {
                             ret.content = str;
                             listener.trigger("core.system", {
