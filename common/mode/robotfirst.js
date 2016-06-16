@@ -11,7 +11,6 @@ var RobotFirst = function(global) {
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
     var _self = this;
-    var $transferBtn;
     var manager;
     var outerPromise = new Promise();
     var parseDOM = function() {
@@ -140,6 +139,10 @@ var RobotFirst = function(global) {
                                 'data' : ret
                             });
                         }
+                        listener.trigger("core.buttonchange", {
+                            'type' : 'transfer',
+                            'action' : 'hide'
+                        });
                     }
                 },
                 'fail' : function() {
@@ -173,11 +176,14 @@ var RobotFirst = function(global) {
         },0);
     };
     var bindListener = function() {
-        $transferBtn.on("click",transferBtnClickHandler);
+        listener.on("sendArea.artificial",transferBtnClickHandler);
     };
 
     var initPlugins = function() {
-        $transferBtn.show();
+        listener.trigger("core.buttonchange", {
+            'type' : 'transfer',
+            'action' : 'show'
+        });
         //首先发送机器人欢迎语
         if(global.apiInit.ustatus == 0) {
             manager = new Robot(global);
