@@ -349,6 +349,7 @@ var ListMsgHandler = function() {
       },
       //FIXME 发消息  过滤qq表情
       onSendFaceStr:function(data){
+        console.log(data);
         bindMsg(0,data);
       },
       //相关搜索答案点击事件
@@ -405,14 +406,16 @@ var ListMsgHandler = function() {
         initConfig();//配置参数
         initScroll();//初始化&配置scroll
         //FIXME bindListener
-        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.send',msgHandler.onSend);//发送内容
+        fnEvent.on('sendArea.sendfaceStr',msgHandler.onSendFaceStr);//过滤qq表情
         fnEvent.on('core.onreceive',msgHandler.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
+
+        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
-        fnEvent.on('sendArea.sendfaceStr',msgHandler.onSendFaceStr);//过滤qq表情
+
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
     };
