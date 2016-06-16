@@ -96,6 +96,7 @@ function ZC_Face() {
     
     var bindLitener = function() {
         listener.on("sendArea.faceShow",show);
+        listener.on("listMsg.ConvertMsg",analysis);
         
     };
      
