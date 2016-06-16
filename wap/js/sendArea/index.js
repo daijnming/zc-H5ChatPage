@@ -111,11 +111,12 @@ function TextArea(window) {
                 "bottom" : "-215px"
             });
             autoSizePhone();
+            $textarea.focus();
+            $(".qqFaceTip").css("background-position","-2px -3px");
          },200);
         //ico换成表情
-        $(".qqFaceTip").css("background-position","-2px -3px");
-
-        $textarea.focus();
+       
+        
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -180,7 +181,9 @@ function TextArea(window) {
         listener.on("sendArea.uploadImgUrl",onImageUpload);
         $(window).on("resize",autoSizePhone);
         //转人工
-        $artificial.on("click",artificialHandler)
+        $artificial.on("click",artificialHandler);
+        //是否隐藏按钮
+        listener.on("core.buttonchange",buttonChangeHandler)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
