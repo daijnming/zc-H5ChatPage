@@ -41,7 +41,7 @@ var listSugguestionsMsg =
               '</div>';
 
 var rightMsg =
-                  '<div class="msgwrap rightMsg">'+
+                  '<div class="msgwrap rightMsg" date="{{=it.tp}}">'+
                       '<div class="header">'+
                           '<img src="{{=it.userLogo}}" alt="" />'+
                       '</div>'+

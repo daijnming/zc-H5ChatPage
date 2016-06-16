@@ -65,11 +65,17 @@ var ListMsgHandler = function() {
                 itemLan = item.length;
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
+                    //过滤
+                    itemChild.msg = itemChild.msg.replace(/&amp;/g?/&amp;/g:/&amp/g,"&");
+                    itemChild.msg = itemChild.msg.replace(/&lt;/g?/&lt;/g:/&lt/g,"<");
+                    itemChild.msg = itemChild.msg.replace(/&gt;/g?/&gt;/g:/&gt/g,">");
+                    itemChild.msg = itemChild.msg.replace(/&quot;/g?/&quot;/g:/&quot/g,"\"");
+                    itemChild.msg = itemChild.msg.replace(/&qpos;/g?/&qpos;/g:/&qpos/g,"\'");
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace,
-                            'userMsg' : itemChild.msg
+                            'userMsg' : QQFace.analysis(itemChild.msg.trim())
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
@@ -158,7 +164,8 @@ var ListMsgHandler = function() {
               var msg;
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : data
+                  userMsg : QQFace.analysis( data[0]['answer'].trim()),
+                  date:data[0]['date']
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -338,19 +345,13 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        // console.log(data);
-        fnEvent.trigger('listMsg.ConvertMsg',data[0]['answer'].trim());
-        // bindMsg(0,data);
+        console.log(data);
+        bindMsg(0,data);
       },
       //接收回复
      onReceive : function(data){
       //  console.log(data);
         bindMsg(1,data);
-      },
-      //FIXME 发消息  过滤qq表情
-      onSendFaceStr:function(data){
-        // console.log(data);
-        bindMsg(0,data);
       },
       //相关搜索答案点击事件
      onSugguestionsEvent : function(){
@@ -407,7 +408,6 @@ var ListMsgHandler = function() {
         initScroll();//初始化&配置scroll
         //FIXME bindListener
         fnEvent.on('sendArea.send',msgHandler.onSend);//发送内容
-        fnEvent.on('sendArea.sendfaceStr',msgHandler.onSendFaceStr);//过滤qq表情
         fnEvent.on('core.onreceive',msgHandler.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
