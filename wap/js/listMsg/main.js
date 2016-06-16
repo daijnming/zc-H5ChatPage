@@ -152,6 +152,7 @@ var ListMsgHandler = function() {
       if(data){
         switch (msgType) {
           case 0:
+              var msg;
               comf = $.extend({
                   userLogo : global.userInfo.face,
                   userMsg : data[0]['answer'].trim()
@@ -201,7 +202,7 @@ var ListMsgHandler = function() {
               //判断是否是系统回复
               if(_type=='system'){
                 comf = $.extend({
-                  sysMsg:_data.content
+                  sysMsg:$(_data.content).text()
                 });
                 msgHtml = doT.template(msgTemplate.sysMsg)(comf);
               }else{
@@ -249,12 +250,12 @@ var ListMsgHandler = function() {
             chatPanelList.append(msgHtml);
           }
         }
-        //如果是上传图片
-      if(uploadImgToken){
-        //获取上传图片相关信息
-        shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-        progress = $('#'+uploadImgToken);
-      }
+      //   //如果是上传图片
+      // if(uploadImgToken){
+      //   //获取上传图片相关信息
+      //   shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
+      //   progress = $('#'+uploadImgToken);
+      // }
       scrollHanlder.scroll.refresh();//刷新
       // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
       // document.getElementById('.js-scroller').scrollIntoView(false);
@@ -352,16 +353,11 @@ var ListMsgHandler = function() {
         bindMsg(4,data);
       },
       onUpLoadImgProgress:function(data){
-
-
-
-
         var $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
         var $progress = $('#'+uploadImgToken);
         //蒙版高度随百分比改变
         $progress.text(data+'%');
         data = data/100;//获取小数
-
         //蒙版高度
         var h = $shadowLayer.height(),
             cH = data * h,//获取计算后的高度值
