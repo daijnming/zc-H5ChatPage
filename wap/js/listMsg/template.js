@@ -56,7 +56,7 @@ var rightMsg =
 
 
   var rightImg =
-                    '<div class="msgwrap rightMsg" id="{{=it.token}}" '+
+                    '<div class="msgwrap rightMsg" id="{{=it.token}}" >'+
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
@@ -65,8 +65,8 @@ var rightMsg =
                               '<img src="{{=it.uploadImg}}"'+
                             '</p>'+
                             '<div class="shadowLayer" class="js-shadowLayer">'+
-                            '  <span id={{=it.token}} class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
+                              '  <span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                         '</div>'+
                         '<span class="msgStatus statusRight"></span>'+
                     '</div>'+
