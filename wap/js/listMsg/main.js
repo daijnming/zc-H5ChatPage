@@ -11,8 +11,9 @@ var ListMsgHandler = function() {
     var Promise = require('../../../common/util/promise.js');
     var theme = require('./theme.js');
     var Scroll = require('./scroll.js');
+    var QQFace = require('../util/qqFace.js')();
 
-    var msgHander = {},//包装消息相关方法
+    var msgHandler = {},//包装消息相关方法
         sysHander = {},//包装系统和配置方法
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
 
@@ -43,10 +44,9 @@ var ListMsgHandler = function() {
         url_detail : '/chat/user/chatdetail.action'
     };
 
-    //展示历史记录
-    var showHistoryMsg = function(data) {
+    //展示历史记录 type 用于判断加载第一页数据
+    var showHistoryMsg = function(data,num) {
       console.log(data);
-        // msgTemplate
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -56,10 +56,9 @@ var ListMsgHandler = function() {
             msgHtml = '',
             userLogo = 'http://img.sobot.com/console/common/face/user.png',
             customLogo = '',
-            oldCid = '',
             oldTime='',//上一次时间
-            tempHtml = '';
-        reg = /target="_self"/g;
+            tempHtml = '',
+            reg = /target="_self"/g;
         if(data && data.length > 0) {
             for(var i = 0;i < dataLen;i++) {
                 item = data[i].content;
@@ -97,7 +96,7 @@ var ListMsgHandler = function() {
                     tempHtml=(tempHtml+msgHtml).replace(reg,'target="_blank"');
                 }
             }
-            updateChatList(tempHtml,true,true);
+            updateChatList(tempHtml,true,Boolean(num));
         } else {
             //没有更多消息
             global.flags.moreHistroy = false;
@@ -106,7 +105,7 @@ var ListMsgHandler = function() {
         scrollHanlder.scroll.refresh();
     };
     //更新聊天信息列表
-    var updateChatList = function(tmpHtml,isHistory,isPullDown) {
+    var updateChatList = function(tmpHtml,isHistory,isFirstData) {
 
         var _chatPanelList = chatPanelList,
             _chatPanelChildren = '',
@@ -118,13 +117,14 @@ var ListMsgHandler = function() {
                 chatPanelList.children().first().before(tmpHtml);
             } else {
                 chatPanelList.append(tmpHtml);
-                dom = chatPanelList.children().last();
             }
+            dom = chatPanelList.children().last();
         }
-        //不显示时间线
-        global.flags.isTimeLine = false;
+        if(isFirstData){
+          //刷新加载首页历史记录
+          scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
+        }
         return dom;
-
     };
 
     var initScroll = function(){
@@ -158,7 +158,7 @@ var ListMsgHandler = function() {
               var msg;
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : data[0]['answer'].trim()
+                  userMsg : QQFace.analysis(data[0]['answer'].trim())
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -172,7 +172,7 @@ var ListMsgHandler = function() {
                 var _data = _list[i];
                 if(_data.answerType=='4'){
                   //相关搜索
-                  msgHtml = msgHander.sugguestionsSearch(_data);
+                  msgHtml = msgHandler.sugguestionsSearch(_data);
                 }else{
                     //判断是机器人还是客服回复
                     if(_type=='robot'){
@@ -266,6 +266,7 @@ var ListMsgHandler = function() {
       scrollHanlder.scroll.refresh();//刷新
       // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
       // document.getElementById('.js-scroller').scrollIntoView(false);
+      // console.log($(wrapScroll).scrollTop());
       }
     };
     //包装系统和配置方法
@@ -321,7 +322,7 @@ var ListMsgHandler = function() {
       }
     };
     //包装消息相关方法
-    msgHander = {
+    msgHandler = {
       //相关搜索方法
       sugguestionsSearch:function(data){
         if(data){
@@ -338,7 +339,8 @@ var ListMsgHandler = function() {
       //发送消息
       onSend : function(data){
         console.log(data);
-        bindMsg(0,data);
+        fnEvent.trigger('listMsg.ConvertMsg',data[0]['answer'].trim());
+        // bindMsg(0,data);
       },
       //接收回复
      onReceive : function(data){
@@ -382,6 +384,10 @@ var ListMsgHandler = function() {
               $shadowLayer.remove();
               $progress.remove();
             }
+      },
+      //加欢迎语
+      getHello:function(data){
+        showHistoryMsg(data,1);
       }
     };
     /********************************************************************************/
@@ -396,14 +402,14 @@ var ListMsgHandler = function() {
         initScroll();//初始化&配置scroll
         //FIXME bindListener
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
-        fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
-        fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
-        fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
-        fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语 调历史渲染接口
+        fnEvent.on('sendArea.send',msgHandler.onSend);//发送内容
+        fnEvent.on('core.onreceive',msgHandler.onReceive);//接收回复
+        fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
+        fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
+        fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         //FIXME EVENT
-        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
+        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
     };
     //初始化h5页面配置信息
     var initConfig = function() {
