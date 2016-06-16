@@ -191,7 +191,7 @@ function TextArea(window) {
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
-         'date+uid' : date,
+         'dateUid' : date,
          'date': +new Date(),
          'token':data[0].token
          }]);
