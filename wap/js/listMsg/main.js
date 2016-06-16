@@ -349,7 +349,7 @@ var ListMsgHandler = function() {
       },
       //FIXME 发消息  过滤qq表情
       onSendFaceStr:function(data){
-        console.log(data);
+        // console.log(data);
         bindMsg(0,data);
       },
       //相关搜索答案点击事件
