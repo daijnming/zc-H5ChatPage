@@ -101,7 +101,6 @@ var HumanFirst = function(global) {
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
-                        listener.trigger("core.system",[global.apiConfig.adminNonelineTitle]);
                         //暂无客服在线
                         if(manager) {
                             manager.destroy();
@@ -115,6 +114,7 @@ var HumanFirst = function(global) {
                                 ret.content = global.apiConfig.adminNonelineTitle;
                                 listener.trigger("core.system", {
                                     'type' : 'system',
+                                    'status' : 'offline',
                                     'data' : ret
                                 });
                             },1);
@@ -122,6 +122,7 @@ var HumanFirst = function(global) {
                             ret.content = global.apiConfig.adminNonelineTitle;
                             listener.trigger("core.system", {
                                 'type' : 'system',
+                                'status' : 'offline',
                                 'data' : ret
                             });
                         }
@@ -135,6 +136,7 @@ var HumanFirst = function(global) {
                                 ret.content = str;
                                 listener.trigger("core.system", {
                                     'type' : 'system',
+                                    'status' : 'queue',
                                     'data' : ret
                                 });
                             },1);
@@ -142,6 +144,7 @@ var HumanFirst = function(global) {
                             ret.content = str;
                             listener.trigger("core.system", {
                                 'type' : 'system',
+                                'status' : 'queue',
                                 'data' : ret
                             });
                         }
