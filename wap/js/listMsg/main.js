@@ -13,7 +13,10 @@ var ListMsgHandler = function() {
     var Scroll = require('./scroll.js');
 
     var msgHander = {},//包装消息相关方法
-        sysHander = {};//包装系统和配置方法
+        sysHander = {},//包装系统和配置方法
+        sysMsgManager=[];//系统提示管理  排队中  不在线等提示
+
+    var sysMsgList=['queue','offline'];//用于系统提示管理的状态码
 
     //Dom元素
     var topTitleBar,//顶部栏
@@ -160,6 +163,7 @@ var ListMsgHandler = function() {
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
           case 1:
+              //接收人工工作台消息
               //FIXME 类型判断  answerType=4 相关搜索 另形判断
               var _logo,_name,_msg,_type,_list;
               _type=data.type,
@@ -197,16 +201,24 @@ var ListMsgHandler = function() {
               }
             break;
           case 2:
+          //系统提示 人工，机器 人欢迎语
               var _type = data.type;
               var _data = data.data;
               //判断是否是系统回复
               if(_type=='system'){
+                //生成时间戳
+                var tp = +new Date();
                 comf = $.extend({
-                  sysMsg:$(_data.content).text()?$(_data.content).text():_data.content
+                  sysMsg:$(_data.content).text()?$(_data.content).text():_data.content,
+                  sysMsgSign:tp
                 });
+                //是否包含需要处理的系统提示语
+                if(sysMsgList.indexOf(data.status)>=0){
+                  sysMsgManager.push(tp);
+                }
                 msgHtml = doT.template(msgTemplate.sysMsg)(comf);
               }else{
-                //判断是机器人还是客服回复
+                //判断是机器人 | 客服
                 if(_type=='robot'){
                   _logo =global.apiConfig.robotLogo;
                   _name = global.apiConfig.robotName;
@@ -250,12 +262,7 @@ var ListMsgHandler = function() {
             chatPanelList.append(msgHtml);
           }
         }
-      //   //如果是上传图片
-      // if(uploadImgToken){
-      //   //获取上传图片相关信息
-      //   shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-      //   progress = $('#'+uploadImgToken);
-      // }
+
       scrollHanlder.scroll.refresh();//刷新
       // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
       // document.getElementById('.js-scroller').scrollIntoView(false);
@@ -301,6 +308,16 @@ var ListMsgHandler = function() {
       onSessionOpen:function(data){
         console.log(data);
         bindMsg(2,data);
+      },
+      //系统提示消息处理
+      onSysMsgHandler:function(){
+        var _t = setInterval(function(){
+          if(sysMsgManager.length>1){
+            var sign = sysMsgManager.shift();
+            $('#'+sign).remove();
+            scrollHanlder.scroll.refresh();
+          }
+        },5*1000);//每隔5秒处理系统提示消息
       }
     };
     //包装消息相关方法
@@ -387,27 +404,13 @@ var ListMsgHandler = function() {
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHander.onSugguestionsEvent);//相关搜索答案点击事件
-
-        ///
-        var height = $('#uploadimg').find('.js-shadowLayer').height();
-        var margin=0;
-        var _t = setInterval(function(){
-          height = height - 10;
-          margin = margin+10;
-          $('#uploadimg').find('.js-shadowLayer').height(height);
-          $('#uploadimg').find('.js-shadowLayer').css('margin-top',margin+'px');
-          if(height<=0){
-            $('#uploadimg').find('.js-shadowLayer').remove();
-            clearInterval(_t);
-          }
-        },100);
     };
     //初始化h5页面配置信息
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
-        // sysHander.onAutoSize(48);//默认 设置屏幕高度
         sysHander.nowTimer();//显示当前时间
+        sysHander.onSysMsgHandler();//系统提示处理
     };
     //初始化Dom
     var parseDOM = function() {
