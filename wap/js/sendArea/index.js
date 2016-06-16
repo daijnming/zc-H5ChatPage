@@ -29,6 +29,8 @@ function TextArea(window) {
         $artificial=$(".js-artificial")
         $add = $(".js-add");
         $chatAdd = $(".js-chatAdd");
+        //上传图片按钮
+        $uploadImg=$("js-uploadImg");
         //表情按钮
         $emotion = $(".js-emotion");
         $chatEmotion = $(".js-chatEmotion");
@@ -154,11 +156,7 @@ function TextArea(window) {
     };
     var artificialHandler=function(){
         listener.trigger('sendArea.artificial');
-        var a=1;
-        if(a==1){
-            $emotion.show();
-            $add.css("margin-left",0)
-        }
+
     };
     //宽高自适应手机
     var autoSizePhone=function(){
@@ -168,8 +166,18 @@ function TextArea(window) {
 
     };
     var buttonChangeHandler=function(data){
-        console.log(data)
-        
+        console.log(data.action);
+        if(data.action=="hide"){
+            $emotion.show();
+            $uploadImg.show();
+            $artificial.hide();
+            $add.css("margin-left",0)
+        }else{
+            $emotion.hide();
+            $uploadImg.hide();
+            $artificial.show();
+            $add.css("margin-left","2%")
+        }
     }
     var bindLitener = function() {
         //发送按钮
