@@ -30,7 +30,7 @@ function TextArea(window) {
         $add = $(".js-add");
         $chatAdd = $(".js-chatAdd");
         //上传图片按钮
-        $uploadImg=$("js-uploadImg");
+        $uploadImg=$(".js-uploadImg");
         //表情按钮
         $emotion = $(".js-emotion");
         $chatEmotion = $(".js-chatEmotion");
