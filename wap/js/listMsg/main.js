@@ -228,6 +228,8 @@ var ListMsgHandler = function() {
                 token:data[0]['token']
             });
              msgHtml = doT.template(msgTemplate.rightImg)(comf);
+             //触发上传事件
+             fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
             break;
         }
         if(chatPanelList.children().length>0){
@@ -334,6 +336,7 @@ var ListMsgHandler = function() {
       },
       onUpLoadImgProgress:function(data){
         console.log(data);
+        $(progress).text(data);
       }
     };
     /********************************************************************************/
@@ -351,7 +354,6 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.send',msgHander.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHander.onReceive);//接收回复
         fnEvent.on('sendArea.createUploadImg',msgHander.onUpLoadImg);//发送图片
-        fnEvent.on('sendArea.uploadImgProcess',msgHander.onUpLoadImgProgress);//上传进度条
         // fnEvent.on('core.initsession',sysHander.gitHello);//机器人欢迎语
         fnEvent.on('core.initsession',showHistoryMsg);//机器人欢迎语
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
