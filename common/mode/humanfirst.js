@@ -24,7 +24,7 @@ var HumanFirst = function(global) {
         var obj = {
             "date" : DateUtil.formatDate(now),
             "content" : [{
-                'senderType' : 2,
+                'senderType' : (!!word) ? 2 : 1,
                 't' : +now,
                 'msg' : word,
                 'ts' : DateUtil.formatDate(now,true),
@@ -107,7 +107,6 @@ var HumanFirst = function(global) {
                         }
                         manager = new Robot(global);
                         $transferBtn.show();
-                        console.log('暂无客服在线');
                         if(init) {
                             initHumanSession(value,ret,null);
                             setTimeout(function() {
@@ -129,7 +128,6 @@ var HumanFirst = function(global) {
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
-                        console.log('排队');
                         if(init) {
                             initHumanSession(value,ret,null);
                             setTimeout(function() {
@@ -153,7 +151,6 @@ var HumanFirst = function(global) {
                         }
                         manager = new Robot(global);
                     } else if(ret.status == 1) {
-                        console.log('成功');
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
                         } else {
@@ -222,7 +219,6 @@ var HumanFirst = function(global) {
 
     var initPlugins = function() {
         var status = global.apiInit.ustatus;
-        console.log(status);
         if(status == 0 || status == 1 || status == -2) {
             transferConnect(null,null,true);
         } else if(status == -1) {

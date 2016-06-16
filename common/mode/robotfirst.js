@@ -55,6 +55,9 @@ var RobotFirst = function(global) {
     };
 
     var initHumanSession = function(word,ret) {
+        var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
+        var name = (!!word) ? ret.aname : global.apiConfig.robotName;
+        var word = word || global.apiConfig.robotHelloWord;
         initSession(global).then(function(value,promise) {
             if(!value) {
                 value = [];
@@ -63,12 +66,12 @@ var RobotFirst = function(global) {
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
-                    'senderType' : 2,
+                    'senderType' : (!!word) ? 2 : 1,
                     't' : +now,
-                    'msg' : global.apiConfig.adminHelloWord,
+                    'msg' : word,
                     'ts' : DateUtil.formatDate(now,true),
-                    'senderFace' : ret.aface,
-                    'senderName' : ret.aname
+                    'senderFace' : face,
+                    'senderName' : name
                 }]
             };
             value.push(obj);
@@ -100,7 +103,14 @@ var RobotFirst = function(global) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
                         if(init) {
-                            initHumanSession(global.apiConfig.adminNonelineTitle,ret);
+                            initHumanSession(null,ret);
+                            setTimeout(function() {
+                                ret.content = global.apiConfig.adminNonelineTitle;
+                                listener.trigger("core.system", {
+                                    'type' : 'system',
+                                    'data' : ret
+                                });
+                            },1);
                         } else {
                             ret.content = global.apiConfig.adminNonelineTitle;
                             listener.trigger("core.system", {
@@ -109,17 +119,24 @@ var RobotFirst = function(global) {
                             });
                         }
                         //暂无客服在线
-                        console.log('暂无客服在线');
                     } else if(ret.status == 0) {
                         //排队
                         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
-                        console.log('排队');
                         if(init) {
-                            initHumanSession(str,ret);
+                            initHumanSession(null,ret);
+                            setTimeout(function() {
+                                ret.content = str;
+                                listener.trigger("core.system", {
+                                    'type' : 'system',
+                                    'status' : "queue",
+                                    'data' : ret
+                                });
+                            },1);
                         } else {
                             ret.content = str;
                             listener.trigger("core.system", {
                                 'type' : 'system',
+                                'status' : "queue",
                                 'data' : ret
                             });
                         }
@@ -127,7 +144,6 @@ var RobotFirst = function(global) {
                         if(manager) {
                             manager.destroy();
                         }
-                        console.log('成功');
                         manager = socketFactory(ret);
                         manager.start();
                         if(init) {
@@ -171,7 +187,6 @@ var RobotFirst = function(global) {
         };
         value.push(obj);
         setTimeout(function() {
-            console.log(value);
             listener.trigger("core.initsession",value);
         },0);
     };
@@ -184,17 +199,17 @@ var RobotFirst = function(global) {
             'type' : 'transfer',
             'action' : 'show'
         });
+        var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
-        if(global.apiInit.ustatus == 0) {
+        if(status == 0) {
             manager = new Robot(global);
             getWelcome();
         } else {
-            if(global.apiInit.ustatus == 1) {
+            if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);
-            } else if(global.apiInit.ustatus == -1) {
+            } else if(status == -1) {
                 initSession(global).then(initRobotSession);
             }
-            //console.log(manager);
         }
 
     };
