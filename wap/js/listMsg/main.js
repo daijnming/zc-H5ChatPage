@@ -309,7 +309,8 @@ var ListMsgHandler = function() {
           _timer = t + time.substring(time.indexOf(' '),time.lastIndexOf(':'));
         }
         var comf = $.extend({
-          sysData:_timer
+          sysData:_timer,
+          date:+new Date()
         });
         return  doT.template(msgTemplate.sysData)(comf);
       },
@@ -410,23 +411,22 @@ var ListMsgHandler = function() {
       },
       //更新聊天记录
       updateChatMsg:function(tempHtml){
-        console.log(tempHtml);
         if(chatPanelList&&chatPanelList.children().length){
             var lastDom = chatPanelList.children().last();
+            var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
+            //超一分钟 显示 时间线
+            if(_m>1&&!lastDom.hasClass('sysData')){
+              var _t = new Date();
+              var hour = _t.getHours()>=10?_t.getHours():'0'+_t.getHours(),
+                  minutes = _t.getMinutes()>=10?_t.getMinutes():'0'+_t.getMinutes(),
+                  _time = '今天 '+hour+':'+minutes;
+              var comf = $.extend({
+                sysData:_time,
+                date:+new Date()
+              });
+              tempHtml = doT.template(msgTemplate.sysData)(comf)+tempHtml;
+            }
         }
-
-        // var _m = Math.abs(new Date - new Date())
-        //聊天内容更新时间判断
-        // var curTime = new Date();
-        // var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
-        // if(oldTime){
-        //   var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
-        //   if(Number(_m)>1){
-        //     //大于一分钟  0 当天  1上一天 2更久历史
-        //     var type = _t<=1?0:_t>1&&_t<=2?1:2;
-        //     msgHtml += sysHander.getTimeLine(type,itemChild.ts);
-        //   }
-        // }
         chatPanelList.append(tempHtml);
       }
     };
@@ -446,7 +446,6 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
-
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
 
