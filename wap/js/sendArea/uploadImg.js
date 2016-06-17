@@ -39,6 +39,7 @@ function uploadImg() {
             oData.append("countTag",1);
             oData.append("source",0);
             //上传,延迟一毫秒，先让图片在页面加载
+            //onAjaxUploadUpHandler(oData)
             setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
 
 
@@ -53,6 +54,7 @@ function uploadImg() {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString();
             listener.trigger('sendArea.uploadImgProcess',percentage); 
+            console.log(percentage);
         } else {
             alert("请上传正确的图片格式");
             //document.getElementById('progress').innerHTML = '无法计算';

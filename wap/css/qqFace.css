@@ -35,7 +35,7 @@ li, ul, div, p, h1 {
     overflow:hidden;
     width: 24px;
     height: 24px;
-    padding:3% 3.7%;
+    padding:3% 3.1%;
 }
 .faceGroup .backDelete{
     float:left;
@@ -43,10 +43,20 @@ li, ul, div, p, h1 {
     width: 24px;
     height: 20px;
     margin:4% 3%;
-    background: url(../images/icoGroup.png) -178px -1px;
+    background: url(../images/icoGroup2X.png) -178px -1px;
     background-size: 229px 168px;
 }
 .faceGroup img:hover {
     background: #edeff0;
 }
 .faceimg{width:24px;height:24px;margin:0 2px;}
+@media (min-device-width : 375px){
+     .faceGroup .faceIco{
+        padding:3% 3.5%;
+    }
+}
+@media (min-device-width : 411px) and (max-device-width : 736px){
+     .faceGroup .faceIco{
+        padding:3% 3.9%;
+    }
+}

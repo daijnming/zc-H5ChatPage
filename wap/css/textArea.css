@@ -49,27 +49,19 @@ li {
 }
 .add {
     height: 35px;
-    line-height: 32px;
-    width: 35px;
-    text-align: center;
+    width: 34px;
     margin-left: 2%;
-    color: #878787;
-    font-size: 24px;
-    background: url(../images/icoGroup.png) -73px -3px;
-    background-size: 274px 246px;
+    background: url(../images/icoGroup2X.png) -73px -3px;
+    background-size: 267px 233px;
 }
 .qqFaceTip {
     display:none;
     height: 35px;
-    line-height: 32px;
-    width: 37px;
-    text-align: center;
-    margin:0 2%;
-    color: #878787;
-    font-size: 24px;
-    background-image: url(../images/icoGroup.png);
-    background-position:-2px -3px;
-    background-size: 282px 246px;
+    width: 34px;
+    margin-left:2%;
+    background-image: url(../images/icoGroup2X.png);
+    background-position:-4px -3px;
+    background-size: 267px 233px;;
 }
 .chatAdd {
     overflow: hidden;
@@ -89,7 +81,7 @@ li {
 }
 .addList .uploadImg{
     display:none;
-    background: url(../images/icoGroup.png) -151px -44px;
+    background: url(../images/icoGroup2X.png) -146px -44px;
     background-size: 310px 274px;
 }
 .addList .uploadImg input{
@@ -101,19 +93,74 @@ li {
     opacity:0
 }
 .addList .artificial{
-    background: url(../images/icoGroup.png) -4px -44px;
+    background: url(../images/icoGroup2X.png) -4px -44px;
     background-size: 310px 274px;
 }
 .addList .satisfaction{
-    background: url(../images/icoGroup.png) -4px -118px;
+    background: url(../images/icoGroup2X.png) -4px -118px;
     background-size: 310px 274px;
 }
 .addList .leaveMessage{
-    background: url(../images/icoGroup.png) -151px -118px;
+    background: url(../images/icoGroup2X.png) -151px -118px;
     background-size: 310px 274px;
 }
 .showChatAdd {/* display:block; */
 }
 .tab-active{
     display:none;
+}
+/* iphone6 */
+@media (min-device-width : 375px){
+.qqFaceTip {
+    width: 36px;
+}
+.add {
+   
+    width: 35px;
+    
+}
+/* iphone6 Plus */
+@media (min-device-width : 414px) and (max-device-width : 736px) and (-webkit-min-device-pixel-ratio : 3){
+.add {
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    margin-left: 2%;
+    color: #878787;
+    background: url(../images/icoGroup3X.png) -73px -3px;
+    background-size: 274px 246px;
+}
+.qqFaceTip {
+    display:none;
+    height: 35px;
+    width: 37px;
+    text-align: center;
+    margin:0 1% 0 2%;
+    color: #878787;
+    background-image: url(../images/icoGroup3X.png);
+    background-position:-2px -3px;
+    background-size: 282px 246px;
+}
+.addList .uploadImg{
+    display:none;
+    background: url(../images/icoGroup3X.png) -151px -44px;
+    background-size: 310px 274px;
+}
+.addList .uploadImg{
+    display:none;
+    background: url(../images/icoGroup3X.png) -151px -44px;
+    background-size: 310px 274px;
+}
+.addList .artificial{
+    background: url(../images/icoGroup3X.png) -4px -44px;
+    background-size: 310px 274px;
+}
+.addList .satisfaction{
+    background: url(../images/icoGroup3X.png) -4px -118px;
+    background-size: 310px 274px;
+}
+.addList .leaveMessage{
+    background: url(../images/icoGroup3X.png) -151px -118px;
+    background-size: 310px 274px;
+}
 }

@@ -31,13 +31,11 @@ function TextArea(window) {
             $emotion.show();
             $uploadImg.show();
             $artificial.hide();
-            $add.css("margin-left",0)
         }else{
             transferFlag=1;
             $emotion.hide();
             $uploadImg.hide();
             $artificial.show();
-            $add.css("margin-left","2%")
         }
     }
     var showSendBtnHandler = function(evt) {
