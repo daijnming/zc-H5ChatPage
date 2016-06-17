@@ -358,8 +358,14 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(data);
-        bindMsg(0,data);
+        // console.log(data);
+        if(uploadImgToken){
+          //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换url地址即可
+          $('#'+uploadImgToken).find('p img').attr('src',data[0]['answer']);
+          uploadImgToken='';//置空 一个流程完成
+        }else{
+          bindMsg(0,data);
+        }
       },
       //接收回复
      onReceive : function(data){
@@ -386,24 +392,26 @@ var ListMsgHandler = function() {
         bindMsg(4,data);
       },
       onUpLoadImgProgress:function(data){
-        console.log(data);
+        data = 0;
         var $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-        var $progress = $('#'+uploadImgToken);
-        //蒙版高度随百分比改变
-        $progress.text(data+'%');
-        data = data/100;//获取小数
-        //蒙版高度
-        var h = $shadowLayer.height(),
-            cH = data * h,//获取计算后的高度值
-            margin=0;
-            //计算
-            h = h - cH;
-            margin = margin+cH;
-            $shadowLayer.height(h).css('margin-top',margin+'px');
-            if(data>=1){
-              $shadowLayer.remove();
-              $progress.remove();
-            }
+        var $progress = $('#progress'+uploadImgToken);
+        var oldH = $shadowLayer.height();
+        var tt = setInterval(function(){
+          data +=5;
+          //蒙版高度随百分比改变
+          $progress.text(data+'%');
+          var floatData = data/100;//获取小数
+          //蒙版高度
+          var cH = floatData * oldH;//获取计算后的高度值
+          //计算
+          var newH = oldH - cH;
+          $shadowLayer.height(newH);
+          if(floatData>=1){
+            clearInterval(tt);
+            $shadowLayer.remove();
+            $progress.remove();
+          }
+        },100);
       },
       //加欢迎语
       getHello:function(data){
