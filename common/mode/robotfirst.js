@@ -211,7 +211,8 @@ var RobotFirst = function(global) {
     var onReceive = function(list) {
         for(var i = 0,
             len = list.length;i < len;i++) {
-                
+            var item = list[i];
+            console.log(item);
         }
     };
     var bindListener = function() {
