@@ -85,7 +85,7 @@ var HumanFirst = function(global) {
         },0);
     };
 
-    var queueWait = function(ret,init) {
+    var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
         if(init) {
             initHumanSession(value,ret,null);
@@ -160,7 +160,7 @@ var HumanFirst = function(global) {
                         serverOffline(ret,init);
                     } else if(ret.status == 0) {
                         //排队
-                        queueWait(ret,init);
+                        queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
