@@ -44,7 +44,7 @@ function ZC_Face() {
                 if(flag==28){
                     str+='<span class="backDelete"></span>'
                 }else{
-                    str+='<span class="faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
+                    str+='<img class="faceIco" src="'+path+tip[a]+'.gif" data-src="'+a+'" />';
                 }
             };
             str+='</div>'
