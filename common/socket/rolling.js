@@ -44,6 +44,7 @@ function Rolling(puid) {
                             listener.trigger("core.sessionclose");
                         }
                     }
+                    console.log(arr);
                     listener.trigger("core.onreceive", {
                         'type' : socketType,
                         'list' : arr

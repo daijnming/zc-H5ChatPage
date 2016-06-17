@@ -101,8 +101,8 @@ var RobotFirst = function(global) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
         if(!tempManager) {
             tempManager = socketFactory(ret);
+            tempManager.start();
         }
-        tempManager.start();
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
@@ -208,11 +208,36 @@ var RobotFirst = function(global) {
             listener.trigger("core.initsession",value);
         },0);
     };
-    var onReceive = function(list) {
+    var onReceive = function(data) {
+        var list = data.list || [];
         for(var i = 0,
             len = list.length;i < len;i++) {
             var item = list[i];
-            console.log(item);
+            var ret = item;
+            if(item.type === 200) {
+                if(manager) {
+                    manager.destroy();
+                }
+                manager = tempManager;
+                tempManager = null;
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : "transfer",
+                    'data' : {
+                        'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                    }
+                });
+                ret.content = global.apiConfig.adminHelloWord;
+                listener.trigger("core.system", {
+                    'type' : 'human',
+                    'data' : ret
+                });
+                listener.trigger("core.buttonchange", {
+                    'type' : 'transfer',
+                    'action' : 'hide'
+                });
+                break;
+            }
         }
     };
     var bindListener = function() {

@@ -10,7 +10,6 @@ var HumanFirst = function(global) {
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
-    var $transferBtn;
     var manager;
 
     var initHumanSession = function(value,ret,word) {
@@ -86,6 +85,61 @@ var HumanFirst = function(global) {
         },0);
     };
 
+    var queueWait = function(ret,init,value) {
+        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        if(init) {
+            initHumanSession(value,ret,null);
+            setTimeout(function() {
+                ret.content = str;
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : 'queue',
+                    'data' : ret
+                });
+            },1);
+        } else {
+            ret.content = str;
+            listener.trigger("core.system", {
+                'type' : 'system',
+                'status' : 'queue',
+                'data' : ret
+            });
+        }
+        if(manager) {
+            manager.destroy();
+        }
+        manager = new Robot(global);
+    };
+
+    var serverOffline = function(ret,init) {
+        if(manager) {
+            manager.destroy();
+        }
+        manager = new Robot(global);
+        listener.trigger("core.buttonchange", {
+            'type' : 'transfer',
+            'action' : 'show'
+        });
+        if(init) {
+            initHumanSession(value,ret,null);
+            setTimeout(function() {
+                ret.content = global.apiConfig.adminNonelineTitle;
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : 'offline',
+                    'data' : ret
+                });
+            },1);
+        } else {
+            ret.content = global.apiConfig.adminNonelineTitle;
+            listener.trigger("core.system", {
+                'type' : 'system',
+                'status' : 'offline',
+                'data' : ret
+            });
+        }
+    };
+
     var transferSuccess = function(groupId,promise,init) {
         var init = !!init;
         initSession(global,promise).then(function(value,promise) {
@@ -103,54 +157,10 @@ var HumanFirst = function(global) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
                         //暂无客服在线
-                        if(manager) {
-                            manager.destroy();
-                        }
-                        manager = new Robot(global);
-                        $transferBtn.show();
-                        if(init) {
-                            initHumanSession(value,ret,null);
-                            setTimeout(function() {
-                                ret.content = global.apiConfig.adminNonelineTitle;
-                                listener.trigger("core.system", {
-                                    'type' : 'system',
-                                    'status' : 'offline',
-                                    'data' : ret
-                                });
-                            },1);
-                        } else {
-                            ret.content = global.apiConfig.adminNonelineTitle;
-                            listener.trigger("core.system", {
-                                'type' : 'system',
-                                'status' : 'offline',
-                                'data' : ret
-                            });
-                        }
+                        serverOffline(ret,init);
                     } else if(ret.status == 0) {
                         //排队
-                        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
-                        if(init) {
-                            initHumanSession(value,ret,null);
-                            setTimeout(function() {
-                                ret.content = str;
-                                listener.trigger("core.system", {
-                                    'type' : 'system',
-                                    'status' : 'queue',
-                                    'data' : ret
-                                });
-                            },1);
-                        } else {
-                            ret.content = str;
-                            listener.trigger("core.system", {
-                                'type' : 'system',
-                                'status' : 'queue',
-                                'data' : ret
-                            });
-                        }
-                        if(manager) {
-                            manager.destroy();
-                        }
-                        manager = new Robot(global);
+                        queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
@@ -223,7 +233,6 @@ var HumanFirst = function(global) {
     };
 
     var parseDOM = function() {
-        $transferBtn = $(".temp_test");
     };
 
     var bindListener = function() {
