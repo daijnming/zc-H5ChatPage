@@ -75,15 +75,18 @@ var ListMsgHandler = function() {
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace,
-                            'userMsg' : QQFace.analysis(itemChild.msg.trim())
+                            'userMsg' : QQFace.analysis(itemChild.msg.trim()),
+                            'date':itemChild.t
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
+                        console.log(global.apiConfig.robotLogo);
                         comf = $.extend({
-                            'customLogo' : itemChild.senderFace,
+                            'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
                             'customName' : itemChild.senderName,
-                            'customMsg' : itemChild.msg
+                            'customMsg' : itemChild.msg,
+                            'date':itemChild.t
                         });
                         msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                     }
@@ -194,17 +197,20 @@ var ListMsgHandler = function() {
                     comf = $.extend({
                       customLogo : _logo,
                       customName : _name,
-                      customMsg : _msg
+                      customMsg : _msg,
+                      date:+new Date()
                     });
                     msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                 }
-                //添加
-                if(chatPanelList.children().length>0){
-                  chatPanelList.children().last().after(msgHtml);
-                }else{
-                  //有聊天记录就加到最后一项
-                  chatPanelList.append(msgHtml);
-                }
+                //更新聊天记录
+                msgHandler.updateChatMsg(msgHtml);
+                // //添加
+                // if(chatPanelList.children().length>0){
+                //   chatPanelList.children().last().after(msgHtml);
+                // }else{
+                //   //有聊天记录就加到最后一项
+                //   chatPanelList.append(msgHtml);
+                // }
               }
             break;
           case 2:
@@ -217,7 +223,8 @@ var ListMsgHandler = function() {
                 var tp = +new Date();
                 comf = $.extend({
                   sysMsg:$(_data.content).text()?$(_data.content).text():_data.content,
-                  sysMsgSign:tp
+                  sysMsgSign:tp,
+                  date:tp
                 });
                 //是否包含需要处理的系统提示语
                 if(sysMsgList.indexOf(data.status)>=0){
@@ -238,14 +245,16 @@ var ListMsgHandler = function() {
                 comf = $.extend({
                   customLogo : _logo,
                   customName : _name,
-                  customMsg : _msg
+                  customMsg : _msg,
+                  date:+new Date()
                 });
                 msgHtml = doT.template(msgTemplate.leftMsg)(comf);
               }
             break;
           case 3:
             comf = $.extend({
-              sysData:data
+              sysData:data,
+              date:+new Date()
             });
             msgHtml = doT.template(msgTemplate.sysData)(comf);
             break;
@@ -255,19 +264,22 @@ var ListMsgHandler = function() {
                userLogo : global.userInfo.face,
                uploadImg : data[0]['result'],
                progress:0,
-               token:data[0]['token']
+               token:data[0]['token'],
+               date:+new Date()
            });
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
         if(msgType != 1){
-          //回复消息不走此
-          if(chatPanelList.children().length>0){
-            chatPanelList.children().last().after(msgHtml);
-          }else{
-            //有聊天记录就加到最后一项
-            chatPanelList.append(msgHtml);
-          }
+            //回复消息不走此
+          msgHandler.updateChatMsg(msgHtml);
+          //
+          // if(chatPanelList.children().length>0){
+          //   chatPanelList.children().last().after(msgHtml);
+          // }else{
+          //   //有聊天记录就加到最后一项
+          //   chatPanelList.append(msgHtml);
+          // }
         }
 
       scrollHanlder.scroll.refresh();//刷新
@@ -373,6 +385,7 @@ var ListMsgHandler = function() {
         bindMsg(4,data);
       },
       onUpLoadImgProgress:function(data){
+        console.log(data);
         var $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
         var $progress = $('#'+uploadImgToken);
         //蒙版高度随百分比改变
@@ -394,6 +407,27 @@ var ListMsgHandler = function() {
       //加欢迎语
       getHello:function(data){
         showHistoryMsg(data,1);
+      },
+      //更新聊天记录
+      updateChatMsg:function(tempHtml){
+        console.log(tempHtml);
+        if(chatPanelList&&chatPanelList.children().length){
+            var lastDom = chatPanelList.children().last();
+        }
+
+        // var _m = Math.abs(new Date - new Date())
+        //聊天内容更新时间判断
+        // var curTime = new Date();
+        // var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
+        // if(oldTime){
+        //   var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
+        //   if(Number(_m)>1){
+        //     //大于一分钟  0 当天  1上一天 2更久历史
+        //     var type = _t<=1?0:_t>1&&_t<=2?1:2;
+        //     msgHtml += sysHander.getTimeLine(type,itemChild.ts);
+        //   }
+        // }
+        chatPanelList.append(tempHtml);
       }
     };
     /********************************************************************************/

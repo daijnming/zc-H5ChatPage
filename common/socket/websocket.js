@@ -1,13 +1,28 @@
 /**
  * @author Treagzhao
  */
-function WebSocket(puid) {
+function ZcWebSocket(puid,url) {
     this.puid = puid;
+    var url = url.replace('http','ws');
     var socketType = 'human';
+    var websocket;
+
+    var bindListener = function() {
+        websocket.onopen = function() {
+            console.log('websocket connected');
+        };
+    };
+
+    var init = function() {
+        bindListener();
+    };
+
     var destroy = function() {
     };
 
     var start = function() {
+        websocket = new WebSocket(url);
+        init();
     };
 
     var stop = function() {
@@ -18,4 +33,4 @@ function WebSocket(puid) {
     this.stop = stop;
 };
 
-module.exports = WebSocket;
+module.exports = ZcWebSocket;

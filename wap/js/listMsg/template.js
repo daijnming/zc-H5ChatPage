@@ -2,7 +2,7 @@
 var template ={};
 
 var leftMsg =
-              '<div class="msgwrap leftMsg">'+
+              '<div class="msgwrap leftMsg" date="{{=it.date}}">'+
                   '<div class="header">'+
                       '<img src="{{=it.customLogo}}" alt="" />'+
                   '</div>'+
@@ -18,7 +18,7 @@ var leftMsg =
               '</div>';
 
 var listSugguestionsMsg =
-              '<div class="msgwrap leftMsg">'+
+              '<div class="msgwrap leftMsg" date="{{=it.date}}">'+
                   '<div class="header">'+
                       '<img src="http://sobot-test.oss-cn-beijing.aliyuncs.com/console/3542411be2184c8cb6b48d66ca1b2730/userandgroup/29dcc1573d524a16b5dfac756e04ba22.JPG" alt="" />'+
                   '</div>'+
@@ -41,7 +41,7 @@ var listSugguestionsMsg =
               '</div>';
 
 var rightMsg =
-                  '<div class="msgwrap rightMsg" date="{{=it.tp}}">'+
+                  '<div class="msgwrap rightMsg" date="{{=it.date}}">'+
                       '<div class="header">'+
                           '<img src="{{=it.userLogo}}" alt="" />'+
                       '</div>'+
@@ -55,7 +55,7 @@ var rightMsg =
               '</div>';
 
   var rightImg =
-                    '<div class="msgwrap rightMsg" id="{{=it.token}}" >'+
+                    '<div class="msgwrap rightMsg" id="{{=it.token}}" date="{{=it.date}}">'+
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
@@ -74,7 +74,7 @@ var rightMsg =
                 '</div>';
 
 var systemMsg =
-                  '<p class="sysMsg" id={{=it.sysMsgSign}}>'+
+                  '<p class="sysMsg" id={{=it.sysMsgSign}} date="{{=it.date}}">'+
                   '<span class="sysMsgText"> '+
                       '{{=it.sysMsg}}'+
                   '</span>'+
@@ -82,7 +82,7 @@ var systemMsg =
 
 
 var systemData =
-                  '<p class="sysData">'+
+                  '<p class="sysData" date="{{=it.date}}">'+
                       '{{=it.sysData}}'+
                   '</p>';
 
