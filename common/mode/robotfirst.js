@@ -209,7 +209,6 @@ var RobotFirst = function(global) {
         },0);
     };
     var onReceive = function(data) {
-        console.log('data',data);
         var list = data.list || [];
         for(var i = 0,
             len = list.length;i < len;i++) {
