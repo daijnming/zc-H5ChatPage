@@ -10,7 +10,9 @@ var HumanFirst = function(global) {
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
-    var manager;
+    var socketFactory = require('../socket/socketfactory.js');
+    var manager,
+        tempManager;
 
     var initHumanSession = function(value,ret,word) {
         var success = !!word;
@@ -87,6 +89,7 @@ var HumanFirst = function(global) {
 
     var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        alert();
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
@@ -108,6 +111,8 @@ var HumanFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
+        tempManager = socketFactory(ret);
+        tempManager.start();
         manager = new Robot(global);
     };
 
