@@ -89,7 +89,6 @@ var HumanFirst = function(global) {
 
     var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
-        alert();
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
@@ -114,6 +113,39 @@ var HumanFirst = function(global) {
         tempManager = socketFactory(ret);
         tempManager.start();
         manager = new Robot(global);
+    };
+
+    var onReceive = function(data) {
+        var list = data.list || [];
+        for(var i = 0,
+            len = list.length;i < len;i++) {
+            var item = list[i];
+            var ret = item;
+            if(item.type === 200) {
+                if(manager) {
+                    manager.destroy();
+                }
+                manager = tempManager;
+                tempManager = null;
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : "transfer",
+                    'data' : {
+                        'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                    }
+                });
+                ret.content = global.apiConfig.adminHelloWord;
+                listener.trigger("core.system", {
+                    'type' : 'human',
+                    'data' : ret
+                });
+                listener.trigger("core.buttonchange", {
+                    'type' : 'transfer',
+                    'action' : 'hide'
+                });
+                break;
+            }
+        }
     };
 
     var serverOffline = function(ret,init) {
@@ -242,6 +274,7 @@ var HumanFirst = function(global) {
 
     var bindListener = function() {
         listener.on("sendArea.artificial",transferConnect);
+        listener.on("core.onreceive",onReceive);
     };
 
     var initPlugins = function() {
