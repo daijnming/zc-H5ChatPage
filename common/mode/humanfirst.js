@@ -134,11 +134,7 @@ var HumanFirst = function(global) {
                         'content' : "您好，客服" + ret.aname + "接受了您的请求"
                     }
                 });
-                ret.content = global.apiConfig.adminHelloWord;
-                listener.trigger("core.system", {
-                    'type' : 'human',
-                    'data' : ret
-                });
+
                 listener.trigger("core.buttonchange", {
                     'type' : 'transfer',
                     'action' : 'hide'
