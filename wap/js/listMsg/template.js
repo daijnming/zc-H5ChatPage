@@ -66,7 +66,7 @@ var rightMsg =
                             '<div class="shadowLayer js-shadowLayer">'+
                             '</div>'+
                             '<div class="progressLayer">'+
-                              '<span id="prgoress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
+                              '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
                         '<span class="msgStatus statusRight"></span>'+

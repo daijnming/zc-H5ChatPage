@@ -2,6 +2,8 @@ var ListMsgHandler = function() {
     var global,
         scrollHanlder,
         uploadImgToken,//锁定当前上传图片唯一标识
+        isUploadImg=true,//是否为上传图片操作
+        startScrollY,//原始开始滚动高度  暂未使用
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
 
     var Comm = require('../../../common/comm.js');
@@ -45,7 +47,8 @@ var ListMsgHandler = function() {
     };
 
     //展示历史记录 type 用于判断加载第一页数据
-    var showHistoryMsg = function(data,num) {
+    //isFirstData 是否是刚进入页面
+    var showHistoryMsg = function(data,isFirstData) {
       console.log(data);
         var comf,
             sysHtml ='',
@@ -98,27 +101,31 @@ var ListMsgHandler = function() {
                       if(Number(_m)>1){
                         //大于一分钟  0 当天  1上一天 2更久历史
                         var type = _t<=1?0:_t>1&&_t<=2?1:2;
-                        msgHtml += sysHander.getTimeLine(type,itemChild.ts);
+                        var retMsg = sysHander.getTimeLine(type,itemChild.ts);
+                        msgHtml += retMsg?retMsg:'';
                       }
                     }
                     oldTime = itemChild.ts;
                     tempHtml=(tempHtml+msgHtml).replace(reg,'target="_blank"');
                 }
             }
-            updateChatList(tempHtml,true,Boolean(num));
+            //
+
+            updateChatList(tempHtml,true);
         } else {
             //没有更多消息
             global.flags.moreHistroy = false;
         }
         //刷新
         scrollHanlder.scroll.refresh();
+        if(isFirstData){
+          scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+        }
     };
     //更新聊天信息列表
-    var updateChatList = function(tmpHtml,isHistory,isFirstData) {
-
+    var updateChatList = function(tmpHtml,isHistory) {
         var _chatPanelList = chatPanelList,
-            _chatPanelChildren = '',
-            dom;
+            _chatPanelChildren = '';
         //是否是历史记录
         if(isHistory) {
             _chatPanelChildren = _chatPanelList.children();
@@ -127,13 +134,7 @@ var ListMsgHandler = function() {
             } else {
                 chatPanelList.append(tmpHtml);
             }
-            dom = chatPanelList.children().last();
         }
-        if(isFirstData){
-          //刷新加载首页历史记录
-          scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
-        }
-        return dom;
     };
 
     var initScroll = function(){
@@ -159,7 +160,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      var msgHtml,
+      var msgHtml='',
           comf;
       if(data){
         switch (msgType) {
@@ -182,7 +183,7 @@ var ListMsgHandler = function() {
                 var _data = _list[i];
                 if(_data.answerType=='4'){
                   //相关搜索
-                  msgHtml = msgHandler.sugguestionsSearch(_data);
+                  msgHtml += msgHandler.sugguestionsSearch(_data);
                 }else{
                     //判断是机器人还是客服回复
                     if(_type=='robot'){
@@ -200,17 +201,8 @@ var ListMsgHandler = function() {
                       customMsg : _msg,
                       date:+new Date()
                     });
-                    msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                    msgHtml += doT.template(msgTemplate.leftMsg)(comf);
                 }
-                //更新聊天记录
-                msgHandler.updateChatMsg(msgHtml);
-                // //添加
-                // if(chatPanelList.children().length>0){
-                //   chatPanelList.children().last().after(msgHtml);
-                // }else{
-                //   //有聊天记录就加到最后一项
-                //   chatPanelList.append(msgHtml);
-                // }
               }
             break;
           case 2:
@@ -270,22 +262,9 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
-        if(msgType != 1){
-            //回复消息不走此
-          msgHandler.updateChatMsg(msgHtml);
-          //
-          // if(chatPanelList.children().length>0){
-          //   chatPanelList.children().last().after(msgHtml);
-          // }else{
-          //   //有聊天记录就加到最后一项
-          //   chatPanelList.append(msgHtml);
-          // }
-        }
-
-      scrollHanlder.scroll.refresh();//刷新
-      // scrollHanlder.scroll.scrollTo(0,-scrollHanlder.scroll.scrollerHeight);
-      // document.getElementById('.js-scroller').scrollIntoView(false);
-      // console.log($(wrapScroll).scrollTop());
+        msgHandler.updateChatMsg(msgHtml);
+        scrollHanlder.scroll.refresh();//刷新
+        scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
     };
     //包装系统和配置方法
@@ -309,9 +288,14 @@ var ListMsgHandler = function() {
           _timer = t + time.substring(time.indexOf(' '),time.lastIndexOf(':'));
         }
         var comf = $.extend({
-          sysData:_timer
+          sysData:_timer,
+          date:+new Date()
         });
-        return  doT.template(msgTemplate.sysData)(comf);
+        var str = doT.template(msgTemplate.sysData)(comf);
+
+        if(_timer){
+          return str;
+        }
       },
       //输入栏高度变化设置
       onAutoSize : function(node){
@@ -357,8 +341,15 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(data);
-        bindMsg(0,data);
+        console.log(scrollHanlder.scroll);
+        // console.log(data);
+        if(uploadImgToken){
+          //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换url地址即可
+          $('#'+uploadImgToken).find('p img').attr('src',data[0]['answer']);
+          uploadImgToken='';//置空 一个流程完成
+        }else{
+          bindMsg(0,data);
+        }
       },
       //接收回复
      onReceive : function(data){
@@ -385,24 +376,29 @@ var ListMsgHandler = function() {
         bindMsg(4,data);
       },
       onUpLoadImgProgress:function(data){
-        console.log(data);
-        var $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-        var $progress = $('#'+uploadImgToken);
+        var $shadowLayer,
+            $progress,
+            oldH;
+        if(isUploadImg){
+            $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
+            $progress = $('#progress'+uploadImgToken);
+            oldH = $shadowLayer.height();
+            isUploadImg=false;
+        }
         //蒙版高度随百分比改变
         $progress.text(data+'%');
-        data = data/100;//获取小数
+        var floatData = data/100;//获取小数
         //蒙版高度
-        var h = $shadowLayer.height(),
-            cH = data * h,//获取计算后的高度值
-            margin=0;
-            //计算
-            h = h - cH;
-            margin = margin+cH;
-            $shadowLayer.height(h).css('margin-top',margin+'px');
-            if(data>=1){
-              $shadowLayer.remove();
-              $progress.remove();
-            }
+        var cH = floatData * oldH;//获取计算后的高度值
+        //计算
+        var newH = oldH - cH;
+        $shadowLayer.height(newH);
+        if(floatData>=1){
+          isUploadImg=true;//开启上传图片
+          $shadowLayer.remove();
+          $progress.remove();
+          scrollHanlder.scroll.refresh();//刷新
+        }
       },
       //加欢迎语
       getHello:function(data){
@@ -410,23 +406,22 @@ var ListMsgHandler = function() {
       },
       //更新聊天记录
       updateChatMsg:function(tempHtml){
-        console.log(tempHtml);
         if(chatPanelList&&chatPanelList.children().length){
             var lastDom = chatPanelList.children().last();
+            var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
+            //超一分钟 显示 时间线
+            if(_m>1&&!lastDom.hasClass('sysData')){
+              var _t = new Date();
+              var hour = _t.getHours()>=10?_t.getHours():'0'+_t.getHours(),
+                  minutes = _t.getMinutes()>=10?_t.getMinutes():'0'+_t.getMinutes(),
+                  _time = '今天 '+hour+':'+minutes;
+              var comf = $.extend({
+                sysData:_time,
+                date:+new Date()
+              });
+              tempHtml = doT.template(msgTemplate.sysData)(comf)+tempHtml;
+            }
         }
-
-        // var _m = Math.abs(new Date - new Date())
-        //聊天内容更新时间判断
-        // var curTime = new Date();
-        // var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
-        // if(oldTime){
-        //   var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
-        //   if(Number(_m)>1){
-        //     //大于一分钟  0 当天  1上一天 2更久历史
-        //     var type = _t<=1?0:_t>1&&_t<=2?1:2;
-        //     msgHtml += sysHander.getTimeLine(type,itemChild.ts);
-        //   }
-        // }
         chatPanelList.append(tempHtml);
       }
     };
@@ -446,7 +441,6 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
-
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
 
