@@ -28,12 +28,11 @@ function TextArea(window) {
         if(data.action=="hide"){
             //2为人工
             transferFlag=2;
-            $emotion.show();
+            $(".qqFaceTip").show();
             $uploadImg.show();
             $artificial.hide();
         }else{
             transferFlag=1;
-            $emotion.hide();
             $uploadImg.hide();
             $artificial.show();
         }
@@ -56,7 +55,7 @@ function TextArea(window) {
         } else {
             $sendBtn.hide();
             hideChatAreaHandler();
-            $add.show();
+            $(".add").show();
             $textarea.css("width","85%");
         }
     };
@@ -66,11 +65,11 @@ function TextArea(window) {
             $sendBtn.show();
             $add.hide();
             //hideChatAreaHandler();
-            $textarea.css("width","65%");
+            $textarea.css("width","67%");
         } else {
             $sendBtn.hide();
             hideChatAreaHandler();
-            $add.show();
+            $(".add").show();
             $textarea.css("width","85%");
             $textarea.blur();
             $textarea.focus();
@@ -86,7 +85,6 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
-            //console.log(str);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -101,45 +99,145 @@ function TextArea(window) {
         $textarea.html("");
         $textarea.blur();
         $textarea.focus();
+        $sendBtn.hide();
+        if(transferFlag==1){
+            $textarea.css("width","85%");
+        }else{
+            $textarea.css("width","75%");
+        }
         autoSizePhone();    
     };
     var showChatAddHandler=function(){
         //与键盘优化
         if($chatArea.hasClass("showChatAdd")){
             //隐藏
-           hideChatAreaHandler();
+            hideChatAreaHandler();
+            //1为机器人模式
+            if(transferFlag==1){
+                $(".addhover").hide();
+                $(".add").show();
+                $(".qqFaceTiphover").hide();
+                $(".qqFaceTip").hide();
+            }else{
+                $(".addhover").hide();
+                $(".add").show();
+                $(".qqFaceTiphover").hide();
+                $(".qqFaceTip").show();
+            }
+            
         } else {
             setTimeout(function(){
                 //显示
                 $chatArea.addClass("showChatAdd");
+                $chatArea.removeClass("showChatEmotion");
+                $chatAdd.show();
+                $chatEmotion.hide();
                 $chatArea.animate({
                     bottom : "0"
                 },200);
+                //1为机器人模式
+                if(transferFlag==1){
+                    $(".qqFaceTiphover").hide();
+                    $(".qqFaceTip").hide();
+                    $(".addhover").show();
+                    $(".add").hide();
+                }else{
+                    $(".addhover").show();
+                    $(".add").hide();
+                    $(".qqFaceTiphover").hide();
+                    $(".qqFaceTip").show();
+                }
+               
+                autoSizePhone();
+            },200)
+        }
+    };
+    var showChatEmotionHandler=function(){
+        //与键盘优化
+        if($chatArea.hasClass("showChatEmotion")){
+            //隐藏
+            hideChatAreaHandler();
+            
+        } else {
+            setTimeout(function(){
+                //显示
+                $chatArea.addClass("showChatEmotion");
+                $chatArea.removeClass("showChatAdd");
+                $chatAdd.hide();
+                $chatEmotion.show();
+                $chatArea.animate({
+                    bottom : "0"
+                },200);
+                if(transferFlag==1){
+                    $(".qqFaceTiphover").hide();
+                    $(".qqFaceTip").hide();
+                    $(".addhover").hide();
+                    $(".add").show();
+                }else{
+                    var _text=$textarea.text();
+                    $(".qqFaceTiphover").show();
+                    $(".qqFaceTip").hide();
+                    $(".addhover").hide();
+                    if(_text){
+                        $add.hide();
+                        $sendBtn.show();
+                    }else{
+                        $(".add").show();
+                        $sendBtn.hide();
+                    }
+                    
+                }
                 autoSizePhone();
             },200)
         }
     };
     var hideChatAreaHandler = function() {
+        var _bottom="-"+215+"px";
+        //console.log(_bottom);
         setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
+            $chatArea.removeClass("showChatEmotion");
             $chatArea.css({
-                "bottom" : "-215px"
+                "bottom" : _bottom
             });
             autoSizePhone();
-            
+            var _text=$textarea.text();
+            if(transferFlag==1){
+                $(".qqFaceTiphover").hide();
+                $(".qqFaceTip").hide();
+                $(".addhover").hide();
+                if(_text){
+                    $add.hide();
+                    $sendBtn.show();
+                }else{
+                    $(".add").show();
+                    $sendBtn.hide();
+                }
+            }else{
+                $(".qqFaceTiphover").hide();
+                $(".qqFaceTip").show();
+                $(".addhover").hide();
+                if(_text){
+                    $add.hide();
+                    $sendBtn.show();
+                }else{
+                    $(".add").show();
+                    $sendBtn.hide();
+                }
+            }
          },200);
+
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
         //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
-        $chatAdd.addClass("tab-active");
+        //$chatAdd.addClass("tab-active");
         var id=$(this).attr("data-id");
-        $(".tab-active").hide();
+        //$(".tab-active").hide();
         $(id).show();
-       
-        if(id=="#chatEmotion"){
-            $(".keyboard").on("click",keyboardHandler)
-        }
+        //if(id=="#chatEmotion"){
+         //   $(".keyboard").on("click",keyboardHandler)
+       // }
     };
      //icon换成键盘icon
     var keyboardHandler=function(){
@@ -230,7 +328,7 @@ function TextArea(window) {
         $textarea.on("keyup",showSendBtnHandler);
         $textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAddHandler);
-        $emotion.on("click",showChatAddHandler);
+        $emotion.on("click",showChatEmotionHandler);
         //表情、加号切换
         $tab.on("click",tabChatAreaHandler)
         //定位光标

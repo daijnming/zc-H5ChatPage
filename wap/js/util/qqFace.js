@@ -39,22 +39,26 @@ function ZC_Face() {
             });*/
             var flag=0;
             var str='<div id="faceBox" class="face">';
-            for(var a in tip) {  
+            for(var a in tip) { 
                 flag+=1;
-                if(flag==28){
-                    str+='<span class="backDelete"></span>'
+                if(flag==27){
+                    str+='<span class="faceIco faceIco'+flag+'" data-src="'+a+'" /></span><span class="backDelete"></span>'
                 }else{
                     str+='<span class="faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
                 }
             };
             str+='</div>'
             $faceGroup.append(str);
+            facepositionHandler();
              //模拟退格键
             $(".backDelete").on("click",function(){
                 listener.trigger('sendArea.backDelete');
             });
         }
         sendTotextArea();
+    };
+    var facepositionHandler=function(){
+
     };
     var sendTotextArea = function() {
         $(document.body).undelegate();
