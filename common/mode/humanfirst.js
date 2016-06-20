@@ -144,7 +144,7 @@ var HumanFirst = function(global) {
         }
     };
 
-    var serverOffline = function(ret,init) {
+    var serverOffline = function(ret,init,value) {
         if(manager) {
             manager.destroy();
         }
@@ -190,7 +190,7 @@ var HumanFirst = function(global) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
                         //暂无客服在线
-                        serverOffline(ret,init);
+                        serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
                         queueWait(ret,init,value);
