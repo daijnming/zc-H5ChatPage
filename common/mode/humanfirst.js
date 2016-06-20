@@ -153,8 +153,7 @@ var HumanFirst = function(global) {
             'type' : 'transfer',
             'action' : 'show'
         });
-        if(init) {
-            initHumanSession(value,ret,null);
+        if(init) {initHumanSession(value,ret,null);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle;
                 listener.trigger("core.system", {

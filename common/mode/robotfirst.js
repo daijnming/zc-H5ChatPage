@@ -85,6 +85,7 @@ var RobotFirst = function(global) {
                 ret.content = global.apiConfig.adminNonelineTitle;
                 listener.trigger("core.system", {
                     'type' : 'system',
+                    'status' : 'offline',
                     'data' : ret
                 });
             },1);
@@ -92,6 +93,7 @@ var RobotFirst = function(global) {
             ret.content = global.apiConfig.adminNonelineTitle;
             listener.trigger("core.system", {
                 'type' : 'system',
+                'status' : 'offline',
                 'data' : ret
             });
         }
