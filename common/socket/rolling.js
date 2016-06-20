@@ -5,6 +5,7 @@ function Rolling(puid) {
     this.puid = puid;
     var listener = require('../util/listener.js');
     var socketType = 'human';
+    var timer;
     var onSend = function(args) {
         var data = args[0];
         $.ajax({
@@ -23,6 +24,7 @@ function Rolling(puid) {
     };
 
     var destroy = function() {
+        clearInterval(timer);
     };
 
     var getMessage = function() {
@@ -40,11 +42,10 @@ function Rolling(puid) {
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
                         arr.push(item);
-                        if(item.type === 204) {
+                        if(item.type === 204 && item.status == 2) {
                             listener.trigger("core.sessionclose");
                         }
                     }
-                    console.log(arr);
                     listener.trigger("core.onreceive", {
                         'type' : socketType,
                         'list' : arr
@@ -54,7 +55,7 @@ function Rolling(puid) {
             'fail' : function() {
             }
         });
-        setTimeout(getMessage,1500);
+        timer = setTimeout(getMessage,1500);
     };
 
     var bindListener = function() {

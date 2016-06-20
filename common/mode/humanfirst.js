@@ -10,7 +10,9 @@ var HumanFirst = function(global) {
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
-    var manager;
+    var socketFactory = require('../socket/socketfactory.js');
+    var manager,
+        tempManager;
 
     var initHumanSession = function(value,ret,word) {
         var success = !!word;
@@ -108,10 +110,41 @@ var HumanFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
+        tempManager = socketFactory(ret);
+        tempManager.start();
         manager = new Robot(global);
     };
 
-    var serverOffline = function(ret,init) {
+    var onReceive = function(data) {
+        var list = data.list || [];
+        for(var i = 0,
+            len = list.length;i < len;i++) {
+            var item = list[i];
+            var ret = item;
+            if(item.type === 200) {
+                if(manager) {
+                    manager.destroy();
+                }
+                manager = tempManager;
+                tempManager = null;
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : "transfer",
+                    'data' : {
+                        'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                    }
+                });
+
+                listener.trigger("core.buttonchange", {
+                    'type' : 'transfer',
+                    'action' : 'hide'
+                });
+                break;
+            }
+        }
+    };
+
+    var serverOffline = function(ret,init,value) {
         if(manager) {
             manager.destroy();
         }
@@ -120,8 +153,7 @@ var HumanFirst = function(global) {
             'type' : 'transfer',
             'action' : 'show'
         });
-        if(init) {
-            initHumanSession(value,ret,null);
+        if(init) {initHumanSession(value,ret,null);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle;
                 listener.trigger("core.system", {
@@ -157,7 +189,7 @@ var HumanFirst = function(global) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
                     if(ret.status == 2) {
                         //暂无客服在线
-                        serverOffline(ret,init);
+                        serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
                         queueWait(ret,init,value);
@@ -237,6 +269,7 @@ var HumanFirst = function(global) {
 
     var bindListener = function() {
         listener.on("sendArea.artificial",transferConnect);
+        listener.on("core.onreceive",onReceive);
     };
 
     var initPlugins = function() {
