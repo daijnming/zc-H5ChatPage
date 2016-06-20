@@ -33,7 +33,7 @@ var ScrollHandler = function(global,node){
       scrollbars : false,// 是否显示滚动条
       bounce : true,// 边界反弹
       momentum : true// 是否惯性滑动
-      // startY : -($(pullDown).height())
+      //  startY : -300
       });
     }
   };

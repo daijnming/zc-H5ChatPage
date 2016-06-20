@@ -48,26 +48,55 @@ li {
     text-align: center;
 }
 .add {
-    height: 35px;
-    width: 34px;
+    height: 32px;
+    width: 32px;
     margin-left: 2%;
     background-image: url(../images/icoGroup2X.png);
-    background-position:-73px -3px;
-    background-size: 267px 233px;
+    background-position:-69px -3px;
+    background-size:255px 221px;
+}
+.addhover {
+    display:none;
+    height: 32px;
+    width: 32px;
+    margin-left: 2%;
+    background-image: url(../images/icoGroup2X.png);
+    background-position:-101px -3px;
+    background-size: 255px 221px;
 }
 .qqFaceTip {
     display:none;
-    height: 35px;
-    width: 34px;
+    height: 32px;
+    width: 32px;
     margin-left:2%;
     background-image: url(../images/icoGroup2X.png);
     background-position:-4px -3px;
-    background-size: 267px 233px;;
+    background-size:255px 221px;
 }
+.qqFaceTiphover{
+    display:none;
+    height: 32px;
+    width: 32px;
+    margin-left:2%;
+    background-image: url(../images/icoGroup2X.png);
+    background-position:-37px -3px;
+    background-size:255px 221px;
+}
+/* .keyboard {
+    display:none;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    margin:0 1% 0 2%;
+    color: #878787;
+    background-image: url(../images/icoGroup3X.png);
+    background-position:-142px -3px;
+    background-size: 273px 240px;
+} */
 .chatAdd {
     overflow: hidden;
     width: 100%;
-    height: 215px;
+    height: 212px;
     background:#fafcfb;
 }
 .addList{
@@ -113,20 +142,54 @@ li {
 }
 /* iphone6 */
 @media (min-device-width : 375px){
+.chatAdd {
+    
+    height: 212px;
+ 
+}
 .qqFaceTip {
-    width: 35px;
+    display:none;
+    width: 33px;
     background-image: url(../images/icoGroup2X.png);
     background-position: -4px -3px;
-    background-size: 273px 234px;
+    background-size: 260px 226px;
+}
+.qqFaceTiphover{
+    display:none;
+   width: 33px;
+    background-image: url(../images/icoGroup2X.png);
+    background-position: -37px -2px;
+    background-size: 260px 226px;
+}
+.keyboard {
+    display:none;
+    width: 35px;
+    background-image: url(../images/icoGroup3X.png);
+    background-position:-142px -3px;
+    background-size: 273px 240px;
 }
 .add {
-    width: 35px;
+    width: 33px;
+    height:35px;
     background-image: url(../images/icoGroup2X.png);
-    background-position: -73px -3px;
-    background-size: 273px 234px;
+    background-position: -69px -2px;
+    background-size: 265px 231px;
+}
+.addhover {
+    display:none;
+    width: 33px;
+    height:33px;
+    background-image: url(../images/icoGroup2X.png);
+    background-position: -103px -3px;
+    background-size: 265px 231px;
 }
 /* iphone6 Plus */
 @media (min-device-width : 414px) and (max-device-width : 736px) and (-webkit-min-device-pixel-ratio : 3){
+.chatAdd {
+    
+    height: 212px;
+ 
+}
 .add {
     height: 35px;
     width: 35px;
@@ -137,7 +200,40 @@ li {
     background-position: -73px -3px;
     background-size:  273px 240px;
 }
+.addhover {
+    display:none;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    margin-left: 2%;
+    color: #878787;
+    background-image: url(../images/icoGroup3X.png);
+    background-position: -108px -3px;
+    background-size:  275px 240px;
+}
 .qqFaceTip {
+    display:none;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    margin:0 0% 0 2%;
+    color: #878787;
+    background-image: url(../images/icoGroup3X.png);
+    background-position:-3px -3px;
+    background-size: 273px 240px;
+}
+.qqFaceTiphover{
+    display:none;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    margin:0 0% 0 2%;
+    color: #878787;
+    background-image: url(../images/icoGroup3X.png);
+    background-position:-38px -3px;
+    background-size: 273px 240px;
+}
+.keyboard {
     display:none;
     height: 35px;
     width: 35px;
@@ -145,7 +241,7 @@ li {
     margin:0 1% 0 2%;
     color: #878787;
     background-image: url(../images/icoGroup3X.png);
-    background-position:-3px -3px;
+    background-position:-142px -3px;
     background-size: 273px 240px;
 }
 .addList .uploadImg{
