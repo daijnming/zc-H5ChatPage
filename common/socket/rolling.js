@@ -17,7 +17,7 @@ function Rolling(puid) {
                 'content' : data.answer
             },
             'dataType' : 'json',
-            'type' : "get",
+            'type' : "POST",
             'success' : function(ret) {
             }
         });
