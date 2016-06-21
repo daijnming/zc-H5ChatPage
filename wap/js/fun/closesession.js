@@ -3,7 +3,11 @@
     var bindListener = function() {
         listener.on("core.sessionclose", function(ret) {
             var status = ret[0];
+            console.log(status);
             switch(status) {
+                case -1:
+                    alert('仅人工模式，转人工失败');
+                    break;
                 case 1:
                     alert('客服自己离线了');
                     break;
@@ -21,7 +25,7 @@
                     break;
             }
 
-            window.location.reload();
+            // window.location.reload();
         });
     };
 

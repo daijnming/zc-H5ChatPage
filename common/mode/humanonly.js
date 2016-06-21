@@ -67,11 +67,13 @@ function HumanOnly(global) {
         manager = new Robot(global);
         setTimeout(function() {
             listener.trigger("core.initsession",value);
+            listener.trigger("core.sessionclose",-1);
         },0);
     };
 
     var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        console.log(init);
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
@@ -81,6 +83,7 @@ function HumanOnly(global) {
                     'status' : 'queue',
                     'data' : ret
                 });
+                listener.trigger("core.sessionclose",-1);
             },1);
         } else {
             ret.content = str;
@@ -89,13 +92,8 @@ function HumanOnly(global) {
                 'status' : 'queue',
                 'data' : ret
             });
+            listener.trigger("core.sessionclose",-1);
         }
-        if(manager) {
-            manager.destroy();
-        }
-        tempManager = socketFactory(ret);
-        tempManager.start();
-        manager = new Robot(global);
     };
     var serverOffline = function(ret,init,value) {
         if(manager) {
@@ -115,6 +113,7 @@ function HumanOnly(global) {
                     'status' : 'offline',
                     'data' : ret
                 });
+                listener.trigger("core.sessionclose",-1);
             },1);
         } else {
             ret.content = global.apiConfig.adminNonelineTitle;
@@ -123,6 +122,7 @@ function HumanOnly(global) {
                 'status' : 'offline',
                 'data' : ret
             });
+            listener.trigger("core.sessionclose",-1);
         }
     };
 
@@ -133,6 +133,7 @@ function HumanOnly(global) {
             'status' : 'blacklist',
             'data' : ret
         });
+        listener.trigger("core.sessionclose",-1);
     };
     var transferSuccess = function(groupId,promise,init) {
         var init = !!init;
@@ -202,7 +203,6 @@ function HumanOnly(global) {
 
     var initPlugins = function() {
         var status = global.apiInit.ustatus;
-        console.log(status);
         if(status == 0 || status == 1 || status == -2) {
             transferConnect(null,null,true);
         }

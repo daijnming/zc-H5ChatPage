@@ -11,7 +11,6 @@ var Core = function(window) {
 
     var bindListener = function() {
         listener.on("system.send", function(data) {
-            console.log(data);
         });
     };
 

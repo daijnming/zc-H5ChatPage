@@ -154,7 +154,12 @@ var RobotFirst = function(global) {
     };
 
     var blackListCallback = function(ret,init) {
-        console.log(ret);
+        ret.content = '暂时无法转接人工客服';
+        listener.trigger("core.system", {
+            'type' : 'system',
+            'status' : 'blacklist',
+            'data' : ret
+        });
     };
 
     /**
