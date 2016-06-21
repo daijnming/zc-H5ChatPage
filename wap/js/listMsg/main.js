@@ -19,7 +19,8 @@ var ListMsgHandler = function() {
         sysHander = {},//包装系统和配置方法
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
 
-    var sysMsgList=['queue','offline'];//用于系统提示管理的状态码
+    // queue:用户排除中  offline:客服不在线  blacklist:被拉黑
+    var sysMsgList=['queue','offline','blacklist'];//用于系统提示管理的状态码
 
     //Dom元素
     var topTitleBar,//顶部栏
@@ -49,7 +50,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      console.log(data);
+      // console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -84,7 +85,7 @@ var ListMsgHandler = function() {
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
-                        console.log(global.apiConfig.robotLogo);
+                        // console.log(global.apiConfig.robotLogo);
                         comf = $.extend({
                             'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
                             'customName' : itemChild.senderName,
@@ -165,10 +166,11 @@ var ListMsgHandler = function() {
       if(data){
         switch (msgType) {
           case 0:
-              var msg;
+              var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
+              console.log(msg);
               comf = $.extend({
                   userLogo : global.userInfo.face,
-                  userMsg : QQFace.analysis( data[0]['answer'].trim()),
+                  userMsg : QQFace.analysis(msg),
                   date:data[0]['date']
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
@@ -177,8 +179,10 @@ var ListMsgHandler = function() {
               //接收人工工作台消息
               //FIXME 类型判断  answerType=4 相关搜索 另形判断
               var _logo,_name,_msg,_type,_list;
-              _type=data.type,
+
+              _type=data.type;
               _list=data.list;
+
               for(var i=0;i<_list.length;i++){
                 var _data = _list[i];
                 if(_data.answerType=='4'){
@@ -198,7 +202,7 @@ var ListMsgHandler = function() {
                     comf = $.extend({
                       customLogo : _logo,
                       customName : _name,
-                      customMsg : _msg,
+                      customMsg : Comm.getNewUrlRegex(_msg),
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
@@ -341,11 +345,13 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(scrollHanlder.scroll);
+        // console.log(scrollHanlder.scroll);
         // console.log(data);
         if(uploadImgToken){
-          //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换url地址即可
-          $('#'+uploadImgToken).find('p img').attr('src',data[0]['answer']);
+          //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
+          var $div = $('#'+uploadImgToken);
+          $div.find('p img:first-child').remove();
+          $div.find('p').html(data[0]['answer']);
           uploadImgToken='';//置空 一个流程完成
         }else{
           bindMsg(0,data);
@@ -353,6 +359,7 @@ var ListMsgHandler = function() {
       },
       //接收回复
      onReceive : function(data){
+      //  console.log(data);
       //  console.log(data);
         bindMsg(1,data);
       },
