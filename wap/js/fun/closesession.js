@@ -2,8 +2,7 @@
     var listener = require('../../../common/util/listener.js');
     var bindListener = function() {
         listener.on("core.sessionclose", function(ret) {
-            var status = ret[0];
-            console.log(status);
+            var status = ret;
             switch(status) {
                 case -1:
                     alert('仅人工模式，转人工失败');
