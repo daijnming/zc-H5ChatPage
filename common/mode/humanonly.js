@@ -157,7 +157,6 @@ function HumanOnly(global) {
                         queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
-
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
                         } else {
                             listener.trigger("core.system", {

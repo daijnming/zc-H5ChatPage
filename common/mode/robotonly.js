@@ -69,10 +69,12 @@ var RobotFirst = function(global) {
     };
 
     var initPlugins = function() {
-        listener.trigger("core.buttonchange", {
-            'type' : 'transfer',
-            'action' : 'hide'
-        });
+        setTimeout(function() {
+            listener.trigger("core.buttonchange", {
+                'type' : 'transfer',
+                'action' : 'hide'
+            });
+        },5);
         var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
         if(status == 0) {
