@@ -42,7 +42,7 @@ function Rolling(puid) {
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
                         arr.push(item);
-                        if(item.type === 204 && (item.status == 2 || item.status == 3)) {
+                        if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
                         }
                     }
