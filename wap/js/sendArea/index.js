@@ -192,7 +192,7 @@ function TextArea(window) {
         }
     };
     var hideChatAreaHandler = function() {
-        var _bottom="-"+215+"px";
+        var _bottom="-"+213+"px";
         //console.log(_bottom);
         setTimeout(function(){
             $chatArea.removeClass("showChatAdd");

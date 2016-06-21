@@ -5,7 +5,7 @@ li {
     width: 100%;
    /*  height:261px; */
     position: fixed;
-    bottom:-215px;
+    bottom:-213px;
     left: 0;
     background: #fff;
     z-index: 10;
@@ -13,7 +13,7 @@ li {
 .sendarea {
     padding: 4px 10px;
     min-height: 37px;
-    padding-top: 5px;
+   /*  padding-bottom: 6px; */
     -webkit-box-align: center;
     -webkit-align-items: center;
     align-items: center;
@@ -39,8 +39,8 @@ li {
     display: none;
     background-color: #09aeb0;
     width: 18%;
-    height: 37px;
-    line-height: 37px;
+    height: 34px;
+    line-height: 34px;
     margin-left: 1%;
     border-radius: 4px;
     color: #fff;

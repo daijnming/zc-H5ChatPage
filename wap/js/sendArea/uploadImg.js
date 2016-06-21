@@ -20,6 +20,13 @@ function uploadImg() {
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
+        // size单位为字节 5M = 5242880
+        if(file.size >= 5242880) {
+            // 图片过大
+            alert("图片大于5M");
+            return;
+        }
+        //console.log(file);
         //判断上传文件是否为图片
         if(/^(image)/.test(file.type)){
             //创建本地图片数据流
@@ -28,11 +35,12 @@ function uploadImg() {
             reader.onload = function(e){
                 token= currentUid + +new Date();
                 //this.result 本地图片的数据流
-                //alert(this.result);
-                listener.trigger("sendArea.createUploadImg",[{
-                    'result' : this.result,
+                lrz(file, {quality: 0.7},function (results) {
+                   listener.trigger("sendArea.createUploadImg",[{
+                    'result' : results.base64,
                     'token':token
-                }])
+                    }])
+                });
             }
             oData.append("file",file);
             oData.append("type","msg");
@@ -53,8 +61,8 @@ function uploadImg() {
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString();
-            listener.trigger('sendArea.uploadImgProcess',percentage); 
             console.log(percentage);
+            listener.trigger('sendArea.uploadImgProcess',percentage); 
         } else {
             alert("请上传正确的图片格式");
             //document.getElementById('progress').innerHTML = '无法计算';
