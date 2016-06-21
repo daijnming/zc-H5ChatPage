@@ -10,6 +10,10 @@ function TextArea(window) {
     var ZC_Face = require('../util/qqFace.js')();
     //上传附件
     var uploadImg = require('./uploadImg.js')(); 
+    //当前状态
+    var CurrentState = require('../../../common/mode/currentState.js'); 
+    //模拟placeholder
+    var placeholder = require('./placeholder.js'); 
     /* var inputCache = {};
      //模板引擎
      var template = require('./template.js');*/
@@ -22,8 +26,13 @@ function TextArea(window) {
         //1为机器人，2为人工
     var transferFlag=1;
     //传给聊天的url
-    
-    var buttonChangeHandler=function(data){
+    var statusHandler=function(){
+        if(CurrentState.getCurrentState()=="human"){
+            //提示文本
+            placeholder($textarea,"当前是机器人");
+        }
+    };
+    var changeStatusHandler=function(data){
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
             //2为人工
@@ -31,10 +40,13 @@ function TextArea(window) {
             $(".qqFaceTip").show();
             $uploadImg.show();
             $artificial.hide();
+             //提示文本
+            placeholder($textarea,"当前是人工");
         }else{
             transferFlag=1;
             $uploadImg.hide();
             $artificial.show();
+           
         }
     }
     var showSendBtnHandler = function(evt) {
@@ -259,6 +271,8 @@ function TextArea(window) {
          //将新表情追加到待发送框里
         var _html=$textarea.html()+src;
         $textarea.html(_html);
+        //提示文本
+        placeholder($textarea,"当前是人工");
         //显示发送按钮
         manualmodeButton()
         //调整窗体高度
@@ -303,13 +317,6 @@ function TextArea(window) {
         listener.trigger('sendArea.autoSize',$chatArea);
 
     };
-    var placeholderHandler=function(input){
-        /* $(input).placeholder({
-            word:"我成功了",     // @string 提示文本
-            color:"#000",    // @string 文本颜色
-            evtType:"focus"  // @string focus|keydown 触发placeholder的事件类型
-          })*/
-    };
    var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
@@ -348,7 +355,7 @@ function TextArea(window) {
         //转人工
         $artificial.on("click",artificialHandler);
         //是否隐藏按钮
-        listener.on("core.buttonchange",buttonChangeHandler)
+        listener.on("core.buttonchange",changeStatusHandler)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -356,14 +363,14 @@ function TextArea(window) {
     var initPlugsin = function() {//插件
         //上传图片
         //uploadFun = uploadImg($uploadBtn,node,core,window);
-        //提示文本
-        placeholderHandler("$textarea");
+        statusHandler();
         autoSizePhone();
     };
     var init = function() {
         parseDOM();
         initPlugsin();
         bindLitener();
+
     };
     listener.on("core.onload", function(data) {
         global = data;

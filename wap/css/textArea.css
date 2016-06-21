@@ -11,6 +11,7 @@ li {
     z-index: 10;
 }
 .sendarea {
+    position:relative;
     padding: 4px 10px;
     min-height: 37px;
    /*  padding-bottom: 6px; */
@@ -23,6 +24,7 @@ li {
     
 }
 .textarea {
+
     background-color: #ddd;
     line-height: 25px;
     padding: 5px;
@@ -139,6 +141,13 @@ li {
 }
 .tab-active{
     display:none;
+}
+.sendarea .placeholder{
+    position:absolute;
+    left:23px;
+    top:13px;
+    color:#999;
+    font-size:15px;
 }
 /* iphone6 */
 @media (min-device-width : 375px){

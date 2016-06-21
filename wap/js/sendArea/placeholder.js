@@ -1,6 +1,53 @@
-$.fn.placeholder = function(option, callback) {
+/**
+ *
+ * @author daijm
+ */
+function placeholder(ele,str) {//ele为要操作的元素
+    var that = {};
+   	var $ele=ele,
+   		str=str;
+    var parseDOM = function() {
+        
+    };
+    var placeholderHanlder=function(){
+    	$(".placeholder").text(str)
+    };
+    var placeholderStatus=function(){
+    	var txt=$ele.text();
+    	if(txt==""){
+    		$(".placeholder").show();
+    	}else{
+    		$(".placeholder").hide();
+    	}
+		
+    };
+    var hideplaceholder=function(){
+    	$(".placeholder").hide();
+    };
+    var bindLitener = function() { 
+        $ele.on("focus",hideplaceholder);
+        $ele.on("blur",placeholderStatus);
+    };
+	var initPlugsin = function() {//插件
+		placeholderStatus();
+    };
+    var init = function() {
+        parseDOM();
+        bindLitener();
+        placeholderHanlder();
+        
+    };
+    init();
+    initPlugsin();
+}
+
+module.exports = placeholder;
+
+
+
+/*$.fn.placeholder = function(option, callback) {
     var settings = $.extend({
-        word: '我的天我的天',
+        word: '',
         color: '#999',
         evtType: 'focus',
         zIndex: 20,
@@ -9,15 +56,15 @@ $.fn.placeholder = function(option, callback) {
  
     function bootstrap($that) {
         // some alias
-        var word    = settings.word
-        var color   = settings.color
-        var evtType = settings.evtType
-        var zIndex  = settings.zIndex
-        var diffPaddingLeft = settings.diffPaddingLeft
+        var word    = '',
+        color   = '#999',
+        evtType = 'focus',
+        zIndex  = 20,
+        diffPaddingLeft = 3
  
         // default css
-        var width       = $that.outerWidth()
-        var height      = $that.outerHeight()
+        var width       = "100%";
+        var height      = "100%";
         var fontSize    = $that.css('font-size')
         var fontFamily  = $that.css('font-family')
         var paddingLeft = $that.css('padding-left')
@@ -40,13 +87,7 @@ $.fn.placeholder = function(option, callback) {
  
         // 位置调整
         move()
- 
-        // textarea 不加line-heihgt属性
-        if ($that.is('input')) {
-            $placeholder.css({
-                lineHeight: height + 'px'
-            })
-        }
+
         $placeholder.appendTo(document.body)
  
         // 内容为空时才显示，比如刷新页面输入域已经填入了内容时
@@ -60,9 +101,8 @@ $.fn.placeholder = function(option, callback) {
             $that[0].focus()
         }
         function move() {
-            var offset = $that.offset()
-            var top    = offset.top
-            var left   = offset.left
+            var top    = "15px"
+            var left   = "0"
             $placeholder.css({
                 top: top,
                 left: left
@@ -105,12 +145,7 @@ $.fn.placeholder = function(option, callback) {
                 $placeholder.hide()
             }
         })
- 
-        // 窗口缩放时处理
-        $(window).resize(function() {
-            move()
-        })
- 
+   
         // cache
         $that.data('el', $placeholder)
         $that.data('move', move)
@@ -122,4 +157,4 @@ $.fn.placeholder = function(option, callback) {
         bootstrap($elem)
         if ($.isFunction(callback)) callback($elem)
     })
-}  
+}  */
