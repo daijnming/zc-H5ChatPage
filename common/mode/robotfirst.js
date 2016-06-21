@@ -152,6 +152,16 @@ var RobotFirst = function(global) {
             'action' : 'hide'
         });
     };
+
+    var blackListCallback = function(ret,init) {
+        ret.content = '暂时无法转接人工客服';
+        listener.trigger("core.system", {
+            'type' : 'system',
+            'status' : 'blacklist',
+            'data' : ret
+        });
+    };
+
     /**
      *
      * @param {Object} init 是通过事件点击触发，还是自动触发
@@ -179,6 +189,8 @@ var RobotFirst = function(global) {
                         queueWait(ret,init);
                     } else if(ret.status == 1) {
                         transferHumanSucess(ret,init);
+                    } else if(ret.status == 3) {
+                        blackListCallback(ret,init);
                     }
                 },
                 'fail' : function() {
