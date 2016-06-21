@@ -153,7 +153,8 @@ var HumanFirst = function(global) {
             'type' : 'transfer',
             'action' : 'show'
         });
-        if(init) {initHumanSession(value,ret,null);
+        if(init) {
+            initHumanSession(value,ret,null);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle;
                 listener.trigger("core.system", {
@@ -170,6 +171,15 @@ var HumanFirst = function(global) {
                 'data' : ret
             });
         }
+    };
+
+    var blackListCallback = function(ret,init) {
+        ret.content = '暂时无法转接人工客服';
+        listener.trigger("core.system", {
+            'type' : 'system',
+            'status' : 'blacklist',
+            'data' : ret
+        });
     };
 
     var transferSuccess = function(groupId,promise,init) {
@@ -224,6 +234,8 @@ var HumanFirst = function(global) {
                             'type' : 'transfer',
                             'action' : 'hide'
                         });
+                    } else if(ret.status == 3) {
+                        blackListCallback(ret,init);
                     }
                 },
                 'fail' : function() {

@@ -10,6 +10,7 @@ function ModeEntranceFactroy(global) {
     var type;
     var humanFirst = require('./humanfirst.js');
     var robotFirst = require('./robotfirst.js');
+    var robotOnly = require('./robotonly.js');
     if(!!manager) {
         return manager;
     }
@@ -19,6 +20,9 @@ function ModeEntranceFactroy(global) {
             break;
         case HUMAN_FIRST:
             manager = new humanFirst(global);
+            break;
+        case ROBOT_ONLY:
+            manager = new robotOnly(global);
             break;
     }
     return manager;
