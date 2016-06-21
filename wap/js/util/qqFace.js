@@ -14,15 +14,7 @@ function ZC_Face() {
     tip2 = weixinSymbol,
     qqfaceReg = reg.qqfaceReg,
     qqfaceReg2 = reg.qqfaceReg2;
-    var path =  "/wap/images/qqarclist/";
     var that = {};
-    var initConfig = function() {//将表情集合预加载
-        for(var a in tip) {
-            var img = new Image();
-            img.src = path + tip[a] + '.gif';
-        }
-       
-    };
     var parseDOM = function() {
         $faceGroup = $(".js-faceGroup");
     };
@@ -49,20 +41,17 @@ function ZC_Face() {
             };
             str+='</div>'
             $faceGroup.append(str);
-            facepositionHandler();
              //模拟退格键
-            $(".backDelete").on("click",function(){
+            $(".backDelete").unbind();
+            $(".backDelete").bind("click",function(){
                 listener.trigger('sendArea.backDelete');
             });
         }
         sendTotextArea();
     };
-    var facepositionHandler=function(){
-
-    };
     var sendTotextArea = function() {
-        $(document.body).undelegate();
-        $(document.body).delegate(".js-faceIco",'click', function(e) {
+        $(".js-faceIco").unbind();
+        $(".js-faceIco").bind('click', function(e) {
             var elm = e.currentTarget;
             var src = $(elm).attr("data-src");
             var reg = /u([0-9A-Za-z]{5})/;
@@ -104,7 +93,6 @@ function ZC_Face() {
     
     var bindLitener = function() {
         listener.on("sendArea.faceShow",show);
-       //listener.on("listMsg.ConvertMsg",analysis);
     };
      
     var initPlugsin = function() {//插件
@@ -114,7 +102,6 @@ function ZC_Face() {
         parseDOM();
         bindLitener();
         initPlugsin();
-        initConfig();
     };
 
     init();
