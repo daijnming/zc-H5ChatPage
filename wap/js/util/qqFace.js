@@ -42,9 +42,9 @@ function ZC_Face() {
             for(var a in tip) { 
                 flag+=1;
                 if(flag==27){
-                    str+='<span class="faceIco faceIco'+flag+'" data-src="'+a+'" /></span><span class="backDelete"></span>'
+                    str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span><span class="backDelete"></span>'
                 }else{
-                    str+='<span class="faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
+                    str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
                 }
             };
             str+='</div>'
@@ -62,7 +62,7 @@ function ZC_Face() {
     };
     var sendTotextArea = function() {
         $(document.body).undelegate();
-        $(document.body).delegate(".faceIco",'click', function(e) {
+        $(document.body).delegate(".js-faceIco",'click', function(e) {
             var elm = e.currentTarget;
             var src = $(elm).attr("data-src");
             var reg = /u([0-9A-Za-z]{5})/;
@@ -87,7 +87,9 @@ function ZC_Face() {
                 var ico = qqfaceReg2.exec(str);
                 var pathname = tip2[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
-                str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
+                //str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
+                str = str.replace(qqfaceReg2,'<span class="faceIco faceIco'+pathname+'" /></span>');
+
             }
         }
         //console.log(str);

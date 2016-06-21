@@ -30,7 +30,7 @@ li, ul, div, p, h1 {
     float: left;
     cursor: pointer;
 }
-.faceGroup .faceIco{
+ .faceIco{
     float:left;
     overflow:hidden;
     width: 24px;
@@ -135,7 +135,7 @@ li, ul, div, p, h1 {
 }
 /* iphone6 */
 @media (min-device-width : 375px){
-    .faceGroup .faceIco{
+     .faceIco{
         margin:3% 3.5%;
         width: 25px;
         height: 25px;
@@ -227,7 +227,7 @@ li, ul, div, p, h1 {
 /* iphone6 Plus */
 @media (min-device-width : 411px) and (max-device-width : 736px){
 
-     .faceGroup .faceIco{
+    .faceIco{
         margin:3% 3.9%;
         width: 25px;
         height: 25px;
@@ -274,25 +274,25 @@ li, ul, div, p, h1 {
         background-position:-392px -8px;
     }
     .faceIco14{
-        background-position:-426px -8px;
+        background-position:-425px -8px;
     }
     .faceIco15{
-        background-position:-458px -8px;
+        background-position:-457px -8px;
     }
     .faceIco16{
-        background-position:-490px -8px;
+        background-position:-489px -8px;
     }
     .faceIco17{
-        background-position:-522px -8px;
+        background-position:-520px -8px;
     }
     .faceIco18{
         background-position:-554px -8px;
     }
     .faceIco19{
-        background-position:-586px -8px;
+        background-position:-585px -8px;
     }
     .faceIco20{
-        background-position:-618px -8px;
+        background-position:-617px -8px;
     }
     .faceIco21{
         background-position:-650px -8px;
