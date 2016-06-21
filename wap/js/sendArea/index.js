@@ -281,9 +281,9 @@ function TextArea(window) {
         //onFileTypeHandler(data); 
         //通过textarea.send事件将用户的数据传到显示台
         var date= currentUid + +new Date();
-        //var img='<img src="'+data[0].url+'">';
+        var img='<img class="webchat_img_upload" src="'+data[0].url+'">';
         listener.trigger('sendArea.send',[{
-         'answer' :data[0].url,
+         'answer' :img,
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
@@ -302,6 +302,13 @@ function TextArea(window) {
         //console.log(_height);
         listener.trigger('sendArea.autoSize',$chatArea);
 
+    };
+    var placeholderHandler=function(input){
+        /* $(input).placeholder({
+            word:"我成功了",     // @string 提示文本
+            color:"#000",    // @string 文本颜色
+            evtType:"focus"  // @string focus|keydown 触发placeholder的事件类型
+          })*/
     };
    var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -347,8 +354,10 @@ function TextArea(window) {
        listener.trigger('sendArea.faceShow');
     };
     var initPlugsin = function() {//插件
-        //uploadFun = uploadImg($uploadBtn,node,core,window);
         //上传图片
+        //uploadFun = uploadImg($uploadBtn,node,core,window);
+        //提示文本
+        placeholderHandler("$textarea");
         autoSizePhone();
     };
     var init = function() {
