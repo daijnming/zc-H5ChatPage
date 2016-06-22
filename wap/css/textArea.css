@@ -1,3 +1,4 @@
+
 li {
     list-style: none;
 }
@@ -37,12 +38,10 @@ li {
 .hideChatArea{
     animation:hideChatArea 0.2s;
    animation-fill-mode : forwards;
-    /* bottom:-213px; */
 }
 .showChatArea{
     animation:showChatArea 0.2s;
     animation-fill-mode : forwards;
-    /* bottom:0; */
 }
 .textarea {
     background-color: #ddd;
@@ -169,6 +168,46 @@ li {
     color:#999;
     font-size:15px;
 }
+.endSession{
+    display:none;
+    width:100%;
+    height:93px;
+    border-top:1px solid #ced7d6;
+}
+.endSession span{
+    display:inline-block;
+    float:left;
+    width:29%;
+    margin:2% 2%;
+    border-radius:10px;
+    text-align:center;
+}
+.endSession span:hover{
+    background-color:#edf1f2;
+}
+.endSession span i{
+    display:inline-block;
+    height:52px;
+    width:53%;
+    background-image: url(../images/endEssion2X.png);
+    background-repeat:no-repeat;
+}
+.endSession span p{
+    width:100%;
+    font-size:0.8rem;
+    color:#7c8687;
+    padding-bottom:2%;
+    text-align:center;
+}
+.endSession .span1 i{
+     background-position: -76px -12px;
+}
+.endSession .span2 i{
+     background-position: center -12px;
+}
+.endSession .span3 i{
+     background-position: -475px -12px;
+}
 /* iphone6 */
 @media (min-device-width : 375px){
 .chatAdd {
@@ -212,8 +251,12 @@ li {
     background-position: -103px -3px;
     background-size: 265px 231px;
 }
+.endSession span i{
+     width:44%;
+}
+}
 /* iphone6 Plus */
-@media (min-device-width : 414px) and (max-device-width : 736px) and (-webkit-min-device-pixel-ratio : 3){
+@media (min-device-width : 414px) and (max-device-width : 736px){
 .chatAdd {
     
     height: 212px;
@@ -300,4 +343,13 @@ li {
     background-position: -151px -118px;
     background-size: 310px 274px;
 }
+.endSession span i{
+    width:40%;
+}
+}
+/* iphone6puls橫屏 */
+@media (min-device-width : 736px){
+    .endSession span i{
+        width:23%;
+    }
 }

@@ -75,7 +75,6 @@ function TextArea(window) {
         if(_text) {
             $sendBtn.show();
             $add.hide();
-            //hideChatAreaHandler();
             $textarea.css("width","67%");
         } else {
             $sendBtn.hide();
@@ -212,7 +211,7 @@ function TextArea(window) {
             $chatArea.removeClass("showChatArea").addClass("hideChatArea");/*css({
                 "bottom" : _bottom
             });*/
-           
+
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==1){
@@ -318,7 +317,22 @@ function TextArea(window) {
         listener.trigger('sendArea.autoSize',$chatArea);
 
     };
-   var parseDOM = function() {
+    //结束会话
+    var endSessionHandler=function(status){
+       switch(status) {
+            case 1://客服自己离线了
+            case 2://客服把你T了
+            case 3://客服把你拉黑了
+            case 6://有新窗口打开
+            $keepSession.hide();
+            $endSession.show();
+            autoSizePhone();
+        }
+    };
+    var newMessage=function(){
+        window.location.reload()
+    };
+    var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
         $textarea = $(".js-textarea");
@@ -333,6 +347,12 @@ function TextArea(window) {
         $emotion = $(".js-emotion");
         $chatEmotion = $(".js-chatEmotion");
         $tab=$(".js-tab");
+        //会话弹窗
+        $keepSession=$(".js-keepSession")
+        //结束会话弹窗
+        $endSession=$(".js-endSession");
+        //新会话
+        $newMessage=$(".js-newMessage");
         //oTxt = document.getElementById("js-textarea");
     };
 
@@ -357,7 +377,11 @@ function TextArea(window) {
         //转人工
         $artificial.on("click",artificialHandler);
         //是否隐藏按钮
-        listener.on("core.buttonchange",changeStatusHandler)
+        listener.on("core.buttonchange",changeStatusHandler);
+        //结束会话
+        listener.on("core.sessionclose",endSessionHandler);
+        //新会话
+        $newMessage.on("click",newMessage);
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
