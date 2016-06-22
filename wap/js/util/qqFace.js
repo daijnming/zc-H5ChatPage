@@ -77,7 +77,7 @@ function ZC_Face() {
                 var pathname = tip2[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
                 //str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
-                str = str.replace(qqfaceReg2,'<span class="faceIco faceIco'+pathname+'" /></span>');
+                str = str.replace(qqfaceReg2,'<span class="msgfaceIco faceIco faceIco'+pathname+'" /></span>');
 
             }
         }

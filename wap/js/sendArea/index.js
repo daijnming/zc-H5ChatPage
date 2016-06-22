@@ -46,7 +46,6 @@ function TextArea(window) {
             transferFlag=1;
             $uploadImg.hide();
             $artificial.show();
-           
         }
     }
     var showSendBtnHandler = function(evt) {
@@ -144,9 +143,10 @@ function TextArea(window) {
                 $chatArea.removeClass("showChatEmotion");
                 $chatAdd.show();
                 $chatEmotion.hide();
-                $chatArea.animate({
+                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
+                /*$chatArea.animate({
                     bottom : "0"
-                },200);
+                },200);*/
                 //1为机器人模式
                 if(transferFlag==1){
                     $(".qqFaceTiphover").hide();
@@ -159,7 +159,6 @@ function TextArea(window) {
                     $(".qqFaceTiphover").hide();
                     $(".qqFaceTip").show();
                 }
-               
                 autoSizePhone();
             },200)
         }
@@ -177,9 +176,10 @@ function TextArea(window) {
                 $chatArea.removeClass("showChatAdd");
                 $chatAdd.hide();
                 $chatEmotion.show();
-                $chatArea.animate({
+                /*$chatArea.animate({
                     bottom : "0"
-                },200);
+                },200);*/
+                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 if(transferFlag==1){
                     $(".qqFaceTiphover").hide();
                     $(".qqFaceTip").hide();
@@ -204,14 +204,15 @@ function TextArea(window) {
         }
     };
     var hideChatAreaHandler = function() {
-        var _bottom="-"+213+"px";
+       // var _bottom="-"+213+"px";
         //console.log(_bottom);
-        setTimeout(function(){
+       // setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
-            $chatArea.css({
+            $chatArea.removeClass("showChatArea").addClass("hideChatArea");/*css({
                 "bottom" : _bottom
-            });
+            });*/
+           
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==1){
@@ -237,7 +238,7 @@ function TextArea(window) {
                     $sendBtn.hide();
                 }
             }
-         },200);
+       //  },200);
 
     };
     //表情、加号切换
@@ -334,6 +335,7 @@ function TextArea(window) {
         $tab=$(".js-tab");
         //oTxt = document.getElementById("js-textarea");
     };
+
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);

@@ -1,14 +1,25 @@
 li {
     list-style: none;
 }
+@keyframes hideChatArea
+   {
+   form   {bottom:0;}
+   to  {bottom:-213px;}
+   }
+@keyframes showChatArea
+   {
+   form   {bottom:-213px;}
+   to  {bottom:0px;}
+   }
 .chatArea {
     width: 100%;
    /*  height:261px; */
     position: fixed;
-    bottom:-213px;
     left: 0;
+    bottom:-213px;
     background: #fff;
     z-index: 10;
+    /* transition:bottom 0.2s linear; */
 }
 .sendarea {
     position:relative;
@@ -23,8 +34,17 @@ li {
     border-bottom: 1px solid #cacaca;
     
 }
+.hideChatArea{
+    animation:hideChatArea 0.2s;
+   animation-fill-mode : forwards;
+    /* bottom:-213px; */
+}
+.showChatArea{
+    animation:showChatArea 0.2s;
+    animation-fill-mode : forwards;
+    /* bottom:0; */
+}
 .textarea {
-
     background-color: #ddd;
     line-height: 25px;
     padding: 5px;
