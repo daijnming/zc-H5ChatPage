@@ -202,7 +202,7 @@ var ListMsgHandler = function() {
                     comf = $.extend({
                       customLogo : _logo,
                       customName : _name,
-                      customMsg : Comm.getNewUrlRegex(_msg),
+                      customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
@@ -314,7 +314,7 @@ var ListMsgHandler = function() {
       },
       //转接人工
       onSessionOpen:function(data){
-        console.log(data);
+        // console.log(data);
         bindMsg(2,data);
       },
       //系统提示消息处理
@@ -359,8 +359,7 @@ var ListMsgHandler = function() {
       },
       //接收回复
      onReceive : function(data){
-      //  console.log(data);
-      //  console.log(data);
+      //  console.log(data,1);
         bindMsg(1,data);
       },
       //相关搜索答案点击事件
