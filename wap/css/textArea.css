@@ -65,7 +65,7 @@ li {
     font-size: 14px;
     text-align: center;
 }
-.add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImg,.addList .artificial,.addList .satisfaction,.addList .leaveMessage{
+.add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
     background-image: url(../images/icoGroup2X.png);
     background-repeat:no-repeat;
     background-size:356px 276px;
@@ -118,15 +118,14 @@ li {
     width:100%;
 }
 .addList li {
+    overflow:hidden;
     float: left;
     position:relative;
     width:70px;
-    height:70px;
     margin:16px;
 }
 .addList .uploadImg{
     display:none;
-    background-position:-142px -44px;
 }
 .addList .uploadImg input{
     position:absolute;
@@ -137,18 +136,36 @@ li {
     opacity:0
 }
 .addList .artificial{
-    background-position: 7px -44px;
 }
 .addList .satisfaction{
     display:none;
-    background-position:8px -120px;
 }
 .addList .leaveMessage{
+}
+.addList i{
+    display:inline-block;
+    width:100%;
+    height:63px;
+}
+.addList p{
+    width:100%;
+    text-align:center;
+    color:#859191;
+    font-size:0.8em;
+}
+.addList .uploadImgbg{
+    background-position:-142px -44px;
+}
+.addList .artificialbg{
+    background-position: 7px -44px;
+}
+.addList .satisfactionbg{
+    background-position:8px -120px;
+}
+.addList .leaveMessagebg{
     background-position: -151px -118px;
 }
-.addList .evaluateTip{
 
-}
 .showChatAdd {/* display:block; */
 }
 .tab-active{
@@ -210,7 +227,7 @@ li {
 }
 /* iphone6 Plus */
 @media (min-device-width : 414px) and (max-device-width : 736px){
-    .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImg,.addList .artificial,.addList .satisfaction,.addList .leaveMessage{
+    .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
     }
