@@ -248,7 +248,7 @@ li {
     width: 33px;
     height:33px;
     background-image: url(../images/icoGroup2X.png);
-    background-position: -103px -3px;
+    background-position: -105px -3px;
     background-size: 265px 231px;
 }
 .endSession span i{
@@ -345,6 +345,8 @@ li {
 }
 .endSession span i{
     width:40%;
+    /* background-image: url(../images/endEssion3X.png);
+    background-size:600px 78px; */
 }
 }
 /* iphone6puls橫屏 */

@@ -14,6 +14,8 @@ function TextArea(window) {
     var CurrentState = require('../../../common/mode/currentState.js'); 
     //模拟placeholder
     var placeholder = require('./placeholder.js'); 
+    //alert()
+    var evaluate=require("./evaluate.js");
     /* var inputCache = {};
      //模板引擎
      var template = require('./template.js');*/
@@ -178,7 +180,7 @@ function TextArea(window) {
                 /*$chatArea.animate({
                     bottom : "0"
                 },200);*/
-                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
+                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 if(transferFlag==1){
                     $(".qqFaceTiphover").hide();
                     $(".qqFaceTip").hide();
@@ -324,13 +326,19 @@ function TextArea(window) {
             case 2://客服把你T了
             case 3://客服把你拉黑了
             case 6://有新窗口打开
+            $chatArea.removeClass("hideChatArea").addClass("showChatArea");
             $keepSession.hide();
             $endSession.show();
             autoSizePhone();
         }
     };
+    //重新开始新会话
     var newMessage=function(){
         window.location.reload()
+    };
+    var evaluateHandler=function(){
+        //评价
+        evaluate();
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -382,6 +390,8 @@ function TextArea(window) {
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
         $newMessage.on("click",newMessage);
+        //弹窗
+        $(".sysData").on("click",evaluateHandler)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
