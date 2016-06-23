@@ -167,14 +167,15 @@ li {
 .endSession{
     display:none;
     width:100%;
-    height:93px;
+    overflow:hidden;
+    /* height:52px; */
     border-top:1px solid #ced7d6;
 }
 .endSession span{
     display:inline-block;
     float:left;
     width:29%;
-    margin:2% 2%;
+    margin:2%;
     border-radius:10px;
     text-align:center;
 }
@@ -183,26 +184,27 @@ li {
 }
 .endSession span i{
     display:inline-block;
-    height:52px;
+    height:24px;
     width:53%;
     background-image: url(../images/endEssion2X.png);
+    background-size:300px 39px;
     background-repeat:no-repeat;
 }
 .endSession span p{
     width:100%;
-    font-size:0.8rem;
+    font-size:0.3rem;
     color:#7c8687;
     padding-bottom:2%;
     text-align:center;
 }
 .endSession .span1 i{
-     background-position: -76px -12px;
+     background-position: -26px -7px;
 }
 .endSession .span2 i{
-     background-position: center -12px;
+     background-position: center -7px;
 }
 .endSession .span3 i{
-     background-position: -475px -12px;
+     background-position: -226px -7px;
 }
 /* iphone6 */
 @media (min-device-width : 375px){
@@ -271,8 +273,6 @@ li {
     }
     .endSession span i{
         width:40%;
-        /* background-image: url(../images/endEssion3X.png);
-        background-size:600px 78px; */
     }
 }
 /* iphone6puls橫屏 */
