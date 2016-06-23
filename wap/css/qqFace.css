@@ -9,18 +9,13 @@ li, ul, div, p, h1 {
    box-shadow: 1px 1px 0.5px #999
 } */
 .faceGroup {
-    /* position: absolute;
-    top: -207px;
-    left: 10px;
-    z-index: 1000; */
     overflow:hidden;
     width: 100%;
     height: 200px;
     padding: 6px;
     background: #fff;
-   
 }
-.faceGroup .face {/* height:178px;overflow-y: hidden; outline: none; */
+.faceGroup .face {
     width:100%;
 }
 .faceGroup .face ul{ 
@@ -30,289 +25,127 @@ li, ul, div, p, h1 {
     float: left;
     cursor: pointer;
 }
- .faceIco{
+.faceIco{
     float:left;
     overflow:hidden;
     width: 24px;
     height: 24px;
     margin:3% 3.1%;
     background-image:url(../images/qqface2X.png);
-    background-size:831px 42px
+    background-repeat:no-repeat;
+    background-size:801px 22px;
 }
 .faceGroup .backDelete{
     float:left;
     overflow:hidden;
     width: 24px;
-    height: 20px;
-    margin:4% 3%;
-    background: url(../images/icoGroup2X.png) -178px -1px;
-    background-size: 229px 168px;
+    height: 30px;
+    margin:3% 3.5%;
+    background-image: url(../images/icoGroup2X.png);
+    background-repeat:no-repeat;
+    background-position:-288px 0px;
+    background-size:356px 276px;
 }
-.faceGroup img:hover {
-    background: #edeff0;
+.faceimg{
+    width:24px;
+    height:24px;
+    margin:0 2px;
 }
-.faceimg{width:24px;height:24px;margin:0 2px;}
 .faceIco1{
-    background-position:-8px -8px;
+background-position:2px 2px;
 }
 .faceIco2{
-    background-position:-38px -8px;
+    background-position:-28px 2px;
 }
 .faceIco3{
-    background-position:-69px -8px;
+    background-position:-58px 2px;
 }
 .faceIco4{
-    background-position:-99px -8px;
+    background-position:-88px 2px;
 }
 .faceIco5{
-    background-position:-129px -8px;
+    background-position:-118px 2px;
 }
 .faceIco6{
-    background-position:-159px -8px;
+    background-position:-148px 2px;
 }
 .faceIco7{
-    background-position:-189px -8px;
+    background-position:-178px 2px;
 }
 .faceIco8{
-    background-position:-220px -8px;
+    background-position:-208px 2px;
 }
 .faceIco9{
-    background-position:-250px -8px;
+    background-position:-238px 2px;
 }
 .faceIco10{
-    background-position:-282px -8px;
+    background-position:-268px 2px;
 }
 .faceIco11{
-    background-position:-312px -8px;
+    background-position:-298px 2px;
 }
 .faceIco12{
-    background-position:-342px -8px;
+    background-position:-328px 2px;
 }
 .faceIco13{
-    background-position:-372px -8px;
+    background-position:-358px 2px;
 }
 .faceIco14{
-    background-position:-402px -8px;
+    background-position:-388px 2px;
 }
 .faceIco15{
-    background-position:-434px -8px;
+    background-position:-418px 2px;
 }
 .faceIco16{
-    background-position:-464px -8px;
+    background-position:-448px 2px;
 }
 .faceIco17{
-    background-position:-494px -8px;
+    background-position:-478px 2px;
 }
 .faceIco18{
-    background-position:-526px -8px;
+    background-position:-508px 2px;
 }
 .faceIco19{
-    background-position:-556px -8px;
+    background-position:-538px 2px;
 }
 .faceIco20{
-    background-position:-586px -8px;
+    background-position:-568px 2px;
 }
 .faceIco21{
-    background-position:-617px -8px;
+    background-position:-598px 2px;
 }
 .faceIco22{
-    background-position:-647px -8px;
+    background-position:-628px 2px;
 }
 .faceIco23{
-    background-position:-677px -8px;
+    background-position:-658px 2px;
 }
 .faceIco24{
-    background-position:-707px -8px;
+    background-position:-688px 2px;
 }
 .faceIco25{
-    background-position:-738px -8px;
+    background-position:-718px 2px;
 }
 .faceIco26{
-    background-position:-768px -8px;
+    background-position:-748px 2px;
 }
 .faceIco27{
-    background-position:-798px -8px;
+    background-position:-778px 2px;
 }
 /* iphone6 */
 @media (min-device-width : 375px){
-     .faceIco{
+    .faceIco{
         margin:3% 3.5%;
         width: 25px;
         height: 25px;
-        background-image:url(../images/qqface3X.png);
-        background-size:875px 42px
-    }
-     .faceIco1{
-        background-position:-8px -8px;
-    }
-    .faceIco2{
-        background-position:-40px -8px;
-    }
-    .faceIco3{
-        background-position:-72px -8px;
-    }
-    .faceIco4{
-        background-position:-104px -8px;
-    }
-    .faceIco5{
-        background-position:-136px -8px;
-    }
-    .faceIco6{
-        background-position:-168px -8px;
-    }
-    .faceIco7{
-        background-position:-200px -8px;
-    }
-    .faceIco8{
-        background-position:-232px -8px;
-    }
-    .faceIco9{
-        background-position:-264px -8px;
-    }
-    .faceIco10{
-        background-position:-296px -8px;
-    }
-    .faceIco11{
-        background-position:-328px -8px;
-    }
-    .faceIco12{
-        background-position:-360px -8px;
-    }
-    .faceIco13{
-        background-position:-392px -8px;
-    }
-    .faceIco14{
-        background-position:-426px -8px;
-    }
-    .faceIco15{
-        background-position:-458px -8px;
-    }
-    .faceIco16{
-        background-position:-490px -8px;
-    }
-    .faceIco17{
-        background-position:-522px -8px;
-    }
-    .faceIco18{
-        background-position:-554px -8px;
-    }
-    .faceIco19{
-        background-position:-586px -8px;
-    }
-    .faceIco20{
-        background-position:-618px -8px;
-    }
-    .faceIco21{
-        background-position:-650px -8px;
-    }
-    .faceIco22{
-        background-position:-682px -8px;
-    }
-    .faceIco23{
-        background-position:-714px -8px;
-    }
-    .faceIco24{
-        background-position:-746px -8px;
-    }
-    .faceIco25{
-        background-position:-778px -8px;
-    }
-    .faceIco26{
-        background-position:-810px -8px;
-    }
-    .faceIco27{
-        background-position:-842px -8px;
     }
 }
 /* iphone6 Plus */
 @media (min-device-width : 411px) and (max-device-width : 736px){
-
     .faceIco{
         margin:3% 3.9%;
         width: 25px;
         height: 25px;
         background-image:url(../images/qqface3X.png);
-        background-size:875px 42px
-    }
-    .faceIco1{
-        background-position:-8px -8px;
-    }
-    .faceIco2{
-        background-position:-40px -8px;
-    }
-    .faceIco3{
-        background-position:-72px -8px;
-    }
-    .faceIco4{
-        background-position:-104px -8px;
-    }
-    .faceIco5{
-        background-position:-136px -8px;
-    }
-    .faceIco6{
-        background-position:-168px -8px;
-    }
-    .faceIco7{
-        background-position:-200px -8px;
-    }
-    .faceIco8{
-        background-position:-232px -8px;
-    }
-    .faceIco9{
-        background-position:-264px -8px;
-    }
-    .faceIco10{
-        background-position:-296px -8px;
-    }
-    .faceIco11{
-        background-position:-328px -8px;
-    }
-    .faceIco12{
-        background-position:-360px -8px;
-    }
-    .faceIco13{
-        background-position:-392px -8px;
-    }
-    .faceIco14{
-        background-position:-425px -8px;
-    }
-    .faceIco15{
-        background-position:-457px -8px;
-    }
-    .faceIco16{
-        background-position:-489px -8px;
-    }
-    .faceIco17{
-        background-position:-520px -8px;
-    }
-    .faceIco18{
-        background-position:-554px -8px;
-    }
-    .faceIco19{
-        background-position:-585px -8px;
-    }
-    .faceIco20{
-        background-position:-617px -8px;
-    }
-    .faceIco21{
-        background-position:-650px -8px;
-    }
-    .faceIco22{
-        background-position:-682px -8px;
-    }
-    .faceIco23{
-        background-position:-714px -8px;
-    }
-    .faceIco24{
-        background-position:-746px -8px;
-    }
-    .faceIco25{
-        background-position:-778px -8px;
-    }
-    .faceIco26{
-        background-position:-810px -8px;
-    }
-    .faceIco27{
-        background-position:-842px -8px;
     }
 }
