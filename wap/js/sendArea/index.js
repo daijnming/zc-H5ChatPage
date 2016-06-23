@@ -41,12 +41,14 @@ function TextArea(window) {
             transferFlag=2;
             $(".qqFaceTip").show();
             $uploadImg.show();
+            $satisfaction.show();
             $artificial.hide();
              //提示文本
             placeholder($textarea,"当前是人工");
         }else{
             transferFlag=1;
             $uploadImg.hide();
+            $satisfaction.hide();
             $artificial.show();
         }
     }
@@ -361,6 +363,8 @@ function TextArea(window) {
         $endSession=$(".js-endSession");
         //新会话
         $newMessage=$(".js-newMessage");
+        //评价
+        $satisfaction=$(".js-satisfaction");
         //oTxt = document.getElementById("js-textarea");
     };
 
@@ -391,7 +395,7 @@ function TextArea(window) {
         //新会话
         $newMessage.on("click",newMessage);
         //弹窗
-        $(".sysData").on("click",evaluateHandler)
+        $satisfaction.on("click",evaluateHandler)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');

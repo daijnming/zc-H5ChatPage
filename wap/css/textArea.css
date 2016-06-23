@@ -67,13 +67,13 @@ li {
 }
 .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImg,.addList .artificial,.addList .satisfaction,.addList .leaveMessage{
     background-image: url(../images/icoGroup2X.png);
+    background-repeat:no-repeat;
     background-size:356px 276px;
 }
 .add {
     height: 32px;
     width: 32px;
     margin-left: 2%;
-    background-repeat:no-repeat;
     background-position:-96px 2px;
 }
 .addhover {
@@ -81,7 +81,6 @@ li {
     height: 32px;
     width: 32px;
     margin-left: 2%;
-    background-repeat:no-repeat;
     background-position:-144px 2px;
 }
 .qqFaceTip {
@@ -89,7 +88,6 @@ li {
     height: 32px;
     width: 32px;
     margin-left:2%;
-    background-repeat:no-repeat;
     background-position:0px 2px;
 }
 .qqFaceTiphover{
@@ -97,7 +95,6 @@ li {
     height: 32px;
     width: 32px;
     margin-left:2%;
-    background-repeat:no-repeat;
     background-position:-48px 2px;
 }
 /* .keyboard {
@@ -129,7 +126,6 @@ li {
 }
 .addList .uploadImg{
     display:none;
-    background-repeat:no-repeat;
     background-position:-142px -44px;
 }
 .addList .uploadImg input{
@@ -141,16 +137,17 @@ li {
     opacity:0
 }
 .addList .artificial{
-    background-repeat:no-repeat;
     background-position: 7px -44px;
 }
 .addList .satisfaction{
-    background-repeat:no-repeat;
-    background-position: -4px -118px;
+    display:none;
+    background-position:8px -120px;
 }
 .addList .leaveMessage{
-    background-repeat:no-repeat;
     background-position: -151px -118px;
+}
+.addList .evaluateTip{
+
 }
 .showChatAdd {/* display:block; */
 }
@@ -168,7 +165,6 @@ li {
     display:none;
     width:100%;
     overflow:hidden;
-    /* height:52px; */
     border-top:1px solid #ced7d6;
 }
 .endSession span{
@@ -208,68 +204,15 @@ li {
 }
 /* iphone6 */
 @media (min-device-width : 375px){
-    .chatAdd {
-        height: 212px;
-    }
-    .qqFaceTip {
-        display:none;
-        background-position: 1px 2px;
-    }
-    .qqFaceTiphover{
-        display:none;
-        background-position: -47px 2px;
-    }
-    .add {
-        background-position: -95px 2px;
-    }
-    .addhover {
-        display:none;
-        background-position: -143px 2px;
-    }
     .endSession span i{
          width:44%;
     }
 }
 /* iphone6 Plus */
 @media (min-device-width : 414px) and (max-device-width : 736px){
-    .chatAdd {
-        height: 212px;
-    }
     .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImg,.addList .artificial,.addList .satisfaction,.addList .leaveMessage{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
-    }
-    .add {
-        margin-left: 2%;
-        background-position: -94px 3px;
-    }
-    .addhover {
-        display:none;
-        margin-left: 2%;
-        background-position: -142px 3px;
-    }
-    .qqFaceTip {
-        display:none;
-        margin:0 0% 0 2%;
-        background-position:2px 3px;
-    }
-    .qqFaceTiphover{
-        display:none;
-        margin:0 0% 0 2%;
-        background-position:-46px 3px;
-    }
-    .addList .uploadImg{
-        display:none;
-        background-position: -143px -44px;
-    }
-    .addList .artificial{
-        background-position: 7px -44px;
-    }
-    .addList .satisfaction{
-        background-position:-2px -3px;
-    }
-    .addList .leaveMessage{
-        background-position: -151px -118px;
     }
     .endSession span i{
         width:40%;
