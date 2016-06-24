@@ -28,6 +28,7 @@ function TextArea(window) {
     var transferFlag=1;
     //传给聊天的url
     var statusHandler=function(){
+        console.log(CurrentState.getCurrentState());
         if(CurrentState.getCurrentState()=="human"){
             //提示文本
             placeholder($textarea,"当前是机器人");
@@ -99,7 +100,6 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
-            console.log(date);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -343,7 +343,7 @@ function TextArea(window) {
     };
     var evaluateHandler=function(){
         //评价
-        evaluate();
+        evaluate(transferFlag);
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
