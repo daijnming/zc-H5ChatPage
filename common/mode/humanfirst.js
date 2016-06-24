@@ -110,7 +110,7 @@ var HumanFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
-        tempManager = socketFactory(ret);
+        tempManager = socketFactory(ret,global);
         tempManager.start();
         manager = new Robot(global);
     };

@@ -40,6 +40,12 @@ var ListMsgHandler = function() {
       MSG_SERVED:'已送达',
       MSG_FAIL:'发送失败'
     };
+    //系统提示
+    var sysPromptLan ={
+      L0001:'您与{0}的会话已经结束',
+      L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
+      L0003:'您已在新窗口打开聊天页面'
+    };
 
     //api接口
     var api = {
@@ -167,7 +173,7 @@ var ListMsgHandler = function() {
         switch (msgType) {
           case 0:
               var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
-              console.log(msg);
+              // console.log(msg);
               comf = $.extend({
                   userLogo : global.userInfo.face,
                   userMsg : QQFace.analysis(msg),
@@ -176,37 +182,75 @@ var ListMsgHandler = function() {
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
           case 1:
-              //接收人工工作台消息
-              //FIXME 类型判断  answerType=4 相关搜索 另形判断
+              //FIXME 接收人工工作台消息
               var _logo,_name,_msg,_type,_list;
-
               _type=data.type;
               _list=data.list;
-
               for(var i=0;i<_list.length;i++){
                 var _data = _list[i];
-                if(_data.answerType=='4'){
-                  //相关搜索
-                  msgHtml += msgHandler.sugguestionsSearch(_data);
-                }else{
-                    //判断是机器人还是客服回复
-                    if(_type=='robot'){
-                      _logo =global.apiConfig.robotLogo;
-                      _name = global.apiConfig.robotName;
-                      _msg =_data.answer;
-                    }else if(_type=='human'){
-                      _logo=_data.aface;
-                      _name=_data.aname;
-                      _msg=_data.content;
-                    }
+                //判断类型 robot human
+                if(_type=='robot'){
+                  //FIXME 机器人类型  answerType=4 相关搜索
+                  if(_data.answerType=='4'){
+                    //相关搜索
+                    msgHtml += msgHandler.sugguestionsSearch(_data);
+                  }else{
+                    _msg =_data.answer;
                     comf = $.extend({
-                      customLogo : _logo,
-                      customName : _name,
+                      customLogo : global.apiConfig.robotLogo,
+                      customName : global.apiConfig.robotName,
                       customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
+                  }
+                }else{
+                  //FIXME 客服类型
+                  //202 客服发来消息
+                  if(_data.type==202){
+                    _msg=_data.content;
+                    comf = $.extend({
+                      customLogo : _data.aface,
+                      customName : _data.aname,
+                      customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                      date:+new Date()
+                    });
+                    msgHtml += doT.template(msgTemplate.leftMsg)(comf);
+                  }else  if(_data.type==204){
+                    //会话结束
+                    msgHtml+=msgHandler.sessionCloseHander(_data);
+                  }
                 }
+                // var _data = _list[i];
+                // if(_data.answerType=='4'){
+                //   //相关搜索
+                //   msgHtml += msgHandler.sugguestionsSearch(_data);
+                // }else{
+                //   //202 客服发来的消息
+                //   if(_data.type==202){
+                //     //判断是机器人还是客服回复
+                //     if(_type=='robot'){
+                //       _logo =global.apiConfig.robotLogo;
+                //       _name = global.apiConfig.robotName;
+                //       _msg =_data.answer;
+                //     }else if(_type=='human'){
+                //       _logo=_data.aface;
+                //       _name=_data.aname;
+                //       _msg=_data.content;
+                //     }
+                //     comf = $.extend({
+                //       customLogo : _logo,
+                //       customName : _name,
+                //       customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                //       date:+new Date()
+                //     });
+                //     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
+                //   }
+                //   //204 会话结束
+                //   else if(_data.type==204){
+                //     msgHtml+=sessionCloseHander(_data);
+                //   }
+                // }
               }
             break;
           case 2:
@@ -359,7 +403,7 @@ var ListMsgHandler = function() {
       },
       //接收回复
      onReceive : function(data){
-      //  console.log(data,1);
+       console.log(data);
         bindMsg(1,data);
       },
       //相关搜索答案点击事件
@@ -429,6 +473,41 @@ var ListMsgHandler = function() {
             }
         }
         chatPanelList.append(tempHtml);
+      },
+      //会话结束判断
+      // 1：人工客服离线导致用户下线
+      // 2：被客服移除
+      // 3：被列入黑单
+      // 4：长时间不说话
+      // 6：有新窗口打开
+      sessionCloseHander:function(data){
+        var msg='';
+        if(data){
+          switch (data.status) {
+            case 1:
+            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
+              break;
+            case 2:
+            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
+              break;
+            case 3:
+            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
+              break;
+            case 4:
+            msg = Comm.format(sysPromptLan.L0002,[data.aname],false);
+              break;
+            case 6:
+            msg = Comm.format(sysPromptLan.L0003,[data.aname],false);
+              break;
+          }
+        }
+        var tp = +new Date();
+        var comf = $.extend({
+          sysMsg:msg,
+          sysMsgSign:tp,
+          date:tp
+        });
+        return doT.template(msgTemplate.sysMsg)(comf);
       }
     };
     /********************************************************************************/
