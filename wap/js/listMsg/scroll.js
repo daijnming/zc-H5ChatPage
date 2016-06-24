@@ -1,3 +1,6 @@
+/*
+* @author denzel
+*/
 var ScrollHandler = function(global,node){
 
   var That={};

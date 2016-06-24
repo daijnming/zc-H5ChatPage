@@ -1,3 +1,6 @@
+/*
+* @author denzel
+*/
 var ListMsgHandler = function() {
     var global,
         scrollHanlder,
@@ -325,8 +328,6 @@ var ListMsgHandler = function() {
         clearInterval(timer);
         timer =  setTimeout(function(){
           var offsetTop = node.offset().top-$(topTitleBar).height();
-          // console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
-          // console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
