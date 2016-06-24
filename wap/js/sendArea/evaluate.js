@@ -63,6 +63,8 @@ function evaluate(currentStatus) {
         modeAlert();
     }
     var humanInitPlugins = function() {
+        alert("Not developed");
+        return;
         Alert = new Alert({
             'title' : '人工客服评价',
             'footer':false,
