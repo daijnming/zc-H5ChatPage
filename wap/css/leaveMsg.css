@@ -1,3 +1,4 @@
+/* 评价自定义弹窗样式 */
 .evaluate{
 	position:absolute;
 	width:90%;
@@ -5,6 +6,18 @@
 	background:#fff;
 	z-index:20;
 }
+.evaluate .close{
+	overflow:hidden;
+}
+.evaluate .close_button{
+	width:95%;
+	text-align:right;
+	padding-right:5%;
+	font-size:1.4em;
+	display:inline-block;
+	color:#c0c5c8
+}
+
 .evaluate .h1{
 	width:100%;
 	text-align:center;
@@ -33,7 +46,7 @@
 }
 .evaluate .wether span.active{
 	color:#fff;
-	border:none;
+	border:1px solid #09aeb0;
 	background:#09aeb0;
 }
 .evaluate .h2{
@@ -62,9 +75,9 @@
 	font-size:0.8em;
 	border:1px solid #c4cdcc;
 }
-.evaluate .situation span.active{
+.evaluate .situation .active{
 	 color:#fff;
-	 border:none;
+	 border:1px solid #09aeb0;
 	 background:#09aeb0;
 }
 .evaluate textarea{
