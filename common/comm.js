@@ -94,6 +94,32 @@ var Comm = {
             res += tmp;
         }
         return res;
+    },
+    //str 系统提示语  args 组装数据  isFormat 是否需要组装
+    format:function(str,args,isFormat){
+      if (isFormat) {
+        var result;
+        if (typeof (args) == "object") {
+          for (var key in args) {
+              var reg = '{'+key+'}';
+              result = str.replace(reg, args[key]);
+            }
+        }
+        else {
+          for (var i = 0; i < args.length; i++) {
+              if(args[i]==undefined)
+              {
+                return "";
+              } else {
+                  var reg = '{'+i+'}';
+                  result = str.replace(reg, args[i]);
+                }
+            }
+          }
+            return result;
+        } else {
+            return str;
+        }
     }
 };
 module.exports = Comm;

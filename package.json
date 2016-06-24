@@ -33,6 +33,22 @@
   "license": "ISC",
   "devDependencies": {
     "browserify": "^13.0.1",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^3.0.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-notify": "^2.2.0",
+    "gulp-removelogs": "^0.1.0",
+    "gulp-rev": "^7.1.0",
+    "gulp-rev-replace": "^0.4.3",
+    "gulp-sequence": "^0.4.5",
+    "gulp-uglify": "^1.5.4",
+    "gulp-useref": "^3.1.0",
+    "gulp-watch": "^4.3.8",
+    "mustache": "^2.2.1",
+    "requiredir": "^1.0.7"
   }
 }
