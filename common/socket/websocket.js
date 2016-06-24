@@ -8,12 +8,18 @@ function ZcWebSocket(puid,url,global) {
     var listener = require('../util/listener.js');
     var websocket;
     var ROLE_USER = 0;
-
+    console.log(global);
     var onSend = function(data) {
         var item;
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
+        item.type = 103;
+        item.msgId = item['date+uid'];
+        item.content = item.answer;
+        item.uname = global.userInfo.uname;
+        item.face = global.userInfo.face;
+        delete item["date+uid"];
         websocket.send(JSON.stringify(item));
     };
 

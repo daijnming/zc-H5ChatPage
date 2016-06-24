@@ -8,6 +8,7 @@ function Rolling(puid,pu,global) {
     var timer;
     var onSend = function(args) {
         var data = args[0];
+        console.log(data);
         $.ajax({
             'url' : '/chat/user/chatsend.action',
             'data' : {
@@ -19,6 +20,8 @@ function Rolling(puid,pu,global) {
             'dataType' : 'json',
             'type' : "POST",
             'success' : function(ret) {
+            },
+            'error' : function(ret) {
             }
         });
     };
