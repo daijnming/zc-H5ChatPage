@@ -195,12 +195,13 @@ var ListMsgHandler = function() {
                     //相关搜索
                     msgHtml += msgHandler.sugguestionsSearch(_data);
                   }else{
-                    _msg =_data.answer;
+                    _msg =QQFace.analysis( _data.answer?_data.answer:'')//过滤表情;
+                    var index = _msg.indexOf('uploadedFile');
+                    var res = index>0?_msg:Comm.getNewUrlRegex(_msg);
                     comf = $.extend({
                       customLogo : global.apiConfig.robotLogo,
                       customName : global.apiConfig.robotName,
-                      // customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
-                      customMsg : _msg?_msg:'',
+                      customMsg : res,
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
@@ -209,12 +210,14 @@ var ListMsgHandler = function() {
                   //FIXME 客服类型
                   //202 客服发来消息
                   if(_data.type==202){
-                    _msg=_data.content;
+                    _msg=QQFace.analysis(_data.content?_data.content:'');//过滤表情
+                    var index = _msg.indexOf('uploadedFile');
+
+                    var res = index>0?_msg:Comm.getNewUrlRegex(_msg);
                     comf = $.extend({
                       customLogo : _data.aface,
                       customName : _data.aname,
-                      // customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
-                      customMsg : _msg?_msg:'',
+                      customMsg : res,
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);

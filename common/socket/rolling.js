@@ -6,8 +6,10 @@ function Rolling(puid,pu,global) {
     var listener = require('../util/listener.js');
     var socketType = 'human';
     var timer;
-    var onSend = function(args) {
+    var onSend = function(args,retry) {
+        var retry = retry || 0;
         var data = args[0];
+        data.dateuid = data['date+uid'];
         $.ajax({
             'url' : '/chat/user/chatsend.action',
             'data' : {
@@ -19,6 +21,22 @@ function Rolling(puid,pu,global) {
             'dataType' : 'json',
             'type' : "POST",
             'success' : function(ret) {
+                listener.trigger("core.msgresult", {
+                    'msgId' : data.dateuid,
+                    'result' : 'success'
+                });
+            },
+            'error' : function(ret) {
+                if(retry >= 3) {
+                    listener.trigger("core.msgresult", {
+                        'msgId' : data.dateuid,
+                        'result' : 'success'
+                    });
+                } else {
+                    setTimeout(function() {
+                        onSend([data],retry + 1);
+                    },1000);
+                }
             }
         });
     };

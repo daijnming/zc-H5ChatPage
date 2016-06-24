@@ -1,16 +1,68 @@
 /**
  * @author Treagzhao
  */
-function ZcWebSocket(puid,url) {
+function ZcWebSocket(puid,url,global) {
     this.puid = puid;
-    var url = url.replace('http','ws');
+    var url = global.apiConfig.websocketUrl;
     var socketType = 'human';
+    var listener = require('../util/listener.js');
     var websocket;
+    var TIMEOUT_DURATION = 5 * 1000;
+    var ROLE_USER = 0;
 
+    var retryList = {};
+
+    var retry = function() {
+        var now = +new Date();
+        for(var el in retryList) {
+            var item = retryList[el];
+            if(now - item.sendTime >= TIMEOUT_DURATION) {
+                console.log('消息发送是失败');
+            }
+        }
+    };
+
+    var onSend = function(data) {
+        var item;
+        if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
+            item = data[0];
+        }
+        item.type = 103;
+        item.msgId = item['date+uid'];
+        item.sendTime = item.date;
+        item.content = item.answer;
+        item.uname = global.userInfo.uname;
+        item.face = global.userInfo.face;
+        retryList[item.msgId] = item;
+        delete item["date+uid"];
+        websocket.send(JSON.stringify(item));
+    };
+
+    var onMessage = function(data) {
+        console.log('onreceive',data);
+    };
+
+    var onClosed = function() {
+        console.log("websocket closed");
+    };
     var bindListener = function() {
         websocket.onopen = function() {
-            console.log('websocket connected');
+            console.log(global);
+            var start = {
+                "t" : ROLE_USER,
+                "u" : global.apiInit.uid,
+                's' : global.sysNum
+            };
+            websocket.send(JSON.stringify(start));
+            setInterval(retry,1000);
         };
+        websocket.onclose = function() {
+            onClosed();
+        };
+        websocket.onmessage = function(evt) {
+            console.log(evt);
+        };
+        listener.on("sendArea.send",onSend);
     };
 
     var init = function() {
