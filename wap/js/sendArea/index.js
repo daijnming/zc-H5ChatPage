@@ -102,7 +102,7 @@ function TextArea(window) {
                 'answer' : str,
                 'uid' : currentUid,
                 'cid' : currentCid,
-                'date+uid' : date,
+                'dateuid' : date,
                 'date': +new Date(),
                 'token':""
 
