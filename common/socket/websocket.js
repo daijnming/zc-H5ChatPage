@@ -7,8 +7,21 @@ function ZcWebSocket(puid,url,global) {
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var websocket;
+    var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
-    console.log(global);
+
+    var retryList = {};
+
+    var retry = function() {
+        var now = +new Date();
+        for(var el in retryList) {
+            var item = retryList[el];
+            if(now - item.sendTime >= TIMEOUT_DURATION) {
+                console.log('消息发送是失败');
+            }
+        }
+    };
+
     var onSend = function(data) {
         var item;
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
@@ -16,9 +29,11 @@ function ZcWebSocket(puid,url,global) {
         }
         item.type = 103;
         item.msgId = item['date+uid'];
+        item.sendTime = item.date;
         item.content = item.answer;
         item.uname = global.userInfo.uname;
         item.face = global.userInfo.face;
+        retryList[item.msgId] = item;
         delete item["date+uid"];
         websocket.send(JSON.stringify(item));
     };
@@ -39,9 +54,7 @@ function ZcWebSocket(puid,url,global) {
                 's' : global.sysNum
             };
             websocket.send(JSON.stringify(start));
-            setInterval(function() {
-
-            },1000);
+            setInterval(retry,1000);
         };
         websocket.onclose = function() {
             onClosed();
