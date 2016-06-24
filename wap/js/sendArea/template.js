@@ -4,7 +4,7 @@
 var template = {};
 var _selfHtml = '<div class="evaluate js-evaluate">'+
 						'<div class="close"><span class="close_button">×</span></div>'+
-						'<p class="h1">是否解决了您的问题</p>'+
+						'<p class="h1">机器人是否解决了您的问题</p>'+
 						'<div class="wether">'+
 							'<span class="js-isques">是</span>'+
 							'<span class="js-noques">否</span>'+

@@ -49,7 +49,7 @@ function evaluate() {
     var initPlugins = function() {
         Alert = new Alert({
             'title' : 'dfg',
-            'text' : '是否解决了您的问题',
+            'text' : '机器人是否解决了您的问题',
             'OK' : function() {
                 
             }

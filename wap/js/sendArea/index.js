@@ -40,6 +40,7 @@ function TextArea(window) {
             transferFlag=2;
             $(".qqFaceTip").show();
             $uploadImg.show();
+            //满意度评价
             $satisfaction.show();
             $artificial.hide();
              //提示文本
@@ -47,7 +48,7 @@ function TextArea(window) {
         }else{
             transferFlag=1;
             $uploadImg.hide();
-            $satisfaction.hide();
+            $satisfaction.show();
             $artificial.show();
         }
     }
