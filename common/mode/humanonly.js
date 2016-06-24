@@ -176,7 +176,7 @@ function HumanOnly(global) {
                         if(manager) {
                             manager.destroy();
                         }
-                        manager = socketFactory(ret);
+                        manager = socketFactory(ret,global);
                         manager.start();
                         listener.trigger("core.buttonchange", {
                             'type' : 'transfer',

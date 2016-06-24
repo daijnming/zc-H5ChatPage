@@ -1,7 +1,7 @@
 /**
  * @author Treagzhao
  */
-function Rolling(puid) {
+function Rolling(puid,pu,global) {
     this.puid = puid;
     var listener = require('../util/listener.js');
     var socketType = 'human';
@@ -44,6 +44,15 @@ function Rolling(puid) {
                         arr.push(item);
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
+                            if(item.status == 2) {
+                                listener.trigger("core.system", {
+                                    'type' : 'system',
+                                    'status' : 'kickout',
+                                    'data' : {
+                                        'content' : "您与客服" + item.aname + "的会话已经关闭"
+                                    }
+                                });
+                            }
                         }
                     }
                     listener.trigger("core.onreceive", {

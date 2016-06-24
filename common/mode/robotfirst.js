@@ -102,7 +102,7 @@ var RobotFirst = function(global) {
     var queueWait = function(ret,init) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
         if(!tempManager) {
-            tempManager = socketFactory(ret);
+            tempManager = socketFactory(ret,global);
             tempManager.start();
         }
         if(init) {
@@ -129,7 +129,7 @@ var RobotFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
-        manager = socketFactory(ret);
+        manager = socketFactory(ret,global);
         manager.start();
         if(init) {
             initHumanSession(global.apiConfig.adminHelloWord,ret);
