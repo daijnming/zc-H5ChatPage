@@ -199,7 +199,8 @@ var ListMsgHandler = function() {
                     comf = $.extend({
                       customLogo : global.apiConfig.robotLogo,
                       customName : global.apiConfig.robotName,
-                      customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                      // customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                      customMsg : _msg?_msg:'',
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
@@ -212,7 +213,8 @@ var ListMsgHandler = function() {
                     comf = $.extend({
                       customLogo : _data.aface,
                       customName : _data.aname,
-                      customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                      // customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
+                      customMsg : _msg?_msg:'',
                       date:+new Date()
                     });
                     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
@@ -221,36 +223,6 @@ var ListMsgHandler = function() {
                     msgHtml+=msgHandler.sessionCloseHander(_data);
                   }
                 }
-                // var _data = _list[i];
-                // if(_data.answerType=='4'){
-                //   //相关搜索
-                //   msgHtml += msgHandler.sugguestionsSearch(_data);
-                // }else{
-                //   //202 客服发来的消息
-                //   if(_data.type==202){
-                //     //判断是机器人还是客服回复
-                //     if(_type=='robot'){
-                //       _logo =global.apiConfig.robotLogo;
-                //       _name = global.apiConfig.robotName;
-                //       _msg =_data.answer;
-                //     }else if(_type=='human'){
-                //       _logo=_data.aface;
-                //       _name=_data.aname;
-                //       _msg=_data.content;
-                //     }
-                //     comf = $.extend({
-                //       customLogo : _logo,
-                //       customName : _name,
-                //       customMsg : Comm.getNewUrlRegex(_msg?_msg:''),
-                //       date:+new Date()
-                //     });
-                //     msgHtml += doT.template(msgTemplate.leftMsg)(comf);
-                //   }
-                //   //204 会话结束
-                //   else if(_data.type==204){
-                //     msgHtml+=sessionCloseHander(_data);
-                //   }
-                // }
               }
             break;
           case 2:
@@ -358,7 +330,7 @@ var ListMsgHandler = function() {
       },
       //转接人工
       onSessionOpen:function(data){
-        // console.log(data);
+        console.log(data);
         bindMsg(2,data);
       },
       //系统提示消息处理
