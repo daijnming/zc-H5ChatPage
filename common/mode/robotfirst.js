@@ -221,6 +221,7 @@ var RobotFirst = function(global) {
         setTimeout(function() {
             listener.trigger("core.initsession",value);
         },0);
+        manager = new Robot(global);
     };
     var onReceive = function(data) {
         var list = data.list || [];
