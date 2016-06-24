@@ -236,10 +236,26 @@ var initConfig = function() {
         }
     };
 
+    var judgeEnviroment = function() {
+        var promise = new Promise();
+        $.ajax({
+            'url' : '/wap/admins_new/getEnvironment',
+            'dataType' : 'json',
+            'data' : {},
+            'success' : function(ret) {
+                promise.resolve('success');
+            },
+            'error' : function(ret) {
+                promise.resolve('fail');
+            }
+        });
+        return promise;
+    };
+
     //promise方法
     var promiseHandler = function() {
-        Promise.when(function() {
-            var promise = new Promise();
+        judgeEnviroment().then(function(value,promise) {
+            var promise = promise || new Promise();
             config.initUA();
             config.initParams();
             config.initLanguage();
@@ -257,6 +273,11 @@ var initConfig = function() {
                 },
                 success : (function(data) {
                     That.cacheInfo.apiConfig = data;
+                    if(value === 'success') {
+                        data.websocketUrl = "";
+                    } else {
+                        data.websocketUrl = "ws://139.129.95.94:9000/ws";
+                    }
                     promise.resolve();
                 })
             });
