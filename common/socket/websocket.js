@@ -34,7 +34,7 @@ function ZcWebSocket(puid,url,global) {
         item.uname = global.userInfo.uname;
         item.face = global.userInfo.face;
         retryList[item.msgId] = item;
-        delete item["date+uid"];
+        //delete item["date+uid"];
         websocket.send(JSON.stringify(item));
     };
 
