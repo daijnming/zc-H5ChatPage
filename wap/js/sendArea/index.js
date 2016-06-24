@@ -9,11 +9,11 @@ function TextArea(window) {
     //表情
     var ZC_Face = require('../util/qqFace.js')();
     //上传附件
-    var uploadImg = require('./uploadImg.js')(); 
+    var uploadImg = require('./uploadImg.js')();
     //当前状态
-    var CurrentState = require('../../../common/mode/currentState.js'); 
+    var CurrentState = require('../../../common/mode/currentState.js');
     //模拟placeholder
-    var placeholder = require('./placeholder.js'); 
+    var placeholder = require('./placeholder.js');
     //alert()
     var evaluate=require("./evaluate.js");
     /* var inputCache = {};
@@ -28,6 +28,7 @@ function TextArea(window) {
     var transferFlag=1;
     //传给聊天的url
     var statusHandler=function(){
+        console.log(CurrentState.getCurrentState());
         if(CurrentState.getCurrentState()=="human"){
             //提示文本
             placeholder($textarea,"当前是机器人");
@@ -119,7 +120,7 @@ function TextArea(window) {
         }else{
             $textarea.css("width","75%");
         }
-        autoSizePhone();    
+        autoSizePhone();
     };
     var showChatAddHandler=function(){
         //与键盘优化
@@ -138,11 +139,11 @@ function TextArea(window) {
                 $(".qqFaceTiphover").hide();
                 $(".qqFaceTip").show();
             }
-            
+
         } else {
             setTimeout(function(){
                 //显示
-               
+
                 $chatArea.addClass("showChatAdd");
                 $chatArea.removeClass("showChatEmotion");
                 $chatAdd.show();
@@ -172,7 +173,7 @@ function TextArea(window) {
         if($chatArea.hasClass("showChatEmotion")){
             //隐藏
             hideChatAreaHandler();
-            
+
         } else {
             setTimeout(function(){
                 //显示
@@ -201,7 +202,7 @@ function TextArea(window) {
                         $(".add").show();
                         $sendBtn.hide();
                     }
-                    
+
                 }
                 autoSizePhone();
             },200)
@@ -297,7 +298,7 @@ function TextArea(window) {
         autoSizePhone();
     };
     var onImageUpload = function(data) {
-        //onFileTypeHandler(data); 
+        //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         var date= currentUid + +new Date();
         var img='<img class="webchat_img_upload" src="'+data[0].url+'">';
@@ -306,7 +307,7 @@ function TextArea(window) {
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
-         'dateUid' : date,
+         'dateuid' : date,
          'date': +new Date(),
          'token':data[0].token
          }]);
@@ -342,7 +343,7 @@ function TextArea(window) {
     };
     var evaluateHandler=function(){
         //评价
-        evaluate();
+        evaluate(transferFlag);
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");

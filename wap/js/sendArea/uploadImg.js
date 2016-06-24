@@ -49,8 +49,6 @@ function uploadImg() {
             //上传,延迟一毫秒，先让图片在页面加载
             //onAjaxUploadUpHandler(oData)
             setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
-
-
         }else{
             alert("请上传正确的图片格式")
         }
@@ -69,26 +67,6 @@ function uploadImg() {
         }
     }
     var onAjaxUploadUpHandler=function(oData){
-        /*var oXHR=$.ajax({
-            url : "/wap/js/sendArea/fileupload.json",
-            type : "post",
-            data : oData,
-            'dataType' : 'json',
-            //告诉jQuery不要去处理发送的数据
-            processData : false,
-            contentType : false,
-        success:function(response) {
-            var url = response.url;
-            listener.trigger('sendArea.uploadImgUrl',[{
-                'url' : url
-            }]);
-            //通过textarea.uploadImgUrl事件将图片地址传到聊天窗体
-        },
-        fail:function(ret) {
-            console.log("上传失败");
-        }
-        });*/
-       // var vFD = new FormData();
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/wap/js/sendArea/fileupload.json');

@@ -1,3 +1,6 @@
+/*
+* @author denzel
+*/
 var ListMsgHandler = function() {
     var global,
         scrollHanlder,
@@ -325,10 +328,9 @@ var ListMsgHandler = function() {
         clearInterval(timer);
         timer =  setTimeout(function(){
           var offsetTop = node.offset().top-$(topTitleBar).height();
-          // console.log('height:'+ ($(window).height() - $(topTitleBar).height() - 48));
-          // console.log('offsetTop:'+ (offsetTop - $(topTitleBar).height()));
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
+          scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
         },300);
       },
       //转接人工
@@ -364,8 +366,7 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        // console.log(scrollHanlder.scroll);
-        // console.log(data);
+        console.log(data);
         if(uploadImgToken){
           //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
           var $div = $('#'+uploadImgToken);
@@ -378,7 +379,7 @@ var ListMsgHandler = function() {
       },
       //接收回复
      onReceive : function(data){
-       console.log(data);
+      //  console.log(data);
         bindMsg(1,data);
       },
       //相关搜索答案点击事件
@@ -483,6 +484,9 @@ var ListMsgHandler = function() {
           date:tp
         });
         return doT.template(msgTemplate.sysMsg)(comf);
+      },
+      msgReceived:function(data){
+        console.log(data);
       }
     };
     /********************************************************************************/
@@ -503,6 +507,7 @@ var ListMsgHandler = function() {
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
+        fnEvent.on('core.msgresult',msgHandler.msgReceived);//消息确认收到通知
 
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
