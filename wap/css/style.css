@@ -316,7 +316,56 @@ body {
     position:fixed;
     top:0;
     left:0;
-    opacity:0.5;
-    background:#000;
+    background:rgba(0,0,0,0.5);
     z-index:15;
+}
+.modeDialog{
+    position:absolute;
+    width:90%;
+    text-align:center;
+    background:#fff;
+    z-index:20;
+}
+.modeDialog .close{
+    overflow:hidden;
+}
+.modeDialog .close_button{
+    width:95%;
+    text-align:right;
+    padding-right:5%;
+    font-size:1.4em;
+    display:inline-block;
+    color:#c0c5c8
+}
+
+.modeDialog .h1{
+    width:100%;
+    text-align:center;
+    font-size:1em;
+    color:#333333;
+    margin-top:20px;
+
+}
+.modeDialog .wether{
+    overflow:hidden;
+    width:60%;
+    margin:22px auto;
+}
+.modeDialog .wether span:first-child{
+    margin-left:0;
+}
+.modeDialog .wether span{
+    display:inline-block;
+    float:left;
+    height:44px;
+    line-height:44px;
+    border:1px solid #c5cecb;
+    border-radius:4px;
+    margin-left:10%;
+    width:40%;
+}
+.modeDialog .wether span.active{
+    color:#fff;
+    border:1px solid #09aeb0;
+    background:#09aeb0;
 }

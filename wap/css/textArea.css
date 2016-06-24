@@ -4,13 +4,23 @@ li {
 }
 @keyframes hideChatArea
    {
-   form   {bottom:0;}
-   to  {bottom:-213px;}
+   0%   {bottom:0;}
+   100%  {bottom:-213px;}
    }
 @keyframes showChatArea
    {
-   form   {bottom:-213px;}
-   to  {bottom:0px;}
+   0%   {bottom:-213px;}
+   100%  {bottom:0px;}
+   }
+@-webkit-keyframes hideChatArea
+   {
+   0%   {bottom:0;}
+   100%  {bottom:-213px;}
+   }
+@-webkit-keyframes showChatArea
+   {
+   0%   {bottom:-213px;}
+   100%  {bottom:0px;}
    }
 .chatArea {
     width: 100%;
@@ -34,11 +44,15 @@ li {
 }
 .hideChatArea{
     animation:hideChatArea 0.2s;
-   animation-fill-mode : forwards;
+    animation-fill-mode : forwards;
+    -webkit-animation:hideChatArea 0.2s;
+    -webkit-animation-fill-mode : forwards;
 }
 .showChatArea{
     animation:showChatArea 0.2s;
     animation-fill-mode : forwards;
+    -webkit-animation:showChatArea 0.2s;
+    -webkit-animation-fill-mode : forwards;
 }
 .textarea {
     background-color: #ddd;

@@ -19,7 +19,6 @@ function TextArea(window) {
     /* var inputCache = {};
      //模板引擎
      var template = require('./template.js');*/
-
     var global;
     var $node;
     var currentCid,
@@ -142,6 +141,7 @@ function TextArea(window) {
         } else {
             setTimeout(function(){
                 //显示
+               
                 $chatArea.addClass("showChatAdd");
                 $chatArea.removeClass("showChatEmotion");
                 $chatAdd.show();
@@ -327,6 +327,7 @@ function TextArea(window) {
             case 1://客服自己离线了
             case 2://客服把你T了
             case 3://客服把你拉黑了
+            case 4://长时间不说话
             case 6://有新窗口打开
             $chatArea.removeClass("hideChatArea").addClass("showChatArea");
             $keepSession.hide();
