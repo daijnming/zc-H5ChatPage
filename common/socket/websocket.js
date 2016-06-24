@@ -7,32 +7,35 @@ function ZcWebSocket(puid,url,global) {
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var websocket;
-    var ROLE_SERVICE = 2;
+    var ROLE_USER = 0;
 
     var onSend = function(data) {
-        console.log(data);
+        var item;
+        if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
+            item = data[0];
+        }
+        websocket.send(JSON.stringify(item));
     };
 
     var onMessage = function(data) {
-        console.log(data);
+        console.log('onreceive',data);
     };
 
     var onClosed = function() {
         console.log("websocket closed");
-    }
+    };
     var bindListener = function() {
         websocket.onopen = function() {
             console.log(global);
             var start = {
-                "t" : ROLE_SERVICE,
+                "t" : ROLE_USER,
                 "u" : global.apiInit.uid,
                 's' : global.sysNum
             };
-            console.log(JSON.stringify(start));
-            setTimeout(function() {
-                websocket.send(JSON.stringify(start));
-            },1000);
+            websocket.send(JSON.stringify(start));
+            setInterval(function() {
 
+            },1000);
         };
         websocket.onclose = function() {
             onClosed();
