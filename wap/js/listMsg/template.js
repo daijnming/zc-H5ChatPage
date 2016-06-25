@@ -52,7 +52,7 @@ var rightMsg =
                             '{{=it.userMsg}}'+
                           '</p>'+
                       '</div>'+
-                      '<span class="msgStatus statusRight"></span>'+
+                      '<span id="userMsg{{=it.dateuid}}" class="js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                   '</div>'+
               '</div>';
 
@@ -68,7 +68,7 @@ var rightMsg =
                             '<div class="shadowLayer js-shadowLayer">'+
                             '</div>'+
                             '<div class="progressLayer">'+
-                              '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
+                              '<span id="userMsg{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
                         '<span class="msgStatus statusRight"></span>'+

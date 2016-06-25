@@ -3,6 +3,7 @@
 */
 var ListMsgHandler = function() {
     var global,
+        currentState,//当前聊天对象状态  1 智能机器人  2人工客服
         scrollHanlder,
         uploadImgToken,//锁定当前上传图片唯一标识
         isUploadImg=true,//是否为上传图片操作
@@ -18,8 +19,10 @@ var ListMsgHandler = function() {
     var Scroll = require('./scroll.js');
     var QQFace = require('../util/qqFace.js')();
 
-    var msgHandler = {},//包装消息相关方法
-        sysHander = {},//包装系统和配置方法
+    var msgHandler = {},//包装消息相关方法 对象方法
+        sysHander = {},//包装系统和配置方法 对象方法
+        msgSendIdHander=[],//填装发送消息的容器 用于与消息确认匹配
+        msgAcknowledgementHandler={},//消息确认容器
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
 
     // queue:用户排除中  offline:客服不在线  blacklist:被拉黑
@@ -36,12 +39,12 @@ var ListMsgHandler = function() {
         shadowLayer,//上传图片蒙板
         wrapBox;//页面
 
-    //消息状态
-    var MSGSTATUS={
-      MSG_LOADING:'发送中',
-      MSG_LSSUED:'已发送',
-      MSG_SERVED:'已送达',
-      MSG_FAIL:'发送失败'
+    //消息状态-类
+    var MSGSTATUSCLASS={
+      MSG_LOADING:'msg-loading',//正在发送
+      MSG_LSSUED:'msg-lssued',//已发送
+      MSG_SERVED:'msg-served',//已送达
+      MSG_FAIL:'msg-fail'//发送失败
     };
     //系统提示
     var sysPromptLan ={
@@ -89,7 +92,8 @@ var ListMsgHandler = function() {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace,
                             'userMsg' : QQFace.analysis(itemChild.msg.trim()),
-                            'date':itemChild.t
+                            'date':itemChild.t,
+                            'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
@@ -176,11 +180,16 @@ var ListMsgHandler = function() {
         switch (msgType) {
           case 0:
               var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
-              // console.log(msg);
+              //FIXME 消息确认 只在与客服聊天时添加
+              var msgClass = currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
+              if(currentState==2){
+                msgSendIdHander.push(data[0]['dateuid']);//暂存发送消息id
+              }
               comf = $.extend({
                   userLogo : global.userInfo.face,
                   userMsg : QQFace.analysis(msg),
-                  date:data[0]['date']
+                  date:data[0]['dateuid'],
+                  msgLoading:msgClass //消息确认
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
@@ -252,10 +261,12 @@ var ListMsgHandler = function() {
               }else{
                 //判断是机器人 | 客服
                 if(_type=='robot'){
+                  currentState=1;
                   _logo =global.apiConfig.robotLogo;
                   _name = global.apiConfig.robotName;
                   _msg =_data.answer;
                 }else if(_type=='human'){
+                  currentState=2;
                   _logo=_data.aface;
                   _name=_data.aname;
                   _msg=_data.content;
@@ -292,6 +303,7 @@ var ListMsgHandler = function() {
         scrollHanlder.scroll.refresh();//刷新
         scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
+      // console.log(currentState);
     };
     //包装系统和配置方法
     sysHander = {
@@ -335,7 +347,6 @@ var ListMsgHandler = function() {
       },
       //转接人工
       onSessionOpen:function(data){
-        console.log(data);
         bindMsg(2,data);
       },
       //系统提示消息处理
@@ -366,7 +377,7 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(data);
+        // console.log(data);
         if(uploadImgToken){
           //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
           var $div = $('#'+uploadImgToken);
@@ -380,6 +391,12 @@ var ListMsgHandler = function() {
       //接收回复
      onReceive : function(data){
       //  console.log(data);
+       //判断当前聊天状态
+       if(data.type==='robot'){
+         currentState=1;
+       }else if(data.type==='human'){
+         currentState=2;
+       }
         bindMsg(1,data);
       },
       //相关搜索答案点击事件
@@ -407,7 +424,7 @@ var ListMsgHandler = function() {
             oldH;
         if(isUploadImg){
             $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-            $progress = $('#progress'+uploadImgToken);
+            $progress = $('#userMsg'+uploadImgToken);
             oldH = $shadowLayer.height();
             isUploadImg=false;
         }
@@ -428,6 +445,10 @@ var ListMsgHandler = function() {
       },
       //加欢迎语
       getHello:function(data){
+        //判断智能机器人还是人工客服 1 robot 2 human
+        if(data && data.length){
+          currentState = data[data.length-1].content[0]['senderType'];
+        }
         showHistoryMsg(data,1);
       },
       //更新聊天记录
@@ -475,7 +496,7 @@ var ListMsgHandler = function() {
             case 6:
             msg = Comm.format(sysPromptLan.L0003,[data.aname],false);
               break;
-          }
+          }          
         }
         var tp = +new Date();
         var comf = $.extend({
@@ -485,8 +506,23 @@ var ListMsgHandler = function() {
         });
         return doT.template(msgTemplate.sysMsg)(comf);
       },
+      //消息确认方法
       msgReceived:function(data){
-        console.log(data);
+        // data={msgId:'123',result:'success'};
+        // msgSendIdHander = ['123','456'];
+        if(data&&data.msgId){
+            var isMsgId = msgSendIdHander.indexOf(data.msgId);
+            if(isMsgId>=0){
+              if(data.result=='success'){
+                msgSendIdHander.splice(isMsgId,1);//从数组中删除
+                $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('msg-served');
+              }else{
+                //发送失败
+                $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('msg-fail');
+              }
+            }
+        }
+        // console.log(data);
       }
     };
     /********************************************************************************/
