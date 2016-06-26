@@ -1,8 +1,13 @@
 var that = {};
 
 var state;
-that.getCurrentState = function(){
-	return 'human';
-}
+
+that.setCurrentState = function(s) {
+    state = s;
+};
+
+that.getCurrentState = function() {
+    return state;
+};
 
 module.exports = that;
