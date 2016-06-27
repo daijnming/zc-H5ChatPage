@@ -16,9 +16,9 @@ var AlertTemplate = '<div class="modeDialog js-modeDialog">'+
 							'{{=it.cancelText || "取消"}}'+
 							'</span>'+
 						'</div>'+
-						'<div class="modal-body">'+
-            			'</div>'+
 						'{{ } }}'+
+						'<div class="model-body">'+
+            			'</div>'+
 					 '</div>';
 template.AlertTemplate= AlertTemplate;
 template.layer=layer;

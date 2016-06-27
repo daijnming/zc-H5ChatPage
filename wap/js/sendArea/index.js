@@ -11,7 +11,7 @@ function TextArea(window) {
     //上传附件
     var uploadImg = require('./uploadImg.js')();
     //当前状态
-    var CurrentState = require('../../../common/mode/currentState.js');
+    //var CurrentState = require('../../../common/mode/currentState.js');
     //模拟placeholder
     var placeholder = require('./placeholder.js');
     //alert()
@@ -28,8 +28,7 @@ function TextArea(window) {
     var transferFlag=1;
     //传给聊天的url
     var statusHandler=function(){
-        console.log(CurrentState.getCurrentState());
-        if(CurrentState.getCurrentState()=="human"){
+        if(core.statechange()=="human"){
             //提示文本
             placeholder($textarea,"当前是机器人");
         }
