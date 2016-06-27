@@ -384,6 +384,9 @@ var ListMsgHandler = function() {
           $div.find('p img:first-child').remove();
           $div.find('p').html(data[0]['answer']);
           uploadImgToken='';//置空 一个流程完成
+        }else if(data[0].sendAgain){
+          //消息重发
+
         }else{
           bindMsg(0,data);
         }
@@ -508,17 +511,39 @@ var ListMsgHandler = function() {
       },
       //消息确认方法
       msgReceived:function(data){
+        console.log(data);
         // data={msgId:'123',result:'success'};
         // msgSendIdHander = ['123','456'];
         if(data&&data.msgId){
             var isMsgId = msgSendIdHander.indexOf(data.msgId);
             if(isMsgId>=0){
+              // var ran = Math.random();
+              // console.log(ran);
+              // if(ran>0.5){
+              //   data.result='success';
+              // }else{
+              //   data.result='fali';
+              // }
               if(data.result=='success'){
                 msgSendIdHander.splice(isMsgId,1);//从数组中删除
-                $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('msg-served');
+                $('#userMsg'+data.msgId).removeClass('msg-loading msg-fail').addClass('msg-served');
               }else{
                 //发送失败
                 $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('msg-fail');
+                //消息重发
+                $('#userMsg'+data.msgId).on('click',function(){
+                  fnEvent.trigger('sendArea.send',[{
+                     'answer' :$(this).prev().text().trim(),
+                     'uid' : global.apiInit.uid,
+                     'cid' : global.apiInit.cid,
+                     //时间戳
+                     'dateuid' : data.msgId,
+                     'date': +new Date(),
+                     'token':'',
+                     'sendAgain':true//是否重发
+                     }]);
+                });
+                // $('#userMsg'+data.msgId).off('click');
               }
             }
         }
