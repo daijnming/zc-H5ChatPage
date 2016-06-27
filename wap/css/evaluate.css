@@ -1,54 +1,4 @@
 /* 评价自定义弹窗样式 */
-.evaluate{
-	position:absolute;
-	width:90%;
-	text-align:center;
-	background:#fff;
-	z-index:20;
-}
-.evaluate .close{
-	overflow:hidden;
-}
-.evaluate .close_button{
-	width:95%;
-	text-align:right;
-	padding-right:5%;
-	font-size:1.4em;
-	display:inline-block;
-	color:#c0c5c8
-}
-
-.evaluate .h1{
-	width:100%;
-	text-align:center;
-	font-size:1em;
-	color:#333333;
-	margin-top:5px;
-
-}
-.evaluate .wether{
-	overflow:hidden;
-	width:60%;
-	margin:22px auto;
-}
-.evaluate .wether span:first-child{
-	margin-left:0;
-}
-.evaluate .wether span{
-	display:inline-block;
-	float:left;
-	height:44px;
-	line-height:44px;
-	border:1px solid #c5cecb;
-	border-radius:4px;
-	margin-left:10%;
-	width:40%;
-}
-.evaluate .wether span.active{
-	color:#fff;
-	border:1px solid #09aeb0;
-	background:#09aeb0;
-}
 .evaluate .h2{
 	clear:both;
 	float:left;
@@ -104,9 +54,33 @@
 	border-radius:4px;
 	background:#09aeb0;
 }
-#star{position:relative;width:100%;margin:auto;height:24px;}
-#star ul,#star span{float:left;display:inline;height:19px;line-height:19px;}
-#star ul{margin:0 10px;}
-#star li{float:left;width:24px;cursor:pointer;text-indent:-9999px;background:url(../images/star.png) no-repeat;}
-#star strong{color:#f60;padding-left:10px;}
-#star li.on{background-position:0 -28px;}
+#star{
+	position:relative;
+	width:100%;
+	margin:25px 0;
+}
+#star ul{
+	margin:auto;
+	overflow:hidden;
+	display:inline-block;
+}
+#star li{
+	float:left;
+	width:45px;
+	height:35px;
+	cursor:pointer;
+	text-indent:-9999px;
+	background-image:url(../images/icoGroup2X.png);
+	background-repeat:no-repeat;
+	background-size:356px 276px;
+	background-position: -115px -242px;
+}
+#star li.on{
+	background-position:-60px -242px;
+}
+/* iphone6 Plus */
+@media (min-device-width : 414px) and (max-device-width : 736px){
+    #star li{
+		background-image:url(../images/icoGroup3X.png);
+	} 
+}

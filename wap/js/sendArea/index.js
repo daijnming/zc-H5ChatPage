@@ -11,7 +11,7 @@ function TextArea(window) {
     //上传附件
     var uploadImg = require('./uploadImg.js')();
     //当前状态
-    var CurrentState = require('../../../common/mode/currentState.js');
+    //var CurrentState = require('../../../common/mode/currentState.js');
     //模拟placeholder
     var placeholder = require('./placeholder.js');
     //alert()
@@ -23,14 +23,17 @@ function TextArea(window) {
     var $node;
     var currentCid,
         currentUid,
-        answer;
+        answer,
+        currentStatus;
         //1为机器人，2为人工
     var transferFlag=1;
     //传给聊天的url
-    var statusHandler=function(){
-        console.log(CurrentState.getCurrentState());
-        if(CurrentState.getCurrentState()=="human"){
+    var statusHandler=function(data){
+        currentStatus=data;
+        if(currentStatus=="human"){
             //提示文本
+            placeholder($textarea,"当前是人工");
+        }else if(currentStatus == 'robot'){
             placeholder($textarea,"当前是机器人");
         }
     };
@@ -100,6 +103,7 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
+            console.log(currentStatus);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -107,7 +111,8 @@ function TextArea(window) {
                 'dateuid' : date,
                 'date': +new Date(),
                 'token':"",
-                'sendAgain':false
+                'sendAgain':false,
+                'currentStatus':currentStatus
 
             }]);
         };
@@ -310,7 +315,8 @@ function TextArea(window) {
          'dateuid' : date,
          'date': +new Date(),
          'token':data[0].token,
-         'sendAgain':false
+         'sendAgain':false,
+         'currentStatus':currentStatus
          }]);
     };
     var artificialHandler=function(){
@@ -336,6 +342,7 @@ function TextArea(window) {
             $keepSession.hide();
             $endSession.show();
             autoSizePhone();
+            break;
         }
     };
     //重新开始新会话
@@ -400,6 +407,7 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
+        
         //新会话
         $newMessage.on("click",newMessage);
         //评价弹窗
@@ -411,15 +419,20 @@ function TextArea(window) {
     var initPlugsin = function() {//插件
         //上传图片
         //uploadFun = uploadImg($uploadBtn,node,core,window);
-        statusHandler();
+        //statusHandler();
         autoSizePhone();
     };
     var init = function() {
-        parseDOM();
+        //parseDOM();
         initPlugsin();
         bindLitener();
 
     };
+    (function(){
+        parseDOM();
+        //改变当前状态
+        listener.on("core.statechange",statusHandler);
+    })();
     listener.on("core.onload", function(data) {
         global = data;
         currentUid=global[0].apiInit.uid;

@@ -107,6 +107,10 @@ var RobotFirst = function(global) {
             tempManager = socketFactory(ret,global);
             tempManager.start();
         }
+        if(manager) {
+            manager.destroy();
+        }
+        manager = new Robot(global);
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
@@ -134,6 +138,7 @@ var RobotFirst = function(global) {
         }
         manager = socketFactory(ret,global);
         manager.start();
+        setCurrentState.setCurrentState('human');
         if(init) {
             initHumanSession(global.apiConfig.adminHelloWord,ret);
         } else {
