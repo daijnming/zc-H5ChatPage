@@ -107,6 +107,10 @@ var RobotFirst = function(global) {
             tempManager = socketFactory(ret,global);
             tempManager.start();
         }
+        if(manager) {
+            manager.destroy();
+        }
+        manager = new Robot(global);
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
