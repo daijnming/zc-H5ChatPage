@@ -9,7 +9,6 @@ function Rolling(puid,pu,global) {
     var onSend = function(args,retry) {
         var retry = retry || 0;
         var data = args[0];
-        data.dateuid = data['date+uid'];
         $.ajax({
             'url' : '/chat/user/chatsend.action',
             'data' : {
