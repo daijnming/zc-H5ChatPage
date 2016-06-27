@@ -51,7 +51,7 @@ function evaluate(currentStatus) {
         var conf={};
         var _html = doT.template(template.humanOne_selfHtml)(conf);
         Alert.setInner(_html);
-        
+        //starEvaluateHandler();
         $aLi =$("#star li");
         var i = iScore = iStar = 0;
         for (i = 1; i <= $aLi.length; i++){
@@ -72,22 +72,37 @@ function evaluate(currentStatus) {
                     case 2://二星
                     case 3://三星
                     case 4://四星
-                        humanSetInnerStepTwoHtml();
+                        humanSetInnerStepTwoHtml(iStar);
+                        break;
                     case 5://五星
-                        alert("满意100%")
+                        Alert.hide();
+                        alert("感谢您的反馈");
+                        break;
                      
                 }
             }
         }
     };
-    var fnPoint=function(iArg){ 
+    var humanSetInnerStepTwoHtml=function(iStar){
+        Alert.show();
+        var conf={};
+        var _html = doT.template(template.humanTwo_selfHtml)(conf);
+        Alert.setInner(_html);
+        fnPoint(iStar);
+        $(".js-noques").addClass("active");
+        $(".js-isques").on("click",hideDialog)
+        $(".wether span").on("click",toggleActive);
+        $(".situation span").on("click",toggleActiveRepeat);
+    };
+    var starEvaluateHandler=function(iStar){
+       
+    };
+    var fnPoint=function(iArg){alert(iArg); 
         //分数赋值
-        iScore = iArg || iStar;
+        iScore = iArg// || iStar;
         for (i = 0; i < $aLi.length; i++) $aLi[i].className = i < iScore ? "on" : "";
     };
-    var humanSetInnerStepTwoHtml=function(){
 
-    };
     var modeAlert=function(){
         Alert.show();
     };

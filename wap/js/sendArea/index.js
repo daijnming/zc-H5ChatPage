@@ -340,6 +340,7 @@ function TextArea(window) {
             $keepSession.hide();
             $endSession.show();
             autoSizePhone();
+            break;
         }
     };
     //重新开始新会话
