@@ -23,13 +23,14 @@ function TextArea(window) {
     var $node;
     var currentCid,
         currentUid,
-        answer;
+        answer,
+        currentStatus;
         //1为机器人，2为人工
     var transferFlag=1;
     //传给聊天的url
     var statusHandler=function(data){
-        console.log(data);
-        if("human"=="human"){
+        currentStatus=data;
+        if(currentStatus=="human"){
             //提示文本
             placeholder($textarea,"当前是机器人");
         }
@@ -100,6 +101,7 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
+            console.log(currentStatus);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -107,7 +109,8 @@ function TextArea(window) {
                 'dateuid' : date,
                 'date': +new Date(),
                 'token':"",
-                'sendAgain':false
+                'sendAgain':false,
+                'currentStatus':currentStatus
 
             }]);
         };
@@ -310,7 +313,8 @@ function TextArea(window) {
          'dateuid' : date,
          'date': +new Date(),
          'token':data[0].token,
-         'sendAgain':false
+         'sendAgain':false,
+         'currentStatus':currentStatus
          }]);
     };
     var artificialHandler=function(){
