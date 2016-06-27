@@ -6,6 +6,7 @@ var HumanFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
+    var modeState = require('./currentState.js');
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
@@ -34,6 +35,7 @@ var HumanFirst = function(global) {
                 'senderName' : name
             }]
         };
+        modeState.setCurrentState("human");
         value.push(obj);
         setTimeout(function() {
             listener.trigger("core.initsession",value);
@@ -61,6 +63,7 @@ var HumanFirst = function(global) {
             manager.destroy();
         }
         manager = new Robot(global);
+        modeState.setCurrentState("robot");
         setTimeout(function() {
             listener.trigger("core.initsession",value);
         },0);
@@ -113,6 +116,7 @@ var HumanFirst = function(global) {
         tempManager = socketFactory(ret,global);
         tempManager.start();
         manager = new Robot(global);
+        modeState.setCurrentState("robot");
     };
 
     var onReceive = function(data) {
@@ -149,6 +153,7 @@ var HumanFirst = function(global) {
             manager.destroy();
         }
         manager = new Robot(global);
+        modeState.setCurrentState("robot");
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
             'action' : 'show'
@@ -175,6 +180,7 @@ var HumanFirst = function(global) {
 
     var blackListCallback = function(ret,init) {
         ret.content = '暂时无法转接人工客服';
+        modeState.setCurrentState("robot");
         listener.trigger("core.system", {
             'type' : 'system',
             'status' : 'blacklist',
@@ -230,6 +236,7 @@ var HumanFirst = function(global) {
                             manager = new Rolling(ret.puid);
                         }
                         manager.start();
+                        modeState.setCurrentState("human");
                         listener.trigger("core.buttonchange", {
                             'type' : 'transfer',
                             'action' : 'hide'
