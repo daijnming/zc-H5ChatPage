@@ -65,6 +65,7 @@ function HumanOnly(global) {
         };
         value.push(obj);
         manager = new Robot(global);
+        modeState.setCurrentState("robot");
         setTimeout(function() {
             listener.trigger("core.initsession",value);
             listener.trigger("core.sessionclose",-1);
@@ -99,6 +100,7 @@ function HumanOnly(global) {
             manager.destroy();
         }
         manager = new Robot(global);
+        modeState.setCurrentState("robot");
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
             'action' : 'show'
@@ -177,6 +179,7 @@ function HumanOnly(global) {
                             manager.destroy();
                         }
                         manager = socketFactory(ret,global);
+                        modeState.setCurrentState("human");
                         manager.start();
                         listener.trigger("core.buttonchange", {
                             'type' : 'transfer',

@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 .chatPanelList{
-  padding: 0 20px 0 20px;
+  padding: 0 10px 0 10px;
   overflow-x: hidden;
 }
 .chatMsgList {
@@ -152,7 +152,13 @@ p,ul,li{
 }
 .msgStatus.statusRight.msg-fail{
   display: inline-block;
-  background: red;
+  /*background: red;*/
+  background: url(../images/icoGroup2X.png) no-repeat;
+  margin-top: -7px;
+  width:48px;
+  height: 54px;
+  /*transform: scale(0.5);*/
+  background-position: 0 -392px;
 
 }
 .msgStatus.statusLeft{

@@ -52,7 +52,7 @@ var rightMsg =
                             '{{=it.userMsg}}'+
                           '</p>'+
                       '</div>'+
-                      '<span id="userMsg{{=it.dateuid}}" class="js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
+                      '<span id="userMsg{{=it.date}}" class="js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                   '</div>'+
               '</div>';
 

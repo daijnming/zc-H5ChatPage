@@ -79,9 +79,11 @@ var RobotFirst = function(global) {
         //首先发送机器人欢迎语
         if(status == 0) {
             manager = new Robot(global);
+            modeState.setCurrentState("robot");
             getWelcome();
         } else if(status == -1) {
             manager = new Robot(global);
+            modeState.setCurrentState("robot");
             initSession(global).then(initRobotSession);
         }
     };
