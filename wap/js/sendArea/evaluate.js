@@ -11,6 +11,7 @@ function evaluate(currentStatus) {
         dialog;
     var parseDOM = function() {
         $evaluate=$(".js-evaluate");
+       
     };
     //不可多选
     var toggleActive=function(){
@@ -31,7 +32,7 @@ function evaluate(currentStatus) {
     var sobotSetInnerHtml = function() {
         Alert.hide();
         var conf={};
-        var _html = doT.template(template._selfHtml)(conf);
+        var _html = doT.template(template.sobot_selfHtml)(conf);
         dialog.setInner(_html);
         dialog.show();
         position();
@@ -40,8 +41,36 @@ function evaluate(currentStatus) {
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
     };
-    var humanSetInnerHtml=function(){
-        alert("Not developed");
+    var humanSetInnerStepOneHtml=function(){
+        var conf={};
+        var _html = doT.template(template.humanOne_selfHtml)(conf);
+        dialog.setInner(_html);
+        dialog.show();
+        $aLi =$("#star li");
+        var i = iScore = iStar = 0;
+        for (i = 1; i <= $aLi.length; i++){
+            $aLi[i - 1].index = i;
+            //鼠标移过显示分数
+            $aLi[i - 1].onmouseover = function (){
+                fnPoint(this.index);
+            };
+            //鼠标离开后恢复上次评分
+            $aLi[i - 1].onmouseout = function (){
+                fnPoint();
+            };
+            //点击后进行评分处理
+            $aLi[i - 1].onclick = function (){
+                iStar = this.index;
+            }
+        }
+    };
+    var fnPoint=function(iArg){ 
+        //分数赋值
+        iScore = iArg || iStar;
+        for (i = 0; i < $aLi.length; i++) $aLi[i].className = i < iScore ? "on" : "";
+    };
+    var humanSetInnerStepTwoHtml=function(){
+
     };
     var modeAlert=function(){
         Alert.show();
@@ -63,17 +92,7 @@ function evaluate(currentStatus) {
         modeAlert();
     }
     var humanInitPlugins = function() {
-        alert("Not developed");
-        return;
-        Alert = new Alert({
-            'title' : '人工客服评价',
-            'footer':false,
-            'OK' : function() {
-                
-            }
-        });
         dialog = new Dialog();
-        modeAlert();
     }
     var sobotbindListener = function() {
         //机器人评价
@@ -83,9 +102,8 @@ function evaluate(currentStatus) {
     };
     var humanbindListener = function() {
         //人工评价
-        $(".js-noques").on("click",humanSetInnerHtml);
+        $(".js-noques").on("click",humanSetInnerStepTwoHtml);
         $(".js-isques").on("click",hideDialog)
-       
     };
     var init = function() {
         parseDOM();
@@ -96,6 +114,7 @@ function evaluate(currentStatus) {
         //人工评价
         }else{
             humanInitPlugins();
+            humanSetInnerStepOneHtml();
             humanbindListener();
         }
         

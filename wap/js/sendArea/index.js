@@ -106,7 +106,8 @@ function TextArea(window) {
                 'cid' : currentCid,
                 'dateuid' : date,
                 'date': +new Date(),
-                'token':""
+                'token':"",
+                'sendAgain':false
 
             }]);
         };
@@ -217,7 +218,6 @@ function TextArea(window) {
             $chatArea.removeClass("showChatArea").addClass("hideChatArea");/*css({
                 "bottom" : _bottom
             });*/
-
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==1){
@@ -309,7 +309,8 @@ function TextArea(window) {
          //时间戳
          'dateuid' : date,
          'date': +new Date(),
-         'token':data[0].token
+         'token':data[0].token,
+         'sendAgain':false
          }]);
     };
     var artificialHandler=function(){
@@ -345,6 +346,9 @@ function TextArea(window) {
         //评价
         evaluate(transferFlag);
     };
+    /*var sendAreablurHandler=function(){
+        $textarea.blur();
+    };*/
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
@@ -389,6 +393,7 @@ function TextArea(window) {
         //发送图片
         listener.on("sendArea.uploadImgUrl",onImageUpload);
         $(window).on("resize",autoSizePhone);
+        //$(window).on("click",sendAreablurHandler);
         //转人工
         $artificial.on("click",artificialHandler);
         //是否隐藏按钮
@@ -397,7 +402,7 @@ function TextArea(window) {
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
         $newMessage.on("click",newMessage);
-        //弹窗
+        //评价弹窗
         $satisfaction.on("click",evaluateHandler)
     };
     var onEmotionClickHandler = function() {

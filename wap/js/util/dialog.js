@@ -18,9 +18,10 @@ function Dialog(spec) {
         $layer = $(template.layer);
         var _html = doT.template(template.AlertTemplate)(conf);
         $outer = $(_html);
+        $(".js-layer").html(_html);
     };
     var setInner = function(elm) {
-        $layer.html($(elm));
+        var _html=$(".model_body").html($(elm));
     };
     var hide = function(e) {
         $layer.animate({
@@ -49,13 +50,12 @@ function Dialog(spec) {
         var left,top;
         left=($(window).width()-($(window).width()*0.9))/2+"px";
         top=($(window).height()-$(".js-modeDialog").height())/2+"px";
-        console.log($(".js-modeDialog").height());
         $(".js-modeDialog").css({"left":left,"top":top});
         //$(".js-modeDialog").css("top",top);
     };
     var show = function() {
-        
         $(document.body).append($layer);
+
         $(".js-modeDialog").animate({
             'opacity' : 1
         },300);

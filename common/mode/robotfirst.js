@@ -98,7 +98,7 @@ var RobotFirst = function(global) {
                 'data' : ret
             });
         }
-        stateManager('robot');
+        //stateManager('robot');
     };
 
     var queueWait = function(ret,init) {
@@ -225,7 +225,7 @@ var RobotFirst = function(global) {
             listener.trigger("core.initsession",value);
         },0);
         manager = new Robot(global);
-        stateManager('robot');
+        //stateManager('robot');
     };
     var onReceive = function(data) {
         var list = data.list || [];
@@ -273,7 +273,7 @@ var RobotFirst = function(global) {
         //首先发送机器人欢迎语
         if(status == 0) {
             manager = new Robot(global);
-            stateManager('robot');
+            //stateManager('robot');
             getWelcome();
         } else {
             if(status == 1 || status == -2) {
