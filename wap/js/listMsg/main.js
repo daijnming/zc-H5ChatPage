@@ -496,7 +496,7 @@ var ListMsgHandler = function() {
             case 6:
             msg = Comm.format(sysPromptLan.L0003,[data.aname],false);
               break;
-          }          
+          }
         }
         var tp = +new Date();
         var comf = $.extend({
