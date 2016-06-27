@@ -114,6 +114,11 @@ var ListMsgHandler = function() {
                       var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
                       if(Number(_m)>1){
                         //大于一分钟  0 当天  1上一天 2更久历史
+                        if(_t<=1){
+                            type = 0;
+                        }else{
+                            type = _t>1&&_t<=2?1:2;
+                        }
                         var type = _t<=1?0:_t>1&&_t<=2?1:2;
                         var retMsg = sysHander.getTimeLine(type,itemChild.ts);
                         msgHtml += retMsg?retMsg:'';
