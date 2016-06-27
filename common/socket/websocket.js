@@ -28,6 +28,7 @@ function ZcWebSocket(puid,url,global) {
             item = data[0];
         }
         item.type = 103;
+        console.log(data);
         item.msgId = item['date+uid'];
         item.sendTime = item.date;
         item.content = item.answer;
