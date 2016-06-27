@@ -55,6 +55,14 @@ function evaluate(currentStatus) {
         var iStar = 0;
         for (i = 1; i <= $aLi.length; i++){
             $aLi[i - 1].index = i;
+            //鼠标移过显示分数
+            $aLi[i - 1].onmouseover = function (){
+                fnPoint(this.index);
+            };
+            //鼠标离开后恢复上次评分
+            $aLi[i - 1].onmouseout = function (){
+                fnPoint(this.index);
+            };
             //点击后进行评分处理
             $aLi[i - 1].onclick = function (){
                 iStar = this.index;
@@ -82,6 +90,7 @@ function evaluate(currentStatus) {
         $aLi =$("#star li");
         //var iStar = 0;
         for (i = 1; i <= $aLi.length; i++){
+            //继承星星
             fnPoint(iStar);
             $aLi[i - 1].index = i;
             //鼠标移过显示分数
