@@ -51,19 +51,10 @@ function evaluate(currentStatus) {
         var conf={};
         var _html = doT.template(template.humanOne_selfHtml)(conf);
         Alert.setInner(_html);
-        //starEvaluateHandler();
         $aLi =$("#star li");
-        var i = iScore = iStar = 0;
+        var iStar = 0;
         for (i = 1; i <= $aLi.length; i++){
             $aLi[i - 1].index = i;
-            //鼠标移过显示分数
-            $aLi[i - 1].onmouseover = function (){
-                fnPoint(this.index);
-            };
-            //鼠标离开后恢复上次评分
-            $aLi[i - 1].onmouseout = function (){
-                fnPoint();
-            };
             //点击后进行评分处理
             $aLi[i - 1].onclick = function (){
                 iStar = this.index;
@@ -72,7 +63,7 @@ function evaluate(currentStatus) {
                     case 2://二星
                     case 3://三星
                     case 4://四星
-                        humanSetInnerStepTwoHtml(iStar);
+                        humanSetInnerStepTwoHtml(iStar)
                         break;
                     case 5://五星
                         Alert.hide();
@@ -88,7 +79,30 @@ function evaluate(currentStatus) {
         var conf={};
         var _html = doT.template(template.humanTwo_selfHtml)(conf);
         Alert.setInner(_html);
-        fnPoint(iStar);
+        $aLi =$("#star li");
+        //var iStar = 0;
+        for (i = 1; i <= $aLi.length; i++){
+            fnPoint(iStar);
+            $aLi[i - 1].index = i;
+            //鼠标移过显示分数
+            $aLi[i - 1].onmouseover = function (){
+                fnPoint(this.index);
+            };
+            //鼠标离开后恢复上次评分
+            $aLi[i - 1].onmouseout = function (){
+                fnPoint(this.index);
+            };
+            //点击后进行评分处理
+            $aLi[i - 1].onclick = function (){
+                iStar = this.index;
+                switch(iStar) {
+                    case 5://五星
+                        Alert.hide();
+                        alert("感谢您的反馈");
+                        break;
+                }
+            }
+        }
         $(".js-noques").addClass("active");
         $(".js-isques").on("click",hideDialog)
         $(".wether span").on("click",toggleActive);
@@ -96,11 +110,10 @@ function evaluate(currentStatus) {
     };
     var starEvaluateHandler=function(iStar){
        
-    };
-    var fnPoint=function(iArg){alert(iArg); 
+    }; 
+    var fnPoint=function(iArg){//alert(iArg); 
         //分数赋值
-        iScore = iArg// || iStar;
-        for (i = 0; i < $aLi.length; i++) $aLi[i].className = i < iScore ? "on" : "";
+        for (var i = 0; i < $aLi.length; i++) $aLi[i].className = i < iArg ? "on" : "";
     };
 
     var modeAlert=function(){

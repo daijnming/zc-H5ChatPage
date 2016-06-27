@@ -32,6 +32,8 @@ function TextArea(window) {
         currentStatus=data;
         if(currentStatus=="human"){
             //提示文本
+            placeholder($textarea,"当前是人工");
+        }else if(currentStatus == 'robot'){
             placeholder($textarea,"当前是机器人");
         }
     };
@@ -405,8 +407,7 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
-        //改变状态
-        listener.on("core.statechange",statusHandler);
+        
         //新会话
         $newMessage.on("click",newMessage);
         //评价弹窗
@@ -418,15 +419,20 @@ function TextArea(window) {
     var initPlugsin = function() {//插件
         //上传图片
         //uploadFun = uploadImg($uploadBtn,node,core,window);
-        statusHandler();
+        //statusHandler();
         autoSizePhone();
     };
     var init = function() {
-        parseDOM();
+        //parseDOM();
         initPlugsin();
         bindLitener();
 
     };
+    (function(){
+        parseDOM();
+        //改变当前状态
+        listener.on("core.statechange",statusHandler);
+    })();
     listener.on("core.onload", function(data) {
         global = data;
         currentUid=global[0].apiInit.uid;
