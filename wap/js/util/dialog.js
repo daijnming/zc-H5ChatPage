@@ -3,8 +3,7 @@
  */
 function Dialog(spec) {
     var template = require('./template.js');
-    var $layer,
-        $outer;
+    var $layer;
     var _self = this;
     var conf = $.extend({
         "okText" : "确定",
@@ -17,11 +16,11 @@ function Dialog(spec) {
     var initDOM = function() {
         $layer = $(template.layer);
         var _html = doT.template(template.AlertTemplate)(conf);
-        $outer = $(_html);
-        $(".js-layer").html(_html);
+        $layer.html(_html);
     };
     var setInner = function(elm) {
-        var _html=$(".model_body").html($(elm));
+        $(".model-body").html(elm);
+        position();
     };
     var hide = function(e) {
         $layer.animate({
@@ -55,18 +54,15 @@ function Dialog(spec) {
     };
     var show = function() {
         $(document.body).append($layer);
-
         $(".js-modeDialog").animate({
             'opacity' : 1
         },300);
         bindListener();
         position();
     };
-
     var init = function() {
         initDOM();
     };
-
     init();
 
     //this.getOuter = getOuter;
