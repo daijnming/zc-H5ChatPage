@@ -134,7 +134,6 @@ var RobotFirst = function(global) {
         }
         manager = socketFactory(ret,global);
         manager.start();
-        stateManager("human");
         if(init) {
             initHumanSession(global.apiConfig.adminHelloWord,ret);
         } else {
