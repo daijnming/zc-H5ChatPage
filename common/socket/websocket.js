@@ -53,7 +53,12 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var commonMessageHandler = function(data) {
-        console.log(data);
+        listener.trigger("core.onreceive", {
+            'type' : socketType,
+            'list' : [data]
+        });
+    };
+    var systemMessageHandler = function(data) {
         listener.trigger("core.onreceive", {
             'type' : socketType,
             'list' : [data]
@@ -66,6 +71,8 @@ function ZcWebSocket(puid,url,global) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
+        } else if(data.type == 204) {
+            systemMessageHandler(data);
         }
     };
 
