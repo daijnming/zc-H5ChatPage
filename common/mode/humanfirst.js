@@ -96,7 +96,7 @@ var HumanFirst = function(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = str;
+                ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'queue',
@@ -104,7 +104,7 @@ var HumanFirst = function(global) {
                 });
             },1);
         } else {
-            ret.content = str;
+            ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'queue',

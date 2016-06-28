@@ -78,7 +78,7 @@ function HumanOnly(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = str;
+                ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'queue',
@@ -87,7 +87,7 @@ function HumanOnly(global) {
                 listener.trigger("core.sessionclose",-1);
             },1);
         } else {
-            ret.content = str;
+            ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'queue',

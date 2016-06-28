@@ -101,7 +101,7 @@ var RobotFirst = function(global) {
     };
 
     var queueWait = function(ret,init) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待 ";
         if(!tempManager) {
             tempManager = socketFactory(ret,global);
             tempManager.start();
@@ -113,7 +113,7 @@ var RobotFirst = function(global) {
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
-                ret.content = str + leaveMessageStr;
+                ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : "queue",
@@ -121,7 +121,7 @@ var RobotFirst = function(global) {
                 });
             },1);
         } else {
-            ret.content = str + leaveMessageStr;
+            ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : "queue",
