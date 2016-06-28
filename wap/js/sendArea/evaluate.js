@@ -54,6 +54,7 @@ function evaluate(currentStatus) {
         $aLi =$("#star li");
         var iStar = 0;
         for (i = 1; i <= $aLi.length; i++){
+
             $aLi[i - 1].index = i;
             //鼠标移过显示分数
             $aLi[i - 1].onmouseover = function (){
@@ -122,7 +123,9 @@ function evaluate(currentStatus) {
     }; 
     var fnPoint=function(iArg){//alert(iArg); 
         //分数赋值
-        for (var i = 0; i < $aLi.length; i++) $aLi[i].className = i < iArg ? "on" : "";
+        for (var i = 0; i < $aLi.length; i++){
+          $aLi[i].className = i < iArg ? "on" : "";
+        }
     };
 
     var modeAlert=function(){

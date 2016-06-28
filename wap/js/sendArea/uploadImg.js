@@ -33,11 +33,13 @@ function uploadImg() {
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e){
-                token= currentUid + +new Date();
+                date=+new Date();
+                token= currentUid + date;
                 //this.result 本地图片的数据流
                 lrz(file, {quality: 0.7},function (results) {
                    listener.trigger("sendArea.createUploadImg",[{
                     'result' : results.base64,
+                    'date':date,
                     'token':token
                     }])
                 });
