@@ -13,6 +13,7 @@
       errorBar,//错误提示
       successLogo,//提交成功
       successLayer,//留言成功弹出层
+      closeErrorBar,//关闭提示框
       submit;//提交按钮
 
   //FIXME  普通用户来源：0PC,1微信,2APP,3微博,4WAP,5融云,6呼叫中心
@@ -83,16 +84,16 @@
   var onSubmit= function(){
     var emailRegex = /^([a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*(?:@(?!-))(?:(?:[a-zA-Z0-9]*)(?:[a-zA-Z0-9](?!-))(?:\.(?!-)))+[a-zA-Z0-9]{2,})$/;
     if(!$email.val()){
-      $(errorBar).addClass('show').text('请填写邮箱！');
+      $(errorBar).addClass('show').find('.js-errorLine').text('请填写邮箱！');
     }else if(!$emailMsg.val()){
-      $(errorBar).addClass('show').text('请填写问题描述！');
+      $(errorBar).addClass('show').find('.js-errorLine').text('请填写问题描述！');
     }else {
       if(emailRegex.test($email.val())){
         $(submit).off('click');
         $(errorBar).removeClass('show');
         onSave($email.val(),$emailMsg.val());//提交后台保存处理
       }else{
-        $(errorBar).addClass('show').text('邮箱格式错误！');
+        $(errorBar).addClass('show').find('.js-errorLine').text('邮箱格式错误！');
       }
     }
   };
@@ -105,8 +106,12 @@
     }else{
       $(topBack).removeClass('show');
       $(emailHelper).css('margin-top','20px');
-      $(errorBar).css('top','20px');
+      $(errorBar).css('top','0');
     }
+  };
+  //关闭提示框
+  var onCloseErrorBar = function(){
+    $(errorBar).removeClass('show');
   };
   var parseDom=function(){
     topBack = $('.js-header-back');
@@ -118,12 +123,14 @@
     errorBar = $('.js-showLayer');
     successLogo = $('.js-success');
     successLayer = $('.js-submitLayer');//留言成功弹出层
+    closeErrorBar = $('.js-errorIcon');
   };
   var initPlugsin = function(){
     topBackHandler();
   };
   var bindListener = function(){
     $(submit).on('click',onSubmit);
+    $(closeErrorBar).on('click',onCloseErrorBar);
   };
   //初始化留言页面
   var initConfig = function(){
@@ -144,13 +151,17 @@
             source : uSource
         },
         success : (function(data) {
+          console.log(data);
           document.title= data.robotName;//title 名称 使用客服昵称
           $(topTitle).text(data.robotName);
           $(topBack).css('background',data.color);//顶部返回栏
           $(submit).css('background',data.color);//提交按钮
           $(successLogo).css('background-color',data.color);//留言成功
-          //var msg = '<div>'+data.msgTxt+'</div>';
-          //$(emailHelper).find('span').html(msg);
+          var msg = '<div>'+data.msgTxt+'</div>';
+          $(emailHelper).find('.js-helper').html(msg);
+          //内容提示
+          var msgTmp='<div>'+data.msgTmp+'</div>';
+           $($emailMsg).attr('placeholder',$(msgTmp).text());
         })
     });
   };

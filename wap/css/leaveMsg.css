@@ -131,6 +131,7 @@ footer button{
   color:#fff;
   border: 0;
   outline: none;
+  background: transparent;
 }
 .showLayer{
   position: absolute;
@@ -142,6 +143,9 @@ footer button{
   text-align: center;
   background-color: rgb(255,205,56);
   display: none;
+}
+.showLayer span.errorLine{
+  margin-left: 30px;
 }
 .showLayer.show{
   display: block;
@@ -181,4 +185,35 @@ footer button{
   border-radius: 15px;
   line-height: 30px;
   vertical-align: middle;
+}
+.showLayer span.errorIcon{
+  width:20px;
+  height: 20px;
+  float: right;
+  margin-right: 10px;
+  margin-top: 8px;
+}
+.showLayer span.errorIcon::before{
+  content: '';
+  position: absolute;
+  /*height: 2px;*/
+  width:15px;
+  top:18px;
+  right:13px;
+  background: #fff;
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+  border:1px solid #999;
+}
+.showLayer span.errorIcon::after{
+  content: '';
+  position: absolute;
+  /*height: 2px;*/
+  width:15px;
+  top:18px;
+  right:13px;
+  background: #fff;
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+  border:1px solid #999;
 }
