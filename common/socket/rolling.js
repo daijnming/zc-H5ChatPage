@@ -62,6 +62,7 @@ function Rolling(puid,pu,global) {
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
                         arr.push(item);
+                       
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
                             if(item.status == 2) {
@@ -74,6 +75,7 @@ function Rolling(puid,pu,global) {
                                 });
                             }
                         }
+
                     }
                     listener.trigger("core.onreceive", {
                         'type' : socketType,

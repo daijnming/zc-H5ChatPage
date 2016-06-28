@@ -16,7 +16,6 @@ function ZcWebSocket(puid,url,global) {
         var now = +new Date();
         for(var el in retryList) {
             var item = retryList[el];
-            console.log(el,item);
             if(now - item.sendTime >= TIMEOUT_DURATION) {
                 delete retryList[el];
                 listener.trigger("core.msgresult", {
@@ -60,6 +59,18 @@ function ZcWebSocket(puid,url,global) {
         });
     };
     var systemMessageHandler = function(data) {
+        if(data.type == 204) {
+            listener.trigger("core.sessionclose",data.status);
+            if(data.status == 2) {
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : 'kickout',
+                    'data' : {
+                        'content' : "您与客服" + data.aname + "的会话已经关闭"
+                    }
+                });
+            }
+        }
         listener.trigger("core.onreceive", {
             'type' : socketType,
             'list' : [data]
@@ -83,7 +94,7 @@ function ZcWebSocket(puid,url,global) {
         var data = JSON.parse(evt.data);
         //messageConfirm(data);
         if(data.type == 301) {
-            //ackConfirmMessageHandler(data);
+            ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
         } else {
