@@ -65,13 +65,27 @@ function ZcWebSocket(puid,url,global) {
         });
     };
 
+    var messageConfirm = function(data) {
+        $.ajax({
+            'url' : '/chat/user/msg/ack.action',
+            'dataType' : 'json',
+            'data' : {
+                'content' : JSON.stringify(arr),
+                'tnk' : +new Date()
+            },
+            'type' : 'POST'
+        }).success(function(ret) {
+        }).fail(function(ret) {
+        });
+    };
     var onMessage = function(evt) {
         var data = JSON.parse(evt.data);
+        //messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
-        } else if(data.type == 204) {
+        } else {
             systemMessageHandler(data);
         }
     };
