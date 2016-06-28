@@ -343,3 +343,7 @@ p,ul,li{
     margin:1%;
 }
 /******theme end ******/
+/****统一超链接颜色***/
+.leftMsg .msgOuter a,.sysMsgText a{
+  color:rgb(25,161,227) !important;
+}
