@@ -11,7 +11,7 @@ li, ul, div, p, h1 {
 .faceGroup {
     overflow:hidden;
     width: 100%;
-    height: 200px;
+    height: 200px; 
     padding: 6px;
     background: #fff;
 }
@@ -132,6 +132,16 @@ background-position:2px 2px;
 .faceIco27{
     background-position:-778px 2px;
 }
+@media (min-device-width : 320px){
+    
+}
+@media (min-device-width : 360px){
+   .faceIco{
+        margin:3% 3.5%;
+        width: 25px;
+        height: 25px;
+    }
+}
 /* iphone6 */
 @media (min-device-width : 375px){
     .faceIco{
@@ -141,11 +151,42 @@ background-position:2px 2px;
     }
 }
 /* iphone6 Plus */
-@media (min-device-width : 411px) and (max-device-width : 736px){
+@media (min-device-width : 411px){
     .faceIco{
         margin:3% 3.9%;
         width: 25px;
         height: 25px;
         background-image:url(../images/qqface3X.png);
     }
+}
+ 
+@media (min-device-width : 480px){
+    
+}
+/*  */
+@media (min-device-width : 600px){
+    .faceIco{
+        margin:3% 4.9%;
+        width: 25px;
+        height: 25px;
+    }
+    .faceGroup .backDelete{
+        margin:3% 4.9%;
+    }
+}
+/*  */
+@media (min-device-width : 640px){
+    
+}
+/* iphone6puls橫屏 */
+@media (min-device-width : 736px){
+    
+}
+/*  */
+@media (min-device-width : 1280px){
+    
+}
+/*  */
+@media (min-device-width : 1600px){
+    
 }

@@ -232,6 +232,17 @@ li {
 .endSession .span3 i{
      background-position: -226px -7px;
 }
+
+@media (min-device-width : 320px){
+    .endSession span i{
+         width:51%;
+    }
+
+@media (min-device-width : 360px){
+    .endSession span i{
+         width:44%;
+    }
+}
 /* iphone6 */
 @media (min-device-width : 375px){
     .endSession span i{
@@ -239,7 +250,7 @@ li {
     }
 }
 /* iphone6 Plus */
-@media (min-device-width : 414px) and (max-device-width : 736px){
+@media (min-device-width : 414px){
     .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
@@ -248,9 +259,33 @@ li {
         width:40%;
     }
 }
+@media (min-device-width : 480px){
+    .endSession span i{
+         width:36%;
+    }
+}
+
+/*  */
+@media (min-device-width : 640px){
+    .endSession span i{
+        width:24%;
+    }
+}
 /* iphone6puls橫屏 */
 @media (min-device-width : 736px){
     .endSession span i{
         width:23%;
+    }
+}
+/*  */
+@media (min-device-width : 1280px){
+    .endSession span i{
+        width:13%;
+    }
+}
+/*  */
+@media (min-device-width : 1600px){
+    .endSession span i{
+        width:11%;
     }
 }
