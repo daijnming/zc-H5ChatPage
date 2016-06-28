@@ -10,6 +10,7 @@ var ListMsgHandler = function() {
         startScrollY,//原始开始滚动高度  暂未使用
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
 
+
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
     var msgTemplate = require('./template.js');
