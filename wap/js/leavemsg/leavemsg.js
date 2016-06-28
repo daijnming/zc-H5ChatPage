@@ -23,7 +23,7 @@
       companyId,
       back;//顶部返回栏
 
-  var host = 'http://test.sobot.com';//本地&测试
+  var host = '';//本地&测试
   // var host = 'http://www.sobot.com';//正式环境
 
   //接口
