@@ -31,6 +31,9 @@ function ZcWebSocket(puid,url,global) {
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
+        if(item.currentStatus !== 'human') {
+            return;
+        }
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;
