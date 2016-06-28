@@ -265,11 +265,8 @@ var initConfig = function() {
             arr.push(el + "=" + value);
             count++;
         }
-        var str = '您可以<a href="' + arr.join("") + '" >留言</a>"';
-        var div = $("<div></div>");
-        div.html(str);
-        console.log(str);
-        return div.text();
+        var str = '您可以<a class="leave-msg-btn" href="' + arr.join("") + '" >留言</a>';
+        return str;
     };
     //promise方法
     var promiseHandler = function() {
@@ -314,7 +311,7 @@ var initConfig = function() {
                     email : That.cacheInfo.userInfo.email,
                     uname : That.cacheInfo.userInfo.uname,
                     visitTitle : That.cacheInfo.userInfo.visitTitle,
-                    visitUrl : That.cacheInfo.userInfo.visitUrl,
+                    visitUsrl : That.cacheInfo.userInfo.visitUrl,
                     face : That.cacheInfo.userInfo.face
                 },
                 success : function(res) {

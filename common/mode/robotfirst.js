@@ -47,7 +47,6 @@ var RobotFirst = function(global) {
         });
         return promise;
     };
-
     var initHumanSession = function(word,ret) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
