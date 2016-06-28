@@ -1,6 +1,6 @@
 /*
 * @author denzel
-*/
+*/ 
 var ListMsgHandler = function() {
     var global,
         currentState,//当前聊天对象状态  1 智能机器人  2人工客服
@@ -10,6 +10,7 @@ var ListMsgHandler = function() {
         startScrollY,//原始开始滚动高度  暂未使用
         inputTimer,//正在输入处理
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
+
 
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
