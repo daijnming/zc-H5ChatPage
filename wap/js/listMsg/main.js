@@ -309,6 +309,7 @@ var ListMsgHandler = function() {
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+          $(window).scrollTop($("#js-textarea").offset().top);  
         },300);
       },
       //转接人工
