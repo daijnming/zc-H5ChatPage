@@ -511,13 +511,13 @@ var ListMsgHandler = function() {
         if(data&&data.msgId){
             var isMsgId = msgSendIdHander.indexOf(data.msgId);
             if(isMsgId>=0){
-              var ran = Math.random();
-              console.log(ran);
-              if(ran>0.5){
-                data.result='success';
-              }else{
-                data.result='fali';
-              }
+              // var ran = Math.random();
+              // console.log(ran);
+              // if(ran>0.5){
+              //   data.result='success';
+              // }else{
+              //   data.result='fali';
+              // }
               if(data.result=='success'){
                 msgSendIdHander.splice(isMsgId,1);//从数组中删除
                 $('#userMsg'+data.msgId).removeClass('msg-loading msg-fail').addClass('msg-served');
