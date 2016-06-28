@@ -177,6 +177,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
+      console.log(data);
       var msgHtml='',
           comf;
       if(data){
@@ -191,7 +192,8 @@ var ListMsgHandler = function() {
               comf = $.extend({
                   userLogo : global.userInfo.face,
                   userMsg : QQFace.analysis(msg),
-                  date:data[0]['dateuid'],
+                  date:data[0]['date'],
+                  msgId:data[0]['dateuid'],
                   msgLoading:msgClass //消息确认
               });
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
@@ -257,12 +259,13 @@ var ListMsgHandler = function() {
             break;
           case 4:
             uploadImgToken = data[0]['token'];
+            msgSendIdHander.push(uploadImgToken);//暂存发送消息id
             comf = $.extend({
                userLogo : global.userInfo.face,
                uploadImg : data[0]['result'],
                progress:0,
                token:data[0]['token'],
-               date:+new Date()
+               date:data[0]['date']
            });
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
@@ -345,10 +348,10 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        // console.log(data);
+        console.log(data);
         if(uploadImgToken){
           //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-          var $div = $('#'+uploadImgToken);
+          var $div = $('#img'+uploadImgToken);
           $div.find('p img:first-child').remove();
           $div.find('p').html(data[0]['answer']);
           uploadImgToken='';//置空 一个流程完成
@@ -394,8 +397,8 @@ var ListMsgHandler = function() {
             $progress,
             oldH;
         if(isUploadImg){
-            $shadowLayer = $('#'+uploadImgToken).find('.js-shadowLayer');
-            $progress = $('#userMsg'+uploadImgToken);
+            $shadowLayer = $('#img'+uploadImgToken).find('.js-shadowLayer');
+            $progress = $('#progress'+uploadImgToken);
             oldH = $shadowLayer.height();
             isUploadImg=false;
         }
@@ -501,16 +504,21 @@ var ListMsgHandler = function() {
                 //消息重发
                 $('#userMsg'+data.msgId).on('click',function(){
                   $('#userMsg'+data.msgId).removeClass('msg-fail').addClass('msg-loading');
-                  fnEvent.trigger('sendArea.send',[{
-                     'answer' :$(this).prev().text().trim(),
-                     'uid' : global.apiInit.uid,
-                     'cid' : global.apiInit.cid,
-                     //时间戳
-                     'dateuid' : data.msgId,
-                     'date': +new Date(),
-                     'token':'',
-                     'sendAgain':true//是否重发
-                     }]);
+                  if($(this).hasClass('msg')){
+                    fnEvent.trigger('sendArea.send',[{
+                       'answer' :$(this).prev().text().trim(),
+                       'uid' : global.apiInit.uid,
+                       'cid' : global.apiInit.cid,
+                       //时间戳
+                       'dateuid' : data.msgId,
+                       'date': +new Date(),
+                       'token':'',
+                       'sendAgain':true//是否重发
+                    }]);
+                  }else{
+                    var imgBase64 = $(this).prev().find('img').attr('src');
+                    fnEvent.trigger('listMsg.imgSendAgain',imgBase64);
+                  }
                 });
                 // $('#userMsg'+data.msgId).off('click');
               }
