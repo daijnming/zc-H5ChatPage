@@ -87,8 +87,13 @@ function uploadImg() {
             }
         }
     };
+    var imgSendAgain=function(data){
+        console.log(data);
+        onAjaxUploadUpHandler(data)
+    };
     var bindLitener = function() {
-        $(".js-upload").on("change",onFormDataUpHandler)
+        $(".js-upload").on("change",onFormDataUpHandler);
+        listener.on('listMsg.imgSendAgain',imgSendAgain)
     };
 
     var initPlugsin = function() {//插件

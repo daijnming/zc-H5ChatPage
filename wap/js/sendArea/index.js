@@ -103,7 +103,7 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
-            console.log(currentStatus);
+            //console.log(currentStatus);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -118,8 +118,14 @@ function TextArea(window) {
         };
         //清空待发送框
         $textarea.html("");
-        $textarea.blur();
-        $textarea.focus();
+        //发送前是什么状态，发送后就是什么状态
+        //获取document上获取焦点的id
+       /* var textarea=document.getElementById("js-textarea");
+        alert(document.activeElement.id);
+        if(document.activeElement.id=='textarea'){*/
+            $textarea.blur();
+            $textarea.focus();
+        //} 
         $sendBtn.hide();
         if(transferFlag==1){
             $textarea.css("width","83%");
@@ -127,6 +133,11 @@ function TextArea(window) {
             $textarea.css("width","75%");
         }
         autoSizePhone();
+    };
+    var sendedKeepFocus=function(){
+        //var t1=document.getElementById("js-textarea");
+        
+         
     };
     var showChatAddHandler=function(){
         //与键盘优化
@@ -359,6 +370,8 @@ function TextArea(window) {
     };
     var hideKeyboard=function(){
         $textarea.blur();
+        $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+        autoSizePhone();
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
