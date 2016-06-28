@@ -17,7 +17,11 @@ function ZcWebSocket(puid,url,global) {
         for(var el in retryList) {
             var item = retryList[el];
             if(now - item.sendTime >= TIMEOUT_DURATION) {
-                console.log('消息发送是失败');
+                delete retryList[el];
+                listener.trigger("core.msgresult", {
+                    'msgId' : item.dateuid,
+                    'result' : 'fail'
+                });
             }
         }
     };
@@ -27,14 +31,16 @@ function ZcWebSocket(puid,url,global) {
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
+        if(item.currentStatus !== 'human') {
+            return;
+        }
         item.type = 103;
-        item.msgId = item['date+uid'];
+        item.msgId = item['dateuid'];
         item.sendTime = item.date;
         item.content = item.answer;
         item.uname = global.userInfo.uname;
         item.face = global.userInfo.face;
         retryList[item.msgId] = item;
-        //delete item["date+uid"];
         websocket.send(JSON.stringify(item));
     };
 
@@ -47,7 +53,6 @@ function ZcWebSocket(puid,url,global) {
     };
     var bindListener = function() {
         websocket.onopen = function() {
-            console.log(global);
             var start = {
                 "t" : ROLE_USER,
                 "u" : global.apiInit.uid,
@@ -59,8 +64,8 @@ function ZcWebSocket(puid,url,global) {
         websocket.onclose = function() {
             onClosed();
         };
-        websocket.onmessage = function(evt) {
-            console.log(evt);
+        websocket.onmessage = function(evt,data) {
+            console.log(evt,data);
         };
         listener.on("sendArea.send",onSend);
     };

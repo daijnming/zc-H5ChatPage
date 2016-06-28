@@ -17,13 +17,13 @@
       submit;//提交按钮
 
   //FIXME  普通用户来源：0PC,1微信,2APP,3微博,4WAP,5融云,6呼叫中心
-  var uSource=4,//source参数  默认为wap
+  var uSource=1,//source参数  默认为微信
       sysNum,//系统id
       uid,
       companyId,
       back;//顶部返回栏
 
-  var host = 'http://test.sobot.com';//本地&测试
+  var host = '';//本地&测试
   // var host = 'http://www.sobot.com';//正式环境
 
   //接口

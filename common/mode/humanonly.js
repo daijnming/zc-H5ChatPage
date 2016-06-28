@@ -11,6 +11,7 @@ function HumanOnly(global) {
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
     var socketFactory = require('../socket/socketfactory.js');
+    var leaveMessageStr = global.apiConfig.leaveMsg;
     var manager = null;
 
     var initHumanSession = function(value,ret,word) {
@@ -77,7 +78,7 @@ function HumanOnly(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = str;
+                ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'queue',
@@ -86,7 +87,7 @@ function HumanOnly(global) {
                 listener.trigger("core.sessionclose",-1);
             },1);
         } else {
-            ret.content = str;
+            ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'queue',
@@ -108,7 +109,7 @@ function HumanOnly(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = global.apiConfig.adminNonelineTitle;
+                ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'offline',
@@ -117,7 +118,7 @@ function HumanOnly(global) {
                 listener.trigger("core.sessionclose",-1);
             },1);
         } else {
-            ret.content = global.apiConfig.adminNonelineTitle;
+            ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'offline',

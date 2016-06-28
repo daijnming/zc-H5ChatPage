@@ -12,6 +12,7 @@ var RobotFirst = function(global) {
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
     var socketFactory = require('../socket/socketfactory.js');
+    var leaveMessageStr = global.apiConfig.leaveMsg;
     var _self = this;
     var manager,
         tempManager;
@@ -46,7 +47,6 @@ var RobotFirst = function(global) {
         });
         return promise;
     };
-
     var initHumanSession = function(word,ret) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
@@ -75,7 +75,6 @@ var RobotFirst = function(global) {
         });
 
     };
-
     /**
      * 客服已离线
      */
@@ -83,7 +82,7 @@ var RobotFirst = function(global) {
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
-                ret.content = global.apiConfig.adminNonelineTitle;
+                ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'offline',
@@ -91,7 +90,7 @@ var RobotFirst = function(global) {
                 });
             },1);
         } else {
-            ret.content = global.apiConfig.adminNonelineTitle;
+            ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'offline',
@@ -102,7 +101,7 @@ var RobotFirst = function(global) {
     };
 
     var queueWait = function(ret,init) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待 ";
         if(!tempManager) {
             tempManager = socketFactory(ret,global);
             tempManager.start();
@@ -114,7 +113,7 @@ var RobotFirst = function(global) {
         if(init) {
             initHumanSession(null,ret);
             setTimeout(function() {
-                ret.content = str;
+                ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : "queue",
@@ -122,7 +121,7 @@ var RobotFirst = function(global) {
                 });
             },1);
         } else {
-            ret.content = str;
+            ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : "queue",
@@ -185,7 +184,7 @@ var RobotFirst = function(global) {
                     'sysNum' : global.sysNum,
                     'uid' : global.apiInit.uid,
                     'way' : 1,
-                    'groupId' : groupId
+                    'groupId' : groupId || ''
                 },
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
@@ -278,8 +277,8 @@ var RobotFirst = function(global) {
         //首先发送机器人欢迎语
         if(status == 0) {
             manager = new Robot(global);
-            setCurrentState.setCurrentState('robot');
             getWelcome();
+            setCurrentState.setCurrentState('robot');
         } else {
             if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);

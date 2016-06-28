@@ -252,6 +252,22 @@ var initConfig = function() {
         return promise;
     };
 
+    var getLeaveMessage = function(params) {
+        var arr = ['leaveMessage.html'];
+        var count = 0;
+        for(var el in params) {
+            var value = encodeURIComponent(params[el]);
+            if(count == 0) {
+                arr.push("?")
+            } else {
+                arr.push("&");
+            }
+            arr.push(el + "=" + value);
+            count++;
+        }
+        var str = '您可以<a class="leave-msg-btn" href="' + arr.join("") + '" >留言</a>';
+        return str;
+    };
     //promise方法
     var promiseHandler = function() {
         judgeEnviroment().then(function(value,promise) {
@@ -295,12 +311,13 @@ var initConfig = function() {
                     email : That.cacheInfo.userInfo.email,
                     uname : That.cacheInfo.userInfo.uname,
                     visitTitle : That.cacheInfo.userInfo.visitTitle,
-                    visitUrl : That.cacheInfo.userInfo.visitUrl,
+                    visitUsrl : That.cacheInfo.userInfo.visitUrl,
                     face : That.cacheInfo.userInfo.face
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
+                    That.cacheInfo.apiConfig.leaveMsg = That.cacheInfo.apiConfig.msgflag == 0 ? getLeaveMessage(That.cacheInfo.urlParams) : '';
                     outerPromise.resolve(That.cacheInfo);
                 }
             });

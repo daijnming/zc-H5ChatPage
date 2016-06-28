@@ -9,6 +9,9 @@ function Rolling(puid,pu,global) {
     var onSend = function(args,retry) {
         var retry = retry || 0;
         var data = args[0];
+        if(data.currentStatus !== 'human') {
+            return;
+        }
         $.ajax({
             'url' : '/chat/user/chatsend.action',
             'data' : {

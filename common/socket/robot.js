@@ -14,6 +14,9 @@ function Robot(global) {
 
     var onsend = function(args) {
         var data = args[0];
+        if(data.currentStatus !== 'robot') {
+            return;
+        }
         var token = createToken(data);
         $.ajax({
             'url' : '/chat/user/robotsend.action',
