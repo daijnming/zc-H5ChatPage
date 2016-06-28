@@ -28,6 +28,7 @@ function ZcWebSocket(puid,url,global) {
 
     var onSend = function(data) {
         var item;
+        console.log('send',data);
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
