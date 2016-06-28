@@ -243,6 +243,7 @@ var RobotFirst = function(global) {
                 }
                 manager = tempManager;
                 tempManager = null;
+                setCurrentState.setCurrentState('human');
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : "transfer",
