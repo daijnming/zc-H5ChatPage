@@ -252,6 +252,25 @@ var initConfig = function() {
         return promise;
     };
 
+    var getLeaveMessage = function(params) {
+        var arr = ['leaveMessage.html'];
+        var count = 0;
+        for(var el in params) {
+            var value = encodeURIComponent(params[el]);
+            if(count == 0) {
+                arr.push("?")
+            } else {
+                arr.push("&");
+            }
+            arr.push(el + "=" + value);
+            count++;
+        }
+        var str = '您可以<a href="' + arr.join("") + '" >留言</a>"';
+        var div = $("<div></div>");
+        div.html(str);
+        console.log(str);
+        return div.text();
+    };
     //promise方法
     var promiseHandler = function() {
         judgeEnviroment().then(function(value,promise) {
@@ -301,6 +320,7 @@ var initConfig = function() {
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
+                    That.cacheInfo.apiConfig.leaveMsg = That.cacheInfo.apiConfig.msgflag == 0 ? getLeaveMessage(That.cacheInfo.urlParams) : '';
                     outerPromise.resolve(That.cacheInfo);
                 }
             });

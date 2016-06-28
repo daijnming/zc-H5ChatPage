@@ -12,6 +12,7 @@ var HumanFirst = function(global) {
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
     var socketFactory = require('../socket/socketfactory.js');
+    var leaveMessageStr = global.apiConfig.leaveMsg;
     var manager,
         tempManager;
 
@@ -161,7 +162,7 @@ var HumanFirst = function(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = global.apiConfig.adminNonelineTitle;
+                ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'offline',
@@ -169,7 +170,7 @@ var HumanFirst = function(global) {
                 });
             },1);
         } else {
-            ret.content = global.apiConfig.adminNonelineTitle;
+            ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'offline',
