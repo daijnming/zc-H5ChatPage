@@ -16,6 +16,7 @@ function ZcWebSocket(puid,url,global) {
         var now = +new Date();
         for(var el in retryList) {
             var item = retryList[el];
+            console.log(el,item);
             if(now - item.sendTime >= TIMEOUT_DURATION) {
                 delete retryList[el];
                 listener.trigger("core.msgresult", {
