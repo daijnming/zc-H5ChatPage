@@ -52,26 +52,26 @@ var rightMsg =
                             '{{=it.userMsg}}'+
                           '</p>'+
                       '</div>'+
-                      '<span id="userMsg{{=it.date}}" class="js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
+                      '<span id="userMsg{{=it.msgId}}" class="msg js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                   '</div>'+
               '</div>';
 
   var rightImg =
-                    '<div class="msgwrap rightMsg" id="{{=it.token}}" date="{{=it.date}}">'+
+                    '<div class="msgwrap rightMsg" date="{{=it.date}}">'+
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
-                        '<div class="msgOuter js-userMsgOuter">'+
+                        '<div id="img{{=it.token}}" class="msgOuter js-userMsgOuter">'+
                             '<p>'+
                               '<img src="{{=it.uploadImg}}"'+
                             '</p>'+
                             '<div class="shadowLayer js-shadowLayer">'+
                             '</div>'+
                             '<div class="progressLayer">'+
-                              '<span id="userMsg{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
+                              '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
-                        '<span class="msgStatus statusRight"></span>'+
+                        '<span id="userMsg{{=it.token}}" class="img js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                     '</div>'+
                 '</div>';
 
