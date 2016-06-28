@@ -1,6 +1,6 @@
 /*
 * @author denzel
-*/ 
+*/
 var ListMsgHandler = function() {
     var global,
         currentState,//当前聊天对象状态  1 智能机器人  2人工客服
@@ -225,7 +225,7 @@ var ListMsgHandler = function() {
                     //会话结束
                     msgHtml+=msgHandler.sessionCloseHander(_data);
                   }else if(_data.type==205){
-                    console.log(+new Date());
+                    // console.log(+new Date());
                     //客服正在输入
                     msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                   }
@@ -359,7 +359,7 @@ var ListMsgHandler = function() {
       },
       //发送消息
       onSend : function(data){
-        console.log(data);
+        // console.log(data);
         if(uploadImgToken){
           //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
           var $div = $('#img'+uploadImgToken);
@@ -368,7 +368,11 @@ var ListMsgHandler = function() {
           uploadImgToken='';//置空 一个流程完成
         }else if(data[0].sendAgain){
           //消息重发
-
+          console.log(data);
+          //重发放到最后
+          var oDiv = $('#userMsg'+data.dateuid).parents('div.rightMsg');
+          chatPanelList.append(oDiv);
+          // $(oDiv).remove();
         }else{
           bindMsg(0,data);
         }
@@ -501,19 +505,19 @@ var ListMsgHandler = function() {
       },
       //消息确认方法
       msgReceived:function(data){
-        console.log(data);
+        // console.log(data);
         // data={msgId:'123',result:'success'};
         // msgSendIdHander = ['123','456'];
         if(data&&data.msgId){
             var isMsgId = msgSendIdHander.indexOf(data.msgId);
             if(isMsgId>=0){
-              // var ran = Math.random();
-              // console.log(ran);
-              // if(ran>0.5){
-              //   data.result='success';
-              // }else{
-              //   data.result='fali';
-              // }
+              var ran = Math.random();
+              console.log(ran);
+              if(ran>0.5){
+                data.result='success';
+              }else{
+                data.result='fali';
+              }
               if(data.result=='success'){
                 msgSendIdHander.splice(isMsgId,1);//从数组中删除
                 $('#userMsg'+data.msgId).removeClass('msg-loading msg-fail').addClass('msg-served');
@@ -523,21 +527,22 @@ var ListMsgHandler = function() {
                 //消息重发
                 $('#userMsg'+data.msgId).on('click',function(){
                   $('#userMsg'+data.msgId).removeClass('msg-fail').addClass('msg-loading');
+                  var answer ;
                   if($(this).hasClass('msg')){
-                    fnEvent.trigger('sendArea.send',[{
-                       'answer' :$(this).prev().text().trim(),
-                       'uid' : global.apiInit.uid,
-                       'cid' : global.apiInit.cid,
-                       //时间戳
-                       'dateuid' : data.msgId,
-                       'date': +new Date(),
-                       'token':'',
-                       'sendAgain':true//是否重发
-                    }]);
+                    answer = $(this).prev().text().trim();
                   }else{
-                    var imgBase64 = $(this).prev().find('img').attr('src');
-                    fnEvent.trigger('listMsg.imgSendAgain',imgBase64);
+                    answer = $(this).prev().find('p').html();
                   }
+                  fnEvent.trigger('sendArea.send',[{
+                     'answer' :answer,
+                     'uid' : global.apiInit.uid,
+                     'cid' : global.apiInit.cid,
+                     //时间戳
+                     'dateuid' : data.msgId,
+                     'date': +new Date(),
+                     'token':data.msgId,
+                     'sendAgain':true//是否重发
+                  }]);
                 });
                 // $('#userMsg'+data.msgId).off('click');
               }
