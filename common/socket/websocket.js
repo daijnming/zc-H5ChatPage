@@ -44,8 +44,29 @@ function ZcWebSocket(puid,url,global) {
         websocket.send(JSON.stringify(item));
     };
 
-    var onMessage = function(data) {
-        console.log('onreceive',data);
+    var ackConfirmMessageHandler = function(data) {
+        listener.trigger("core.msgresult", {
+            'msgId' : data.msgId,
+            'result' : 'success'
+        });
+        delete retryList[data.msgId];
+    };
+
+    var commonMessageHandler = function(data) {
+        console.log(data);
+        listener.trigger("core.onreceive", {
+            'type' : socketType,
+            'list' : [data]
+        });
+    };
+
+    var onMessage = function(evt) {
+        var data = JSON.parse(evt.data);
+        if(data.type == 301) {
+            ackConfirmMessageHandler(data);
+        } else if(data.type == 202) {
+            commonMessageHandler(data);
+        }
     };
 
     var onClosed = function() {
@@ -64,9 +85,7 @@ function ZcWebSocket(puid,url,global) {
         websocket.onclose = function() {
             onClosed();
         };
-        websocket.onmessage = function(evt,data) {
-            console.log(evt,data);
-        };
+        websocket.onmessage = onMessage;
         listener.on("sendArea.send",onSend);
     };
 
