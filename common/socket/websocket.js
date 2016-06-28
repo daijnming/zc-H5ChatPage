@@ -18,8 +18,6 @@ function ZcWebSocket(puid,url,global) {
             var item = retryList[el];
             if(now - item.sendTime >= TIMEOUT_DURATION) {
                 delete retryList[el];
-                console.log('消息发送是失败');
-                console.log(item);
                 listener.trigger("core.msgresult", {
                     'msgId' : item.dateuid,
                     'result' : 'fail'
@@ -34,7 +32,7 @@ function ZcWebSocket(puid,url,global) {
             item = data[0];
         }
         item.type = 103;
-        item.msgId = item['date+uid'];
+        item.msgId = item['dateuid'];
         item.sendTime = item.date;
         item.content = item.answer;
         item.uname = global.userInfo.uname;
@@ -52,7 +50,6 @@ function ZcWebSocket(puid,url,global) {
     };
     var bindListener = function() {
         websocket.onopen = function() {
-            console.log('create');
             var start = {
                 "t" : ROLE_USER,
                 "u" : global.apiInit.uid,
