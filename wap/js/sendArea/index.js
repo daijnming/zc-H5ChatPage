@@ -24,6 +24,8 @@ function TextArea(window) {
     var currentCid,
         currentUid,
         answer,
+        //记住输入框的状态,点击发送后要保持
+        focusStatus,
         currentStatus;
         //1为机器人，2为人工
     var transferFlag=1;
@@ -77,6 +79,9 @@ function TextArea(window) {
             $(".add").css("display","inline-block");
             $textarea.css("width","83%");
         }
+        if(document.activeElement.id=="js-textarea"){
+            focusStatus=true;
+        }
     };
     var manualmodeButton=function(){
         var _text = $textarea.text();
@@ -92,6 +97,9 @@ function TextArea(window) {
             $textarea.blur();
             $textarea.focus();
         }
+        if(document.activeElement.id=="js-textarea"){
+            focusStatus=true;
+        }
     };
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
@@ -103,7 +111,6 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
-            console.log(currentStatus);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -120,17 +127,19 @@ function TextArea(window) {
         $textarea.html("");
         //发送前是什么状态，发送后就是什么状态
         //获取document上获取焦点的id
-       /* var textarea=document.getElementById("js-textarea");
-        alert(document.activeElement.id);
-        if(document.activeElement.id=='textarea'){*/
+        if(focusStatus==true){
             $textarea.blur();
             $textarea.focus();
-        //} 
+        }else{
+            $(".add").css("display","inline-block");
+        }
         $sendBtn.hide();
         if(transferFlag==1){
             $textarea.css("width","83%");
+           
         }else{
             $textarea.css("width","75%");
+             
         }
         autoSizePhone();
     };
@@ -184,6 +193,7 @@ function TextArea(window) {
                 autoSizePhone();
             },200)
         }
+        focusStatus=false;
     };
     var showChatEmotionHandler=function(){
         //与键盘优化
@@ -224,6 +234,7 @@ function TextArea(window) {
                 autoSizePhone();
             },200)
         }
+        focusStatus=false;
     };
     var hideChatAreaHandler = function() {
        // var _bottom="-"+213+"px";
@@ -260,7 +271,7 @@ function TextArea(window) {
                 }
             }
        //  },200);
-
+       focusStatus=false;
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -312,6 +323,7 @@ function TextArea(window) {
         $textarea.text(_html);
         manualmodeButton();
         autoSizePhone();
+        focusStatus=false
     };
     var onImageUpload = function(data) {
         //onFileTypeHandler(data);
@@ -329,18 +341,42 @@ function TextArea(window) {
          'sendAgain':false,
          'currentStatus':currentStatus
          }]);
+        focusStatus=false;
     };
     var artificialHandler=function(){
         listener.trigger('sendArea.artificial');
-
+        focusStatus=false;
     };
     //宽高自适应手机
     var autoSizePhone=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
         listener.trigger('sendArea.autoSize',$chatArea);
-
     };
+    /*var compatiblegetBrowser = function() {
+        var browserList =  ['mqqbrowser',// QQ浏览器(注意mqqbrowser和qq的顺序)
+                            'qq',// 手机qq
+                            'micromessenger',// 微信浏览器
+                            'ucbrowser',// UC浏览器(注意ucbrowser和safari的顺序)
+                            'miuibrowser',// 小米浏览器
+                            'safari',// Safari浏览器
+                            'opera mobi',// Opera浏览器
+                            'opera mini',// Opera Mini浏览器
+                            'firefox' // Firefox浏览器
+                            ],
+            browserListLen = browserList.length,
+            userAgent = navigator.userAgent.toLowerCase(),
+            uaIndex = 0;
+
+        for(var i = 0,
+            item = '';i < browserListLen;i++) {
+            item = browserList[i];
+            uaIndex = userAgent.indexOf(item);
+            if(uaIndex > 0) {
+                return item;
+            }
+        }
+    };*/
     //结束会话
     var endSessionHandler=function(status){
        switch(status) {
@@ -367,14 +403,36 @@ function TextArea(window) {
     var evaluateHandler=function(){
         //评价
         evaluate(transferFlag);
+        focusStatus=false;
     };
     var hideKeyboard=function(){
         $textarea.blur();
         $chatArea.removeClass("showChatArea").addClass("hideChatArea");
-        $(".qqFaceTiphover").hide();
-        $(".addhover").hide();
-        $(".qqFaceTip").css("display","inline-block");
-        $(".add").css("display","inline-block");
+        var _text = $textarea.text();
+        if(transferFlag==1){
+            if(_text) {
+                $(".qqFaceTiphover").hide();
+                $(".addhover").hide();
+                $(".qqFaceTip").hide();
+            } else {
+                $(".qqFaceTiphover").hide();
+                $(".addhover").hide();
+                $(".add").css("display","inline-block");
+                $(".qqFaceTip").hide();
+            }
+        }else{
+            if(_text) {
+                $(".qqFaceTiphover").hide();
+                $(".addhover").hide();
+                $(".qqFaceTip").css("display","inline-block");
+            } else {
+                $(".qqFaceTiphover").hide();
+                $(".addhover").hide();
+                $(".add").css("display","inline-block");
+                $(".qqFaceTip").css("display","inline-block");
+            }
+        }
+        focusStatus=false;
         autoSizePhone();
     };
     var parseDOM = function() {
