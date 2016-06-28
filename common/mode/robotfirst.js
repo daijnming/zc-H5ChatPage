@@ -185,7 +185,7 @@ var RobotFirst = function(global) {
                     'sysNum' : global.sysNum,
                     'uid' : global.apiInit.uid,
                     'way' : 1,
-                    'groupId' : groupId
+                    'groupId' : groupId || ''
                 },
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
@@ -278,8 +278,8 @@ var RobotFirst = function(global) {
         //首先发送机器人欢迎语
         if(status == 0) {
             manager = new Robot(global);
-            setCurrentState.setCurrentState('robot');
             getWelcome();
+            setCurrentState.setCurrentState('robot');
         } else {
             if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);
