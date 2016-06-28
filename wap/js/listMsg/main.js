@@ -82,11 +82,8 @@ var ListMsgHandler = function() {
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
                     //过滤
-                    itemChild.msg = itemChild.msg.replace(/&amp;/g?/&amp;/g:/&amp/g,"&");
-                    itemChild.msg = itemChild.msg.replace(/&lt;/g?/&lt;/g:/&lt/g,"<");
-                    itemChild.msg = itemChild.msg.replace(/&gt;/g?/&gt;/g:/&gt/g,">");
-                    itemChild.msg = itemChild.msg.replace(/&quot;/g?/&quot;/g:/&quot/g,"\"");
-                    itemChild.msg = itemChild.msg.replace(/&qpos;/g?/&qpos;/g:/&qpos/g,"\'");
+                    var $tmp = $('<div></div>').html(itemChild.msg);
+                    itemChild.msg = $tmp.text();
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
@@ -114,12 +111,13 @@ var ListMsgHandler = function() {
                       var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
                       if(Number(_m)>1){
                         //大于一分钟  0 当天  1上一天 2更久历史
+                        var type;
                         if(_t<=1){
                             type = 0;
                         }else{
                             type = _t>1&&_t<=2?1:2;
                         }
-                        var type = _t<=1?0:_t>1&&_t<=2?1:2;
+                        // var type = _t<=1?0:_t>1&&_t<=2?1:2;
                         var retMsg = sysHander.getTimeLine(type,itemChild.ts);
                         msgHtml += retMsg?retMsg:'';
                       }
@@ -200,9 +198,8 @@ var ListMsgHandler = function() {
             break;
           case 1:
               //FIXME 接收人工工作台消息
-              var _logo,_name,_msg,_type,_list;
-              _type=data.type;
-              _list=data.list;
+              var _type=data.type;
+              var _list=data.list;
               for(var i=0;i<_list.length;i++){
                 var _data = _list[i];
                 //判断类型 robot human
@@ -212,32 +209,13 @@ var ListMsgHandler = function() {
                     //相关搜索
                     msgHtml += msgHandler.sugguestionsSearch(_data);
                   }else{
-                    _msg =QQFace.analysis( _data.answer?_data.answer:'')//过滤表情;
-                    var index = _msg.indexOf('uploadedFile');
-                    var res = index>0?_msg:Comm.getNewUrlRegex(_msg);
-                    comf = $.extend({
-                      customLogo : global.apiConfig.robotLogo,
-                      customName : global.apiConfig.robotName,
-                      customMsg : res,
-                      date:+new Date()
-                    });
-                    msgHtml += doT.template(msgTemplate.leftMsg)(comf);
+                    msgHtml +=  msgHandler.onMsgFromCustom('robot',_data);
                   }
                 }else{
                   //FIXME 客服类型
                   //202 客服发来消息
                   if(_data.type==202){
-                    _msg=QQFace.analysis(_data.content?_data.content:'');//过滤表情
-                    var index = _msg.indexOf('uploadedFile');
-
-                    var res = index>0?_msg:Comm.getNewUrlRegex(_msg);
-                    comf = $.extend({
-                      customLogo : _data.aface,
-                      customName : _data.aname,
-                      customMsg : res,
-                      date:+new Date()
-                    });
-                    msgHtml += doT.template(msgTemplate.leftMsg)(comf);
+                    msgHtml += msgHandler.onMsgFromCustom('human',_data);
                   }else  if(_data.type==204){
                     //会话结束
                     msgHtml+=msgHandler.sessionCloseHander(_data);
@@ -264,25 +242,9 @@ var ListMsgHandler = function() {
                 }
                 msgHtml = doT.template(msgTemplate.sysMsg)(comf);
               }else{
-                //判断是机器人 | 客服
-                if(_type=='robot'){
-                  currentState=1;
-                  _logo =global.apiConfig.robotLogo;
-                  _name = global.apiConfig.robotName;
-                  _msg =_data.answer;
-                }else if(_type=='human'){
-                  currentState=2;
-                  _logo=_data.aface;
-                  _name=_data.aname;
-                  _msg=_data.content;
-                }
-                comf = $.extend({
-                  customLogo : _logo,
-                  customName : _name,
-                  customMsg : _msg,
-                  date:+new Date()
-                });
-                msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                //1 机器人  2 客服
+                currentState = _type=='robot'?1:2;
+                msgHtml =  msgHandler.onMsgFromCustom(_type,_data);
               }
             break;
           case 3:
@@ -362,7 +324,7 @@ var ListMsgHandler = function() {
             $('#'+sign).remove();
             scrollHanlder.scroll.refresh();
           }
-        },5*1000);//每隔5秒处理系统提示消息
+        },1*1000);//每隔1秒处理系统提示消息
       }
     };
     //包装消息相关方法
@@ -537,6 +499,7 @@ var ListMsgHandler = function() {
                 $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('msg-fail');
                 //消息重发
                 $('#userMsg'+data.msgId).on('click',function(){
+                  $('#userMsg'+data.msgId).removeClass('msg-fail').addClass('msg-loading');
                   fnEvent.trigger('sendArea.send',[{
                      'answer' :$(this).prev().text().trim(),
                      'uid' : global.apiInit.uid,
@@ -553,6 +516,30 @@ var ListMsgHandler = function() {
             }
         }
         // console.log(data);
+      },
+      //来自于客服的消息
+      //type --> robot human
+      onMsgFromCustom:function(type,data){
+        var logo,name,msg;
+        if(type=='robot'){
+          msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
+          logo = global.apiConfig.robotLogo;
+          name = global.apiConfig.robotName;
+        }else if(type=='human'){
+          msg =QQFace.analysis(data.content?data.content:'');//过滤表情
+          logo = data.aface;
+          name = data.aname;
+        }
+        var index = msg.indexOf('uploadedFile');
+        var res = index>0?msg:Comm.getNewUrlRegex(msg);
+        var comf = $.extend({
+            customLogo : logo,
+            customName : name,
+            customMsg : res,
+            date:+new Date()
+          });
+        var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);
+        return tmpHtml;
       }
     };
     /********************************************************************************/
