@@ -82,7 +82,7 @@ function ZcWebSocket(puid,url,global) {
         var data = JSON.parse(evt.data);
         //messageConfirm(data);
         if(data.type == 301) {
-            ackConfirmMessageHandler(data);
+            //ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
         } else {
