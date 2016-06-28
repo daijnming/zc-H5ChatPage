@@ -232,7 +232,8 @@ var ListMsgHandler = function() {
                 //生成时间戳
                 var tp = +new Date();
                 comf = $.extend({
-                  sysMsg:$(_data.content).text()?$(_data.content).text():_data.content,
+                  // sysMsg:$(_data.content).text()?$(_data.content).text():_data.content,
+                  sysMsg:_data.content,
                   sysMsgSign:tp,
                   date:tp
                 });
