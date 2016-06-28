@@ -8,6 +8,7 @@ var ListMsgHandler = function() {
         uploadImgToken,//锁定当前上传图片唯一标识
         isUploadImg=true,//是否为上传图片操作
         startScrollY,//原始开始滚动高度  暂未使用
+        inputTimer,//正在输入处理
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
 
 
@@ -24,7 +25,9 @@ var ListMsgHandler = function() {
         sysHander = {},//包装系统和配置方法 对象方法
         msgSendIdHander=[],//填装发送消息的容器 用于与消息确认匹配
         msgAcknowledgementHandler={},//消息确认容器
+        beingTyped=[],//正在输入
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
+
 
     // queue:用户排除中  offline:客服不在线  blacklist:被拉黑
     var sysMsgList=['queue','offline','blacklist'];//用于系统提示管理的状态码
@@ -51,7 +54,8 @@ var ListMsgHandler = function() {
     var sysPromptLan ={
       L0001:'您与{0}的会话已经结束',
       L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
-      L0003:'您已在新窗口打开聊天页面'
+      L0003:'您已在新窗口打开聊天页面',
+      L0004:'客服正在输入...'
     };
 
     //api接口
@@ -170,7 +174,6 @@ var ListMsgHandler = function() {
           //没有历史记录
           global.flags.moreHistroy = false;
         }
-
       });
     };
     //发送消息绑定到页面
@@ -178,7 +181,6 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      console.log(data);
       var msgHtml='',
           comf;
       if(data){
@@ -222,6 +224,10 @@ var ListMsgHandler = function() {
                   }else  if(_data.type==204){
                     //会话结束
                     msgHtml+=msgHandler.sessionCloseHander(_data);
+                  }else if(_data.type==205){
+                    console.log(+new Date());
+                    //客服正在输入
+                    msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                   }
                 }
               }
@@ -232,19 +238,7 @@ var ListMsgHandler = function() {
               var _data = data.data;
               //判断是否是系统回复
               if(_type=='system'){
-                //生成时间戳
-                var tp = +new Date();
-                comf = $.extend({
-                  // sysMsg:$(_data.content).text()?$(_data.content).text():_data.content,
-                  sysMsg:_data.content,
-                  sysMsgSign:tp,
-                  date:tp
-                });
-                //是否包含需要处理的系统提示语
-                if(sysMsgList.indexOf(data.status)>=0){
-                  sysMsgManager.push(tp);
-                }
-                msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+                msgHtml = sysHander.onSysMsgShow(_data.content,data.status);
               }else{
                 //1 机器人  2 客服
                 currentState = _type=='robot'?1:2;
@@ -321,15 +315,31 @@ var ListMsgHandler = function() {
       onSessionOpen:function(data){
         bindMsg(2,data);
       },
-      //系统提示消息处理
-      onSysMsgHandler:function(){
+      //系统消息显示处理
+      onSysMsgShow:function(msg,status){
+        //生成时间戳
+        var tp = +new Date();
+        var comf = $.extend({
+          sysMsg:msg,
+          sysMsgSign:tp,
+          date:tp
+        });
+        //是否包含需要处理的系统提示语
+        if(sysMsgList.indexOf(status)>=0){
+          sysMsgManager.push(tp);//用于系统提示判断
+        }else if(status ==205){
+          beingTyped.push(tp);//用于正在输入判断
+        }
+        var msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+        return msgHtml;
+      },
+      //正在输入处理
+      onBeingInput:function(){
         var _t = setInterval(function(){
-          if(sysMsgManager.length>1){
-            var sign = sysMsgManager.shift();
+            var sign = beingTyped.shift();
             $('#'+sign).remove();
             scrollHanlder.scroll.refresh();
-          }
-        },1*1000);//每隔1秒处理系统提示消息
+        },5*1000);//每隔5秒处理正在输入提示消息
       }
     };
     //包装消息相关方法
@@ -445,6 +455,14 @@ var ListMsgHandler = function() {
             }
         }
         chatPanelList.append(tempHtml);
+
+        //FIXME 永存消息只显示最新的一条
+        if(sysMsgManager.length>1){
+          var sign = sysMsgManager.shift();
+          $('#'+sign).animate({'margin-top':'-50px',opacity:'0.1'},500,function(){
+            $(this).remove();
+          });
+        }
       },
       //会话结束判断
       // 1：人工客服离线导致用户下线
@@ -584,7 +602,7 @@ var ListMsgHandler = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         sysHander.nowTimer();//显示当前时间
-        sysHander.onSysMsgHandler();//系统提示处理
+        sysHander.onBeingInput();//正在输入处理
     };
     //初始化Dom
     var parseDOM = function() {
