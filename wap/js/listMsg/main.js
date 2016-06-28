@@ -562,10 +562,14 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         fnEvent.on('core.msgresult',msgHandler.msgReceived);//消息确认收到通知
-
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
+        $('.js-chatMsgList').on('click',function(){
+          //空白处点击 隐藏键盘
+          fnEvent.trigger('listMsg.hideKeyboard');
+        });
     };
+
     //初始化h5页面配置信息
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
