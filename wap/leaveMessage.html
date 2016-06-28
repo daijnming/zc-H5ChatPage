@@ -42,15 +42,15 @@
       <div class="wrap-helper js-wrap-helper">
         <img src="./images/leaveMsgIcon.png" alt="" />
         <div class="js-helper helper">
-          asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作asdfasdgasdfasdfasdfasd返回这个是邮箱提示消息，你就按这个操作
+          <!-- 提示语 -->
         </div>
       </div>
       <div class="wrap-content">
         <div class="content-emil">
-          <input type="text" name="name" value="" placeholder="邮箱">
+          <input type="text" name="name" value="" placeholder="邮箱" maxlength="60">
         </div>
         <div class="content-msg">
-          <textarea name="name" rows="8" cols="40"></textarea>
+          <textarea name="name" rows="8" cols="40"></textarea maxlength="100">
         </div>
       </div>
       <footer>
@@ -58,7 +58,8 @@
       </footer>
     </div>
     <div class="showLayer js-showLayer">
-      邮箱格式错误
+      <span class="js-errorLine errorLine"></span>
+      <span class="errorIcon js-errorIcon"></span>
     </div>
     <!------show success Layer  提交成功弹出层----->
     <div class="submitLayer js-submitLayer">
