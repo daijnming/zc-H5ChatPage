@@ -103,7 +103,7 @@ function TextArea(window) {
             _html=ZC_Face.analysis(str)
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
-            //console.log(currentStatus);
+            console.log(currentStatus);
             listener.trigger('sendArea.send',[{
                 'answer' : str,
                 'uid' : currentUid,
@@ -371,6 +371,10 @@ function TextArea(window) {
     var hideKeyboard=function(){
         $textarea.blur();
         $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+        $(".qqFaceTiphover").hide();
+        $(".addhover").hide();
+        $(".qqFaceTip").css("display","inline-block");
+        $(".add").css("display","inline-block");
         autoSizePhone();
     };
     var parseDOM = function() {

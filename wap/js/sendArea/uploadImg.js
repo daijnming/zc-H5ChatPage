@@ -7,6 +7,7 @@ function uploadImg() {
     var listener = require("../../../common/util/listener.js");
     //上传图片假消息时间戳
     var token="",
+    tp="",
     currentUid;
     /*
     //模板引擎
@@ -33,13 +34,13 @@ function uploadImg() {
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e){
-                date=+new Date();
-                token= currentUid + date;
+                tp=+new Date();
+                token= currentUid + tp;
                 //this.result 本地图片的数据流
                 lrz(file, {quality: 0.7},function (results) {
                    listener.trigger("sendArea.createUploadImg",[{
                     'result' : results.base64,
-                    'date':date,
+                    'date':tp,
                     'token':token
                     }])
                 });
@@ -79,6 +80,7 @@ function uploadImg() {
                     var url = JSON.parse(req.target.response).url;
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'url' : url,
+                            'date':tp,
                             'token':token
                         }]);
                 }else{
@@ -88,8 +90,8 @@ function uploadImg() {
         }
     };
     var imgSendAgain=function(data){
-        console.log(data);
-        onAjaxUploadUpHandler(data)
+       console.log(data);
+        //onAjaxUploadUpHandler(data)
     };
     var bindLitener = function() {
         $(".js-upload").on("change",onFormDataUpHandler);

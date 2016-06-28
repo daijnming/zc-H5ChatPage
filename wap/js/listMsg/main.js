@@ -1,6 +1,6 @@
 /*
 * @author denzel
-*/
+*/ 
 var ListMsgHandler = function() {
     var global,
         currentState,//当前聊天对象状态  1 智能机器人  2人工客服
