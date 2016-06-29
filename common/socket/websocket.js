@@ -34,6 +34,11 @@ function ZcWebSocket(puid,url,global) {
         if(item.currentStatus !== 'human') {
             return;
         }
+        if(!item.date){
+            item.ts = + new Date();
+        }else{
+            item.ts = data.date;
+        }
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;
