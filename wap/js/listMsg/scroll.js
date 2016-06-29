@@ -66,6 +66,7 @@ var ScrollHandler = function(global,node){
   };
   //下拉刷新
   That.pullDown = function(callback){
+    console.log(scroll.y);
     //有更多历史记录
     if(scroll.y > 40&&global.flags.moreHistroy) {
       global.flags.pageNow+=1;//下拉刷新
