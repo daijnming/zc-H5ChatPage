@@ -3,3 +3,5 @@
 dest/
 bower_components/
 node_modules/
+rev-manifest.json
+dist/

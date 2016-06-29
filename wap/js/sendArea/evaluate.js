@@ -1,14 +1,18 @@
 /**
  * @author daijm
  */
-//currentStatus为1则为机器人，为2则为人工
-function evaluate(currentStatus) {
+//currentStatus为0则为机器人，为1则为人工
+function evaluate(currentStatus,global) {
     var template = require('./template.js');
     var Alert=require('../util/alert.js');
     //var Dialog=require('../util/dialog.js');
     var currentStatus=currentStatus;
     var Alert,
         dialog;
+    var score="",
+        tag="",
+        remark="",
+        type="";
     var parseDOM = function() {
         $evaluate=$(".js-evaluate");
     };
@@ -41,6 +45,7 @@ function evaluate(currentStatus) {
         $(".js-isques").on("click",hideDialog)
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
+        $(".submit").on("click",EvaluateAjaxHandler)
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -69,12 +74,23 @@ function evaluate(currentStatus) {
                 iStar = this.index;
                 switch(iStar) {
                     case 1://一星
+                        score=1;
+                        humanSetInnerStepTwoHtml(iStar);
+                        break;
                     case 2://二星
+                        score=2;
+                        humanSetInnerStepTwoHtml(iStar);
+                        break;
                     case 3://三星
+                        score=3;
+                        humanSetInnerStepTwoHtml(iStar);
+                        break;
                     case 4://四星
-                        humanSetInnerStepTwoHtml(iStar)
+                        score=4;
+                        humanSetInnerStepTwoHtml(iStar);
                         break;
                     case 5://五星
+                        score=5;
                         Alert.hide();
                         alert("感谢您的反馈");
                         break;
@@ -106,10 +122,24 @@ function evaluate(currentStatus) {
             $aLi[i - 1].onclick = function (){
                 iStar = this.index;
                 switch(iStar) {
+                    case 1://一星
+                        score=1;
+                        break;
+                    case 2://二星
+                        score=2;
+                        break;
+                    case 3://三星
+                        score=3;
+                        break;
+                    case 4://四星
+                        score=4;
+                        break;
                     case 5://五星
+                        score=5;
                         Alert.hide();
                         alert("感谢您的反馈");
                         break;
+                     
                 }
             }
         }
@@ -117,6 +147,36 @@ function evaluate(currentStatus) {
         $(".js-isques").on("click",hideDialog)
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
+        $(".submit").on("click",EvaluateAjaxHandler)
+    };
+    var EvaluateAjaxHandler=function(){
+        remark=$(".js-evaluateInner").val();
+        var tag=[];
+        for(var i=1;i<5;i++){
+            if($(".tag"+i).hasClass("active")){
+                tag.push(i)
+            }
+        };
+        tag=tag.join(",");
+        $.ajax({
+            type : "post",
+            url : "/chat/user/comment.action",
+            dataType : "json",
+            data : {
+                cid : global[0].apiInit.cid,
+                visitorId:global[0].apiInit.uid,
+                score:score,
+                tag:tag,
+                remark:remark,
+                type:currentStatus 
+            },
+            success:function(req){
+                alert("感谢您的反馈");
+            }
+        });
+        Alert.hide();
+        $('.js-satisfaction').remove();
+        $(".js-endSession span").css("width","45%")
     };
     var starEvaluateHandler=function(iStar){
        
@@ -148,7 +208,7 @@ function evaluate(currentStatus) {
     var init = function() {
         parseDOM();
         //机器人评价
-        if(currentStatus==1){
+        if(currentStatus==0){
             sobotSetInnerStepOneHtml();
             sobotbindListener();
         //人工评价
