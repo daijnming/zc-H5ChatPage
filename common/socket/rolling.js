@@ -15,7 +15,7 @@ function Rolling(puid,pu,global) {
         if(!data.date){
             data.ts = + new Date();
         }else{
-            data.ts = date;
+            data.ts = data.date;
         }
         $.ajax({
             'url' : '/chat/user/chatsend.action',
