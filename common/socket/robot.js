@@ -15,7 +15,6 @@ function Robot(global) {
 
     var onsend = function(args) {
         var data = args[0];
-        console.log(data);
         if(data.currentStatus !== 'robot') {
             return;
         }
@@ -27,7 +26,6 @@ function Robot(global) {
         if(data.requestType == 'question') {
             question = true;
         }
-        alert();
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
