@@ -5,6 +5,7 @@ function Robot(global) {
     var _self = this;
     var listener = require('../util/listener.js');
     var socketType = 'robot';
+    var question = false;
     var parseDOM = function() {
     };
 
@@ -18,6 +19,13 @@ function Robot(global) {
             return;
         }
         var token = createToken(data);
+        var content = data.answer.replace(/(^\s+|\s+$)/g,'');
+        if(!/^\d+$/.test(content)){
+            question = false;
+        }
+        if(data.requestType == 'question') {
+            question = true;
+        }
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
@@ -28,11 +36,14 @@ function Robot(global) {
                 'uid' : global.apiInit.uid,
                 'cid' : global.apiInit.cid,
                 'source' : global.userInfo.source,
-                'questionFlag' : 0
+                'questionFlag' : question ? 1 : 0
             },
             'type' : 'post',
             'success' : function(ret) {
                 var item = JSON.parse(ret);
+                if(item.answerType == 4) {
+                    question = true;
+                }
                 listener.trigger("core.onreceive", {
                     'list' : [item],
                     'type' : socketType
@@ -41,6 +52,7 @@ function Robot(global) {
             'fail' : function(ret) {
             }
         });
+        question = false;
     };
 
     var destroy = function() {
