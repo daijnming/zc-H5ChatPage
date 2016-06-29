@@ -168,7 +168,6 @@ var RobotFirst = function(global) {
             'data' : ret
         });
     };
-
     /**
      *
      * @param {Object} init 是通过事件点击触发，还是自动触发

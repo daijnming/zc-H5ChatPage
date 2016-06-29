@@ -46,19 +46,22 @@ var ScrollHandler = function(global,node){
         maxY = scroll.maxScrollY - y;
     if(global.flags.moreHistroy){
       if(y >= 40) {
-          $(pullDown).text('放手加载更多');
-          $(pullDown).addClass('down');
-          $(pullDown).removeClass('up');
-          return "";
-      } else if(y < 40 && y > 0) {
-          $(pullDown).text('下拉加载更多');
-          $(pullDown).addClass('up');
-          $(pullDown).removeClass('down');
+          $(pullDown).text('正在加载中...');
+          $(pullDown).addClass('loading');
+          // $(pullDown).addClass('down');
+          // $(pullDown).removeClass('up');
           return "";
       }
+      // else if(y < 40 && y > 0) {
+      //     $(pullDown).text('正在加载中...');
+      //     // $(pullDown).addClass('up');
+      //     // $(pullDown).removeClass('down');
+      //     return "";
+      // }
     }else{
       $(pullDown).text('没有更多消息');
-      $(pullDown).removeClass('up down');
+      $(pullDown).removeClass('loading');
+      // $(pullDown).removeClass('up down');
     }
   };
   //下拉刷新

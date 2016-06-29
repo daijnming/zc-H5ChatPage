@@ -86,14 +86,21 @@ var ListMsgHandler = function() {
                 itemLan = item.length;
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
-                    //过滤
-                    var $tmp = $('<div></div>').html(itemChild.msg);
-                    itemChild.msg = $tmp.text();
+                    //过滤 尼玛 忘记过滤什么了
+                    // var $tmp = $('<div></div>').html(itemChild.msg);
+                    // itemChild.msg = $tmp.text();
+                    var index = itemChild.msg.indexOf('uploadedFile');
+                    var res;
+                    if(index>=0||(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0)){
+                      res = itemChild.msg;
+                    }else{
+                      res=Comm.getNewUrlRegex(itemChild.msg);
+                    }
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace,
-                            'userMsg' : QQFace.analysis(itemChild.msg.trim()),
+                            'userMsg' : QQFace.analysis(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
@@ -101,13 +108,19 @@ var ListMsgHandler = function() {
                     } else {
                         //机器人：1    人工客服：2
                         // console.log(global.apiConfig.robotLogo);
-                        comf = $.extend({
-                            'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
-                            'customName' : itemChild.senderName,
-                            'customMsg' : itemChild.msg,
-                            'date':itemChild.t
-                        });
-                        msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                        console.log(itemChild);
+                        if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
+                          //FIXME 相关问题搜索
+                          msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
+                        }else{
+                          comf = $.extend({
+                              'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
+                              'customName' : itemChild.senderName,
+                              'customMsg' : res,
+                              'date':itemChild.t
+                          });
+                          msgHtml = doT.template(msgTemplate.leftMsg)(comf);
+                        }
                     }
                     //时间线显示
                     var curTime = new Date();
@@ -169,6 +182,10 @@ var ListMsgHandler = function() {
         if(data.length>0){
           // console.log(data);
           showHistoryMsg(data);
+          setTimeout(function(){
+            $(pullDown).removeClass('loading');
+            $(pullDown).text('下拉加载更多');
+          },100);
           global.flags.moreHistroy = true;
         }else{
           //没有历史记录
@@ -202,6 +219,7 @@ var ListMsgHandler = function() {
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
           case 1:
+          console.log(data);
               //FIXME 接收人工工作台消息
               var _type=data.type;
               var _list=data.list;
@@ -212,7 +230,7 @@ var ListMsgHandler = function() {
                   //FIXME 机器人类型  answerType=4 相关搜索
                   if(_data.answerType=='4'){
                     //相关搜索
-                    msgHtml += msgHandler.sugguestionsSearch(_data);
+                    msgHtml += msgHandler.sugguestionsSearch(_data,false);
                   }else{
                     msgHtml +=  msgHandler.onMsgFromCustom('robot',_data);
                   }
@@ -309,7 +327,8 @@ var ListMsgHandler = function() {
           $(wrapScroll).height(offsetTop);
           scrollHanlder.scroll.refresh();
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
-          $(window).scrollTop($("#js-textarea").offset().top);  
+          $(window).scrollTop(Number($("#js-textarea").offset().top));
+          // $('#js-textarea').text($("#js-textarea").offset().top+':'+Number($("#js-textarea").offset().top-50));
         },300);
       },
       //转接人工
@@ -343,14 +362,17 @@ var ListMsgHandler = function() {
         },5*1000);//每隔5秒处理正在输入提示消息
       }
     };
-    //包装消息相关方法
+    //包装消息相关方法 isHistory 是否是历史记录
     msgHandler = {
       //相关搜索方法
-      sugguestionsSearch:function(data){
+      sugguestionsSearch:function(data,isHistory){
         if(data){
           var list = data.sugguestions;
           var comf = $.extend({
+            customLogo:global.apiConfig.robotLogo,
+            customName:global.apiConfig.robotName,
             list:list,
+            isHistory:isHistory,
             stripe:data.stripe
           });
           var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
@@ -371,7 +393,7 @@ var ListMsgHandler = function() {
           //消息重发
           console.log(data);
           //重发放到最后
-          var oDiv = $('#userMsg'+data.dateuid).parents('div.rightMsg');
+          var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
           chatPanelList.append(oDiv);
           // $(oDiv).remove();
         }else{
@@ -399,6 +421,8 @@ var ListMsgHandler = function() {
                   'answer' : _msg,
                   'uid' : global.apiConfig.uid,
                   'cid' : global.apiConfig.cid,
+                  'currentState':'robot',
+                  'requestType':'question',
                   'date' : global.apiConfig.uid + new Date()
               }]);
         }
@@ -539,7 +563,8 @@ var ListMsgHandler = function() {
                      'uid' : global.apiInit.uid,
                      'cid' : global.apiInit.cid,
                      //时间戳
-                     'dateuid' : data.msgId,
+                     'dateuid' : global.apiInit.uid+ +new Date(),
+                     'oldMsgId':data.msgId,
                      'date': +new Date(),
                      'token':data.msgId,
                      'sendAgain':true//是否重发
@@ -556,7 +581,9 @@ var ListMsgHandler = function() {
       onMsgFromCustom:function(type,data){
         var logo,name,msg;
         if(type=='robot'){
+          console.log(data.answer);
           msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
+          // msg = data.answer;
           logo = global.apiConfig.robotLogo;
           name = global.apiConfig.robotName;
         }else if(type=='human'){
@@ -565,7 +592,13 @@ var ListMsgHandler = function() {
           name = data.aname;
         }
         var index = msg.indexOf('uploadedFile');
-        var res = index>0?msg:Comm.getNewUrlRegex(msg);
+        var res;
+        //判断是否是富文本
+        if(index>=0||(msg.indexOf('<')>=0 && msg.indexOf('>')>=0)){
+          res = msg;
+        }else{
+          res = Comm.getNewUrlRegex(msg);
+        }
         var comf = $.extend({
             customLogo : logo,
             customName : name,

@@ -38,15 +38,30 @@ body{
   color:#fff;
 
 }
+
 .wrap .header-back .back i::before{
-  content: "";
+  content: '';
   position: absolute;
-  width:0;
-  border-width: 6px 12px 10px 0;
-  border-color: transparent #fff;
-  border-style: solid;
-  top:17px;
+  width:15px;
+  height: 2px;
+  top:28px;
   left:9px;
+  background: #fff;
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+  /*border:1px solid #999;*/
+}
+.wrap .header-back .back i::after{
+  content: '';
+  position: absolute;
+  height: 2px;
+  width:15px;
+  top:18px;
+  left:9px;
+  background: #fff;
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+  /*border:1px solid #999;*/
 }
 .wrap .header-back .title{
   text-align: center;

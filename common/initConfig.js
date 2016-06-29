@@ -227,7 +227,14 @@ var initConfig = function() {
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
                 face : urlParams['face'] ? urlParams['face'] : 'http://img.sobot.com/console/common/face/user.png',//默认用户头像
-                back : urlParams['back'] ? urlParams['back'] : ''
+                back : urlParams['back'] ? urlParams['back'] : '',
+                realname:urlParams['realname']?urlParams['realname']:'',
+                weibo:urlParams['weibo']?urlParams['weibo']:'',
+                weixin:urlParams['weixin']?urlParams['weixin']:'',
+                qq:urlParams['qq']?urlParams['qq']:'',
+                sex:urlParams['sex']?urlParams['sex']:'',
+                birthday:urlParams['birthday']?urlParams['birthday']:'',
+                remark:urlParams['remark']?urlParams['remark']:''
             };
         },
         //FIXME 初始化SysNum系统 id
@@ -312,7 +319,14 @@ var initConfig = function() {
                     uname : That.cacheInfo.userInfo.uname,
                     visitTitle : That.cacheInfo.userInfo.visitTitle,
                     visitUsrl : That.cacheInfo.userInfo.visitUrl,
-                    face : That.cacheInfo.userInfo.face
+                    face : That.cacheInfo.userInfo.face,
+                    realname:That.cacheInfo.userInfo.realname,
+                    weibo:That.cacheInfo.userInfo.weibo,
+                    weixin:That.cacheInfo.userInfo.weixin,
+                    qq:That.cacheInfo.userInfo.qq,
+                    sex:That.cacheInfo.userInfo.sex,
+                    birthday:That.cacheInfo.userInfo.birthday,
+                    remakr:That.cacheInfo.userInfo.remark
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;
