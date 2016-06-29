@@ -22,12 +22,12 @@ var template = {};
 var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
 								'<p class="h2">是否有以下情况</p>'+
 								'<div class="situation">'+
-									'<span>答非所问</span>'+
-									'<span style="margin-right:0">理解能力差</span>'+
-									'<span>一问三不知</span>'+
-									'<span style="margin-right:0">不礼貌</span>'+
+									'<span class="tag1">答非所问</span>'+
+									'<span class="tag2" style="margin-right:0">理解能力差</span>'+
+									'<span class="tag3">一问三不知</span>'+
+									'<span class="tag4" style="margin-right:0">不礼貌</span>'+
 								'</div>'+
-								'<textarea placeholder="欢迎给我们的服务提建议"></textarea>'+
+								'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 								'<a class="submit" href="#">提交评价</a>'+
 							 '</div>';
 var humanOne_selfHtml = '<div class="evaluate js-evaluate">'+
@@ -53,12 +53,12 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 							'</div>'+
 							'<p class="h2">是否有以下情况</p>'+
 							'<div class="situation">'+
-								'<span>答非所问</span>'+
-								'<span style="margin-right:0">理解能力差</span>'+
-								'<span>一问三不知</span>'+
-								'<span style="margin-right:0">不礼貌</span>'+
+								'<span class="tag1">答非所问</span>'+
+								'<span class="tag2" style="margin-right:0">理解能力差</span>'+
+								'<span class="tag3">一问三不知</span>'+
+								'<span class="tag4" style="margin-right:0">不礼貌</span>'+
 							'</div>'+
-							'<textarea placeholder="欢迎给我们的服务提建议"></textarea>'+
+							'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 							'<a class="submit" href="#">提交评价</a>'+
 						'</div>';
 template.sobotEvaluate_selfHtml = sobotEvaluate_selfHtml;

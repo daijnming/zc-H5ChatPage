@@ -179,7 +179,7 @@ li {
     background-position:8px -120px;
 }
 .addList .leaveMessagebg{
-    background-position: -151px -118px;
+    background-position: -142px -118px;
 }
 
 .showChatAdd {/* display:block; */
@@ -199,6 +199,7 @@ li {
     width:100%;
     overflow:hidden;
     border-top:1px solid #ced7d6;
+    box-sizing: border-box;
 }
 .endSession span{
     display:inline-block;
@@ -207,6 +208,7 @@ li {
     margin:2%;
     border-radius:10px;
     text-align:center;
+    box-sizing: border-box;
 }
 .endSession span:hover{
     background-color:#edf1f2;
@@ -214,7 +216,8 @@ li {
 .endSession span i{
     display:inline-block;
     height:24px;
-    width:53%;
+    width:26px;
+    margin:auto;
     background-image: url(../images/endEssion2X.png);
     background-size:300px 39px;
     background-repeat:no-repeat;
@@ -227,16 +230,16 @@ li {
     text-align:center;
 }
 .endSession .span1 i{
-     background-position: -26px -7px;
+     background-position: -37px -7px;
 }
 .endSession .span2 i{
      background-position: center -7px;
 }
 .endSession .span3 i{
-     background-position: -226px -7px;
+     background-position: -237px -7px;
 }
 
-@media (min-device-width : 320px){
+/* @media (min-device-width : 320px){
     .endSession span i{
          width:51%;
     }
@@ -246,49 +249,49 @@ li {
          width:44%;
     }
 }
-/* iphone6 */
+iphone6
 @media (min-device-width : 375px){
     .endSession span i{
          width:44%;
     }
-}
+} */
 /* iphone6 Plus */
 @media (min-device-width : 414px){
     .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
     }
-    .endSession span i{
+    /* .endSession span i{
         width:40%;
-    }
+    } */
 }
-@media (min-device-width : 480px){
+/* @media (min-device-width : 480px){
     .endSession span i{
          width:36%;
     }
 }
 
-/*  */
+
 @media (min-device-width : 640px){
     .endSession span i{
         width:24%;
     }
 }
-/* iphone6puls橫屏 */
+iphone6puls橫屏
 @media (min-device-width : 736px){
     .endSession span i{
         width:23%;
     }
 }
-/*  */
+
 @media (min-device-width : 1280px){
     .endSession span i{
         width:13%;
     }
 }
-/*  */
+
 @media (min-device-width : 1600px){
     .endSession span i{
         width:11%;
     }
-}
+} */
