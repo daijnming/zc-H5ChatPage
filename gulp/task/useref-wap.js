@@ -6,8 +6,8 @@ var gulpIf = require("gulp-if");
 var cleanCSS = require('gulp-clean-css');
 
 var autoPrefixed = require("gulp-autoprefixer");
-gulp.task("useref-wap",['browserify-wap'],function(){
-	return gulp.src("wap/index.html").
+gulp.task("useref-wap",['browserify-wap','imagemin-wap'],function(){
+	return gulp.src("wap/**/*.html").
 	pipe(useref()).
 	pipe(gulpIf("*.css",cleanCSS({
 		'compatibility':"ie8"
