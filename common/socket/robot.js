@@ -15,17 +15,19 @@ function Robot(global) {
 
     var onsend = function(args) {
         var data = args[0];
+        console.log(data);
         if(data.currentStatus !== 'robot') {
             return;
         }
         var token = createToken(data);
         var content = data.answer.replace(/(^\s+|\s+$)/g,'');
-        if(!/^\d+$/.test(content)){
+        if(!/^\d+$/.test(content)) {
             question = false;
         }
         if(data.requestType == 'question') {
             question = true;
         }
+        alert();
         $.ajax({
             'url' : '/chat/user/robotsend.action',
             'data' : 'type',
