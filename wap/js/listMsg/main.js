@@ -89,11 +89,18 @@ var ListMsgHandler = function() {
                     //过滤 尼玛 忘记过滤什么了
                     // var $tmp = $('<div></div>').html(itemChild.msg);
                     // itemChild.msg = $tmp.text();
+                    var index = itemChild.msg.indexOf('uploadedFile');
+                    var res;
+                    if(index>=0||(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0)){
+                      res = itemChild.msg;
+                    }else{
+                      res=Comm.getNewUrlRegex(itemChild.msg);
+                    }
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace,
-                            'userMsg' : QQFace.analysis(itemChild.msg.trim()),
+                            'userMsg' : QQFace.analysis(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
@@ -109,7 +116,7 @@ var ListMsgHandler = function() {
                           comf = $.extend({
                               'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
                               'customName' : itemChild.senderName,
-                              'customMsg' : itemChild.msg,
+                              'customMsg' : res,
                               'date':itemChild.t
                           });
                           msgHtml = doT.template(msgTemplate.leftMsg)(comf);
@@ -212,6 +219,7 @@ var ListMsgHandler = function() {
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
           case 1:
+          console.log(data);
               //FIXME 接收人工工作台消息
               var _type=data.type;
               var _list=data.list;
@@ -385,7 +393,7 @@ var ListMsgHandler = function() {
           //消息重发
           console.log(data);
           //重发放到最后
-          var oDiv = $('#userMsg'+data.dateuid).parents('div.rightMsg');
+          var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
           chatPanelList.append(oDiv);
           // $(oDiv).remove();
         }else{
@@ -555,7 +563,8 @@ var ListMsgHandler = function() {
                      'uid' : global.apiInit.uid,
                      'cid' : global.apiInit.cid,
                      //时间戳
-                     'dateuid' : data.msgId,
+                     'dateuid' : global.apiInit.uid+ +new Date(),
+                     'oldMsgId':data.msgId,
                      'date': +new Date(),
                      'token':data.msgId,
                      'sendAgain':true//是否重发
@@ -583,8 +592,13 @@ var ListMsgHandler = function() {
           name = data.aname;
         }
         var index = msg.indexOf('uploadedFile');
-        var res = index>0?Comm.getNewUrlRegex(msg):msg;
-        // var res = msg;
+        var res;
+        //判断是否是富文本
+        if(index>=0||(msg.indexOf('<')>=0 && msg.indexOf('>')>=0)){
+          res = msg;
+        }else{
+          res = Comm.getNewUrlRegex(msg);
+        }
         var comf = $.extend({
             customLogo : logo,
             customName : name,
