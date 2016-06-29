@@ -12,6 +12,11 @@ function Rolling(puid,pu,global) {
         if(data.currentStatus !== 'human') {
             return;
         }
+        if(!data.date){
+            data.ts = + new Date();
+        }else{
+            data.ts = date;
+        }
         $.ajax({
             'url' : '/chat/user/chatsend.action',
             'data' : {
