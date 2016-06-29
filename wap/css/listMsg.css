@@ -264,7 +264,7 @@ p,ul,li{
   display: inline-block;
   float: left;
 }
-.wrap .header-back .back i::before{
+/*.wrap .header-back .back i::before{
   content: "";
   position: absolute;
   width:0;
@@ -273,7 +273,32 @@ p,ul,li{
   border-style: solid;
   top:17px;
   left:9px;
+}*/
+.wrap .header-back .back i::before{
+  content: '';
+  position: absolute;
+  width:15px;
+  height: 2px;
+  top:28px;
+  left:9px;
+  background: #fff;
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+  /*border:1px solid #999;*/
 }
+.wrap .header-back .back i::after{
+  content: '';
+  position: absolute;
+  height: 2px;
+  width:15px;
+  top:18px;
+  left:9px;
+  background: #fff;
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+  /*border:1px solid #999;*/
+}
+
 .wrap .header-back .title{
   text-align: center;
   vertical-align: middle;
@@ -296,6 +321,16 @@ p,ul,li{
 .wrap .pullDown .pullDownLabel{
   position: relative;
   display: inline-block;
+}
+.wrap .pullDown .pullDownLabel.loading::after{
+  content:"";
+  background-image: url(../images/msg_loading.gif);
+  width:36px;
+  height: 36px;
+  transform: scale(0.5);
+  position: absolute;
+  left:66px;
+  top:2px;
 }
 .wrap .pullDown .pullDownLabel.up::after{
   content: "";
@@ -341,9 +376,13 @@ p,ul,li{
     float:none;
     display:inline-block;
     margin:1%;
+    vertical-align: middle;
 }
 /******theme end ******/
 /****统一超链接颜色***/
 .leftMsg .msgOuter a,.sysMsgText a{
   color:rgb(25,161,227) !important;
+}
+iframe,embed,table{
+  width: 100% !important;
 }
