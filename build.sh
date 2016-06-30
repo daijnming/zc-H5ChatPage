@@ -1,12 +1,5 @@
 CONF="WEB-INF/replace.conf"
 JAR="WEB-INF/lib/replace.jar"
-
-replaceScript(){
-   java -jar $JAR -s $1 -c $CONFIG > ${1}_temp
-   rm $1
-   mv ${1}_temp $1
-}
-
 while [ $# -gt 0 ]
 do
 	case $1 in 
@@ -14,6 +7,7 @@ do
 	 	case $2 in
 			wap )
 				gulp production-wap
+				find dist/wap -name "*.html" -type f | xargs -I {}  sh replace.sh {} $JAR $CONF 
 			;;
 			pc )
 			;;
