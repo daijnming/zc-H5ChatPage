@@ -9,8 +9,8 @@ var ListMsgHandler = function() {
         isUploadImg=true,//是否为上传图片操作
         startScrollY,//原始开始滚动高度  暂未使用
         inputTimer,//正在输入处理
+        scrollerInitHeight,//滚动区域高度
         timer;//输入框高度延迟处理 解决与弹出键盘冲突
-
 
     var Comm = require('../../../common/comm.js');
     var fnEvent = require('../../../common/util/listener.js');
@@ -37,6 +37,7 @@ var ListMsgHandler = function() {
         userChatBox,//用户聊天内容背景色
         chatMsgList,//聊天窗体
         wrapScroll,//滚动窗体
+        scrollChatList,//滚动区域
         pullDown,//下拉刷新
         chatPanelList,//滚动列表
         progress,//进度条
@@ -108,7 +109,7 @@ var ListMsgHandler = function() {
                     } else {
                         //机器人：1    人工客服：2
                         // console.log(global.apiConfig.robotLogo);
-                        console.log(itemChild);
+                        // console.log(itemChild);
                         if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
                           //FIXME 相关问题搜索
                           msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
@@ -145,31 +146,33 @@ var ListMsgHandler = function() {
                 }
             }
             //
-
-            updateChatList(tempHtml,true);
+            updateChatList(tempHtml);
         } else {
             //没有更多消息
             global.flags.moreHistroy = false;
         }
         //刷新
-        scrollHanlder.scroll.refresh();
+        // scrollHanlder.scroll.refresh();
         if(isFirstData){
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+        }else{
+          setTimeout(function(){
+            var _y = -($(scrollChatList).height() - scrollerInitHeight);
+            console.log($(scrollChatList).height()+':'+_y);
+            scrollHanlder.scroll.scrollTo(0,_y);
+            scrollerInitHeight = $(scrollChatList).height();
+          },2000);
         }
     };
     //更新聊天信息列表
-    var updateChatList = function(tmpHtml,isHistory) {
+    var updateChatList = function(tmpHtml) {
         var _chatPanelList = chatPanelList,
-            _chatPanelChildren = '';
-        //是否是历史记录
-        if(isHistory) {
             _chatPanelChildren = _chatPanelList.children();
             if(_chatPanelChildren && _chatPanelChildren.length) {
                 chatPanelList.children().first().before(tmpHtml);
             } else {
                 chatPanelList.append(tmpHtml);
             }
-        }
     };
 
     var initScroll = function(){
@@ -180,12 +183,11 @@ var ListMsgHandler = function() {
     var onPullDown = function(){
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
-          // console.log(data);
-          showHistoryMsg(data);
+          showHistoryMsg(data,0);
           setTimeout(function(){
             $(pullDown).removeClass('loading');
             $(pullDown).text('下拉加载更多');
-          },100);
+          },2000);
           global.flags.moreHistroy = true;
         }else{
           //没有历史记录
@@ -219,7 +221,6 @@ var ListMsgHandler = function() {
               msgHtml = doT.template(msgTemplate.rightMsg)(comf);
             break;
           case 1:
-          console.log(data);
               //FIXME 接收人工工作台消息
               var _type=data.type;
               var _list=data.list;
@@ -391,7 +392,7 @@ var ListMsgHandler = function() {
           uploadImgToken='';//置空 一个流程完成
         }else if(data[0].sendAgain){
           //消息重发
-          console.log(data);
+          // console.log(data);
           //重发放到最后
           var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
           chatPanelList.append(oDiv);
@@ -530,9 +531,6 @@ var ListMsgHandler = function() {
       },
       //消息确认方法
       msgReceived:function(data){
-        // console.log(data);
-        // data={msgId:'123',result:'success'};
-        // msgSendIdHander = ['123','456'];
         if(data&&data.msgId){
             var isMsgId = msgSendIdHander.indexOf(data.msgId);
             if(isMsgId>=0){
@@ -581,7 +579,7 @@ var ListMsgHandler = function() {
       onMsgFromCustom:function(type,data){
         var logo,name,msg;
         if(type=='robot'){
-          console.log(data.answer);
+          // console.log(data.answer);
           msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
           // msg = data.answer;
           logo = global.apiConfig.robotLogo;
@@ -640,6 +638,7 @@ var ListMsgHandler = function() {
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
+        scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         sysHander.nowTimer();//显示当前时间
         sysHander.onBeingInput();//正在输入处理
     };
@@ -652,6 +651,8 @@ var ListMsgHandler = function() {
         pullDown = $('.js-pullDownLabel');
         chatPanelList = $('.js-chatPanelList');
         wrapBox = $('.js-wrapBox');
+        scrollChatList = $('.js-scroller');
+
     };
 
     var bindListener = function() {

@@ -21,14 +21,6 @@ function ZC_Face() {
     var show = function() {
         //集合如果不存在，则创建
         if($('#faceBox').length <= 0) {
-            /*loadFile.load('/wap/views/sendArea/qqFace.html').then(function(value) {
-                var qqface_html = doT.template(value)({
-                    "tip" : tip,
-                    "path" : path
-                });
-                alert(qqface_html);
-                $faceGroup.append(qqface_html);
-            });*/
             var flag=0;
             var str='<div id="faceBox" class="face">';
             for(var a in tip) { 

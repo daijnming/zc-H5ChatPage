@@ -26,9 +26,11 @@ function TextArea(window) {
         answer,
         //记住输入框的状态,点击发送后要保持
         focusStatus,
-        currentStatus;
-        //1为机器人，2为人工
-    var transferFlag=1;
+        currentStatus,
+        //用户输入的内容在客服提示
+        timer;
+        //0为机器人，1为人工
+    var transferFlag=0;
     //传给聊天的url
     var statusHandler=function(data){
         currentStatus=data;
@@ -42,8 +44,8 @@ function TextArea(window) {
     var changeStatusHandler=function(data){
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
-            //2为人工
-            transferFlag=2;
+            //1为人工
+            transferFlag=1;
             $(".qqFaceTip").css("display","inline-block");
             $uploadImg.show();
             //满意度评价
@@ -52,19 +54,39 @@ function TextArea(window) {
              //提示文本
             placeholder($textarea,"当前是人工");
         }else{
-            transferFlag=1;
+            transferFlag=0;
             $uploadImg.hide();
             $satisfaction.show();
             $artificial.show();
         }
     }
+    //用户输入，工作台提示
+    var chatAdminshowtextHandler=function(){
+        clearInterval(timer);
+        var txt=$($textarea).text()
+        timer = setTimeout(function(){
+            var content=$textarea.text();
+            $.ajax({
+                type : "post",
+                url : "/chat/user/input.action",
+                dataType : "json",
+                data : {
+                    cid :currentCid,
+                    uid:currentUid,
+                    content:content 
+                }
+            });
+        },500)
+    };
     var showSendBtnHandler = function(evt) {
         //判断当前是否为人工模式
-        if(transferFlag==1){
+        if(transferFlag==0){
             robotmodeButton();
         }else{
             manualmodeButton();
         }
+        chatAdminshowtextHandler()
+        
     };
     var robotmodeButton=function(){
         var _text = $textarea.text();
@@ -134,7 +156,7 @@ function TextArea(window) {
             $(".add").css("display","inline-block");
         }
         $sendBtn.hide();
-        if(transferFlag==1){
+        if(transferFlag==0){
             $textarea.css("width","83%");
            
         }else{
@@ -153,8 +175,8 @@ function TextArea(window) {
         if($chatArea.hasClass("showChatAdd")){
             //隐藏
             hideChatAreaHandler();
-            //1为机器人模式
-            if(transferFlag==1){
+            //0为机器人模式
+            if(transferFlag==0){
                 $(".addhover").hide();
                 $(".add").css("display","inline-block");
                 $(".qqFaceTiphover").hide();
@@ -178,8 +200,8 @@ function TextArea(window) {
                 /*$chatArea.animate({
                     bottom : "0"
                 },200);*/
-                //1为机器人模式
-                if(transferFlag==1){
+                //0为机器人模式
+                if(transferFlag==0){
                     $(".qqFaceTiphover").hide();
                     $(".qqFaceTip").hide();
                     $(".addhover").css("display","inline-block");
@@ -212,7 +234,7 @@ function TextArea(window) {
                     bottom : "0"
                 },200);*/
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
-                if(transferFlag==1){
+                if(transferFlag==0){
                     $(".qqFaceTiphover").hide();
                     $(".qqFaceTip").hide();
                     $(".addhover").hide();
@@ -247,7 +269,7 @@ function TextArea(window) {
             });*/
             autoSizePhone();
             var _text=$textarea.text();
-            if(transferFlag==1){
+            if(transferFlag==0){
                 $(".qqFaceTiphover").hide();
                 $(".qqFaceTip").hide();
                 $(".addhover").hide();
@@ -272,6 +294,7 @@ function TextArea(window) {
             }
        //  },200);
        focusStatus=false;
+       //$(window).scrollTop($("#js-textarea").offset().top-16);  
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -351,32 +374,9 @@ function TextArea(window) {
     var autoSizePhone=function(){
         //var _height=$(".chatArea").offset().top;
         //console.log(_height);
+        //alert($(".sendarea").offset().top+18);
         listener.trigger('sendArea.autoSize',$chatArea);
     };
-    /*var compatiblegetBrowser = function() {
-        var browserList =  ['mqqbrowser',// QQ浏览器(注意mqqbrowser和qq的顺序)
-                            'qq',// 手机qq
-                            'micromessenger',// 微信浏览器
-                            'ucbrowser',// UC浏览器(注意ucbrowser和safari的顺序)
-                            'miuibrowser',// 小米浏览器
-                            'safari',// Safari浏览器
-                            'opera mobi',// Opera浏览器
-                            'opera mini',// Opera Mini浏览器
-                            'firefox' // Firefox浏览器
-                            ],
-            browserListLen = browserList.length,
-            userAgent = navigator.userAgent.toLowerCase(),
-            uaIndex = 0;
-
-        for(var i = 0,
-            item = '';i < browserListLen;i++) {
-            item = browserList[i];
-            uaIndex = userAgent.indexOf(item);
-            if(uaIndex > 0) {
-                return item;
-            }
-        }
-    };*/
     //结束会话
     var endSessionHandler=function(status){
        switch(status) {
@@ -394,22 +394,25 @@ function TextArea(window) {
     };
     //重新开始新会话
     var newMessage=function(){
-        //window.location.reload()
-        //微信内置浏览器必须使用添加随机数此方法
-        var random=+new Date();
-        //console.log(window.location.href);
-        window.location.href=window.location.href+"&random="+random;
+        var ua = navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i)=="micromessenger") {
+                //微信内置浏览器必须使用添加随机数此方法
+                var random=+new Date();
+                window.location.href=window.location.href+"&refresh="+random;
+            } else {
+                window.location.reload()
+            }
     };
     var evaluateHandler=function(){
         //评价
-        evaluate(transferFlag);
+        evaluate(transferFlag,global);
         focusStatus=false;
     };
     var hideKeyboard=function(){
         $textarea.blur();
         $chatArea.removeClass("showChatArea").addClass("hideChatArea");
         var _text = $textarea.text();
-        if(transferFlag==1){
+        if(transferFlag==0){
             if(_text) {
                 $(".qqFaceTiphover").hide();
                 $(".addhover").hide();
@@ -459,14 +462,17 @@ function TextArea(window) {
         //评价
         $satisfaction=$(".js-satisfaction");
         //oTxt = document.getElementById("js-textarea");
+        //留言按钮
+         $leaveMessage= $(".js-leaveMessage");
     };
-
+    
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
         //qq表情
         $emotion.on("click",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
+        //$textarea.on("keydown",chatAdminshowtextHandler);
         $textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAddHandler);
         $emotion.on("click",showChatEmotionHandler);
@@ -514,10 +520,16 @@ function TextArea(window) {
     })();
     listener.on("core.onload", function(data) {
         global = data;
+        //console.log(global);
         currentUid=global[0].apiInit.uid;
         currentCid=global[0].apiInit.cid;
         //将uid传入上传图片模块
-        listener.trigger('sendArea.sendInitConfig',currentUid)
+        listener.trigger('sendArea.sendInitConfig',currentUid);
+        var msgflag=global[0].apiConfig.msgflag;
+        //为1移除留言按钮
+        if(msgflag==1){
+            $leaveMessage.remove();
+        }
         init();
     });
 
