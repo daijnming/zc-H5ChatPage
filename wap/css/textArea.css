@@ -69,7 +69,7 @@ li {
     overflow: auto;
 }
 .sendBtn {
-    display: none;
+    display: inline-block;
     float:left;
     background-color: #09aeb0;
     width: 18%;
@@ -94,25 +94,28 @@ li {
     background-position:-96px 2px;
 }
 .addhover {
-    display:none;
+    display:inline-block;
     height: 32px;
     width: 32px;
     margin-left: 2%;
     background-position:-144px 2px;
 }
 .qqFaceTip {
-    display:none;
+    display:inline-block;
     height: 32px;
     width: 32px;
     margin-left:2%;
     background-position:0px 2px;
 }
 .qqFaceTiphover{
-    display:none;
+    display:inline-block;
     height: 32px;
     width: 32px;
     margin-left:2%;
     background-position:-48px 2px;
+}
+.activehide{
+    display:none;
 }
 /* .keyboard {
     display:none;
