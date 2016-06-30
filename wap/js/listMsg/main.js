@@ -124,7 +124,8 @@ var ListMsgHandler = function() {
                         // console.log(itemChild);
                         if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
                           //FIXME 相关问题搜索
-                          msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
+                          // msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
+                          msgHtml = messageHandler.msg.sugguestionsSearch(itemChild.sdkMsg,true);
                         }else{
                           comf = $.extend({
                               'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
@@ -221,9 +222,9 @@ var ListMsgHandler = function() {
           case 0:
               var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
               //FIXME 消息确认 只在与客服聊天时添加
-              var msgClass = messageHandler.sys.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
-              if(messageHandler.sys.currentState==2){
-                messageHandler.msg.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
+              var msgClass = messageHandler.config.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
+              if(messageHandler.config.currentState==2){
+                messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
                 // msgSendIdHander.push(data[0]['dateuid']);//暂存发送消息id
               }
               comf = $.extend({
@@ -246,7 +247,8 @@ var ListMsgHandler = function() {
                   //FIXME 机器人类型  answerType=4 相关搜索
                   if(_data.answerType=='4'){
                     //相关搜索
-                    msgHtml += msgHandler.sugguestionsSearch(_data,false);
+                    // msgHtml += msgHandler.sugguestionsSearch(_data,false);
+                    msgHtml += messageHandler.msg.sugguestionsSearch(_data,false);
                   }else{
                     msgHtml +=  msgHandler.onMsgFromCustom('robot',_data);
                   }
@@ -281,7 +283,7 @@ var ListMsgHandler = function() {
                 msgHtml = systemHandler.sys.onSysMsgShow(_data.content,data.status,sysMsgList,sysMsgManager);
               }else{
                 //1 机器人  2 客服
-                messageHandler.sys.currentState = _type=='robot'?1:2;
+                messageHandler.config.currentState = _type=='robot'?1:2;
                 msgHtml =  msgHandler.onMsgFromCustom(_type,_data);
               }
             break;
@@ -294,9 +296,9 @@ var ListMsgHandler = function() {
             break;
           case 4:
             // uploadImgToken = data[0]['token'];
-            messageHandler.msg.uploadImgToken = data[0]['token'];
+            messageHandler.config.uploadImgToken = data[0]['token'];
             // uploadImgHandler.push(data[0]['token']);//图片唯一标识存进容器
-            messageHandler.msg.msgSendACK.push(messageHandler.msg.uploadImgToken);//暂存发送消息id
+            messageHandler.config.msgSendACK.push(messageHandler.config.uploadImgToken);//暂存发送消息id
             // msgSendIdHander.push(uploadImgToken);//暂存发送消息id
             comf = $.extend({
                userLogo : global.userInfo.face,
@@ -309,319 +311,45 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
         }
-        msgHandler.updateChatMsg(msgHtml);
+        updateChatMsg(msgHtml);
         scrollHanlder.scroll.refresh();//刷新
         scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
       // console.log(currentState);
     };
-    //包装消息相关方法 isHistory 是否是历史记录
-    msgHandler = {
-      //相关搜索方法
-      sugguestionsSearch:function(data,isHistory){
-        if(data){
-          var list = data.sugguestions;
-          var comf = $.extend({
-            customLogo:global.apiConfig.robotLogo,
-            customName:global.apiConfig.robotName,
-            list:list,
-            isHistory:isHistory,
-            stripe:data.stripe
-          });
-          var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
-          return msg;
-        }
-        return '非常对不起哦，不知道怎么回答这个问题呢，我会努力学习的。';
-      },
-      //发送消息
-      onSend : function(data){
-        // console.log(data);
-        if(data[0].sendAgain){
-          //消息重发
-          var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
-          chatPanelList.append(oDiv);
-        }else{
-          //非图片
-          if(data[0]['token']==''){
-            bindMsg(0,data);
+    //更新聊天记录
+    var updateChatMsg = function(tempHtml){
+      if(chatPanelList&&chatPanelList.children().length){
+          var lastDom = chatPanelList.children().last();
+          var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
+          //超一分钟 显示 时间线
+          if(_m>1&&!lastDom.hasClass('sysData')){
+            var _t = new Date();
+            var hour = _t.getHours()>=10?_t.getHours():'0'+_t.getHours(),
+                minutes = _t.getMinutes()>=10?_t.getMinutes():'0'+_t.getMinutes(),
+                _time = '今天 '+hour+':'+minutes;
+            var comf = $.extend({
+              sysData:_time,
+              date:+new Date()
+            });
+            tempHtml = doT.template(msgTemplate.sysData)(comf)+tempHtml;
           }
-        }
-      },
-      //接收回复
-     onReceive : function(data){
-       //判断当前聊天状态
-       if(data.type==='robot'){
-         currentState=1;
-       }else if(data.type==='human'){
-         currentState=2;
-       }
-        bindMsg(1,data);
-      },
-      //相关搜索答案点击事件
-     onSugguestionsEvent : function(){
-        var _txt = $(this).text();
-        if(_txt){
-          //获取点击内容
-          var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
-          fnEvent.trigger('sendArea.send',[{
-                  'answer' : _msg,
-                  'uid' : global.apiConfig.uid,
-                  'cid' : global.apiConfig.cid,
-                  'currentState':'robot',
-                  'requestType':'question',
-                  'date' : global.apiConfig.uid + new Date()
-              }]);
-        }
-      },
-      //上传图片
-      onUpLoadImg:function(data){
-        // console.log(data);
-        bindMsg(4,data);
-      },
-      onUpLoadImgProgress:function(data){
-        var $shadowLayer,
-            $progress,
-            oldH;
-        if(isUploadImg){
-            $shadowLayer = $('#img'+messageHandler.msg.uploadImgToken).find('.js-shadowLayer');
-            $progress = $('#progress'+messageHandler.msg.uploadImgToken);
-            oldH = $shadowLayer.height();
-            isUploadImg=false;
-        }
-        //蒙版高度随百分比改变
-        $progress.text(data+'%');
-        var floatData = data/100;//获取小数
-        //蒙版高度
-        var cH = floatData * oldH;//获取计算后的高度值
-        //计算
-        var newH = oldH - cH;
-        $shadowLayer.height(newH);
-        if(floatData>=1){
-          isUploadImg=true;//开启上传图片
-          $shadowLayer.remove();
-          $progress.remove();
-          scrollHanlder.scroll.refresh();//刷新
-        }
-      },
-      //回传图片路径地址
-      onUploadImgUrl:function(data){
-        //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-        var $div = $('#img'+messageHandler.msg.uploadImgToken);
-        $div.find('p img:first-child').remove();
-        $div.find('p').html(data[0]['answer']);
-        messageHandler.msg.uploadImgToken='';//置空 一个流程完成
-      },
-      //加欢迎语
-      getHello:function(data){
-        //判断智能机器人还是人工客服 1 robot 2 human
-        if(data && data.length){
-          messageHandler.sys.currentState = data[data.length-1].content[0]['senderType'];
-        }
-        showHistoryMsg(data,1);
-      },
-      //更新聊天记录
-      updateChatMsg:function(tempHtml){
-        if(chatPanelList&&chatPanelList.children().length){
-            var lastDom = chatPanelList.children().last();
-            var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
-            //超一分钟 显示 时间线
-            if(_m>1&&!lastDom.hasClass('sysData')){
-              var _t = new Date();
-              var hour = _t.getHours()>=10?_t.getHours():'0'+_t.getHours(),
-                  minutes = _t.getMinutes()>=10?_t.getMinutes():'0'+_t.getMinutes(),
-                  _time = '今天 '+hour+':'+minutes;
-              var comf = $.extend({
-                sysData:_time,
-                date:+new Date()
-              });
-              tempHtml = doT.template(msgTemplate.sysData)(comf)+tempHtml;
-            }
-        }
-        chatPanelList.append(tempHtml);
+      }
+      chatPanelList.append(tempHtml);
 
-        //FIXME 永存消息只显示最新的一条
-        if(sysMsgManager.length>1){
-          var sign = sysMsgManager.shift();
-          $('#'+sign).animate({'margin-top':'-50px',opacity:'0.1'},500,function(){
-            $(this).remove();
-          });
-        }
-      },
-      //会话结束判断
-      // 1：人工客服离线导致用户下线
-      // 2：被客服移除
-      // 3：被列入黑单
-      // 4：长时间不说话
-      // 6：有新窗口打开
-      sessionCloseHander:function(data){
-        clearInterval(userTimer);//停止超时提示任务
-        clearInterval(adminTimer);
-        var msg='';
-        if(data){
-          switch (data.status) {
-            case 1:
-            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
-              break;
-            case 2:
-            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
-              break;
-            case 3:
-            msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
-              break;
-            case 4:
-            msg = Comm.format($(global.apiConfig.userOutWord).text(),[data.aname],false);
-              break;
-            case 6:
-            msg = Comm.format(sysPromptLan.L0003,[data.aname],false);
-              break;
-          }
-        }
-        var tp = +new Date();
-        var comf = $.extend({
-          sysMsg:msg,
-          sysMsgSign:tp,
-          date:tp
+      //FIXME 永存消息只显示最新的一条
+      if(sysMsgManager.length>1){
+        var sign = sysMsgManager.shift();
+        $('#'+sign).animate({'margin-top':'-50px',opacity:'0.1'},500,function(){
+          $(this).remove();
         });
-        return doT.template(msgTemplate.sysMsg)(comf);
-      },
-      //消息确认方法
-      msgReceived:function(data){
-        var sendType,//发送类型
-            answer;//发送内容
-        // var isMsgId = msgSendIdHander.indexOf(data.msgId);
-        var isMsgId = messageHandler.msg.msgSendACK.indexOf(data.msgId);
-        if(isMsgId>=0){
-          // var ran = Math.random();
-          // console.log(ran);
-          // if(ran>0.5){
-          //   data.result='success';
-          // }else{
-          //   data.result='fali';
-          // }
-          if(data.result=='success'){
-            // msgSendIdHander.splice(isMsgId,1);//从数组中删除
-            messageHandler.msg.msgSendACK.splice(isMsgId,1);//从数组中删除
-            $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
-          }else{
-            //发送失败 图片  文字 两种判断
-            if($('#userMsg'+data.msgId).hasClass('msg')){
-              //文字
-              $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('error msg-fail');
-            }else{
-              //图片
-              $('#userMsg'+data.msgId).removeClass('msg-close').addClass('error msg-sendAgain');
-            }
-          }
-        }
-      },
-      //消息重发
-      onMsgSendAgain:function(){
-        var that = $(this);
-        var sendType,//发送类型
-            answer;//发送内容
-        var msgId = that.attr('id').substr(7,that.attr('id').length);
-        //判断当前消息是否满足重发条件 error
-        if(that.hasClass('error')){
-          //判断当前是图片重发   文字重发
-          if(that.hasClass('msg')){
-            //文字
-            sendType='msg';
-            that.removeClass('error msg-fail').addClass('msg-loading');
-            answer = that.prev().text().trim();
-          }else{
-            //图片
-            sendType='img';
-            that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
-            answer = that.prev().find('p').html();
-          }
-          fnEvent.trigger('sendArea.send',[{
-             'answer' :answer,
-             'uid' : global.apiInit.uid,
-             'cid' : global.apiInit.cid,
-             'dateuid' : global.apiInit.uid+ +new Date(),
-             'oldMsgId':msgId,
-             'date': +new Date(),
-             'token':msgId,
-             'sendAgain':true//是否重发
-          }]);
-        }
-      },
-      //来自于客服的消息
-      //type --> robot human
-      onMsgFromCustom:function(type,data){
-        var logo,name,msg;
-        if(type=='robot'){
-          // console.log(data.answer);
-          msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
-          // msg = data.answer;
-          logo = global.apiConfig.robotLogo;
-          name = global.apiConfig.robotName;
-        }else if(type=='human'){
-          msg =QQFace.analysis(data.content?data.content:'');//过滤表情
-          logo = data.aface;
-          name = data.aname;
-        }
-        var index = msg.indexOf('uploadedFile');
-        var res;
-        //判断是否是富文本
-        if(index>=0||(msg.indexOf('<')>=0 && msg.indexOf('>')>=0)){
-          res = msg;
-        }else{
-          res = Comm.getNewUrlRegex(msg);
-        }
-        var comf = $.extend({
-            customLogo : logo,
-            customName : name,
-            customMsg : res,
-            date:+new Date()
-          });
-        var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);
-        return tmpHtml;
-      },
-      adminTipTime:function(){
-        adminTimer = setInterval(function(){
-          adminTime += 1;
-          if(adminTime * 1000 >= global.apiConfig.adminTipTime * 1000 * 60){
-          // if(adminTime * 1000 >= 1000 * 5){
-            adminTime=0;//清空
-            //提示客服超时语
-            var data = {
-              type:'system',
-              status:'adminoffline',
-              data:{
-                content:$(global.apiConfig.adminTipWord).text(),
-                status:0
-              }
-            };
-            bindMsg(2,data);
-          }
-        },1000);
-      },
-      userTipTime:function(){
-        userTimer = setInterval(function(){
-          userTime += 1;
-          if(adminTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){
-          // if(userTime * 1000 >= 1000 * 3){
-            userTime=0;//清空
-            //提示客服超时语
-            var data = {
-              type:'system',
-              status:'useroffline',
-              data:{
-                content:$(global.apiConfig.userTipWord).text(),
-                status:0
-              }
-            };
-            bindMsg(2,data);
-          }
-        },1000);
       }
     };
     //加欢迎语
     var getHello = function(data){
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
-        messageHandler.sys.currentState = data[data.length-1].content[0]['senderType'];
+        messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];
       }
       showHistoryMsg(data,1);
     };
@@ -636,17 +364,17 @@ var ListMsgHandler = function() {
         console.log(global);
         initConfig();//配置参数
         //FIXME bindListener
-        fnEvent.on('sendArea.send',msgHandler.onSend);//发送内容
-        fnEvent.on('core.onreceive',msgHandler.onReceive);//接收回复
-        fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
-        fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
-        fnEvent.on('sendArea.uploadImgUrl',msgHandler.onUploadImgUrl);//回传图片路径
+        fnEvent.on('sendArea.send',messageHandler.msg.onSend);//发送内容
+        fnEvent.on('core.onreceive',messageHandler.msg.onReceive);//接收回复
+        fnEvent.on('sendArea.createUploadImg',messageHandler.msg.onUpLoadImg);//发送图片
+        fnEvent.on('sendArea.uploadImgProcess',messageHandler.msg.onUpLoadImgProgress);//上传进度条
+        fnEvent.on('sendArea.uploadImgUrl',messageHandler.msg.onUploadImgUrl);//回传图片路径
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
         // fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
         // fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
-        fnEvent.on('core.msgresult',msgHandler.msgReceived);//消息确认收到通知
+        fnEvent.on('core.msgresult',messageHandler.msg.msgReceived);//消息确认收到通知
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
         $('.js-chatPanelList').delegate('.js-msgStatus','click',msgHandler.onMsgSendAgain);//消息重发
@@ -666,12 +394,10 @@ var ListMsgHandler = function() {
         systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
 
-        // sysHander.nowTimer();//显示当前时间
-        // sysHander.onBeingInput();//正在输入处理
         systemHandler.sys.nowTimer();//显示当前时间
         systemHandler.sys.onBeingInput();//正在输入处理
-        msgHandler.adminTipTime();//客服超时提示
-        msgHandler.userTipTime();//用户超时提示
+        messageHandler.msg.adminTipTime();//客服超时提示
+        messageHandler.msg.userTipTime();//用户超时提示
     };
     //初始化Dom
     var parseDOM = function() {

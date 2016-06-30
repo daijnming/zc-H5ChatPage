@@ -45,6 +45,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var msgTemplate = require('./template.js');
   var QQFace = require('../util/qqFace.js')();
   var Comm = require('../../../common/comm.js');
+  var fnEvent = require('../../../common/util/listener.js');
 
   sys.msg = {
     //相关搜索方法
@@ -95,11 +96,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
         fnEvent.trigger('sendArea.send',[{
                 'answer' : _msg,
-                'uid' : global.apiConfig.uid,
-                'cid' : global.apiConfig.cid,
-                'currentState':'robot',
+                'uid' : global.apiInit.uid,
+                'cid' : global.apiInit.cid,
+                'currentStates':'robot',
                 'requestType':'question',
-                'date' : global.apiConfig.uid + +new Date()
+                'date' : global.apiInit.uid + +new Date()
             }]);
       }
     },
