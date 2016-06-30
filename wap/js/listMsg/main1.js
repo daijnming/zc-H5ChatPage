@@ -24,8 +24,6 @@ var ListMsgHandler = function() {
     var theme = require('./theme.js');
     var Scroll = require('./scroll.js');
     var QQFace = require('../util/qqFace.js')();
-    var SystemHandler = require('./syshandler.js');
-    var MessageHandler = require('./msghandler.js');
 
     var msgHandler = {},//包装消息相关方法 对象方法
         sysHander = {},//包装系统和配置方法 对象方法
@@ -34,9 +32,6 @@ var ListMsgHandler = function() {
         // beingTyped=[],//正在输入
         // uploadImgHandler=[],//上传图片容器
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
-
-    var systemHandler,//系统模块
-        messageHandler;//消息模块
 
 
 
@@ -149,8 +144,7 @@ var ListMsgHandler = function() {
                             type = _t>1&&_t<=2?1:2;
                         }
                         // var type = _t<=1?0:_t>1&&_t<=2?1:2;
-                        // var retMsg = sysHander.getTimeLine(type,itemChild.ts);
-                        var retMsg = systemHandler.sys.getTimeLine(type,itemChild.ts);
+                        var retMsg = sysHander.getTimeLine(type,itemChild.ts);
                         msgHtml += retMsg?retMsg:'';
                       }
                     }
@@ -262,8 +256,7 @@ var ListMsgHandler = function() {
                       break;
                     case 205:
                       //客服正在输入
-                      // msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
-                      msgHtml += systemHandler.sys.onSysMsgShow(sysPromptLan.L0004,_data.type,sysMsgList,sysMsgManager);
+                      msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                       break;
                   }
                 }
@@ -276,8 +269,7 @@ var ListMsgHandler = function() {
               var _data = data.data;
               //判断是否是系统回复
               if(_type=='system'){
-                // msgHtml = sysHander.onSysMsgShow(_data.content,data.status);
-                msgHtml = systemHandler.sys.onSysMsgShow(_data.content,data.status,sysMsgList,sysMsgManager);
+                msgHtml = sysHander.onSysMsgShow(_data.content,data.status);
               }else{
                 //1 机器人  2 客服
                 currentState = _type=='robot'?1:2;
@@ -700,6 +692,7 @@ var ListMsgHandler = function() {
         global = data[0];
         console.log(global);
         initConfig();//配置参数
+        initScroll();//初始化&配置scroll
         //FIXME bindListener
         fnEvent.on('sendArea.send',msgHandler.onSend);//发送内容
         fnEvent.on('core.onreceive',msgHandler.onReceive);//接收回复
@@ -707,10 +700,8 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('sendArea.uploadImgUrl',msgHandler.onUploadImgUrl);//回传图片路径
         fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
-        // fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
-        // fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
-        fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
+        fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
+        fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         fnEvent.on('core.msgresult',msgHandler.msgReceived);//消息确认收到通知
         //FIXME EVENT
         $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
@@ -726,15 +717,8 @@ var ListMsgHandler = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
-        initScroll();//初始化&配置scroll
-
-        systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
-        messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
-
-        // sysHander.nowTimer();//显示当前时间
-        // sysHander.onBeingInput();//正在输入处理
-        systemHandler.sys.nowTimer();//显示当前时间
-        systemHandler.sys.onBeingInput();//正在输入处理
+        sysHander.nowTimer();//显示当前时间
+        sysHander.onBeingInput();//正在输入处理
         msgHandler.adminTipTime();//客服超时提示
         msgHandler.userTipTime();//用户超时提示
     };

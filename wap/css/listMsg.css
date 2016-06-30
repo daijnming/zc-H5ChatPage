@@ -159,7 +159,22 @@ p,ul,li{
   height: 54px;
   /*transform: scale(0.5);*/
   background-position: 0 -392px;
-
+}
+.msgStatus.statusRight.msg-close{
+  display: inline-block;
+  background: url(../images/icoGroup2X.png) no-repeat;
+  margin-top: -7px;
+  width:48px;
+  height: 54px;
+  background-position: -352px -392px;
+}
+.msgStatus.statusRight.msg-sendAgain{
+  display: inline-block;
+  background: url(../images/icoGroup2X.png) no-repeat;
+  margin-top: -7px;
+  width:48px;
+  height: 54px;
+  background-position: -176px -392px;
 }
 .msgStatus.statusLeft{
   float: left;
