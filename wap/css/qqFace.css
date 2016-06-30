@@ -31,7 +31,7 @@ li, ul, div, p, h1 {
     width: 24px;
     height: 24px;
     margin:3% 3.1%;
-    background-image:url(../images/qqface2X.png);
+    background-image:url(../images/static/qqface2X.png);
     background-repeat:no-repeat;
     background-size:801px 22px;
 }
@@ -156,7 +156,7 @@ background-position:2px 2px;
         margin:3% 3.9%;
         width: 25px;
         height: 25px;
-        background-image:url(../images/qqface3X.png);
+        background-image:url(../images/static/qqface3X.png);
     }
 }
  
