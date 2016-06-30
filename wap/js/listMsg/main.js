@@ -221,9 +221,10 @@ var ListMsgHandler = function() {
           case 0:
               var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
               //FIXME 消息确认 只在与客服聊天时添加
-              var msgClass = currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
-              if(currentState==2){
-                msgSendIdHander.push(data[0]['dateuid']);//暂存发送消息id
+              var msgClass = messageHandler.sys.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
+              if(messageHandler.sys.currentState==2){
+                messageHandler.msg.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
+                // msgSendIdHander.push(data[0]['dateuid']);//暂存发送消息id
               }
               comf = $.extend({
                   userLogo : global.userInfo.face,
@@ -280,7 +281,7 @@ var ListMsgHandler = function() {
                 msgHtml = systemHandler.sys.onSysMsgShow(_data.content,data.status,sysMsgList,sysMsgManager);
               }else{
                 //1 机器人  2 客服
-                currentState = _type=='robot'?1:2;
+                messageHandler.sys.currentState = _type=='robot'?1:2;
                 msgHtml =  msgHandler.onMsgFromCustom(_type,_data);
               }
             break;
@@ -292,9 +293,11 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.sysData)(comf);
             break;
           case 4:
-            uploadImgToken = data[0]['token'];
+            // uploadImgToken = data[0]['token'];
+            messageHandler.msg.uploadImgToken = data[0]['token'];
             // uploadImgHandler.push(data[0]['token']);//图片唯一标识存进容器
-            msgSendIdHander.push(uploadImgToken);//暂存发送消息id
+            messageHandler.msg.msgSendACK.push(messageHandler.msg.uploadImgToken);//暂存发送消息id
+            // msgSendIdHander.push(uploadImgToken);//暂存发送消息id
             comf = $.extend({
                userLogo : global.userInfo.face,
                uploadImg : data[0]['result'],
@@ -305,90 +308,12 @@ var ListMsgHandler = function() {
            });
             msgHtml = doT.template(msgTemplate.rightImg)(comf);
             break;
-          case 5:
-            alert();
-          break;
         }
         msgHandler.updateChatMsg(msgHtml);
         scrollHanlder.scroll.refresh();//刷新
         scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
       // console.log(currentState);
-    };
-    //包装系统和配置方法
-    sysHander = {
-      nowTimer:function(){
-        //首次进入提示语
-        var _now = new Date();
-        var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
-        var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
-        var _timer =  '今天' + _hour+':'+_minutes;
-        bindMsg(3,_timer);// 3系统时间提示
-      },
-      //type 0 今天  1 昨天  2 更早在历史记录
-      getTimeLine:function(type,time){
-        //获取时间线显示
-        var _timer;
-        if(type==2){
-          _timer= time.substring(0,time.lastIndexOf(':'));
-        }else{
-          var t = type===0?'今天':'昨天';
-          _timer = t + time.substring(time.indexOf(' '),time.lastIndexOf(':'));
-        }
-        var comf = $.extend({
-          sysData:_timer,
-          date:+new Date()
-        });
-        var str = doT.template(msgTemplate.sysData)(comf);
-
-        if(_timer){
-          return str;
-        }
-      },
-      //输入栏高度变化设置
-      onAutoSize : function(node){
-        clearInterval(timer);
-        timer =  setTimeout(function(){
-          var offsetTop = node.offset().top-$(topTitleBar).height();
-          $(wrapScroll).height(offsetTop);
-          scrollHanlder.scroll.refresh();
-          scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
-          $(window).scrollTop(Number($("#js-textarea").offset().top));
-          // $('#js-textarea').text($("#js-textarea").offset().top+':'+Number($("#js-textarea").offset().top-50));
-        },300);
-      },
-      //转接人工
-      onSessionOpen:function(data){
-        bindMsg(2,data);
-      },
-      //系统消息显示处理
-      onSysMsgShow:function(msg,status){
-        //生成时间戳
-        var tp = +new Date();
-        var msgTmp;
-        //是否包含需要处理的系统提示语
-        if(sysMsgList.indexOf(status)>=0){
-          sysMsgManager.push(tp);//用于系统提示判断
-        }else if(status ==205){
-          msgTmp='input205';
-          var $msgInput = $('.input205').remove();//正在输入class
-        }
-        var comf = $.extend({
-          sysMsg:msg,
-          sysMsgSign:tp,
-          date:tp,
-          msgTmp:msgTmp
-        });
-        var msgHtml = doT.template(msgTemplate.sysMsg)(comf);
-        return msgHtml;
-      },
-      //正在输入处理
-      onBeingInput:function(){
-        var _t = setInterval(function(){
-            $('.input205').remove();
-            scrollHanlder.scroll.refresh();
-        },5*1000);//每隔5秒处理正在输入提示消息
-      }
     };
     //包装消息相关方法 isHistory 是否是历史记录
     msgHandler = {
@@ -458,8 +383,8 @@ var ListMsgHandler = function() {
             $progress,
             oldH;
         if(isUploadImg){
-            $shadowLayer = $('#img'+uploadImgToken).find('.js-shadowLayer');
-            $progress = $('#progress'+uploadImgToken);
+            $shadowLayer = $('#img'+messageHandler.msg.uploadImgToken).find('.js-shadowLayer');
+            $progress = $('#progress'+messageHandler.msg.uploadImgToken);
             oldH = $shadowLayer.height();
             isUploadImg=false;
         }
@@ -481,16 +406,16 @@ var ListMsgHandler = function() {
       //回传图片路径地址
       onUploadImgUrl:function(data){
         //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-        var $div = $('#img'+uploadImgToken);
+        var $div = $('#img'+messageHandler.msg.uploadImgToken);
         $div.find('p img:first-child').remove();
         $div.find('p').html(data[0]['answer']);
-        uploadImgToken='';//置空 一个流程完成
+        messageHandler.msg.uploadImgToken='';//置空 一个流程完成
       },
       //加欢迎语
       getHello:function(data){
         //判断智能机器人还是人工客服 1 robot 2 human
         if(data && data.length){
-          currentState = data[data.length-1].content[0]['senderType'];
+          messageHandler.sys.currentState = data[data.length-1].content[0]['senderType'];
         }
         showHistoryMsg(data,1);
       },
@@ -563,7 +488,8 @@ var ListMsgHandler = function() {
       msgReceived:function(data){
         var sendType,//发送类型
             answer;//发送内容
-        var isMsgId = msgSendIdHander.indexOf(data.msgId);
+        // var isMsgId = msgSendIdHander.indexOf(data.msgId);
+        var isMsgId = messageHandler.msg.msgSendACK.indexOf(data.msgId);
         if(isMsgId>=0){
           // var ran = Math.random();
           // console.log(ran);
@@ -573,7 +499,8 @@ var ListMsgHandler = function() {
           //   data.result='fali';
           // }
           if(data.result=='success'){
-            msgSendIdHander.splice(isMsgId,1);//从数组中删除
+            // msgSendIdHander.splice(isMsgId,1);//从数组中删除
+            messageHandler.msg.msgSendACK.splice(isMsgId,1);//从数组中删除
             $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
           }else{
             //发送失败 图片  文字 两种判断
@@ -690,6 +617,14 @@ var ListMsgHandler = function() {
         },1000);
       }
     };
+    //加欢迎语
+    var getHello = function(data){
+      //判断智能机器人还是人工客服 1 robot 2 human
+      if(data && data.length){
+        messageHandler.sys.currentState = data[data.length-1].content[0]['senderType'];
+      }
+      showHistoryMsg(data,1);
+    };
     /********************************************************************************/
     /********************************************************************************/
     /*************************************基本配置**********************************/
@@ -706,7 +641,7 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.createUploadImg',msgHandler.onUpLoadImg);//发送图片
         fnEvent.on('sendArea.uploadImgProcess',msgHandler.onUpLoadImgProgress);//上传进度条
         fnEvent.on('sendArea.uploadImgUrl',msgHandler.onUploadImgUrl);//回传图片路径
-        fnEvent.on('core.initsession',msgHandler.getHello);//机器人欢迎语 调历史渲染接口
+        fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
         // fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
         // fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
