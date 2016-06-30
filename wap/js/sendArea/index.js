@@ -394,11 +394,14 @@ function TextArea(window) {
     };
     //重新开始新会话
     var newMessage=function(){
-        //window.location.reload()
-        //微信内置浏览器必须使用添加随机数此方法
-        var random=+new Date();
-        //console.log(window.location.href);
-        window.location.href=window.location.href+"&random="+random;
+        var ua = navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i)=="micromessenger") {
+                //微信内置浏览器必须使用添加随机数此方法
+                var random=+new Date();
+                window.location.href=window.location.href+"&refresh="+random;
+            } else {
+                window.location.reload()
+            }
     };
     var evaluateHandler=function(){
         //评价
