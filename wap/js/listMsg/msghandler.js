@@ -16,7 +16,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       adminTime=0,//客户超时时间 默认为 0
       userTime=0,//用户超时时间 默认为 0
       userTimer,//用户超时任务
-      adminTimer;//客服超时任务
+      adminTimer,//客服超时任务
+      isUserSendMsg=false,//用户是否有发送内容
+      isAdminSendMsg=false;//客服是否有发送内容
 
 
   var sys={};
@@ -67,6 +69,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //发送消息
     onSend : function(data){
       // console.log(data);
+      isUserSendMsg = true;//
       if(data[0].sendAgain){
         //消息重发
         var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
@@ -80,6 +83,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+     isAdminSendMsg = true;
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -219,12 +223,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
           answer = that.prev().find('p').html();
         }
+        alert();
+        console.log(sys.config.currentState);
+        console.log(sys.config.currentState==1?'机器人':'客服');
         fnEvent.trigger('sendArea.send',[{
            'answer' :answer,
            'uid' : global.apiInit.uid,
            'cid' : global.apiInit.cid,
            'dateuid' : global.apiInit.uid+ +new Date(),
            'oldMsgId':msgId,
+           'currentStates':sys.config.currentState==1?'robot':'human',
            'date': +new Date(),
            'token':msgId,
            'sendAgain':true//是否重发
@@ -265,6 +273,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     adminTipTime:function(){
       adminTimer = setInterval(function(){
+        //有消息发回 则重新计算超时时间
+        if(isAdminSendMsg){
+          adminTime=0;
+          isAdminSendMsg=false;
+        }
         adminTime += 1;
         if(adminTime * 1000 >= global.apiConfig.adminTipTime * 1000 * 60){
         // if(adminTime * 1000 >= 1000 * 5){
@@ -278,12 +291,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
               status:0
             }
           };
-          bindMsg(2,data);
+          msgBind(2,data);
         }
       },1000);
     },
     userTipTime:function(){
       userTimer = setInterval(function(){
+        //有消息发送  则重新计算超时时间
+        if(isUserSendMsg){
+          userTime=0;
+          isUserSendMsg=false;
+        }
         userTime += 1;
         if(adminTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){
         // if(userTime * 1000 >= 1000 * 3){
@@ -297,7 +315,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
               status:0
             }
           };
-          bindMsg(2,data);
+          msgBind(2,data);
         }
       },1000);
     }
@@ -305,8 +323,27 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var parseDOM = function(){
     chatPanelList = $('.js-chatPanelList');
   };
+  var bindListener = function(){
+    //FIXME EVENT
+    $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
+    $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
+  };
+  var _timer ;
+  var initPlagsin=function(){
+    _timer = setInterval(function(){
+      //若是人工则开始计算超时时间
+      if(sys.config.currentState==2){
+        clearInterval(_timer);
+        sys.msg.adminTipTime();//客服超时提示
+        sys.msg.userTipTime();//用户超时提示
+      }
+    },1000);
+
+  };
   var init =function (){
     parseDOM();
+    bindListener();
+    initPlagsin();
   };
   init();
   return sys;

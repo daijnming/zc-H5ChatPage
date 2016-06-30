@@ -221,12 +221,17 @@ var ListMsgHandler = function() {
         switch (msgType) {
           case 0:
               var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
+
+              //FIXME 机器人与人工客服都要进行消息确认
+              var msgClass = MSGSTATUSCLASS.MSG_LOADING;
+              messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
+
               //FIXME 消息确认 只在与客服聊天时添加
-              var msgClass = messageHandler.config.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
-              if(messageHandler.config.currentState==2){
-                messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
-                // msgSendIdHander.push(data[0]['dateuid']);//暂存发送消息id
-              }
+              // var msgClass = messageHandler.config.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
+              // if(messageHandler.config.currentState==2){
+                // messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
+              // }
+
               comf = $.extend({
                   userLogo : global.userInfo.face,
                   userMsg : QQFace.analysis(msg),
@@ -247,21 +252,20 @@ var ListMsgHandler = function() {
                   //FIXME 机器人类型  answerType=4 相关搜索
                   if(_data.answerType=='4'){
                     //相关搜索
-                    // msgHtml += msgHandler.sugguestionsSearch(_data,false);
                     msgHtml += messageHandler.msg.sugguestionsSearch(_data,false);
                   }else{
-                    msgHtml +=  msgHandler.onMsgFromCustom('robot',_data);
+                    msgHtml +=  messageHandler.msg.onMsgFromCustom('robot',_data);
                   }
                 }else{
                   //FIXME 客服类型
                   switch (_data.type) {
                     case 202:
                       //客服发来消息
-                      msgHtml += msgHandler.onMsgFromCustom('human',_data);
+                      msgHtml += messageHandler.msg.onMsgFromCustom('human',_data);
                       break;
                     case 204:
                       //会话结束
-                      msgHtml+= msgHandler.sessionCloseHander(_data);
+                      msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
                       //客服正在输入
@@ -279,12 +283,11 @@ var ListMsgHandler = function() {
               var _data = data.data;
               //判断是否是系统回复
               if(_type=='system'){
-                // msgHtml = sysHander.onSysMsgShow(_data.content,data.status);
                 msgHtml = systemHandler.sys.onSysMsgShow(_data.content,data.status,sysMsgList,sysMsgManager);
               }else{
                 //1 机器人  2 客服
                 messageHandler.config.currentState = _type=='robot'?1:2;
-                msgHtml =  msgHandler.onMsgFromCustom(_type,_data);
+                msgHtml =  messageHandler.msg.onMsgFromCustom(_type,_data);
               }
             break;
           case 3:
@@ -295,11 +298,8 @@ var ListMsgHandler = function() {
             msgHtml = doT.template(msgTemplate.sysData)(comf);
             break;
           case 4:
-            // uploadImgToken = data[0]['token'];
             messageHandler.config.uploadImgToken = data[0]['token'];
-            // uploadImgHandler.push(data[0]['token']);//图片唯一标识存进容器
             messageHandler.config.msgSendACK.push(messageHandler.config.uploadImgToken);//暂存发送消息id
-            // msgSendIdHander.push(uploadImgToken);//暂存发送消息id
             comf = $.extend({
                userLogo : global.userInfo.face,
                uploadImg : data[0]['result'],
@@ -370,34 +370,23 @@ var ListMsgHandler = function() {
         fnEvent.on('sendArea.uploadImgProcess',messageHandler.msg.onUpLoadImgProgress);//上传进度条
         fnEvent.on('sendArea.uploadImgUrl',messageHandler.msg.onUploadImgUrl);//回传图片路径
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
-        // fnEvent.on('sendArea.autoSize',sysHander.onAutoSize);//窗体聊天内容可视范围
         fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
-        // fnEvent.on('core.system',sysHander.onSessionOpen);//转人工事件
         fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
         fnEvent.on('core.msgresult',messageHandler.msg.msgReceived);//消息确认收到通知
-        //FIXME EVENT
-        $('.js-chatPanelList').delegate('.js-answerBtn','click',msgHandler.onSugguestionsEvent);//相关搜索答案点击事件
-        $('.js-chatPanelList').delegate('.js-msgStatus','click',msgHandler.onMsgSendAgain);//消息重发
         $('.js-chatMsgList').on('click',function(){
           //空白处点击 隐藏键盘
           fnEvent.trigger('listMsg.hideKeyboard');
         });
     };
-
     //初始化h5页面配置信息
     var initConfig = function() {
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         initScroll();//初始化&配置scroll
-
         systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
 
-        systemHandler.sys.nowTimer();//显示当前时间
-        systemHandler.sys.onBeingInput();//正在输入处理
-        messageHandler.msg.adminTipTime();//客服超时提示
-        messageHandler.msg.userTipTime();//用户超时提示
     };
     //初始化Dom
     var parseDOM = function() {

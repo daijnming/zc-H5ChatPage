@@ -92,8 +92,17 @@ var SysmsgHandler = function(msgBind,myScroll){
     topTitleBar = $('.js-header-back');
     wrapScroll = $('.js-wrapper');
   };
+  var bindListener = function(){
+
+  };
+  var initPlagsin=function(){
+    config.sys.nowTimer();//显示当前时间
+    config.sys.onBeingInput();//正在输入处理
+  };
   var init =function (){
     parseDOM();
+    bindListener();
+    initPlagsin();
   };
   init();
   return config;
