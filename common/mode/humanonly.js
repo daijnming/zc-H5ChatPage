@@ -108,21 +108,9 @@ function HumanOnly(global) {
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
-                ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
-                listener.trigger("core.system", {
-                    'type' : 'system',
-                    'status' : 'offline',
-                    'data' : ret
-                });
                 listener.trigger("core.sessionclose",-1);
             },1);
         } else {
-            ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
-            listener.trigger("core.system", {
-                'type' : 'system',
-                'status' : 'offline',
-                'data' : ret
-            });
             listener.trigger("core.sessionclose",-1);
         }
     };
