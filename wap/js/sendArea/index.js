@@ -375,23 +375,32 @@ function TextArea(window) {
     };
     //结束会话
     var endSessionHandler=function(status){
+    console.log("当前状态");
     console.log(status);
        switch(status) {
             case -1://仅人工模式，转人工失败
+                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 $keepSession.hide();
                 $endSession.show();
-            break;
+                autoSizePhone();
+                sessionEnd=true;
+                $(".js-satisfaction").remove();
+                //留言开关
+                if(global.apiConfig.msgflag==1){
+                    $(".js-leaveMsgBtn").remove();
+                }
+                break;
             case 1://客服自己离线了
             case 2://客服把你T了
             case 3://客服把你拉黑了
             case 4://长时间不说话
             case 6://有新窗口打开
-            $chatArea.removeClass("hideChatArea").addClass("showChatArea");
-            $keepSession.hide();
-            $endSession.show();
-            autoSizePhone();
-            sessionEnd=true;
-            break;
+                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
+                $keepSession.hide();
+                $endSession.show();
+                autoSizePhone();
+                sessionEnd=true;
+                break;
         }
     };
     //重新开始新会话
@@ -539,8 +548,7 @@ function TextArea(window) {
     })();
     listener.on("core.onload", function(data) {
         global = data[0];
-
-        console.log(global);
+        //console.log(global);
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
         //将uid传入上传图片模块
@@ -558,7 +566,8 @@ function TextArea(window) {
             var _html2 = doT.template(template.leaveMessageEndBtn)(conf);
             $leaveMessage.append(_html);
             $endSession.append(_html2);
-        }
+        };
+        $(".js-endSession").hide();
         init();
     });
 

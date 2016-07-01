@@ -61,8 +61,8 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 							'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 							'<a class="submit" href="#">提交评价</a>'+
 						'</div>';
-var leaveMessageBtn='<a href="'+'{{=it.hostUrl}}'+'"><i class="leaveMessagebg"></i><p>留言</p></a>';
-var leaveMessageEndBtn='<a href="'+'{{=it.hostUrl}}'+'"><span class="span3"><i class="icon"></i><p>留言</p></span></a>';
+var leaveMessageBtn='<a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="leaveMessagebg"></i><p>留言</p></a>';
+var leaveMessageEndBtn='<span class="span3"><a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="icon"></i><p>留言</p></a></span>';
 template.sobotEvaluate_selfHtml = sobotEvaluate_selfHtml;
 template.humanOne_selfHtml = humanOne_selfHtml;
 template.humanTwo_selfHtml = humanTwo_selfHtml;
