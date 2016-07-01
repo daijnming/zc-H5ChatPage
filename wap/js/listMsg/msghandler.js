@@ -288,7 +288,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
             type:'system',
             status:'adminoffline',
             data:{
-              content:$(global.apiConfig.adminTipWord).text(),
+              content:msg,
               status:0
             }
           };
