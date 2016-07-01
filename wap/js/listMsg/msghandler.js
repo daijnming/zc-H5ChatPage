@@ -83,11 +83,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
-     isAdminSendMsg = true;
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
      }else if(data.type==='human'){
+       isAdminSendMsg = true;
        sys.config.currentState=2;
      }
       msgBind(1,data);
@@ -324,6 +324,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     chatPanelList = $('.js-chatPanelList');
   };
   var bindListener = function(){
+
+    fnEvent.on('sendArea.send',sys.msg.onSend);//发送内容
+    fnEvent.on('core.onreceive',sys.msg.onReceive);//接收回复
+    fnEvent.on('sendArea.createUploadImg',sys.msg.onUpLoadImg);//发送图片
+    fnEvent.on('sendArea.uploadImgProcess',sys.msg.onUpLoadImgProgress);//上传进度条
+    fnEvent.on('sendArea.uploadImgUrl',sys.msg.onUploadImgUrl);//回传图片路径
+    fnEvent.on('core.msgresult',sys.msg.msgReceived);//消息确认收到通知
+
     //FIXME EVENT
     $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
     $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
