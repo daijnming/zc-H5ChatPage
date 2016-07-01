@@ -34,9 +34,9 @@ li {
     position:relative;
     padding: 4px 10px;
     min-height: 37px;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    align-items: center;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
     display: flex;
     border-top: 1px solid #cacaca;
     border-bottom: 1px solid #cacaca;
