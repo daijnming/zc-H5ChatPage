@@ -31,8 +31,6 @@ var ListMsgHandler = function() {
         sysHander = {},//包装系统和配置方法 对象方法
         msgSendIdHander=[],//填装发送消息的容器 用于与消息确认匹配
         msgAcknowledgementHandler={},//消息确认容器
-        // beingTyped=[],//正在输入
-        // uploadImgHandler=[],//上传图片容器
         sysMsgManager=[];//系统提示管理  排队中  不在线等提示
 
     var systemHandler,//系统模块
@@ -54,23 +52,6 @@ var ListMsgHandler = function() {
         progress,//进度条
         shadowLayer,//上传图片蒙板
         wrapBox;//页面
-
-    //消息状态-类
-    var MSGSTATUSCLASS={
-      MSG_LOADING:'msg-loading',//正在发送
-      MSG_LSSUED:'msg-lssued',//已发送
-      MSG_SERVED:'msg-served',//已送达
-      MSG_FAIL:'msg-fail',//发送失败
-      MSG_CLOSE:'msg-close',//关闭发送  图片仅有
-      MSG_SENDAGAIN:'msg-sendAgain'//重发图片
-    };
-    //系统提示
-    var sysPromptLan ={
-      L0001:'您与{0}的会话已经结束',
-      L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
-      L0003:'您已在新窗口打开聊天页面',
-      L0004:'客服正在输入...'
-    };
 
     //api接口
     var api = {
@@ -315,7 +296,6 @@ var ListMsgHandler = function() {
         scrollHanlder.scroll.refresh();//刷新
         scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
-      // console.log(currentState);
     };
     //更新聊天记录
     var updateChatMsg = function(tempHtml){
@@ -361,18 +341,19 @@ var ListMsgHandler = function() {
     //core加载完成
     var onCoreOnload = function(data) {
         global = data[0];
-        console.log(global);
+        // console.log(global);
         initConfig();//配置参数
         //FIXME bindListener
-        fnEvent.on('sendArea.send',messageHandler.msg.onSend);//发送内容
-        fnEvent.on('core.onreceive',messageHandler.msg.onReceive);//接收回复
-        fnEvent.on('sendArea.createUploadImg',messageHandler.msg.onUpLoadImg);//发送图片
-        fnEvent.on('sendArea.uploadImgProcess',messageHandler.msg.onUpLoadImgProgress);//上传进度条
-        fnEvent.on('sendArea.uploadImgUrl',messageHandler.msg.onUploadImgUrl);//回传图片路径
+        // fnEvent.on('sendArea.send',messageHandler.msg.onSend);//发送内容
+        // fnEvent.on('core.onreceive',messageHandler.msg.onReceive);//接收回复
+        // fnEvent.on('sendArea.createUploadImg',messageHandler.msg.onUpLoadImg);//发送图片
+        // fnEvent.on('sendArea.uploadImgProcess',messageHandler.msg.onUpLoadImgProgress);//上传进度条
+        // fnEvent.on('sendArea.uploadImgUrl',messageHandler.msg.onUploadImgUrl);//回传图片路径
+        // fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
+        // fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
+        // fnEvent.on('core.msgresult',messageHandler.msg.msgReceived);//消息确认收到通知
+
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
-        fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
-        fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
-        fnEvent.on('core.msgresult',messageHandler.msg.msgReceived);//消息确认收到通知
         $('.js-chatMsgList').on('click',function(){
           //空白处点击 隐藏键盘
           fnEvent.trigger('listMsg.hideKeyboard');

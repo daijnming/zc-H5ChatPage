@@ -13,6 +13,10 @@ var SysmsgHandler = function(msgBind,myScroll){
   var autoTimer;//输入框高度延迟处理 解决与弹出键盘冲突
 
   var msgTemplate = require('./template.js');
+  var QQFace = require('../util/qqFace.js')();
+  var Comm = require('../../../common/comm.js');
+  var fnEvent = require('../../../common/util/listener.js');
+
   var config={};
 
    config.sys = {
@@ -93,7 +97,8 @@ var SysmsgHandler = function(msgBind,myScroll){
     wrapScroll = $('.js-wrapper');
   };
   var bindListener = function(){
-
+    fnEvent.on('sendArea.autoSize',config.sys.onAutoSize);//窗体聊天内容可视范围
+    fnEvent.on('core.system',config.sys.onSessionOpen);//转人工事件
   };
   var initPlagsin=function(){
     config.sys.nowTimer();//显示当前时间
