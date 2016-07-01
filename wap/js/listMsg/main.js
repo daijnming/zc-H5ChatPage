@@ -102,7 +102,7 @@ var ListMsgHandler = function() {
                     var index = itemChild.msg.indexOf('uploadedFile');
                     var res;
                     if(index>=0||(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0)){
-                      res = itemChild.msg;
+                      res = $('<div>'+itemChild.msg+'</div>').text();
                     }else{
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }

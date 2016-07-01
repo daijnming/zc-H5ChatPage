@@ -223,7 +223,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
           answer = that.prev().find('p').html();
         }
-        alert();
         console.log(sys.config.currentState);
         console.log(sys.config.currentState==1?'机器人':'客服');
         fnEvent.trigger('sendArea.send',[{
@@ -232,7 +231,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
            'cid' : global.apiInit.cid,
            'dateuid' : global.apiInit.uid+ +new Date(),
            'oldMsgId':msgId,
-           'currentStates':sys.config.currentState==1?'robot':'human',
+           'currentStatus':sys.config.currentState==1?'robot':'human',
            'date': +new Date(),
            'token':msgId,
            'sendAgain':true//是否重发
