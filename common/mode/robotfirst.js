@@ -16,6 +16,7 @@ var RobotFirst = function(global) {
     var _self = this;
     var manager,
         tempManager;
+    var queueing = false;
     var outerPromise = new Promise();
     var parseDOM = function() {
         $transferBtn = $(".temp_test");
@@ -102,6 +103,7 @@ var RobotFirst = function(global) {
 
     var queueWait = function(ret,init) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待 ";
+        queueing = true;
         if(!tempManager) {
             tempManager = socketFactory(ret,global);
             tempManager.start();
@@ -135,6 +137,7 @@ var RobotFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
+        queueing = false;
         manager = socketFactory(ret,global);
         manager.start();
         setCurrentState.setCurrentState('human');
@@ -186,6 +189,7 @@ var RobotFirst = function(global) {
                     'sysNum' : global.sysNum,
                     'uid' : global.apiInit.uid,
                     'way' : 1,
+                    'current' : queueing,
                     'groupId' : groupId || ''
                 },
                 'success' : function(ret) {
