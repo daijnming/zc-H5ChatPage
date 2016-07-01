@@ -182,12 +182,16 @@ var HumanFirst = function(global) {
 
     var blackListCallback = function(ret,init) {
         ret.content = '暂时无法转接人工客服';
+        manager = new Robot(global);
         modeState.setCurrentState("robot");
         listener.trigger("core.system", {
             'type' : 'system',
             'status' : 'blacklist',
             'data' : ret
         });
+        if(init) {
+            initRobotSession();
+        }
     };
 
     var transferSuccess = function(groupId,promise,init) {
