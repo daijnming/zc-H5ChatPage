@@ -26,7 +26,7 @@ var formatDate = function(date,showTime) {
     var minutes = date.getMinutes();
     var seconds = date.getSeconds();
     var arr2 = [f(hour),f(minutes),f(seconds)];
-    return arr.join("-") + ( showTime ? "" : " " + formatTime(date));
+    return arr.join("-") + ( !showTime ? "" : " " + formatTime(date));
 };
 dateUtil.formatTime = formatTime;
 dateUtil.formatDate = formatDate;
