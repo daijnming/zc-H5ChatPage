@@ -16,9 +16,9 @@ function TextArea(window) {
     var placeholder = require('./placeholder.js');
     //alert()
     var evaluate=require("./evaluate.js");
-    /* var inputCache = {};
+    /* var inputCache = {};*/
      //模板引擎
-     var template = require('./template.js');*/
+    var template = require('./template.js');
     var global;
     var $node;
     var currentCid,
@@ -207,7 +207,6 @@ function TextArea(window) {
         } else {
             setTimeout(function(){
                 //显示
- 
                 $chatArea.addClass("showChatAdd");
                 $chatArea.removeClass("showChatEmotion");
                 $chatAdd.show();
@@ -238,7 +237,6 @@ function TextArea(window) {
         if($chatArea.hasClass("showChatEmotion")){
             //隐藏
             hideChatAreaHandler();
-
         } else {
             setTimeout(function(){
                 //显示
@@ -268,7 +266,6 @@ function TextArea(window) {
                         $(".add").removeClass("activehide")
                         $sendBtn.addClass("activehide");
                     }
-
                 }
                 autoSizePhone();
             },200)
@@ -415,6 +412,7 @@ function TextArea(window) {
         if(!sessionEnd){
             $textarea.blur();
             $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+            $chatArea.removeClass("showChatAdd");
             var _text = $textarea.text();
             if(transferFlag==0){
                 if(_text) {
@@ -443,6 +441,10 @@ function TextArea(window) {
             autoSizePhone();
         }
     };
+    var hideplaceholder=function(){
+        $placeholder.hide();
+        $textarea.focus();
+    };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
@@ -468,7 +470,9 @@ function TextArea(window) {
         $satisfaction=$(".js-satisfaction");
         //oTxt = document.getElementById("js-textarea");
         //留言按钮
-         $leaveMessage= $(".js-leaveMessage");
+        $leaveMessage= $(".js-leaveMessage");
+        //提示
+        $placeholder=$(".js-placeholder");
     };
     
     var bindLitener = function() {
@@ -497,11 +501,12 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
-        
         //新会话
         $newMessage.on("click",newMessage);
         //评价弹窗
-        $satisfaction.on("click",evaluateHandler)
+        $satisfaction.on("click",evaluateHandler);
+        //点击placeholder消失
+        $placeholder.on("click",hideplaceholder)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -538,6 +543,13 @@ function TextArea(window) {
         //为1移除留言按钮
         if(msgflag==1){
             $leaveMessage.remove();
+        }else{
+            var sysnum=global[0].sysNum;
+            var conf=$.extend({
+                'sysnum':sysnum
+            });
+            var _html = doT.template(template.leaveMessageBtn)(conf);
+            $leaveMessage.append(_html);
         }
         init();
     });

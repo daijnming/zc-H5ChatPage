@@ -193,6 +193,7 @@ function evaluate(currentStatus,global) {
     };
     var hideDialog=function(){
         Alert.hide();
+        $(".js-satisfaction").remove();
     };
     var sobotbindListener = function() {
         //机器人评价
@@ -219,7 +220,6 @@ function evaluate(currentStatus,global) {
         }
         
     };
-
     init();
     this.modeAlert = modeAlert;
 }

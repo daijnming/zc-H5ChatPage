@@ -61,8 +61,10 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 							'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 							'<a class="submit" href="#">提交评价</a>'+
 						'</div>';
+var leaveMessageBtn='<a href="leaveMessage.html?sysNum='+'{{=it.sysnum}}'+'"><i class="leaveMessagebg"></i><p>留言</p></a>'
 template.sobotEvaluate_selfHtml = sobotEvaluate_selfHtml;
 template.humanOne_selfHtml = humanOne_selfHtml;
 template.humanTwo_selfHtml = humanTwo_selfHtml;
+template.leaveMessageBtn = leaveMessageBtn;
 module.exports = template;
  
