@@ -228,13 +228,13 @@ var initConfig = function() {
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
                 face : urlParams['face'] ? urlParams['face'] : 'http://img.sobot.com/console/common/face/user.png',//默认用户头像
                 back : urlParams['back'] ? urlParams['back'] : '',
-                realname:urlParams['realname']?urlParams['realname']:'',
-                weibo:urlParams['weibo']?urlParams['weibo']:'',
-                weixin:urlParams['weixin']?urlParams['weixin']:'',
-                qq:urlParams['qq']?urlParams['qq']:'',
-                sex:urlParams['sex']?urlParams['sex']:'',
-                birthday:urlParams['birthday']?urlParams['birthday']:'',
-                remark:urlParams['remark']?urlParams['remark']:''
+                realname : urlParams['realname'] ? urlParams['realname'] : '',
+                weibo : urlParams['weibo'] ? urlParams['weibo'] : '',
+                weixin : urlParams['weixin'] ? urlParams['weixin'] : '',
+                qq : urlParams['qq'] ? urlParams['qq'] : '',
+                sex : urlParams['sex'] ? urlParams['sex'] : '',
+                birthday : urlParams['birthday'] ? urlParams['birthday'] : '',
+                remark : urlParams['remark'] ? urlParams['remark'] : ''
             };
         },
         //FIXME 初始化SysNum系统 id
@@ -259,20 +259,25 @@ var initConfig = function() {
         return promise;
     };
 
-    var getLeaveMessage = function(params) {
+    var getLeaveMessage = function(params,global) {
         var arr = ['leaveMessage.html'];
         var count = 0;
+        var obj = {};
         for(var el in params) {
-            var value = encodeURIComponent(params[el]);
+            obj[el] = params[el];
+        }
+        obj['uid'] = global.apiInit.uid;
+        for(var el in obj) {
+            var value = encodeURIComponent(obj[el]);
             if(count == 0) {
-                arr.push("?")
+                arr.push("?");
             } else {
                 arr.push("&");
             }
             arr.push(el + "=" + value);
             count++;
         }
-        var str = '您可以<a class="leave-msg-btn" href="' + arr.join("") + '" >留言</a>';
+        var str = arr.join("");
         return str;
     };
     //promise方法
@@ -320,18 +325,24 @@ var initConfig = function() {
                     visitTitle : That.cacheInfo.userInfo.visitTitle,
                     visitUsrl : That.cacheInfo.userInfo.visitUrl,
                     face : That.cacheInfo.userInfo.face,
-                    realname:That.cacheInfo.userInfo.realname,
-                    weibo:That.cacheInfo.userInfo.weibo,
-                    weixin:That.cacheInfo.userInfo.weixin,
-                    qq:That.cacheInfo.userInfo.qq,
-                    sex:That.cacheInfo.userInfo.sex,
-                    birthday:That.cacheInfo.userInfo.birthday,
-                    remakr:That.cacheInfo.userInfo.remark
+                    realname : That.cacheInfo.userInfo.realname,
+                    weibo : That.cacheInfo.userInfo.weibo,
+                    weixin : That.cacheInfo.userInfo.weixin,
+                    qq : That.cacheInfo.userInfo.qq,
+                    sex : That.cacheInfo.userInfo.sex,
+                    birthday : That.cacheInfo.userInfo.birthday,
+                    remakr : That.cacheInfo.userInfo.remark
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
-                    That.cacheInfo.apiConfig.leaveMsg = That.cacheInfo.apiConfig.msgflag == 0 ? getLeaveMessage(That.cacheInfo.urlParams) : '';
+                    if(That.cacheInfo.apiConfig.msgflag == 0) {
+                        var url = getLeaveMessage(That.cacheInfo.urlParams,That.cacheInfo);
+                        That.cacheInfo.apiConfig.leaveMsg = '您可以<a class="leave-msg-btn" href="' + url + '" >留言</a>';
+                        That.cacheInfo.apiConfig.leaveMsgUrl = url;
+                    } else {
+                        That.cacheInfo.apiConfig.leaveMsg = '';
+                    }
                     outerPromise.resolve(That.cacheInfo);
                 }
             });

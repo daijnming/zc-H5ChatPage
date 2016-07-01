@@ -8,6 +8,7 @@ function HumanOnly(global) {
     var Robot = require('../socket/robot.js');
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
+    var modeState = require('./currentState.js');
     var transfer = require('./transfer.js');
     var initSession = require('./initsession.js');
     var socketFactory = require('../socket/socketfactory.js');

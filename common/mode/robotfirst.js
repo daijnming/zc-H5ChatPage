@@ -167,6 +167,9 @@ var RobotFirst = function(global) {
             'status' : 'blacklist',
             'data' : ret
         });
+        if(init) {
+            initRobotSession();
+        }
     };
     /**
      *

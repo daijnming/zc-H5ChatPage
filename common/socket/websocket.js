@@ -6,6 +6,7 @@ function ZcWebSocket(puid,url,global) {
     var url = global.apiConfig.websocketUrl;
     var socketType = 'human';
     var listener = require('../util/listener.js');
+    var dateUtil = require('../util/date.js');
     var websocket;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
@@ -34,11 +35,11 @@ function ZcWebSocket(puid,url,global) {
         if(item.currentStatus !== 'human') {
             return;
         }
-        if(!item.date) {
-            item.ts = +new Date();
-        } else {
-            item.ts = data.date;
-        }
+        var d = !!item.date ? new Date(item.date) : new Date();
+        item.t = +d;
+        console.log(dateUtil.formatDate(d,true));
+        item.ts = dateUtil.formatDate(d,true);
+        console.log(item);
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;

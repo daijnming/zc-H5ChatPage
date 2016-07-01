@@ -182,12 +182,16 @@ var HumanFirst = function(global) {
 
     var blackListCallback = function(ret,init) {
         ret.content = '暂时无法转接人工客服';
+        manager = new Robot(global);
         modeState.setCurrentState("robot");
         listener.trigger("core.system", {
             'type' : 'system',
             'status' : 'blacklist',
             'data' : ret
         });
+        if(init) {
+            initRobotSession();
+        }
     };
 
     var transferSuccess = function(groupId,promise,init) {
@@ -232,11 +236,7 @@ var HumanFirst = function(global) {
                         if(manager) {
                             manager.destroy();
                         }
-                        if(WebSocket && false) {
-                            manager = new WebSocket(ret.puid);
-                        } else {
-                            manager = new Rolling(ret.puid);
-                        }
+                        manager = socketFactory(ret,global);
                         manager.start();
                         modeState.setCurrentState("human");
                         listener.trigger("core.buttonchange", {
