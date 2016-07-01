@@ -15,6 +15,7 @@ function ModeEntranceFactroy(global) {
     if(!!manager) {
         return manager;
     }
+    console.log(global.apiConfig.type)
     switch(global.apiConfig.type) {
         case ROBOT_FIRST:
             manager = new robotFirst(global);

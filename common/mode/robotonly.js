@@ -6,6 +6,7 @@ var RobotFirst = function(global) {
     var Promise = require('../util/promise.js');
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
+    var modeState = require('./currentState.js');
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
     var transfer = require('./transfer.js');
@@ -69,7 +70,6 @@ var RobotFirst = function(global) {
     };
 
     var initPlugins = function() {
-        alert();
         setTimeout(function() {
             listener.trigger("core.buttonchange", {
                 'type' : 'transfer',

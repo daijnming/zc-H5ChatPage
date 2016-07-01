@@ -37,31 +37,26 @@ function TextArea(window) {
     var statusHandler=function(data){
         currentStatus=data;
         if(currentStatus=="human"){
+            transferFlag=1;
+            $(".qqFaceTip").removeClass("activehide");
+            //上传图片按钮
+            $uploadImg.show();
+            //满意度评价
+            $satisfaction.show();
             //提示文本
-            //placeholder($textarea,"当前是人工");
             $textarea.attr("placeholder","当前是人工")
         }else if(currentStatus == 'robot'){
-            //placeholder($textarea,"当前是机器人");
+            transferFlag=0;
+            $uploadImg.hide();
+            $satisfaction.show();
             $textarea.attr("placeholder","当前是机器人")
         }
     };
     var changeStatusHandler=function(data){
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
-            //1为人工
-            transferFlag=1;
-            $(".qqFaceTip").removeClass("activehide")
-            $uploadImg.show();
-            //满意度评价
-            $satisfaction.show();
             $artificial.hide();
-             //提示文本
-            //placeholder($textarea,"当前是人工");
-            $textarea.attr("placeholder","当前是人工")
         }else{
-            transferFlag=0;
-            $uploadImg.hide();
-            $satisfaction.show();
             $artificial.show();
         }
     }
@@ -380,7 +375,12 @@ function TextArea(window) {
     };
     //结束会话
     var endSessionHandler=function(status){
+    console.log(status);
        switch(status) {
+            case -1://仅人工模式，转人工失败
+                $keepSession.hide();
+                $endSession.show();
+            break;
             case 1://客服自己离线了
             case 2://客服把你T了
             case 3://客服把你拉黑了
@@ -538,18 +538,19 @@ function TextArea(window) {
         
     })();
     listener.on("core.onload", function(data) {
-        global = data;
-        //console.log(global);
-        currentUid=global[0].apiInit.uid;
-        currentCid=global[0].apiInit.cid;
+        global = data[0];
+
+        console.log(global);
+        currentUid=global.apiInit.uid;
+        currentCid=global.apiInit.cid;
         //将uid传入上传图片模块
         listener.trigger('sendArea.sendInitConfig',currentUid);
-        var msgflag=global[0].apiConfig.msgflag;
+        var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){
             $leaveMessage.remove();
         }else{
-            var hostUrl=global[0].hostUrl;
+            var hostUrl=global.apiConfig.leaveMsgUrl;
             var conf=$.extend({
                 'hostUrl':hostUrl
             });

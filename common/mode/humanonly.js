@@ -106,7 +106,6 @@ function HumanOnly(global) {
             'action' : 'hide'
         });
         if(init) {
-            initHumanSession(value,ret,null);
             setTimeout(function() {
                 listener.trigger("core.sessionclose",-1);
             },1);
