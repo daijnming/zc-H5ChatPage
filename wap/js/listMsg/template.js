@@ -77,12 +77,12 @@ var rightMsg =
                               '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
-                        '<span id="userMsg{{=it.token}}" class="img js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
+                        '<span id="userMsg{{=it.token}}" class="img error js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                     '</div>'+
                 '</div>';
 
 var systemMsg =
-                  '<p class="sysMsg" id={{=it.sysMsgSign}} date="{{=it.date}}">'+
+                  '<p class="sysMsg {{=it.msgTmp}}" id={{=it.sysMsgSign}} date="{{=it.date}}">'+
                   '<span class="sysMsgText"> '+
                       '{{=it.sysMsg}}'+
                   '</span>'+
