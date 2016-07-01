@@ -101,11 +101,9 @@ function HumanOnly(global) {
         if(manager) {
             manager.destroy();
         }
-        manager = new Robot(global);
-        modeState.setCurrentState("robot");
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
-            'action' : 'show'
+            'action' : 'hide'
         });
         if(init) {
             initHumanSession(value,ret,null);
