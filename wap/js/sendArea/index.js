@@ -99,12 +99,12 @@ function TextArea(window) {
             $(".add").addClass("activehide")
             $(".addhover").addClass("activehide")
             hideChatAreaHandler();
-            $textarea.css("width","78%");
+            //$textarea.css("width","78%");
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
             $(".add").removeClass("activehide")
-            $textarea.css("width","83%");
+            //$textarea.css("width","83%");
         }
         if(document.activeElement.id=="js-textarea"){
             focusStatus=true;
@@ -116,12 +116,12 @@ function TextArea(window) {
             $sendBtn.removeClass("activehide")
             $(".add").addClass("activehide")
             $(".addhover").addClass("activehide")
-            $textarea.css("width","67%");
+            //$textarea.css("width","67%");
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
             $(".add").removeClass("activehide")
-            $textarea.css("width","83%");
+           // $textarea.css("width","83%");
             $textarea.blur();
             $textarea.focus();
         }
@@ -176,10 +176,10 @@ function TextArea(window) {
         }
         $sendBtn.addClass("activehide")
         if(transferFlag==0){
-            $textarea.css("width","83%");
+            //$textarea.css("width","83%");
            
         }else{
-            $textarea.css("width","75%");
+            //$textarea.css("width","75%");
              
         }
         autoSizePhone();
