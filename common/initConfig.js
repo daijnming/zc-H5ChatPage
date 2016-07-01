@@ -277,7 +277,7 @@ var initConfig = function() {
             arr.push(el + "=" + value);
             count++;
         }
-        var str = '您可以<a class="leave-msg-btn" href="' + arr.join("") + '" >留言</a>';
+        var str = arr.join("");
         return str;
     };
     //promise方法
@@ -336,7 +336,13 @@ var initConfig = function() {
                 success : function(res) {
                     var data = res.data ? res.data : res;
                     That.cacheInfo.apiInit = data;
-                    That.cacheInfo.apiConfig.leaveMsg = That.cacheInfo.apiConfig.msgflag == 0 ? getLeaveMessage(That.cacheInfo.urlParams,That.cacheInfo) : '';
+                    if(That.cacheInfo.apiConfig.msgflag == 0) {
+                        var url = getLeaveMessage(That.cacheInfo.urlParams,That.cacheInfo);
+                        That.cacheInfo.apiConfig.leaveMsg = '您可以<a class="leave-msg-btn" href="' + url + '" >留言</a>';
+                        That.cacheInfo.apiConfig.leaveMsgUrl = url;
+                    } else {
+                        That.cacheInfo.apiConfig.leaveMsg = '';
+                    }
                     outerPromise.resolve(That.cacheInfo);
                 }
             });
