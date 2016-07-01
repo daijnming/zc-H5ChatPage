@@ -303,7 +303,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           isUserSendMsg=false;
         }
         userTime += 1;
-        if(adminTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){
+        if(userTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){
         // if(userTime * 1000 >= 1000 * 3){
           userTime=0;//清空
           //提示客服超时语

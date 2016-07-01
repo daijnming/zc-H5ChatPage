@@ -36,6 +36,7 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-clean-css": "^2.0.10",
     "gulp-htmlmin": "^2.0.0",
     "gulp-if": "^2.0.1",
     "gulp-imagemin": "^3.0.1",
@@ -49,7 +50,6 @@
     "gulp-useref": "^3.1.0",
     "gulp-watch": "^4.3.8",
     "mustache": "^2.2.1",
-    "requiredir": "^1.0.7",
-    "gulp-clean-css":"^2.0.10"
+    "requiredir": "^1.0.7"
   }
 }
