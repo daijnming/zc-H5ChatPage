@@ -71,7 +71,7 @@ function uploadImg() {
     var onAjaxUploadUpHandler=function(oData){
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
-        oXHR.open('POST','/wap/js/sendArea/fileupload.json');
+        oXHR.open('POST','/mock/fileupload.json');
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
             if(req.target.readyState == 4){
