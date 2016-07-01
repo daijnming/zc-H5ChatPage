@@ -14,6 +14,7 @@ function HumanOnly(global) {
     var socketFactory = require('../socket/socketfactory.js');
     var leaveMessageStr = global.apiConfig.leaveMsg;
     var manager = null;
+    var queueing = true;
 
     var initHumanSession = function(value,ret,word) {
         var success = !!word;
@@ -76,6 +77,7 @@ function HumanOnly(global) {
 
     var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
@@ -125,6 +127,7 @@ function HumanOnly(global) {
     };
     var transferSuccess = function(groupId,promise,init) {
         var init = !!init;
+        queueing = false;
         initSession(global,promise).then(function(value,promise) {
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
@@ -134,6 +137,7 @@ function HumanOnly(global) {
                     'sysNum' : global.sysNum,
                     'uid' : global.apiInit.uid,
                     'way' : 1,
+                    'current' : queueing,
                     'groupId' : groupId
                 },
                 'success' : function(ret) {

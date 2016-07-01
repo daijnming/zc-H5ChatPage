@@ -13,6 +13,7 @@ var HumanFirst = function(global) {
     var initSession = require('./initsession.js');
     var socketFactory = require('../socket/socketfactory.js');
     var leaveMessageStr = global.apiConfig.leaveMsg;
+    var queueing = false;
     var manager,
         tempManager;
 
@@ -93,6 +94,7 @@ var HumanFirst = function(global) {
 
     var queueWait = function(ret,init,value) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
@@ -205,6 +207,7 @@ var HumanFirst = function(global) {
                     'sysNum' : global.sysNum,
                     'uid' : global.apiInit.uid,
                     'way' : 1,
+                    'current' : queueing,
                     'groupId' : groupId
                 },
                 'success' : function(ret) {
@@ -216,6 +219,7 @@ var HumanFirst = function(global) {
                         //排队
                         queueWait(ret,init,value);
                     } else if(ret.status == 1) {
+                        queueing = false;
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
                         } else {
