@@ -175,16 +175,27 @@ li {
 .addList .uploadImgbg{
     background-position:-142px -44px;
 }
+.addList .uploadImgbg:hover{
+    background-position:-217px -44px;
+}
 .addList .artificialbg{
     background-position: 7px -44px;
+}
+.addList .artificialbg:hover{
+    background-position: -67px -44px;
 }
 .addList .satisfactionbg{
     background-position:8px -120px;
 }
+.addList .satisfactionbg:hover{
+    background-position:-67px -120px;
+}
 .addList .leaveMessagebg{
     background-position: -142px -118px;
 }
-
+.addList .leaveMessagebg:hover{
+    background-position: -218px -118px;
+}
 .showChatAdd {/* display:block; */
 }
 .tab-active{

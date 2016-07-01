@@ -65,14 +65,13 @@ function uploadImg() {
             console.log(percentage);
             listener.trigger('sendArea.uploadImgProcess',percentage); 
         } else {
-            alert("请上传正确的图片格式");
             //document.getElementById('progress').innerHTML = '无法计算';
         }
     }
     var onAjaxUploadUpHandler=function(oData){
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
-        oXHR.open('POST','/wap/js/sendArea/fileupload.json');
+        oXHR.open('POST','/chat/webchat/fileupload.action');
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
             if(req.target.readyState == 4){
