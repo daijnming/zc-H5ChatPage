@@ -7,7 +7,7 @@ var socketFactory = function(ret,global) {
         return manager;
     var WebSocket = require('../socket/websocket.js');
     var Rolling = require('../socket/rolling.js');
-    if(window.WebSocket&&false) {
+    if(window.WebSocket) {
         manager = new WebSocket(ret.puid,ret.pu,global);
     } else {
         manager = new Rolling(ret.puid,ret.pu,global);

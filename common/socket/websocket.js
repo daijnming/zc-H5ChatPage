@@ -27,16 +27,16 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var onSend = function(data) {
-        var item;
+        var item = data;
         if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
         if(item.currentStatus !== 'human') {
             return;
         }
-        if(!item.date){
-            item.ts = + new Date();
-        }else{
+        if(!item.date) {
+            item.ts = +new Date();
+        } else {
             item.ts = data.date;
         }
         item.type = 103;
@@ -99,7 +99,7 @@ function ZcWebSocket(puid,url,global) {
         var data = JSON.parse(evt.data);
         //messageConfirm(data);
         if(data.type == 301) {
-            ackConfirmMessageHandler(data);
+            // ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
         } else {

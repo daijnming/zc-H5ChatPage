@@ -48,8 +48,16 @@ function Robot(global) {
                     'list' : [item],
                     'type' : socketType
                 });
+                listener.trigger("core.msgresult", {
+                    'msgId' : data.dateuid,
+                    'result' : 'success'
+                });
             },
             'fail' : function(ret) {
+                listener.trigger("core.msgresult", {
+                    'msgId' : data.dateuid,
+                    'result' : 'fail'
+                });
             }
         });
         question = false;
