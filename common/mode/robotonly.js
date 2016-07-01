@@ -69,6 +69,7 @@ var RobotFirst = function(global) {
     };
 
     var initPlugins = function() {
+        alert();
         setTimeout(function() {
             listener.trigger("core.buttonchange", {
                 'type' : 'transfer',

@@ -500,8 +500,7 @@ function TextArea(window) {
         listener.on("listMsg.hideKeyboard",hideKeyboard);
         //转人工
         $artificial.on("click",artificialHandler);
-        //是否隐藏按钮
-        listener.on("core.buttonchange",changeStatusHandler);
+        
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
@@ -532,8 +531,11 @@ function TextArea(window) {
     };
     (function(){
         parseDOM();
+        //是否隐藏按钮
+        listener.on("core.buttonchange",changeStatusHandler);
         //改变当前状态
         listener.on("core.statechange",statusHandler);
+        
     })();
     listener.on("core.onload", function(data) {
         global = data;
@@ -547,9 +549,9 @@ function TextArea(window) {
         if(msgflag==1){
             $leaveMessage.remove();
         }else{
-            var sysnum=global[0].sysNum;
+            var hostUrl=global[0].hostUrl;
             var conf=$.extend({
-                'sysnum':sysnum
+                'hostUrl':hostUrl
             });
             var _html = doT.template(template.leaveMessageBtn)(conf);
             var _html2 = doT.template(template.leaveMessageEndBtn)(conf);
