@@ -401,3 +401,6 @@ p,ul,li{
 iframe,embed,table{
   width: 100% !important;
 }
+.msgOuter audio{
+  width: 200px !important;
+}

@@ -74,10 +74,14 @@ var ListMsgHandler = function() {
         url_keepDetail : '/chat/user/getChatDetailByCid.action',
         url_detail : '/chat/user/chatdetail.action'
     };
+    //缺省图片库
+    var imgHanlder = {
+      userLogo:'http://img.sobot.com/console/common/face/user.png'
+    };
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      // console.log(data);
+      console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -101,15 +105,19 @@ var ListMsgHandler = function() {
                     // itemChild.msg = $tmp.text();
                     var index = itemChild.msg.indexOf('uploadedFile');
                     var res;
-                    if(index>=0||(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0)){
+                    if(index>=0){
+                      //图片，文件 上传
                       res = $('<div>'+itemChild.msg+'</div>').text();
+                    }else if(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0){
+                      //富文本
+                        res = itemChild.msg;
                     }else{
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
-                            'userLogo' : itemChild.senderFace,
+                            'userLogo' : itemChild.senderFace!='null'?itemChild.senderFace:imgHanlder.userLogo,
                             'userMsg' : QQFace.analysis(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
@@ -125,9 +133,9 @@ var ListMsgHandler = function() {
                           msgHtml = messageHandler.msg.sugguestionsSearch(itemChild.sdkMsg,true);
                         }else{
                           comf = $.extend({
-                              'customLogo' : itemChild.senderFace!=='null'?itemChild.senderFace:global.apiConfig.robotLogo,
+                              'customLogo' : itemChild.senderFace!='null'?itemChild.senderFace:global.apiConfig.robotLogo,
                               'customName' : itemChild.senderName,
-                              'customMsg' : res,
+                              'customMsg' : QQFace.analysis(res),
                               'date':itemChild.t
                           });
                           msgHtml = doT.template(msgTemplate.leftMsg)(comf);
