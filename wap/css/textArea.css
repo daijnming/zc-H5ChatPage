@@ -32,8 +32,8 @@ li {
 }
 .sendarea {
     position:relative;
-    padding: 4px 10px;
-    min-height: 37px;
+    padding: 6px 10px;
+    min-height: 35px;
     -webkit-box-align: end;
     -webkit-align-items: flex-end;
     align-items: flex-end;
@@ -57,15 +57,15 @@ li {
 .textarea {
     float:left;
     background-color: #ddd;
-    line-height: 25px;
-    padding: 5px;
+    line-height: 21px;
+    padding: 7px 5px;
     width: 83%;
     border-radius: 4px;
     font-size: 14px;
     word-wrap: break-word;
     word-break: break-all;
     max-height: 120px;
-    min-height: 25px;
+    min-height: 20px;
     overflow: auto;
 }
 .sendBtn {
@@ -252,7 +252,10 @@ li {
 .endSession .span3 i{
      background-position: -237px -7px;
 }
-
+.textarea[placeholder]:empty:before {
+    content: attr(placeholder);
+    color: #999;
+}
 /* @media (min-device-width : 320px){
     .endSession span i{
          width:51%;
