@@ -281,6 +281,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         if(adminTime * 1000 >= global.apiConfig.adminTipTime * 1000 * 60){
         // if(adminTime * 1000 >= 1000 * 5){
           adminTime=0;//清空
+          var index = global.apiConfig.adminTipWord.indexOf('<');
+          var msg = index<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).text();
           //提示客服超时语
           var data = {
             type:'system',
@@ -306,11 +308,13 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         // if(userTime * 1000 >= 1000 * 3){
           userTime=0;//清空
           //提示客服超时语
+          var index = global.apiConfig.userTipWord.indexOf('<');
+          var msg = index<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).text();
           var data = {
             type:'system',
             status:'useroffline',
             data:{
-              content:$(global.apiConfig.userTipWord).text(),
+              content:msg,
               status:0
             }
           };
