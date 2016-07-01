@@ -36,6 +36,22 @@ var ListMsgHandler = function() {
     var systemHandler,//系统模块
         messageHandler;//消息模块
 
+    //消息状态-类
+    var MSGSTATUSCLASS={
+      MSG_LOADING:'msg-loading',//正在发送
+      MSG_LSSUED:'msg-lssued',//已发送
+      MSG_SERVED:'msg-served',//已送达
+      MSG_FAIL:'msg-fail',//发送失败
+      MSG_CLOSE:'msg-close',//关闭发送  图片仅有
+      MSG_SENDAGAIN:'msg-sendAgain'//重发图片
+    };
+    //系统提示
+    var sysPromptLan ={
+      L0001:'您与{0}的会话已经结束',
+      L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
+      L0003:'您已在新窗口打开聊天页面',
+      L0004:'客服正在输入...'
+    };
 
 
     // queue:用户排除中  offline:客服不在线  blacklist:被拉黑
