@@ -549,7 +549,9 @@ function TextArea(window) {
                 'sysnum':sysnum
             });
             var _html = doT.template(template.leaveMessageBtn)(conf);
+            var _html2 = doT.template(template.leaveMessageEndBtn)(conf);
             $leaveMessage.append(_html);
+            $endSession.append(_html2);
         }
         init();
     });
