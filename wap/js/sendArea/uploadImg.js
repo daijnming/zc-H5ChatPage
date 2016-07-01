@@ -77,8 +77,9 @@ function uploadImg() {
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
+                    var img='<img class="webchat_img_upload uploadedFile" src="'+url+'">';
                         listener.trigger('sendArea.uploadImgUrl',[{
-                            'url' : url,
+                            'answer' : img,
                             'date':tp,
                             'token':token
                         }]);

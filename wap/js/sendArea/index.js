@@ -350,9 +350,9 @@ function TextArea(window) {
         //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         //var date= currentUid + +new Date();
-        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].url+'">';
+        
         listener.trigger('sendArea.send',[{
-         'answer' :img,
+         'answer' :data[0].answer,
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
