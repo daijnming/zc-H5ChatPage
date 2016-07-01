@@ -13,7 +13,7 @@ function TextArea(window) {
     //当前状态
     //var CurrentState = require('../../../common/mode/currentState.js');
     //模拟placeholder
-    var placeholder = require('./placeholder.js');
+    //var placeholder = require('./placeholder.js');
     //alert()
     var evaluate=require("./evaluate.js");
     /* var inputCache = {};*/
@@ -38,9 +38,11 @@ function TextArea(window) {
         currentStatus=data;
         if(currentStatus=="human"){
             //提示文本
-            placeholder($textarea,"当前是人工");
+            //placeholder($textarea,"当前是人工");
+            $textarea.attr("placeholder","当前是人工")
         }else if(currentStatus == 'robot'){
-            placeholder($textarea,"当前是机器人");
+            //placeholder($textarea,"当前是机器人");
+            $textarea.attr("placeholder","当前是机器人")
         }
     };
     var changeStatusHandler=function(data){
@@ -54,7 +56,8 @@ function TextArea(window) {
             $satisfaction.show();
             $artificial.hide();
              //提示文本
-            placeholder($textarea,"当前是人工");
+            //placeholder($textarea,"当前是人工");
+            $textarea.attr("placeholder","当前是人工")
         }else{
             transferFlag=0;
             $uploadImg.hide();
@@ -326,7 +329,8 @@ function TextArea(window) {
         var _html=$textarea.html()+src;
         $textarea.html(_html);
         //提示文本
-        placeholder($textarea,"当前是人工");
+        //placeholder($textarea,"当前是人工");
+        $textarea.attr("placeholder","当前是人工")
         //显示发送按钮
         manualmodeButton();
         //调整窗体高度
@@ -350,7 +354,6 @@ function TextArea(window) {
         //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         //var date= currentUid + +new Date();
-        
         listener.trigger('sendArea.send',[{
          'answer' :data[0].answer,
          'uid' : currentUid,
@@ -441,10 +444,10 @@ function TextArea(window) {
             autoSizePhone();
         }
     };
-    var hideplaceholder=function(){
+   /* var hideplaceholder=function(){
         $placeholder.hide();
         $textarea.focus();
-    };
+    };*/
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
@@ -472,7 +475,7 @@ function TextArea(window) {
         //留言按钮
         $leaveMessage= $(".js-leaveMessage");
         //提示
-        $placeholder=$(".js-placeholder");
+        //$placeholder=$(".js-placeholder");
     };
     
     var bindLitener = function() {
@@ -506,7 +509,7 @@ function TextArea(window) {
         //评价弹窗
         $satisfaction.on("click",evaluateHandler);
         //点击placeholder消失
-        $placeholder.on("click",hideplaceholder)
+        //$placeholder.on("click",hideplaceholder)
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
