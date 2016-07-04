@@ -62,7 +62,7 @@
     $.ajax({
         type : "post",
         url : api.postMsg,
-        dataType : "jsonp",
+        dataType : "json",
         data : {
             uid:uid,
             companyId:sysNum,
@@ -143,7 +143,7 @@
     $.ajax({
         type : "post",
         url : api.config,
-        dataType : "jsonp",
+        dataType : "json",
         data : {
             sysNum : sysNum,
             source : uSource
