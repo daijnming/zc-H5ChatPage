@@ -30,7 +30,9 @@ function TextArea(window) {
         //用户输入的内容在客服提示
         timer,
         //会话是否结束, 用于阻止某些事件
-        sessionEnd=false;
+        sessionEnd=false,
+        //判断用户是否说过话
+        isSpeak=false;
         //0为机器人，1为人工
     var transferFlag=0;
     //传给聊天的url
@@ -127,14 +129,12 @@ function TextArea(window) {
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
         //判断输入框是否为空
-         
-   
-  
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
             return false;
         } else {
-             _html=ZC_Face.analysis(str)
+             _html=ZC_Face.analysis(str);
+             isSpeak=true;
             //xss
             var s = "";
             s = str.replace(/&/g, "&gt;");   
@@ -144,7 +144,6 @@ function TextArea(window) {
             s = s.replace(/\'/g, "&#39;");   
             s = s.replace(/\"/g, "&quot;");   
             s = s.replace(/\n/g, "<br>");
-           
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
             listener.trigger('sendArea.send',[{
@@ -323,6 +322,10 @@ function TextArea(window) {
          //将新表情追加到待发送框里
         var _html=$textarea.html()+src;
         $textarea.html(_html);
+        var textarea=document.getElementById('js-textarea');
+        console.log(textarea.scrollTop);
+        console.log(textarea.scrollHeight);
+        textarea.scrollTop = textarea.scrollHeight;
         //提示文本
         //placeholder($textarea,"当前是人工");
         $textarea.attr("placeholder","当前是人工")
@@ -375,21 +378,8 @@ function TextArea(window) {
     };
     //结束会话
     var endSessionHandler=function(status){
-    console.log("当前状态");
-    console.log(status);
        switch(status) {
             case -1://仅人工模式，转人工失败
-                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
-                $keepSession.hide();
-                $endSession.show();
-                autoSizePhone();
-                sessionEnd=true;
-                $(".js-satisfaction").remove();
-                //留言开关
-                if(global.apiConfig.msgflag==1){
-                    $(".js-leaveMsgBtn").remove();
-                }
-                break;
             case 1://客服自己离线了
             case 2://客服把你T了
             case 3://客服把你拉黑了
@@ -400,6 +390,14 @@ function TextArea(window) {
                 $endSession.show();
                 autoSizePhone();
                 sessionEnd=true;
+                if(status==-1){//仅人工模式，转人工失败
+                    //移除满意度评价
+                    $(".js-satisfaction").remove();
+                    //留言开关
+                    if(global.apiConfig.msgflag==1){
+                        $(".js-leaveMsgBtn").remove();
+                    }
+                }
                 break;
         }
     };
@@ -415,8 +413,12 @@ function TextArea(window) {
             }
     };
     var evaluateHandler=function(){
-        //评价
-        evaluate(transferFlag,global);
+        if(isSpeak==true){
+            //评价
+            evaluate(transferFlag,global);
+        }else{
+            alert("您还没说话，不能评价")
+        }
         focusStatus=false;
     };
     var hideKeyboard=function(){

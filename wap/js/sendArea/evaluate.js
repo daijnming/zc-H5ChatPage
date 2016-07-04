@@ -5,6 +5,7 @@
 function evaluate(currentStatus,global) {
     var template = require('./template.js');
     var Alert=require('../util/alert.js');
+    var listener = require("../../../common/util/listener.js");
     //var Dialog=require('../util/dialog.js');
     var currentStatus=currentStatus;
     var Alert,
@@ -175,8 +176,10 @@ function evaluate(currentStatus,global) {
             }
         });
         Alert.hide();
-        $('.js-satisfaction').remove();
-        $(".js-endSession span").css("width","45%")
+        //$('.js-satisfaction').remove();
+        $(".js-endSession span").css("width","45%");
+        var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
+        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
     };
     var starEvaluateHandler=function(iStar){
        
@@ -193,7 +196,9 @@ function evaluate(currentStatus,global) {
     };
     var hideDialog=function(){
         Alert.hide();
-        $(".js-satisfaction").remove();
+        //$(".js-satisfaction").remove();
+        var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
+        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
     };
     var sobotbindListener = function() {
         //机器人评价
