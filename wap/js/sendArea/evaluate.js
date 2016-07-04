@@ -163,8 +163,8 @@ function evaluate(currentStatus,global) {
             url : "/chat/user/comment.action",
             dataType : "json",
             data : {
-                cid : global[0].apiInit.cid,
-                visitorId:global[0].apiInit.uid,
+                cid : global.apiInit.cid,
+                visitorId:global.apiInit.uid,
                 score:score,
                 tag:tag,
                 remark:remark,

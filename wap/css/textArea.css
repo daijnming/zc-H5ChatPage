@@ -220,11 +220,14 @@ li {
     overflow:hidden;
     border-top:1px solid #ced7d6;
     box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
 }
 .endSession span{
     display:inline-block;
     float:left;
-    width:29%;
+   /*  width:29%; */
     margin:2%;
     border-radius:10px;
     text-align:center;
@@ -248,6 +251,22 @@ li {
     color:#7c8687;
     padding-bottom:2%;
     text-align:center;
+}
+
+.endSession .span1{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+.endSession .span2{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+.endSession .span3{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
 }
 .endSession .span1 i{
      background-position: -37px -7px;
