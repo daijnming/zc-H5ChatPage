@@ -220,7 +220,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      console.log(data);
+      // console.log(data);
       var msgHtml='',
           comf;
       if(data){
@@ -324,6 +324,7 @@ var ListMsgHandler = function() {
     };
     //更新聊天记录
     var updateChatMsg = function(tempHtml){
+      // console.log(tempHtml);
       if(chatPanelList&&chatPanelList.children().length){
           var lastDom = chatPanelList.children().last();
           var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
@@ -386,7 +387,6 @@ var ListMsgHandler = function() {
     };
     //初始化h5页面配置信息
     var initConfig = function() {
-        alert();
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
