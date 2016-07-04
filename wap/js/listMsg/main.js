@@ -81,7 +81,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      console.log(data);
+      // console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -114,6 +114,7 @@ var ListMsgHandler = function() {
                     }else{
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
+                    //FIXME 消息展示时类型判断
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
@@ -219,7 +220,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      // console.log(data);
+      console.log(data);
       var msgHtml='',
           comf;
       if(data){

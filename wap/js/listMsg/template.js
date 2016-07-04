@@ -35,7 +35,7 @@ var listSugguestionsMsg =
                       '{{for(var i=0;i<it.list.length;i++){ }}'+
                       '{{if(it.isHistory){ }}'+
                           '<li>'+
-                            '<a href="#0" class="js-answerBtn" style="color:#596273">{{=it.list[i]}}</a>'+
+                            '<a href="#0" class="js-answerBtn" style="color:#596273">{{=i+1}}: {{=it.list[i]}}</a>'+
                           '</li>'+
                         '{{}else{}}'+
                             '<li>'+

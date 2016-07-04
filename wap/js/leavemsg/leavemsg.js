@@ -20,7 +20,6 @@
   var uSource=1,//source参数  默认为微信
       sysNum,//系统id
       uid,
-      companyId,
       back;//顶部返回栏
 
   var host = '';//本地&测试
@@ -66,7 +65,7 @@
         dataType : "jsonp",
         data : {
             uid:uid,
-            companyId:companyId,
+            companyId:sysNum,
             ticketContent:content,
             customerEmail:email,
             source:uSource,
@@ -140,7 +139,6 @@
     uSource = params.source?params.source:uSource;
     back = params.back;
     uid=params.uid;
-    companyId = params.companyId;
 
     $.ajax({
         type : "post",

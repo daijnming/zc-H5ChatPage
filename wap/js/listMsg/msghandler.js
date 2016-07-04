@@ -72,7 +72,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       isUserSendMsg = true;//
       if(data[0].sendAgain){
         //消息重发
-        var oDiv = $('#userMsg'+data[0].oldMsgId).parents('div.rightMsg');
+        var oDiv = $('#userMsg'+data[0].dateuid).parents('div.rightMsg');
         chatPanelList.append(oDiv);
       }else{
         //非图片
@@ -97,14 +97,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var _txt = $(this).text();
       if(_txt){
         //获取点击内容
-        var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
+        // var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
+        var _msg = _txt.substr(0,_txt.indexOf(':')).trim();
         fnEvent.trigger('sendArea.send',[{
                 'answer' : _msg,
                 'uid' : global.apiInit.uid,
                 'cid' : global.apiInit.cid,
-                'currentStates':'robot',
+                'currentStatus':'robot',
                 'requestType':'question',
-                'date' : global.apiInit.uid + +new Date()
+                'token':'',
+                'dateuid' : global.apiInit.uid + +new Date()
             }]);
       }
     },
@@ -184,6 +186,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
+      console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
@@ -209,6 +212,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var sendType,//发送类型
           answer;//发送内容
       var msgId = that.attr('id').substr(7,that.attr('id').length);
+      // var msgId = that.attr('id');
       //判断当前消息是否满足重发条件 error
       if(that.hasClass('error')){
         //判断当前是图片重发   文字重发
@@ -229,8 +233,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
            'answer' :answer,
            'uid' : global.apiInit.uid,
            'cid' : global.apiInit.cid,
-           'dateuid' : global.apiInit.uid+ +new Date(),
-           'oldMsgId':msgId,
+          //  'dateuid' : global.apiInit.uid+ +new Date(),
+          'dateuid':msgId,
+          //  'oldMsgId':msgId,
            'currentStatus':sys.config.currentState==1?'robot':'human',
            'date': +new Date(),
            'token':msgId,
