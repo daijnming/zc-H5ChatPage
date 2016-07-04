@@ -417,7 +417,8 @@ function TextArea(window) {
             //评价
             evaluate(transferFlag,global);
         }else{
-            alert("您还没说话，不能评价")
+            var evaluateSystem={type:'system',status:'evaluated',data:{content:'您还没发言,暂不能评论'}}
+            listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
         }
         focusStatus=false;
     };

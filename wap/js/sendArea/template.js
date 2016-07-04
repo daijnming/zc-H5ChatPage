@@ -63,10 +63,12 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 						'</div>';
 var leaveMessageBtn='<a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="leaveMessagebg"></i><p>留言</p></a>';
 var leaveMessageEndBtn='<span class="span3"><a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="icon"></i><p>留言</p></a></span>';
+var evamsgHtml='<div class="js-evamsg evamsg"><p>感谢您的反馈</p></div>';
 template.sobotEvaluate_selfHtml = sobotEvaluate_selfHtml;
 template.humanOne_selfHtml = humanOne_selfHtml;
 template.humanTwo_selfHtml = humanTwo_selfHtml;
 template.leaveMessageBtn = leaveMessageBtn;
 template.leaveMessageEndBtn = leaveMessageEndBtn;
+template.evamsgHtml = evamsgHtml;
 module.exports = template;
  

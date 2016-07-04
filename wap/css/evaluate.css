@@ -78,6 +78,8 @@
 #star li.on{
 	background-position:-60px -242px;
 }
+.evamsg{display:none;position:absolute;z-index:100;width:200px;height:40px;background:#000;opacity:0.5;border-radius:6px;}
+.evamsg p{width:100%;height:40px;line-height: 40px;color:#fff;font-size:1em;text-align:center;}
 /* iphone6 Plus */
 @media (min-device-width : 414px) and (max-device-width : 736px){
     #star li{

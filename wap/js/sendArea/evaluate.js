@@ -13,7 +13,8 @@ function evaluate(currentStatus,global) {
     var score="",
         tag="",
         remark="",
-        type="";
+        type="",
+        evamsgHtml="";
     var parseDOM = function() {
         $evaluate=$(".js-evaluate");
     };
@@ -43,10 +44,16 @@ function evaluate(currentStatus,global) {
         var _html = doT.template(template.sobotEvaluate_selfHtml)(conf);
         Alert.setInner(_html);
         $(".js-noques").addClass("active");
-        $(".js-isques").on("click",hideDialog)
+        $(".js-isques").on("click",hideDialog);
+        $(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
         $(".submit").on("click",EvaluateAjaxHandler)
+    };
+    var evaluateSuccess=function(){
+        $('body').append(evamsgHtml);
+        $('.js-evamsg').show();
+        position();
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -93,7 +100,10 @@ function evaluate(currentStatus,global) {
                     case 5://五星
                         score=5;
                         Alert.hide();
-                        alert("感谢您的反馈");
+                        //alert("感谢您的反馈");
+                        $('body').append(evamsgHtml);
+                        $('.js-evamsg').show();
+                        position();
                         break;
                      
                 }
@@ -138,14 +148,16 @@ function evaluate(currentStatus,global) {
                     case 5://五星
                         score=5;
                         Alert.hide();
-                        alert("感谢您的反馈");
+                        //alert("感谢您的反馈");
+                        evaluateSuccess();
                         break;
                      
                 }
             }
         }
         $(".js-noques").addClass("active");
-        $(".js-isques").on("click",hideDialog)
+        $(".js-isques").on("click",hideDialog);
+        $(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
         $(".submit").on("click",EvaluateAjaxHandler)
@@ -172,7 +184,10 @@ function evaluate(currentStatus,global) {
                 type:currentStatus 
             },
             success:function(req){
-                alert("感谢您的反馈");
+                //alert("感谢您的反馈");
+                $('body').append(evamsgHtml);
+                $('.js-evamsg').show();
+                position();
             }
         });
         Alert.hide();
@@ -183,6 +198,13 @@ function evaluate(currentStatus,global) {
     };
     var starEvaluateHandler=function(iStar){
        
+    };
+    var position =function(){
+        //居中
+        var left,top;
+        left=($(window).width()-($(window).width()*0.9))/2+"px";
+        top=($(window).height()-$(".js-evamsg").height())/2+"px";
+        $(".js-evamsg").css({"left":left,"top":top});
     }; 
     var fnPoint=function(iArg){//alert(iArg); 
         //分数赋值
@@ -223,7 +245,9 @@ function evaluate(currentStatus,global) {
             humanSetInnerStepOneHtml();
             humanbindListener();
         }
-        
+        //感谢您的评价
+        var conf={};
+        evamsgHtml = doT.template(template.evamsgHtml)(conf);
     };
     init();
     this.modeAlert = modeAlert;
