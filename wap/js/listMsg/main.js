@@ -271,7 +271,7 @@ var ListMsgHandler = function() {
                       break;
                     case 204:
                       //会话结束
-                      // msgHtml+= messageHandler.msg.sessionCloseHander(_data);
+                      msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
                       //客服正在输入

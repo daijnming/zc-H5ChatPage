@@ -163,7 +163,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
             break;
           case 2:
-          msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
+          // msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
             break;
           case 3:
           msg = Comm.format(sysPromptLan.L0001,[data.aname],true);
