@@ -24,7 +24,9 @@ function uploadImg() {
         // size单位为字节 5M = 5242880
         if(file.size >= 5242880) {
             // 图片过大
-            alert("图片大于5M");
+            //alert("图片大于5M");
+            var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
+            listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
             return;
         }
         //console.log(file);
@@ -53,7 +55,9 @@ function uploadImg() {
             //onAjaxUploadUpHandler(oData)
             setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
         }else{
-            alert("请上传正确的图片格式")
+            //alert("请上传正确的图片格式");
+            var imageError={type:'system',status:'imageError',data:{content:'请上传正确的图片格式'}}
+            listener.trigger('sendArea.sendAreaSystemMsg',imageError);
         }
         //清空文本域
         $(".js-upload").val("");

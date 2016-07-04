@@ -8,6 +8,9 @@ li, ul, div, p, h1 {
     border: 1px solid #e7e7e7;
    box-shadow: 1px 1px 0.5px #999
 } */
+.chatEmotion{
+    width:100%;   
+}
 .faceGroup {
     overflow:hidden;
     width: 100%;
@@ -28,8 +31,8 @@ li, ul, div, p, h1 {
 .faceIco{
     float:left;
     overflow:hidden;
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
     margin:3% 3.1%;
     background-image:url(../images/static/qqface2X.png);
     background-repeat:no-repeat;
@@ -166,7 +169,7 @@ background-position:2px 2px;
 /*  */
 @media (min-device-width : 600px){
     .faceIco{
-        margin:3% 4.9%;
+        margin:1.6% 4.9%;
         width: 25px;
         height: 25px;
     }
@@ -176,17 +179,45 @@ background-position:2px 2px;
 }
 /*  */
 @media (min-device-width : 640px){
-    
+    .faceIco{
+        margin:1.6% 4.9%;
+        width: 25px;
+        height: 25px;
+    }
+    .faceGroup .backDelete{
+        margin:3% 4.9%;
+    }
 }
 /* iphone6puls橫屏 */
 @media (min-device-width : 736px){
-    
+    .faceIco{
+        margin:1.6% 5.3%;
+        width: 25px;
+        height: 25px;
+    }
+    .faceGroup .backDelete{
+        margin:2% 4.8%;
+    }
 }
 /*  */
 @media (min-device-width : 1280px){
-    
+    .faceIco{
+        margin:1.6% 4.9%;
+        width: 25px;
+        height: 25px;
+    }
+    .faceGroup .backDelete{
+        margin:3% 4.9%;
+    }
 }
 /*  */
 @media (min-device-width : 1600px){
-    
+    .faceIco{
+        margin:0.6% 5.9%;
+        width: 25px;
+        height: 25px;
+    }
+    .faceGroup .backDelete{
+        margin:1% 5.9%;
+    }
 }

@@ -323,8 +323,6 @@ function TextArea(window) {
         var _html=$textarea.html()+src;
         $textarea.html(_html);
         var textarea=document.getElementById('js-textarea');
-        console.log(textarea.scrollTop);
-        console.log(textarea.scrollHeight);
         textarea.scrollTop = textarea.scrollHeight;
         //提示文本
         //placeholder($textarea,"当前是人工");
@@ -417,7 +415,7 @@ function TextArea(window) {
             //评价
             evaluate(transferFlag,global);
         }else{
-            var evaluateSystem={type:'system',status:'evaluated',data:{content:'您还没发言,暂不能评论'}}
+            var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'您还没发言,暂不能评论'}}
             listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
         }
         focusStatus=false;

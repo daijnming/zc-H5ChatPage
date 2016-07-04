@@ -10,11 +10,10 @@ function evaluate(currentStatus,global) {
     var currentStatus=currentStatus;
     var Alert,
         dialog;
-    var score="",
+    var score=0,
         tag="",
         remark="",
-        type="",
-        evamsgHtml="";
+        type="";
     var parseDOM = function() {
         $evaluate=$(".js-evaluate");
     };
@@ -45,15 +44,10 @@ function evaluate(currentStatus,global) {
         Alert.setInner(_html);
         $(".js-noques").addClass("active");
         $(".js-isques").on("click",hideDialog);
-        $(".js-isques").on("click",evaluateSuccess);
+        //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
         $(".submit").on("click",EvaluateAjaxHandler)
-    };
-    var evaluateSuccess=function(){
-        $('body').append(evamsgHtml);
-        $('.js-evamsg').show();
-        position();
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -101,9 +95,7 @@ function evaluate(currentStatus,global) {
                         score=5;
                         Alert.hide();
                         //alert("感谢您的反馈");
-                        $('body').append(evamsgHtml);
-                        $('.js-evamsg').show();
-                        position();
+                        evaluateSuccess();
                         break;
                      
                 }
@@ -157,10 +149,10 @@ function evaluate(currentStatus,global) {
         }
         $(".js-noques").addClass("active");
         $(".js-isques").on("click",hideDialog);
-        $(".js-isques").on("click",evaluateSuccess);
+        //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
-        $(".submit").on("click",EvaluateAjaxHandler)
+        $(".js-submit").on("click",EvaluateAjaxHandler)
     };
     var EvaluateAjaxHandler=function(){
         remark=$(".js-evaluateInner").val();
@@ -185,16 +177,14 @@ function evaluate(currentStatus,global) {
             },
             success:function(req){
                 //alert("感谢您的反馈");
-                $('body').append(evamsgHtml);
-                $('.js-evamsg').show();
-                position();
+                Alert.hide();
+                evaluateSuccess();
             }
         });
-        Alert.hide();
         //$('.js-satisfaction').remove();
         $(".js-endSession span").css("width","45%");
-        var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
-        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+        //var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
+        //listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
     };
     var starEvaluateHandler=function(iStar){
        
@@ -202,7 +192,7 @@ function evaluate(currentStatus,global) {
     var position =function(){
         //居中
         var left,top;
-        left=($(window).width()-($(window).width()*0.9))/2+"px";
+        left=($(window).width()-200)/2+"px";
         top=($(window).height()-$(".js-evamsg").height())/2+"px";
         $(".js-evamsg").css({"left":left,"top":top});
     }; 
@@ -218,9 +208,18 @@ function evaluate(currentStatus,global) {
     };
     var hideDialog=function(){
         Alert.hide();
+        evaluateSuccess();
         //$(".js-satisfaction").remove();
-        var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
-        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+    };
+    var evaluateSuccess=function(){
+        //感谢您的评价
+        var conf={};
+        var evamsgHtml = doT.template(template.evamsgHtml)(conf);
+        $('body').append(evamsgHtml);
+        setTimeout(function(){
+            $('.js-evamsg').remove();
+        },3000)
+        position(); 
     };
     var sobotbindListener = function() {
         //机器人评价
@@ -245,9 +244,7 @@ function evaluate(currentStatus,global) {
             humanSetInnerStepOneHtml();
             humanbindListener();
         }
-        //感谢您的评价
-        var conf={};
-        evamsgHtml = doT.template(template.evamsgHtml)(conf);
+        
     };
     init();
     this.modeAlert = modeAlert;
