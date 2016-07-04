@@ -7,6 +7,7 @@ var SysmsgHandler = function(msgBind,myScroll){
 
   //Dom元素
   var topTitleBar,//顶部栏
+      chatPanelList,//滚动列表
       wrapScroll;//滚动窗体
 
   //定义变量
@@ -21,12 +22,19 @@ var SysmsgHandler = function(msgBind,myScroll){
 
    config.sys = {
     nowTimer:function(){
-      //首次进入提示语
-      var _now = new Date();
-      var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
-      var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
-      var _timer =  '今天' + _hour+':'+_minutes;
-      msgBind(3,_timer);// 3系统时间提示
+      //FIXME 首次进入提示语 若上一句未超过1分钟 则不显示提示时间
+      if(chatPanelList&&chatPanelList.children().length){
+          var lastDom = chatPanelList.children().last();
+          var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
+          //超一分钟 显示 时间线
+          if(_m>1&&!lastDom.hasClass('sysData')){
+            var _now = new Date();
+            var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
+            var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
+            var _timer =  '今天' + _hour+':'+_minutes;
+            msgBind(3,_timer);// 3系统时间提示
+          }
+      }
     },
     //type 0 今天  1 昨天  2 更早在历史记录
     getTimeLine:function(type,time){
@@ -90,15 +98,21 @@ var SysmsgHandler = function(msgBind,myScroll){
           $('.input205').remove();
           myScroll.refresh();
       },5*1000);//每隔5秒处理正在输入提示消息
+    },
+    //输入框相关提示系统消息
+    onSendAreaSysMsg:function(data){
+      console.log(data);
     }
   };
   var parseDOM = function(){
     topTitleBar = $('.js-header-back');
     wrapScroll = $('.js-wrapper');
+    chatPanelList = $('.js-chatPanelList');
   };
   var bindListener = function(){
     fnEvent.on('sendArea.autoSize',config.sys.onAutoSize);//窗体聊天内容可视范围
     fnEvent.on('core.system',config.sys.onSessionOpen);//转人工事件
+    fnEvent.on('sendArea.sendAreaSystemMsg',config.sys.onSendAreaSysMsg);//输入框相关提示系统消息
   };
   var initPlagsin=function(){
     config.sys.nowTimer();//显示当前时间
