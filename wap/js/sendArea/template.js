@@ -64,11 +64,13 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 var leaveMessageBtn='<a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="leaveMessagebg"></i><p>留言</p></a>';
 var leaveMessageEndBtn='<span class="span3"><a class="js-leaveMsgBtn" href="'+'{{=it.hostUrl}}'+'"><i class="icon"></i><p>留言</p></a></span>';
 var evamsgHtml='<div class="js-evamsg evamsg"><p>感谢您的反馈</p></div>';
+var layerOpacity0='<div class="layer-opacity0"></div>';
 template.sobotEvaluate_selfHtml = sobotEvaluate_selfHtml;
 template.humanOne_selfHtml = humanOne_selfHtml;
 template.humanTwo_selfHtml = humanTwo_selfHtml;
 template.leaveMessageBtn = leaveMessageBtn;
 template.leaveMessageEndBtn = leaveMessageEndBtn;
 template.evamsgHtml = evamsgHtml;
+template.layerOpacity0 = layerOpacity0;
 module.exports = template;
  

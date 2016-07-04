@@ -233,6 +233,8 @@ function evaluate(currentStatus,global) {
         $(".js-isques").on("click",hideDialog)
     };
     var init = function() {
+        //防止用户快速多次点击弹层
+        $('.layer-opacity0').remove();
         parseDOM();
         //机器人评价
         if(currentStatus==0){

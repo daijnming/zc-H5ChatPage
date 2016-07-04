@@ -137,7 +137,7 @@ function TextArea(window) {
              isSpeak=true;
             //xss
             var s = "";
-            s = str.replace(/&/g, "&gt;");   
+            s = str.replace(/&/g, "&amp;");   
             s = s.replace(/</g, "&lt;");   
             s = s.replace(/>/g, "&gt;");   
             s = s.replace(/ /g, "&nbsp;");   
@@ -233,7 +233,7 @@ function TextArea(window) {
         //与键盘优化
         if($chatArea.hasClass("showChatEmotion")){
             //隐藏
-            hideChatAreaHandler();
+            hideChatAreaHandler()
         } else {
             setTimeout(function(){
                 //显示
@@ -265,7 +265,7 @@ function TextArea(window) {
                     }
                 }
                 autoSizePhone();
-            },200)
+            },400)
         }
         focusStatus=false;
     };
@@ -412,6 +412,10 @@ function TextArea(window) {
     };
     var evaluateHandler=function(){
         if(isSpeak==true){
+            //防止用户快速多次点击弹层
+            var conf={};
+            var _html = doT.template(template.layerOpacity0)(conf);
+            $(document.body).append(_html);
             //评价
             evaluate(transferFlag,global);
         }else{
@@ -424,8 +428,7 @@ function TextArea(window) {
         //会话没结束的时候点击屏幕输入框失去焦点
         if(!sessionEnd){
             $textarea.blur();
-            $chatArea.removeClass("showChatArea").addClass("hideChatArea");
-            $chatArea.removeClass("showChatAdd");
+            $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
             var _text = $textarea.text();
             if(transferFlag==0){
                 if(_text) {
