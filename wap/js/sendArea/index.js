@@ -225,7 +225,7 @@ function TextArea(window) {
                     $(".qqFaceTip").removeClass("activehide")
                 }
                 autoSizePhone();
-            },200)
+            },400)
         }
         focusStatus=false;
     };
@@ -364,6 +364,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var artificialHandler=function(){
+        isSpeak=false;
         listener.trigger('sendArea.artificial');
         focusStatus=false;
     };
