@@ -386,6 +386,7 @@ var ListMsgHandler = function() {
     };
     //初始化h5页面配置信息
     var initConfig = function() {
+        alert();
         theme(global,wrapBox);//主题设置
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
