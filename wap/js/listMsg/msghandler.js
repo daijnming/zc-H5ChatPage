@@ -281,6 +281,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         if(isAdminSendMsg){
           adminTime=0;
           isAdminSendMsg=false;
+          //清空系统提示语
+          // $('.js-sysMsg').remove();
+          // console.log('admins');
         }
         adminTime += 1;
         if(adminTime * 1000 >= global.apiConfig.adminTipTime * 1000 * 60){
@@ -307,6 +310,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         if(isUserSendMsg){
           userTime=0;
           isUserSendMsg=false;
+          //清空系统提示语
+          // $('.js-sysMsg').remove();
+          // console.log('user');
         }
         userTime += 1;
         if(userTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){

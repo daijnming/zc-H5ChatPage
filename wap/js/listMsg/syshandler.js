@@ -101,7 +101,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //输入框相关提示系统消息
     onSendAreaSysMsg:function(data){
-      console.log(data);
+      msgBind(2,data);
     }
   };
   var parseDOM = function(){
