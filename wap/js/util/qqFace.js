@@ -8,6 +8,8 @@ function ZC_Face() {
     var weixinJson = require('./face/weixin.json');
     var weixinSymbol = require('./face/weixinsymbol.json');
     var reg = require('./face/Reg.js');
+    //模板引擎
+    var template = require('./template.js');
     //show
     var tip = weixinJson,
     //analysis
@@ -26,9 +28,19 @@ function ZC_Face() {
             for(var a in tip) { 
                 flag+=1;
                 if(flag==27){
-                    str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span><span class="backDelete"></span>'
+                    var conf=$.extend({
+                        'flag':flag,
+                        'a':a
+                    });
+                    str += doT.template(template.faceIcoStr)(conf);
+                    //str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span><span class="backDelete"></span>'
                 }else{
-                    str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
+                    var conf=$.extend({
+                        'flag':flag,
+                        'a':a
+                    });
+                    str += doT.template(template.faceIcoStr2)(conf);
+                   // str+='<span class="faceIco js-faceIco faceIco'+flag+'" data-src="'+a+'" /></span>';
                 }
             };
             str+='</div>'

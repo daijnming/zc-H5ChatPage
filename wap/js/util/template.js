@@ -20,6 +20,10 @@ var AlertTemplate = '<div class="modeDialog js-modeDialog">'+
 						'<div class="model-body">'+
             			'</div>'+
 					 '</div>';
-template.AlertTemplate= AlertTemplate;
+var faceIcoStr = '<span class="faceIco js-faceIco faceIco'+'{{=it.flag}}'+'" data-src="'+'{{=it.a}}'+'" /></span><span class="backDelete"></span>';
+var faceIcoStr2 = '<span class="faceIco js-faceIco faceIco'+'{{=it.flag}}'+'" data-src="'+'{{=it.a}}'+'" /></span>';
 template.layer=layer;
+template.AlertTemplate= AlertTemplate;
+template.faceIcoStr=faceIcoStr;
+template.faceIcoStr2=faceIcoStr2;
 module.exports = template;
