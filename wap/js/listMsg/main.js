@@ -55,7 +55,7 @@ var ListMsgHandler = function() {
 
 
     // queue:用户排除中  offline:客服不在线  blacklist:被拉黑
-    var sysMsgList=['queue','offline','blacklist','evaluated'];//用于系统提示管理的状态码
+    var sysMsgList=['queue','offline','blacklist','evaluated','firstEvaluate'];//用于系统提示管理的状态码
 
     //Dom元素
     var topTitleBar,//顶部栏
