@@ -53,24 +53,25 @@ function HumanOnly(global) {
     };
 
     var transferFail = function() {
-        var value = [];
-        var now = new Date();
-        var obj = {
-            "date" : DateUtil.formatDate(now),
-            "content" : [{
-                'senderType' : 1,
-                't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true),
-                'senderFace' : global.apiConfig.robotLogo,
-                'senderName' : global.apiConfig.robotName
-            }]
-        };
-        value.push(obj);
-        manager = new Robot(global);
-        modeState.setCurrentState("robot");
+        if(false) {
+            var value = [];
+            var now = new Date();
+            var obj = {
+                "date" : DateUtil.formatDate(now),
+                "content" : [{
+                    'senderType' : 1,
+                    't' : +now,
+                    'msg' : global.apiConfig.robotHelloWord,
+                    'ts' : DateUtil.formatDate(now,true),
+                    'senderFace' : global.apiConfig.robotLogo,
+                    'senderName' : global.apiConfig.robotName
+                }]
+            };
+            value.push(obj);
+            manager = new Robot(global);
+            modeState.setCurrentState("robot");
+        }
         setTimeout(function() {
-            listener.trigger("core.initsession",value);
             listener.trigger("core.sessionclose",-1);
         },0);
     };
