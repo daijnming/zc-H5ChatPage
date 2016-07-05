@@ -66,7 +66,7 @@ var ScrollHandler = function(global,node){
   };
   //下拉刷新
   That.pullDown = function(callback){
-    console.log(scroll.y);
+    var t = $('.js-chatPanelList').children().first().attr('date');
     //有更多历史记录
     if(scroll.y > 40&&global.flags.moreHistroy) {
       global.flags.pageNow+=1;//下拉刷新
@@ -77,7 +77,8 @@ var ScrollHandler = function(global,node){
             data : {
                 uid : global.apiInit.uid,
                 pageNow : global.flags.pageNow,
-                pageSize : global.flags.pageSize
+                pageSize : global.flags.pageSize,
+                t:t
             },
             success:callback
         });

@@ -81,7 +81,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      // console.log(data);
+      console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,

@@ -230,7 +230,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
           answer = that.prev().find('p').html();
         }
-        console.log(sys.config.currentState);
+        // console.log(sys.config.currentState);
         console.log(sys.config.currentState==1?'机器人':'客服');
         fnEvent.trigger('sendArea.send',[{
            'answer' :answer,
