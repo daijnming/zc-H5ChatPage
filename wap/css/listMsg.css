@@ -279,6 +279,9 @@ p,ul,li{
   display: inline-block;
   float: left;
 }
+.wrap .header-back .back a{
+  color:#fff;
+}
 /*.wrap .header-back .back i::before{
   content: "";
   position: absolute;
