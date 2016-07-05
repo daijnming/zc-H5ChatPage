@@ -22,25 +22,19 @@ var SysmsgHandler = function(msgBind,myScroll){
 
    config.sys = {
     nowTimer:function(){
+
+      //有会话就显示时间
       var _now = new Date();
       var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
       var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
       var _timer =  '今天' + _hour+':'+_minutes;
-      msgBind(3,_timer);// 3系统时间提示
-      //有会话就显示时间
-      return;
-      //FIXME 首次进入提示语 若上一句未超过1分钟 则不显示提示时间
       if(chatPanelList&&chatPanelList.children().length){
-          var lastDom = chatPanelList.children().last();
-          var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
-          //超一分钟 显示 时间线
-          if(_m>1&&!lastDom.hasClass('sysData')){
-            var _now = new Date();
-            var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
-            var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
-            var _timer =  '今天' + _hour+':'+_minutes;
-            msgBind(3,_timer);// 3系统时间提示
-          }
+        var lastDom = chatPanelList.children().last();
+        if(!lastDom.hasClass('sysData')){
+          msgBind(3,_timer);// 3系统时间提示
+        }
+      }else{
+        msgBind(3,_timer);
       }
     },
     //type 0 今天  1 昨天  2 更早在历史记录
@@ -76,6 +70,9 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
+      console.log(data);
+      $('.js-title').text(data.data.aname);
+      document.title = data.data.aname;
       msgBind(2,data);
     },
     //系统消息显示处理
