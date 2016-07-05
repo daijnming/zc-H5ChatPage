@@ -73,7 +73,7 @@ var rightMsg =
                             '</p>'+
                             '<div class="shadowLayer js-shadowLayer">'+
                             '</div>'+
-                            '<div class="progressLayer">'+
+                            '<div class="progressLayer js-progressLayer">'+
                               '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
@@ -94,11 +94,19 @@ var systemData =
                       '{{=it.sysData}}'+
                   '</p>';
 
+var showMsgLayer =
+                  '<div class="js-showMsgLayer showMsgLayer">'+
+                    '<div class="msgLayer">'+
+                      '<img src="{{=it.msg}}" />'+
+                    '</div>'+
+                  '</div>';
+
 template.leftMsg = leftMsg;
 template.rightMsg = rightMsg;
 template.rightImg = rightImg;
 template.sysMsg = systemMsg;
 template.sysData = systemData;
+template.showMsgLayer = showMsgLayer;
 template.listSugguestionsMsg = listSugguestionsMsg;
 
 module.exports = template;

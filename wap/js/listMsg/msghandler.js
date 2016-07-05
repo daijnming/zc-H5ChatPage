@@ -117,10 +117,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onUpLoadImgProgress:function(data){
       var $shadowLayer,
           $progress,
+          $progressLayer,
           oldH;
       if(isUploadImg){
           $shadowLayer = $('#img'+sys.config.uploadImgToken).find('.js-shadowLayer');
           $progress = $('#progress'+sys.config.uploadImgToken);
+          $progressLayer = $('.js-progressLayer');
           oldH = $shadowLayer.height();
           isUploadImg=false;
       }
@@ -136,6 +138,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
         $progress.remove();
+        $progressLayer.remove();
         myScroll.refresh();//刷新
       }
     },
@@ -227,7 +230,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
           answer = that.prev().find('p').html();
         }
-        console.log(sys.config.currentState);
+        // console.log(sys.config.currentState);
         console.log(sys.config.currentState==1?'机器人':'客服');
         fnEvent.trigger('sendArea.send',[{
            'answer' :answer,
@@ -332,6 +335,24 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           msgBind(2,data);
         }
       },1000);
+    },
+    //图片展示
+    onShowImg:function(){
+      console.log('enter');
+      var that = $(this);
+      var comf = $.extend({
+          // msg:'http://www.3987.com/ps/uploadfile/2013/0327/20130327045318527.jpg'
+          msg:that.attr('src')
+        });
+      var tmpHtml = doT.template(msgTemplate.showMsgLayer)(comf);
+      $(document.body).append(tmpHtml);
+
+      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200);
+      $('.js-showMsgLayer').on('click',function(){
+        $(this).animate({'opacity':'0'},200,function(){
+          $(this).remove();
+        });
+      });
     }
   };
   var parseDOM = function(){
@@ -349,6 +370,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //FIXME EVENT
     $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
     $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
+    $('.js-chatPanelList').delegate('.webchat_img_upload','click',sys.msg.onShowImg);//图片展示
+    // sys.msg.onShowImg();
   };
   var _timer ;
   var initPlagsin=function(){

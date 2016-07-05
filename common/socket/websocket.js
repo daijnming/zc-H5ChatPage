@@ -8,6 +8,7 @@ function ZcWebSocket(puid,url,global) {
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
     var websocket;
+    var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
 
@@ -37,9 +38,7 @@ function ZcWebSocket(puid,url,global) {
         }
         var d = !!item.date ? new Date(item.date) : new Date();
         item.t = +d;
-        console.log(dateUtil.formatDate(d,true));
         item.ts = dateUtil.formatDate(d,true);
-        console.log(item);
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;
@@ -100,7 +99,7 @@ function ZcWebSocket(puid,url,global) {
         var data = JSON.parse(evt.data);
         //messageConfirm(data);
         if(data.type == 301) {
-            // ackConfirmMessageHandler(data);
+            ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
         } else {
@@ -109,7 +108,18 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var onClosed = function() {
-        console.log("websocket closed");
+        if(connRetryTime++ >= 3) {
+            listener.trigger("core.system", {
+                'type' : 'system',
+                'status' : 'kickout',
+                'data' : {
+                    'content' : "与服务器连接中断"
+                }
+            });
+            listener.trigger("core.sessionclose",-2);
+            return;
+        }
+        websocket = new WebSocket(url);
     };
     var bindListener = function() {
         websocket.onopen = function() {
@@ -118,6 +128,7 @@ function ZcWebSocket(puid,url,global) {
                 "u" : global.apiInit.uid,
                 's' : global.sysNum
             };
+            connRetryTime = 0;
             websocket.send(JSON.stringify(start));
             setInterval(retry,1000);
         };

@@ -22,12 +22,13 @@ var SysmsgHandler = function(msgBind,myScroll){
 
    config.sys = {
     nowTimer:function(){
-      // var _now = new Date();
-      // var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
-      // var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
-      // var _timer =  '今天' + _hour+':'+_minutes;
-      // msgBind(3,_timer);// 3系统时间提示
-      // return;
+      var _now = new Date();
+      var _hour = _now.getHours()>=10?_now.getHours():'0'+_now.getHours();
+      var _minutes = _now.getMinutes()>=10?_now.getMinutes():'0'+_now.getMinutes();
+      var _timer =  '今天' + _hour+':'+_minutes;
+      msgBind(3,_timer);// 3系统时间提示
+      //有会话就显示时间
+      return;
       //FIXME 首次进入提示语 若上一句未超过1分钟 则不显示提示时间
       if(chatPanelList&&chatPanelList.children().length){
           var lastDom = chatPanelList.children().last();

@@ -15,6 +15,7 @@ function transfer(global,promise) {
         layer.delegate(".js-item",'click', function(e) {
             var elm = e.currentTarget;
             var groupId = $(elm).attr("data-id");
+            global.urlParams.groupId = groupId;
             promise.resolve(groupId);
             layer.remove();
         });
