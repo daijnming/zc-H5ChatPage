@@ -8,7 +8,8 @@ function uploadImg() {
     //上传图片假消息时间戳
     var token="",
     tp="",
-    currentUid;
+    currentUid="",
+    sysNum="";
     /*
     //模板引擎
     var template = require('./template.js');*/
@@ -41,11 +42,11 @@ function uploadImg() {
                 tp=+new Date();
                 token= currentUid + tp;
                 //this.result 本地图片的数据流
-                console.log("当前上传图片的大小：");
-                console.log(file);
+                //console.log("当前上传图片的大小：");
+                //console.log(file);
                 lrz(file, {quality: 0.7},function (results) {
-                    console.log("压缩后的图片大小：");
-                    console.log(results);
+                    //console.log("压缩后的图片大小：");
+                    //console.log(results);
                    listener.trigger("sendArea.createUploadImg",[{
                     'result' : results.base64,
                     'date':tp,
@@ -78,6 +79,7 @@ function uploadImg() {
             //document.getElementById('progress').innerHTML = '无法计算';
         }
     }
+   
     var onAjaxUploadUpHandler=function(oData){
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
@@ -102,16 +104,49 @@ function uploadImg() {
                 }
             }
         }
+         
     };
+    //重新发送
+    var imgUploadAgain=function(data){
+        var oData = new FormData();
+        var oXHR = new XMLHttpRequest();
+        oXHR.upload.addEventListener('progress', uploadProgress, false);
+        oXHR.open('POST','/chat/webchat/fileuploadBase64');
+        //中止上传
+        listener.on('leftMsg.closeUploadImg',function(){
+            oXHR.abort();
+        });
+        oData.append("sysNum",sysNum);
+        oData.append("base64",data.base64);
+        oXHR.send(oData);
+        oXHR.onreadystatechange = function(req){
+            if(req.target.readyState == 4){
+                if(req.target.status == 200){
+                    var url = JSON.parse(req.target.response).url;
+                    var img='<img class="webchat_img_upload uploadedFile" src="'+url+'">';
+                        listener.trigger('sendArea.uploadImgUrl',[{
+                            'answer' : img,
+                            'date':tp,
+                            'token':data.token
+                        }]);
+                }else{
+                    //alert("error");
+                }
+            }
+        }
+        
+    }
     var bindLitener = function() {
         $(".js-upload").on("change",onFormDataUpHandler);
+        listener.on('listMsg.imgUploadAgain',imgUploadAgain)
        
     };
 
     var initPlugsin = function() {//插件
     };
     var initConfig=function(data){
-        currentUid=data;
+        currentUid=data.uid;
+        sysNum=data.sysNum;
     };
     var init = function() {
         parseDOM();
