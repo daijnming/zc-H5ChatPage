@@ -32,7 +32,9 @@ function TextArea(window) {
         //会话是否结束, 用于阻止某些事件
         sessionEnd=false,
         //判断用户是否说过话
-        isSpeak=false;
+        isSpeak=false,
+        //是否评价过
+        isEvaluated=false;
         //0为机器人，1为人工
     var transferFlag=0;
     //传给聊天的url
@@ -412,15 +414,34 @@ function TextArea(window) {
             }
     };
     var evaluateHandler=function(){
-        if(isSpeak==true){
-            //防止用户快速多次点击弹层
-            var conf={};
-            var _html = doT.template(template.layerOpacity0)(conf);
-            $(document.body).append(_html);
-            //评价
-            evaluate(transferFlag,global);
-        }else{
-            var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'您还没发言,暂不能评论'}}
+        $.ajax({
+            type : "post",
+            url : "/chat/user/isComment.action",
+            dataType : "json",
+            data : {
+                cid : global.apiInit.cid,
+                type: transferFlag
+            },
+            success:function(req){
+                isEvaluated=req.isComment
+            }
+        });
+         //是否评价过
+        if(isEvaluated==false){
+            if(isSpeak==true){
+               
+                    //防止用户快速多次点击弹层
+                    var conf={};
+                    var _html = doT.template(template.layerOpacity0)(conf);
+                    $(document.body).append(_html);
+                    //评价
+                    evaluate(transferFlag,global);
+            }else{
+                var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'您还没发言,暂不能评论'}}
+                listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+            }
+         }else{
+            var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
             listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
         }
         focusStatus=false;
@@ -553,7 +574,6 @@ function TextArea(window) {
     })();
     listener.on("core.onload", function(data) {
         global = data[0];
-        //console.log(global);
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
         //将uid传入上传图片模块
