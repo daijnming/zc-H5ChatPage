@@ -81,7 +81,6 @@ function uploadImg() {
     }
    
     var onAjaxUploadUpHandler=function(oData){
-        console.log(oData)
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileupload.action');
@@ -109,8 +108,7 @@ function uploadImg() {
     };
     //重新发送
     var imgUploadAgain=function(data){
-        //console.log(data);
-        var oData;
+        var oData = new FormData();
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64');
