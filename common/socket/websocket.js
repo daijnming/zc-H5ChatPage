@@ -37,9 +37,7 @@ function ZcWebSocket(puid,url,global) {
         }
         var d = !!item.date ? new Date(item.date) : new Date();
         item.t = +d;
-        console.log(dateUtil.formatDate(d,true));
         item.ts = dateUtil.formatDate(d,true);
-        console.log(item);
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;
@@ -100,7 +98,7 @@ function ZcWebSocket(puid,url,global) {
         var data = JSON.parse(evt.data);
         //messageConfirm(data);
         if(data.type == 301) {
-            // ackConfirmMessageHandler(data);
+            ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
             commonMessageHandler(data);
         } else {
