@@ -115,13 +115,13 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //上传图片
     onUpLoadImg:function(data){
-      sendTimer = setInterval(function(){
-        if(sendTime>=5){//发送超过60秒判断上传失败
-          clearInterval(sendTimer);
-          $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-        }
-        sendTime +=1;
-      },1000);
+      // sendTimer = setInterval(function(){
+      //   if(sendTime>=5){//发送超过60秒判断上传失败
+      //     clearInterval(sendTimer);
+      //     $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
+      //   }
+      //   sendTime +=1;
+      // },1000);
       msgBind(4,data);
     },
     onUpLoadImgProgress:function(data){
@@ -378,6 +378,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         });
       });
     }
+  };
+  var ImgUploadTask = function(num){
+    var _timer = setInterval(function(){
+      console.log(num);
+    },1000);
   };
   var parseDOM = function(){
     chatPanelList = $('.js-chatPanelList');

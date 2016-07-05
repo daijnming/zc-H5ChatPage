@@ -119,7 +119,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     fnEvent.on('sendArea.sendAreaSystemMsg',config.sys.onSendAreaSysMsg);//输入框相关提示系统消息
   };
   var initPlagsin=function(){
-    config.sys.nowTimer();//显示当前时间
+    // config.sys.nowTimer();//显示当前时间
     config.sys.onBeingInput();//正在输入处理
   };
   var init =function (){
