@@ -164,17 +164,12 @@ var HumanFirst = function(global) {
     };
 
     var serverOffline = function(ret,init,value) {
-        if(manager) {
-            manager.destroy();
-        }
-        manager = new Robot(global);
-        modeState.setCurrentState("robot");
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
             'action' : 'show'
         });
         if(init) {
-            initHumanSession(value,ret,null);
+            initRobotSession(value,ret,null);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
@@ -184,6 +179,11 @@ var HumanFirst = function(global) {
                 });
             },1);
         } else {
+            if(manager) {
+                manager.destroy();
+            }
+            manager = new Robot(global);
+            modeState.setCurrentState("robot");
             ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
