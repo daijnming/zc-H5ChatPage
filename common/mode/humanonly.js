@@ -14,7 +14,7 @@ function HumanOnly(global) {
     var socketFactory = require('../socket/socketfactory.js');
     var leaveMessageStr = global.apiConfig.leaveMsg;
     var manager = null;
-    var queueing = true;
+    var queueing = false;
 
     var initHumanSession = function(value,ret,word) {
         var success = !!word;
@@ -45,7 +45,7 @@ function HumanOnly(global) {
     var transferConnect = function(value,promise,init) {
         var init = !!init;
         var promise = new Promise();
-        transfer(global,promise).then(function() {
+        transfer(global,promise,queueing).then(function() {
             transferSuccess(null,null,init);
         },transferFail);
         return promise;
@@ -53,30 +53,31 @@ function HumanOnly(global) {
     };
 
     var transferFail = function() {
-        var value = [];
-        var now = new Date();
-        var obj = {
-            "date" : DateUtil.formatDate(now),
-            "content" : [{
-                'senderType' : 1,
-                't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true),
-                'senderFace' : global.apiConfig.robotLogo,
-                'senderName' : global.apiConfig.robotName
-            }]
-        };
-        value.push(obj);
-        manager = new Robot(global);
-        modeState.setCurrentState("robot");
+        if(false) {
+            var value = [];
+            var now = new Date();
+            var obj = {
+                "date" : DateUtil.formatDate(now),
+                "content" : [{
+                    'senderType' : 1,
+                    't' : +now,
+                    'msg' : global.apiConfig.robotHelloWord,
+                    'ts' : DateUtil.formatDate(now,true),
+                    'senderFace' : global.apiConfig.robotLogo,
+                    'senderName' : global.apiConfig.robotName
+                }]
+            };
+            value.push(obj);
+            manager = new Robot(global);
+            modeState.setCurrentState("robot");
+        }
         setTimeout(function() {
-            listener.trigger("core.initsession",value);
             listener.trigger("core.sessionclose",-1);
         },0);
     };
 
     var queueWait = function(ret,init,value) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
@@ -147,6 +148,7 @@ function HumanOnly(global) {
                         serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
+                        global.urlParams.groupId = groupId;
                         queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {

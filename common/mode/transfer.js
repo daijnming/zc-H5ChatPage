@@ -1,7 +1,7 @@
 /**
  * @author Treagzhao
  */
-function transfer(global,promise) {
+function transfer(global,promise,queueing) {
     var Promise = require('../util/promise.js');
     var promise = promise || new Promise();
     var template = require('./template.js');
@@ -15,7 +15,6 @@ function transfer(global,promise) {
         layer.delegate(".js-item",'click', function(e) {
             var elm = e.currentTarget;
             var groupId = $(elm).attr("data-id");
-            global.urlParams.groupId = groupId;
             promise.resolve(groupId);
             layer.remove();
         });
@@ -27,6 +26,11 @@ function transfer(global,promise) {
     var init = function() {
         if(global.apiInit.ustatus !== 0) {
             //存在会话保持
+            setTimeout(function() {
+                promise.resolve(null);
+            },0);
+        } else if(queueing) {
+            //正在排队
             setTimeout(function() {
                 promise.resolve(null);
             },0);
@@ -51,7 +55,6 @@ function transfer(global,promise) {
                 'success' : function(ret) {
                     if(ret.length == 1) {
                         var item = ret[0];
-                        global.urlParams.groupId = item.groupId;
                         promise.resolve(item.groupId);
                     } else {
                         showGroups(ret);

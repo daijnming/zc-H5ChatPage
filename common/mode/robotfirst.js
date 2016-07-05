@@ -102,7 +102,7 @@ var RobotFirst = function(global) {
     };
 
     var queueWait = function(ret,init) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待 ";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(!tempManager) {
             tempManager = socketFactory(ret,global);
@@ -111,6 +111,7 @@ var RobotFirst = function(global) {
         if(manager) {
             manager.destroy();
         }
+
         manager = new Robot(global);
         if(init) {
             initHumanSession(null,ret);
@@ -180,7 +181,7 @@ var RobotFirst = function(global) {
      */
     var transferBtnClickHandler = function(evt,init) {
         var init = !!init;
-        transfer(global).then(function(groupId,promise) {
+        transfer(global,null,queueing).then(function(groupId,promise) {
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
                 'type' : 'post',
@@ -199,6 +200,7 @@ var RobotFirst = function(global) {
                         //暂无客服在线
                     } else if(ret.status == 0) {
                         //排队
+                        global.urlParams.groupId = groupId;
                         queueWait(ret,init);
                     } else if(ret.status == 1) {
                         transferHumanSucess(ret,init);
@@ -209,6 +211,8 @@ var RobotFirst = function(global) {
                 'fail' : function() {
                 }
             });
+
+        }, function() {
 
         });
 

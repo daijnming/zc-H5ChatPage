@@ -40,7 +40,7 @@ function TextArea(window) {
     //传给聊天的url
     var statusHandler=function(data){
         currentStatus=data;
-        if(currentStatus=="human"){
+        if(currentStatus=="human"){alert(currentStatus);
             transferFlag=1;
             $(".qqFaceTip").removeClass("activehide");
             //上传图片按钮
@@ -577,7 +577,7 @@ function TextArea(window) {
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
         //将uid传入上传图片模块
-        listener.trigger('sendArea.sendInitConfig',currentUid);
+        listener.trigger('sendArea.sendInitConfig',{"uid":currentUid,"sysNum":global.sysNum});
         var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){
