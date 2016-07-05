@@ -33,8 +33,8 @@ var Theme = function(global,node){
   var setCustomInfo = function(){
     //配置公司名
     // var title = global.apiConfig.companyName&&global.apiConfig.companyName.length > 12 ? global.apiConfig.companyName.substr(0,12) + '..' : global.apiConfig.companyName
-    var title = global.apiConfig.robotName;
-    companyTitle.text(title);
+    // var title = global.apiConfig.robotName;
+    // companyTitle.text(title);
   };
   var parseDom = function(){
     topTitleBar = node.find('.js-header-back');

@@ -81,7 +81,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      console.log(data);
+      // console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -352,9 +352,12 @@ var ListMsgHandler = function() {
     };
     //加欢迎语
     var getHello = function(data){
+      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];
+        document.title = data[0].content[0]['senderName'];
+        $('.js-title').text(data[0].content[0]['senderName']);
       }
       showHistoryMsg(data,1);
     };
@@ -366,18 +369,9 @@ var ListMsgHandler = function() {
     //core加载完成
     var onCoreOnload = function(data) {
         global = data[0];
-        // console.log(global);
+        console.log(global);
         initConfig();//配置参数
         //FIXME bindListener
-        // fnEvent.on('sendArea.send',messageHandler.msg.onSend);//发送内容
-        // fnEvent.on('core.onreceive',messageHandler.msg.onReceive);//接收回复
-        // fnEvent.on('sendArea.createUploadImg',messageHandler.msg.onUpLoadImg);//发送图片
-        // fnEvent.on('sendArea.uploadImgProcess',messageHandler.msg.onUpLoadImgProgress);//上传进度条
-        // fnEvent.on('sendArea.uploadImgUrl',messageHandler.msg.onUploadImgUrl);//回传图片路径
-        // fnEvent.on('sendArea.autoSize',systemHandler.sys.onAutoSize);//窗体聊天内容可视范围
-        // fnEvent.on('core.system',systemHandler.sys.onSessionOpen);//转人工事件
-        // fnEvent.on('core.msgresult',messageHandler.msg.msgReceived);//消息确认收到通知
-
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
         $('.js-chatMsgList').on('click',function(){
           //空白处点击 隐藏键盘
