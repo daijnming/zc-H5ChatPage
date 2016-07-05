@@ -342,7 +342,6 @@ var ListMsgHandler = function() {
           }
       }
       chatPanelList.append(tempHtml);
-
       //FIXME 永存消息只显示最新的一条
       if(sysMsgManager.length>1){
         var sign = sysMsgManager.shift();
