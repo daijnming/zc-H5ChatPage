@@ -14,7 +14,7 @@ function HumanOnly(global) {
     var socketFactory = require('../socket/socketfactory.js');
     var leaveMessageStr = global.apiConfig.leaveMsg;
     var manager = null;
-    var queueing = true;
+    var queueing = false;
 
     var initHumanSession = function(value,ret,word) {
         var success = !!word;
@@ -45,7 +45,7 @@ function HumanOnly(global) {
     var transferConnect = function(value,promise,init) {
         var init = !!init;
         var promise = new Promise();
-        transfer(global,promise).then(function() {
+        transfer(global,promise,queueing).then(function() {
             transferSuccess(null,null,init);
         },transferFail);
         return promise;
@@ -147,6 +147,7 @@ function HumanOnly(global) {
                         serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
+                        global.urlParams.groupId = groupId;
                         queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
