@@ -23,8 +23,9 @@ function uploadImg() {
         var file = input.files[0];
         // size单位为字节 5M = 5242880
         if(file.size >= 5242880) {
-            //console.log("当前上传图片的大小："+file);
-            // 图片过大
+            //console.log("当前上传图片的大小：");
+            //console.log(file);
+            //图片过大
             //alert("图片大于5M");
             var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
             listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
@@ -40,11 +41,11 @@ function uploadImg() {
                 tp=+new Date();
                 token= currentUid + tp;
                 //this.result 本地图片的数据流
-                //console.log("当前上传图片的大小：");
-                //console.log(file);
+                console.log("当前上传图片的大小：");
+                console.log(file);
                 lrz(file, {quality: 0.7},function (results) {
-                   // console.log("压缩后的图片大小：");
-                   // console.log(results.base64);
+                    console.log("压缩后的图片大小：");
+                    console.log(results);
                    listener.trigger("sendArea.createUploadImg",[{
                     'result' : results.base64,
                     'date':tp,
