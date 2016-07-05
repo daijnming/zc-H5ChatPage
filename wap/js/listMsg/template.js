@@ -77,7 +77,7 @@ var rightMsg =
                               '<span id="progress{{=it.token}}" class="progress js-progress">{{=it.progress}}</span>'+
                             '</div>'+
                         '</div>'+
-                        '<span id="userMsg{{=it.token}}" class="img error js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
+                        '<span id="userMsg{{=it.token}}" class="img close js-msgStatus msgStatus statusRight {{=it.msgLoading}}"></span>'+
                     '</div>'+
                 '</div>';
 

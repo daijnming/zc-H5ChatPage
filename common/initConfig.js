@@ -226,7 +226,7 @@ var initConfig = function() {
                 email : urlParams['email'] ? urlParams['email'] : '',
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
-                face : urlParams['face'] ? urlParams['face'] : 'http://img.sobot.com/console/common/face/user.png',//默认用户头像
+                face : urlParams['face'] ? urlParams['face'] : getHanderImg(),//默认用户头像
                 back : urlParams['back'] ? urlParams['back'] : '',
                 realname : urlParams['realname'] ? urlParams['realname'] : '',
                 weibo : urlParams['weibo'] ? urlParams['weibo'] : '',
@@ -258,7 +258,41 @@ var initConfig = function() {
         });
         return promise;
     };
-
+    //获取头像
+    var getHanderImg= function(){
+      var urlParams = Comm.getQueryParam();
+      var img;
+      switch (urlParams['source']) {
+        case 0:
+          //pc
+          img = 'http://img.sobot.com/chatres/common/face/pcType.png';
+          break;
+        case 1:
+        //微信
+        img = 'http://img.sobot.com/chatres/common/face/weixinType.png';
+          break;
+        case 2:
+        //app
+        img = 'http://img.sobot.com/chatres/common/face/appType.png';
+          break;
+        case 3:
+        //微博
+        img = 'http://img.sobot.com/chatres/common/face/weiboType.png';
+          break;
+        case 4:
+        //h5
+        img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+        case 5:
+        //融云
+        img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+        default:
+          img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+      }
+      return img;
+    };
     var getLeaveMessage = function(params,global) {
         var arr = ['leaveMessage.html'];
         var count = 0;

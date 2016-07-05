@@ -17,6 +17,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       userTime=0,//用户超时时间 默认为 0
       userTimer,//用户超时任务
       adminTimer,//客服超时任务
+      sendTimer,//发送消息超时
+      sendTime=0;//发达消息超时时间 默认为0
       isUserSendMsg=false,//用户是否有发送内容
       isAdminSendMsg=false;//客服是否有发送内容
 
@@ -108,10 +110,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
                 'token':'',
                 'dateuid' : global.apiInit.uid + +new Date()
             }]);
-      }
+        }
     },
     //上传图片
     onUpLoadImg:function(data){
+      sendTimer = setInterval(function(){
+        if(sendTime>=5){//发送超过60秒判断上传失败
+          clearInterval(sendTimer);
+          $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
+        }
+        sendTime +=1;
+      },1000);
       msgBind(4,data);
     },
     onUpLoadImgProgress:function(data){
@@ -144,6 +153,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //回传图片路径地址
     onUploadImgUrl:function(data){
+      console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+sys.config.uploadImgToken);
       $div.find('p img:first-child').remove();
@@ -189,7 +199,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      console.log(data);
+      // console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
@@ -204,7 +214,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
             $('#userMsg'+data.msgId).removeClass('msg-loading').addClass('error msg-fail');
           }else{
             //图片
-            $('#userMsg'+data.msgId).removeClass('msg-close').addClass('error msg-sendAgain');
+            $('#userMsg'+data.msgId).removeClass('msg-close').addClass('error msg-fail');
           }
         }
       }
@@ -213,7 +223,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onMsgSendAgain:function(){
       var that = $(this);
       var sendType,//发送类型
-          answer;//发送内容
+          answer,//发送内容
+          isImgUploadSuccess=true;//是否上传成功
       var msgId = that.attr('id').substr(7,that.attr('id').length);
       // var msgId = that.attr('id');
       //判断当前消息是否满足重发条件 error
@@ -227,23 +238,35 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }else{
           //图片
           sendType='img';
-          that.removeClass('msg-sendAgain').addClass('msg-close');//图片重发过程可点击取消
-          answer = that.prev().find('p').html();
+          that.removeClass('error msg-sendAgain').addClass('msg-close close');//图片重发过程可点击取消
+          //FIXME 判断图片是否上传成功，若成功则只需重发图片，若不成功则需重新上传一次
+          var $p = that.prev().find('p');
+          if($p.find('img').hasClass('uploadedFile')){
+            isImgUploadSuccess=true;
+            answer = $p.html();
+          }else {
+            isImgUploadFail=false;
+            var base64 = $p.find('img').attr('src');
+            fnEvent.trigger('listMsg.imgUploadAgain',{'base64':base64,'token':msgId});
+          }
         }
-        // console.log(sys.config.currentState);
-        console.log(sys.config.currentState==1?'机器人':'客服');
-        fnEvent.trigger('sendArea.send',[{
-           'answer' :answer,
-           'uid' : global.apiInit.uid,
-           'cid' : global.apiInit.cid,
-          //  'dateuid' : global.apiInit.uid+ +new Date(),
-          'dateuid':msgId,
-          //  'oldMsgId':msgId,
-           'currentStatus':sys.config.currentState==1?'robot':'human',
-           'date': +new Date(),
-           'token':msgId,
-           'sendAgain':true//是否重发
-        }]);
+        //重发消息
+        if(isImgUploadSuccess){
+          fnEvent.trigger('sendArea.send',[{
+             'answer' :answer,
+             'uid' : global.apiInit.uid,
+             'cid' : global.apiInit.cid,
+            'dateuid':msgId,
+             'currentStatus':sys.config.currentState==1?'robot':'human',
+             'date': +new Date(),
+             'token':msgId,
+             'sendAgain':true//是否重发
+          }]);
+        }
+      }else if(that.hasClass('close')){
+        //点击关闭按钮 重新发送
+        that.removeClass('close msg-close').addClass('msg-sendAgain error');
+        fnEvent.trigger('leftMsg.closeUploadImg',msgId);
       }
     },
     //来自于客服的消息
