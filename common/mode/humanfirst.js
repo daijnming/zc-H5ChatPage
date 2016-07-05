@@ -140,13 +140,18 @@ var HumanFirst = function(global) {
                 }
                 manager = tempManager;
                 tempManager = null;
-                setCurrentState.setCurrentState('human');
+                modeState.setCurrentState('human');
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : "transfer",
                     'data' : {
                         'content' : "您好，客服" + ret.aname + "接受了您的请求"
                     }
+                });
+                ret.content = global.apiConfig.adminHelloWord;
+                listener.trigger("core.system", {
+                    'type' : 'human',
+                    'data' : ret
                 });
 
                 listener.trigger("core.buttonchange", {
