@@ -111,7 +111,7 @@ function uploadImg() {
         var oData = new FormData();
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
-        oXHR.open('POST','/chat/webchat/fileuploadBase64');
+        oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();

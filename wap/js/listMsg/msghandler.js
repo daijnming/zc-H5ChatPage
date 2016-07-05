@@ -85,6 +85,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+    //  console.log(data);
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -153,7 +154,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //回传图片路径地址
     onUploadImgUrl:function(data){
-      console.log(data);
+      // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+sys.config.uploadImgToken);
       $div.find('p img:first-child').remove();
@@ -167,6 +168,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     // 4：长时间不说话
     // 6：有新窗口打开
     sessionCloseHander:function(data){
+      // console.log(data);
       clearInterval(userTimer);//停止超时提示任务
       clearInterval(adminTimer);
       var msg='';
@@ -361,7 +363,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //图片展示
     onShowImg:function(){
-      console.log('enter');
       var that = $(this);
       var comf = $.extend({
           // msg:'http://www.3987.com/ps/uploadfile/2013/0327/20130327045318527.jpg'
