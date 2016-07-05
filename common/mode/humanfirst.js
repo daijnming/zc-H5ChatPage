@@ -85,6 +85,10 @@ var HumanFirst = function(global) {
                 'senderName' : global.apiConfig.robotName
             }]
         };
+        modeState.setCurrentState("robot");
+        if(manager) {
+            manager.destroy();
+        }
         value.push(obj);
         manager = new Robot(global);
         setTimeout(function() {
