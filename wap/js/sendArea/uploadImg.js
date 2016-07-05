@@ -23,6 +23,7 @@ function uploadImg() {
         var file = input.files[0];
         // size单位为字节 5M = 5242880
         if(file.size >= 5242880) {
+            //console.log("当前上传图片的大小："+file);
             // 图片过大
             //alert("图片大于5M");
             var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
@@ -39,7 +40,11 @@ function uploadImg() {
                 tp=+new Date();
                 token= currentUid + tp;
                 //this.result 本地图片的数据流
+                //console.log("当前上传图片的大小：");
+                //console.log(file);
                 lrz(file, {quality: 0.7},function (results) {
+                   // console.log("压缩后的图片大小：");
+                   // console.log(results.base64);
                    listener.trigger("sendArea.createUploadImg",[{
                     'result' : results.base64,
                     'date':tp,
@@ -62,7 +67,7 @@ function uploadImg() {
         //清空文本域
         $(".js-upload").val("");
     }
-    function uploadProgress(e) { //进度上传过程
+    var  uploadProgress=function(e) { //进度上传过程
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString();
@@ -76,6 +81,10 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileupload.action');
+        //中止上传
+        listener.on('leftMsg.closeUploadImg',function(){
+            oXHR.abort();
+        })
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
             if(req.target.readyState == 4){
@@ -95,6 +104,7 @@ function uploadImg() {
     };
     var bindLitener = function() {
         $(".js-upload").on("change",onFormDataUpHandler);
+       
     };
 
     var initPlugsin = function() {//插件
@@ -107,6 +117,7 @@ function uploadImg() {
         bindLitener();
         initPlugsin();
         listener.on('sendArea.sendInitConfig',initConfig)
+        
     };
     init();
 
