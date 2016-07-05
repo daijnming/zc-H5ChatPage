@@ -8,6 +8,7 @@ function ZcWebSocket(puid,url,global) {
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
     var websocket;
+    var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
 
@@ -107,7 +108,18 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var onClosed = function() {
-        console.log("websocket closed");
+        if(connRetryTime++ >= 3) {
+            listener.trigger("core.system", {
+                'type' : 'system',
+                'status' : 'kickout',
+                'data' : {
+                    'content' : "与服务器连接中断"
+                }
+            });
+            listener.trigger("core.sessionclose",-2);
+            return;
+        }
+        websocket = new WebSocket(url);
     };
     var bindListener = function() {
         websocket.onopen = function() {
@@ -116,6 +128,7 @@ function ZcWebSocket(puid,url,global) {
                 "u" : global.apiInit.uid,
                 's' : global.sysNum
             };
+            connRetryTime = 0;
             websocket.send(JSON.stringify(start));
             setInterval(retry,1000);
         };
