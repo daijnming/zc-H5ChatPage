@@ -71,7 +71,9 @@ var HumanFirst = function(global) {
         },0);
     };
 
-    var transferFail = function() {
+    var transferFail = function(init) {
+        if(!init)
+            return;
         var value = [];
         var now = new Date();
         var obj = {
@@ -97,7 +99,7 @@ var HumanFirst = function(global) {
     };
 
     var queueWait = function(ret,init,value) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
@@ -221,6 +223,7 @@ var HumanFirst = function(global) {
                         serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
+                        global.urlParams.groupId = groupId;
                         queueWait(ret,init,value);
                     } else if(ret.status == 1) {
                         queueing = false;
@@ -265,9 +268,11 @@ var HumanFirst = function(global) {
     var transferConnect = function(value,promise,init) {
         var init = !!init;
         var promise = new Promise();
-        transfer(global,promise).then(function() {
+        transfer(global,promise,queueing).then(function() {
             transferSuccess(null,null,init);
-        },transferFail);
+        }, function() {
+            transferFail(init);
+        });
         return promise;
 
     };
