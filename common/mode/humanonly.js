@@ -77,7 +77,7 @@ function HumanOnly(global) {
     };
 
     var queueWait = function(ret,init,value) {
-        var str = "排队中，您在队伍中的第" + ret.count + "个，请等待。";
+        var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
