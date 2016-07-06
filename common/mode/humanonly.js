@@ -17,6 +17,7 @@ function HumanOnly(global) {
     var queueing = false;
 
     var initHumanSession = function(value,ret,word) {
+        return ;
         var success = !!word;
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
