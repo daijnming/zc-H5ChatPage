@@ -281,6 +281,7 @@ function evaluate(currentStatus,global) {
     };
     init();
     this.modeAlert = modeAlert;
+    
 }
 
 module.exports = evaluate;
