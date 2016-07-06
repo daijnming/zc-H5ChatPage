@@ -149,7 +149,7 @@ function HumanOnly(global) {
                     } else if(ret.status == 0) {
                         //排队
                         global.urlParams.groupId = groupId;
-                        queueWait(ret,init,value);
+                        s(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
