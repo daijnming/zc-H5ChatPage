@@ -149,7 +149,7 @@ function HumanOnly(global) {
                 },
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
-                    console.log(ret,1);
+                    // console.log(ret,1);
                     if(ret.status == 2) {
                         //暂无客服在线
                         serverOffline(ret,init,value);
