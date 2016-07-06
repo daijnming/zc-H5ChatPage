@@ -77,12 +77,14 @@ function HumanOnly(global) {
     };
 
     var queueWait = function(ret,init,value) {
+      // console.log(ret,init,value);
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(init) {
             initHumanSession(value,ret,null);
             setTimeout(function() {
                 ret.content = str + " " + leaveMessageStr;
+                ret.aname = '排队中';
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'queue',
@@ -92,6 +94,7 @@ function HumanOnly(global) {
             },1);
         } else {
             ret.content = str + " " + leaveMessageStr;
+            ret.aname = '排队中';
             listener.trigger("core.system", {
                 'type' : 'system',
                 'status' : 'queue',
@@ -104,9 +107,11 @@ function HumanOnly(global) {
         if(manager) {
             manager.destroy();
         }
+        ret.content = '暂无人工客服在线'+ ' '+leaveMessageStr;
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
-            'action' : 'hide'
+            'action' : 'hide',
+            'data':ret
         });
         if(init) {
             setTimeout(function() {
@@ -118,7 +123,8 @@ function HumanOnly(global) {
     };
 
     var blackListCallback = function(ret,init) {
-        ret.content = '暂时无法转接人工客服';
+        ret.content = '暂时无法转接人工客服' +' '+ leaveMessageStr;
+        ret.aname = '未接入';
         listener.trigger("core.system", {
             'type' : 'system',
             'status' : 'blacklist',
@@ -143,13 +149,15 @@ function HumanOnly(global) {
                 },
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
+                    console.log(ret,1);
                     if(ret.status == 2) {
                         //暂无客服在线
                         serverOffline(ret,init,value);
                     } else if(ret.status == 0) {
                         //排队
+                        // console.log(ret,0);
                         global.urlParams.groupId = groupId;
-                        queueWait(ret,init,value);
+                        s(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);

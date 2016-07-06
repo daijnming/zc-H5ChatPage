@@ -175,6 +175,7 @@ var ListMsgHandler = function() {
         // scrollHanlder.scroll.refresh();
         if(isFirstData){
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+          systemHandler.sys.nowTimer();//显示当前时间
         }else{
           setTimeout(function(){
             var _y = -($(scrollChatList).height() - scrollerInitHeight);
@@ -356,8 +357,8 @@ var ListMsgHandler = function() {
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];
-        document.title = data[0].content[0]['senderName'];
-        $('.js-title').text(data[0].content[0]['senderName']);
+        document.title = data[data.length-1].content[0]['senderName'];
+        $('.js-title').text(data[data.length-1].content[0]['senderName']);
       }
       showHistoryMsg(data,1);
     };
@@ -384,8 +385,8 @@ var ListMsgHandler = function() {
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         initScroll();//初始化&配置scroll
-        systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
+        systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
 
     };
     //初始化Dom

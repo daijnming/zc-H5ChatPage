@@ -7,7 +7,9 @@ var SysmsgHandler = function(msgBind,myScroll){
 
   //Dom元素
   var topTitleBar,//顶部栏
+      title,//昵称
       chatPanelList,//滚动列表
+      pullDownLabel,//下拉刷新文案label
       wrapScroll;//滚动窗体
 
   //定义变量
@@ -70,7 +72,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
-      console.log(data);
+      // console.log(data);
       $('.js-title').text(data.data.aname);
       document.title = data.data.aname;
       msgBind(2,data);
@@ -106,20 +108,32 @@ var SysmsgHandler = function(msgBind,myScroll){
     //输入框相关提示系统消息
     onSendAreaSysMsg:function(data){
       msgBind(2,data);
+    },
+    //仅人工 客服不在线
+    onButtonChange:function(data){
+      if(data&&data.data){
+        title.text('未接入');
+        document.title = '未接入';
+        var data = {type:'system',status:'hunmanonly',data:{content:data.data.content,status:0}};
+        msgBind(2,data);
+      }
     }
   };
   var parseDOM = function(){
     topTitleBar = $('.js-header-back');
     wrapScroll = $('.js-wrapper');
     chatPanelList = $('.js-chatPanelList');
+    title = $('.js-title');
+    pullDownLabel = $('.js-pullDownLabel');
   };
   var bindListener = function(){
     fnEvent.on('sendArea.autoSize',config.sys.onAutoSize);//窗体聊天内容可视范围
     fnEvent.on('core.system',config.sys.onSessionOpen);//转人工事件
     fnEvent.on('sendArea.sendAreaSystemMsg',config.sys.onSendAreaSysMsg);//输入框相关提示系统消息
+    fnEvent.on('core.buttonchange',config.sys.onButtonChange);//仅人工 且客服不在线
   };
   var initPlagsin=function(){
-    config.sys.nowTimer();//显示当前时间
+    // config.sys.nowTimer();//显示当前时间
     config.sys.onBeingInput();//正在输入处理
   };
   var init =function (){
