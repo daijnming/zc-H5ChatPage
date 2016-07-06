@@ -353,7 +353,7 @@ var ListMsgHandler = function() {
     };
     //加欢迎语
     var getHello = function(data){
-      console.log(data);
+      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];

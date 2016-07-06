@@ -18,9 +18,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       userTimer,//用户超时任务
       adminTimer,//客服超时任务
       sendTimer,//发送消息超时
-      sendTime=0;//发达消息超时时间 默认为0
-      isUserSendMsg=false,//用户是否有发送内容
-      isAdminSendMsg=false;//客服是否有发送内容
+      sendTime=0,//发达消息超时时间 默认为0
+      isUserSendMsg=false, //用户是否有发送内容
+      isAdminSendMsg=false, //客服是否有发送内容
+      uploadImgId;//上传图片token 判断是否发送或上传成功
 
 
   var sys={};
@@ -115,13 +116,15 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //上传图片
     onUpLoadImg:function(data){
-      // sendTimer = setInterval(function(){
-      //   if(sendTime>=5){//发送超过60秒判断上传失败
-      //     clearInterval(sendTimer);
-      //     $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-      //   }
-      //   sendTime +=1;
-      // },1000);
+      // console.log(data);
+      uploadImgId = data[0]['token'];
+      sendTimer = setInterval(function(){
+        if(sendTime>=60){//发送超过60秒判断上传失败
+          clearInterval(sendTimer);
+          $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
+        }
+        sendTime +=1;
+      },1000);
       msgBind(4,data);
     },
     onUpLoadImgProgress:function(data){
@@ -201,12 +204,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      // console.log(data);
+      console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
       if(isMsgId>=0){
         if(data.result=='success'){
+          if(uploadImgId == data.msgId){
+            sendTime=0;
+            clearInterval(sendTimer);
+          }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
         }else{
@@ -231,6 +238,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       // var msgId = that.attr('id');
       //判断当前消息是否满足重发条件 error
       if(that.hasClass('error')){
+        //消息重发
+        //重发显示到最后一条
+        var oDiv = that.parents('div.rightMsg');
+        chatPanelList.append(oDiv);
         //判断当前是图片重发   文字重发
         if(that.hasClass('msg')){
           //文字
@@ -247,7 +258,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
             isImgUploadSuccess=true;
             answer = $p.html();
           }else {
-            isImgUploadFail=false;
+            isImgUploadSuccess=false;
             var base64 = $p.find('img').attr('src');
             fnEvent.trigger('listMsg.imgUploadAgain',{'base64':base64,'token':msgId});
           }
@@ -379,10 +390,23 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       });
     }
   };
-  var ImgUploadTask = function(num){
-    var _timer = setInterval(function(){
-      console.log(num);
-    },1000);
+  // setInterval(function(){
+  //   var im = new ImgUploadTask(Math.floor(Math.random()*10));
+  //   im.uploadTask();
+  // },3000);
+  var ImgUploadTask = function(data){
+    this.uploadTask = function(){
+      var _timer = setInterval(function(){
+          console.log(data);
+          if(sendTime>=10){//发送超过60秒判断上传失败
+            clearInterval(_timer);
+            // console.log(data);
+            // $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
+          }
+          sendTime +=1;
+      },1000);
+    };
+
   };
   var parseDOM = function(){
     chatPanelList = $('.js-chatPanelList');
