@@ -157,7 +157,7 @@ function HumanOnly(global) {
                         //排队
                         // console.log(ret,0);
                         global.urlParams.groupId = groupId;
-                        queueWait(ret,init,value);
+                        s(ret,init,value);
                     } else if(ret.status == 1) {
                         if(init) {
                             initHumanSession(value,ret,global.apiConfig.adminHelloWord);
