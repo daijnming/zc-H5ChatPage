@@ -47,7 +47,12 @@ function evaluate(currentStatus,global) {
         //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
-        $(".submit").on("click",EvaluateAjaxHandler)
+        $(".submit").on("click",EvaluateAjaxHandler);
+        $(".js-evaluateInner").keydown(function(){
+            if($(this).val().length>200){
+                $(this).val($(this).val().substring(0,200))
+            }
+        })
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -152,7 +157,12 @@ function evaluate(currentStatus,global) {
         //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
-        $(".js-submit").on("click",EvaluateAjaxHandler)
+        $(".js-submit").on("click",EvaluateAjaxHandler);
+         $(".js-evaluateInner").keydown(function(){
+            if($(this).val().length>200){
+                $(this).val($(this).val().substring(0,200))
+            }
+        })
     };
     var EvaluateAjaxHandler=function(){
             remark=$(".js-evaluateInner").val();
@@ -277,11 +287,11 @@ function evaluate(currentStatus,global) {
             humanSetInnerStepOneHtml();
             //humanbindListener();
         }
-        
+       
     };
     init();
     this.modeAlert = modeAlert;
-    
+
 }
 
 module.exports = evaluate;

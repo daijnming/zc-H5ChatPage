@@ -425,7 +425,6 @@ function TextArea(window) {
                 type: transferFlag
             },
             success:function(req){
-                console.log(req.isComment);
                 isEvaluated=req.isComment
                  //是否评价过
                 if(isEvaluated==false){
