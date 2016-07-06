@@ -36,7 +36,7 @@ function uploadImg() {
                 console.log("当前上传图片的大小：");
                 console.log(file);
                 lrz(file, {
-                    quality: 0.7
+                    quality: 0.9
                 }).then(function (results) {
                     // size单位为字节 5M = 5242880
                     if(results.base64Len >= 5242880) {
@@ -48,6 +48,7 @@ function uploadImg() {
                     }
                     console.log("压缩过的图片大小：");
                     console.log(results.base64Len);
+                    oData.append("base64",results.base64);
                     listener.trigger("sendArea.createUploadImg",[{
                         'result' : results.base64,
                         'date':tp,
@@ -69,10 +70,11 @@ function uploadImg() {
                     }])
                 });*/
             }
-            oData.append("file",file);
-            oData.append("type","msg");
+            //oData.append("file",file);
+            oData.append("sysNum",sysNum);
+            /*oData.append("type","msg");
             oData.append("countTag",1);
-            oData.append("source",0);
+            oData.append("source",0);*/
             //上传,延迟一毫秒，先让图片在页面加载
             //onAjaxUploadUpHandler(oData)
             setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
@@ -98,7 +100,7 @@ function uploadImg() {
     var onAjaxUploadUpHandler=function(oData){
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
-        oXHR.open('POST','/chat/webchat/fileupload.action');
+        oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();

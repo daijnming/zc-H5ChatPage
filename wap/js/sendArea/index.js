@@ -576,7 +576,6 @@ function TextArea(window) {
     })();
     listener.on("core.onload", function(data) {
         global = data[0];
-        console.log(global);
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
         //将uid传入上传图片模块
