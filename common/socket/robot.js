@@ -53,7 +53,7 @@ function Robot(global) {
                     'result' : 'success'
                 });
             },
-            'fail' : function(ret) {
+            'error' : function(ret) {
                 listener.trigger("core.msgresult", {
                     'msgId' : data.dateuid,
                     'result' : 'fail'
