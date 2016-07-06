@@ -140,13 +140,18 @@ var HumanFirst = function(global) {
                 }
                 manager = tempManager;
                 tempManager = null;
-                setCurrentState.setCurrentState('human');
+                modeState.setCurrentState('human');
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : "transfer",
                     'data' : {
                         'content' : "您好，客服" + ret.aname + "接受了您的请求"
                     }
+                });
+                ret.content = global.apiConfig.adminHelloWord;
+                listener.trigger("core.system", {
+                    'type' : 'human',
+                    'data' : ret
                 });
 
                 listener.trigger("core.buttonchange", {
@@ -159,17 +164,12 @@ var HumanFirst = function(global) {
     };
 
     var serverOffline = function(ret,init,value) {
-        if(manager) {
-            manager.destroy();
-        }
-        manager = new Robot(global);
-        modeState.setCurrentState("robot");
         listener.trigger("core.buttonchange", {
             'type' : 'transfer',
             'action' : 'show'
         });
         if(init) {
-            initHumanSession(value,ret,null);
+            initRobotSession(value,ret,null);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
@@ -179,6 +179,11 @@ var HumanFirst = function(global) {
                 });
             },1);
         } else {
+            if(manager) {
+                manager.destroy();
+            }
+            manager = new Robot(global);
+            modeState.setCurrentState("robot");
             ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
                 'type' : 'system',
