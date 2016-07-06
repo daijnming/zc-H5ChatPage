@@ -17,7 +17,6 @@ function HumanOnly(global) {
     var queueing = false;
 
     var initHumanSession = function(value,ret,word) {
-        return ;
         var success = !!word;
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
@@ -82,7 +81,7 @@ function HumanOnly(global) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
         if(init) {
-            initHumanSession(value,ret,null);
+            //initHumanSession(value,ret,null);
             setTimeout(function() {
                 ret.content = str + " " + leaveMessageStr;
                 ret.aname = '排队中';
