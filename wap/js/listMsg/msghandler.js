@@ -71,7 +71,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //发送消息
     onSend : function(data){
-      // console.log(data);
+      console.log(data);
       isUserSendMsg = true;//
       if(data[0].sendAgain){
         //消息重发
@@ -390,24 +390,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       });
     }
   };
-  // setInterval(function(){
-  //   var im = new ImgUploadTask(Math.floor(Math.random()*10));
-  //   im.uploadTask();
-  // },3000);
-  var ImgUploadTask = function(data){
-    this.uploadTask = function(){
-      var _timer = setInterval(function(){
-          console.log(data);
-          if(sendTime>=10){//发送超过60秒判断上传失败
-            clearInterval(_timer);
-            // console.log(data);
-            // $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-          }
-          sendTime +=1;
-      },1000);
-    };
-
-  };
   var parseDOM = function(){
     chatPanelList = $('.js-chatPanelList');
   };
@@ -423,7 +405,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //FIXME EVENT
     $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
     $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
-    $('.js-chatPanelList').delegate('.webchat_img_upload','click',sys.msg.onShowImg);//图片展示
+    $('.js-chatPanelList').delegate('img','click',sys.msg.onShowImg);//图片展示
     // sys.msg.onShowImg();
   };
   var _timer ;

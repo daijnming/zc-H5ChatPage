@@ -425,3 +425,7 @@ iframe,embed,table{
   margin: 0 auto;
   margin-top: 50%;
 }
+.showMsgLayer .msgLayer img{
+  width: 100%;
+  height: auto;
+}
