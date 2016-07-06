@@ -439,11 +439,11 @@ function TextArea(window) {
                     //评价
                     evaluate(transferFlag,global);
             }else{
-                var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'您还没发言,暂不能评论'}}
+                var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
                 listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
             }
          }else{
-            var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
+            var evaluateSystem={type:'system',status:'evaluated',data:{content:'您已完成评价'}}
             listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
         }
         focusStatus=false;
