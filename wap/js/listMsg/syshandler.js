@@ -72,7 +72,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
-      // console.log(data);
+      console.log(data);
       $('.js-title').text(data.data.aname);
       document.title = data.data.aname;
       msgBind(2,data);
@@ -111,6 +111,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //仅人工 客服不在线
     onButtonChange:function(data){
+      console.log(data);
       if(data&&data.data){
         title.text('未接入');
         document.title = '未接入';
