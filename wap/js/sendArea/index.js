@@ -40,7 +40,6 @@ function TextArea(window) {
     //传给聊天的url
     var statusHandler=function(data){
         currentStatus=data;
-        console.log(currentStatus);
         if(currentStatus=="human"){
             transferFlag=1;
             $(".qqFaceTip").removeClass("activehide");

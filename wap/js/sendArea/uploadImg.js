@@ -22,16 +22,7 @@ function uploadImg() {
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        // size单位为字节 5M = 5242880
-        if(file.size >= 5242880) {
-            //console.log("当前上传图片的大小：");
-            //console.log(file);
-            //图片过大
-            //alert("图片大于5M");
-            var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
-            listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
-            return;
-        }
+        
         //console.log(file);
         //判断上传文件是否为图片
         if(/^(image)/.test(file.type)){
@@ -42,9 +33,33 @@ function uploadImg() {
                 tp=+new Date();
                 token= currentUid + tp;
                 //this.result 本地图片的数据流
-                //console.log("当前上传图片的大小：");
-                //console.log(file);
-                lrz(file, {quality: 0.7},function (results) {
+                console.log("当前上传图片的大小：");
+                console.log(file);
+                lrz(file, {
+                    quality: 0.7
+                }).then(function (results) {
+                    // size单位为字节 5M = 5242880
+                    if(results.base64Len >= 5242880) {
+                        //图片过大
+                        //alert("图片大于5M");
+                        var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
+                        listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
+                        return;
+                    }
+                    console.log("压缩过的图片大小：");
+                    console.log(results.base64Len);
+                    listener.trigger("sendArea.createUploadImg",[{
+                        'result' : results.base64,
+                        'date':tp,
+                        'token':token
+                    }])
+                }).catch(function (err) {
+                    console.log('处理失败会执行')
+                })
+                .always(function () {
+                    console.log('不管是成功失败，都会执行')
+                });;
+                /*lrz(file, {quality: 0.7},function (results) {
                     //console.log("压缩后的图片大小：");
                     //console.log(results);
                    listener.trigger("sendArea.createUploadImg",[{
@@ -52,7 +67,7 @@ function uploadImg() {
                     'date':tp,
                     'token':token
                     }])
-                });
+                });*/
             }
             oData.append("file",file);
             oData.append("type","msg");
@@ -112,6 +127,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
+        console.log("我是base64接口上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -120,6 +136,7 @@ function uploadImg() {
         oData.append("base64",data.base64);
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
+            console.log('base64上传成功');
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
