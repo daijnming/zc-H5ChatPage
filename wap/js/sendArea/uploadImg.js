@@ -33,10 +33,10 @@ function uploadImg() {
                 tp=+new Date();
                 token= currentUid + tp;
                 //this.result 本地图片的数据流
-                console.log("当前上传图片的大小：");
-                console.log(file);
+                //console.log("当前上传图片的大小：");
+                //console.log(file);
                 lrz(file, {
-                    quality: 0.9
+                    quality: 0.7
                 }).then(function (results) {
                     // size单位为字节 5M = 5242880
                     if(results.base64Len >= 5242880) {
@@ -46,8 +46,8 @@ function uploadImg() {
                         listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
                         return;
                     }
-                    console.log("压缩过的图片大小：");
-                    console.log(results.base64Len);
+                    //console.log("压缩过的图片大小：");
+                    //console.log(results.base64Len);
                     oData.append("base64",results.base64);
                     listener.trigger("sendArea.createUploadImg",[{
                         'result' : results.base64,
@@ -55,10 +55,10 @@ function uploadImg() {
                         'token':token
                     }])
                 }).catch(function (err) {
-                    console.log('处理失败会执行')
+                    console.log('图片压缩失败')
                 })
                 .always(function () {
-                    console.log('不管是成功失败，都会执行')
+                    //console.log('不管是成功失败，都会执行')
                 });;
                 /*lrz(file, {quality: 0.7},function (results) {
                     //console.log("压缩后的图片大小：");
@@ -86,7 +86,7 @@ function uploadImg() {
         //清空文本域
         $(".js-upload").val("");
     }
-    var  uploadProgress=function(e) { //进度上传过程
+    var uploadProgress=function(e) { //进度上传过程
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString();
@@ -101,6 +101,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
+        console.log("我是base64接口上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -109,6 +110,7 @@ function uploadImg() {
         oXHR.onreadystatechange = function(req){
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
+                    console.log('base64上传成功');
                     var url = JSON.parse(req.target.response).url;
                     var img='<img class="webchat_img_upload uploadedFile" src="'+url+'">';
                         listener.trigger('sendArea.uploadImgUrl',[{
@@ -129,7 +131,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
-        console.log("我是base64接口上传");
+        //console.log("我是base64接口上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -138,7 +140,7 @@ function uploadImg() {
         oData.append("base64",data.base64);
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
-            console.log('base64上传成功');
+           // console.log('base64上传成功');
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
