@@ -360,6 +360,7 @@ function TextArea(window) {
          'dateuid' : data[0].token,
          'date': data[0].date,
          'token':data[0].token,
+         //false证明不是重发(仅限图片)
          'sendAgain':false,
          'currentStatus':currentStatus
          }]);
@@ -398,6 +399,7 @@ function TextArea(window) {
                     if(global.apiConfig.msgflag==1){
                         $(".js-leaveMsgBtn").remove();
                     }
+                    //$textarea.attr("placeholder","排队中，请等待...")
                 }
                 break;
         }
@@ -574,6 +576,7 @@ function TextArea(window) {
     })();
     listener.on("core.onload", function(data) {
         global = data[0];
+        console.log(global);
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
         //将uid传入上传图片模块

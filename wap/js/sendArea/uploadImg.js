@@ -112,7 +112,7 @@ function uploadImg() {
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'answer' : img,
                             'date':tp,
-                            'token':token
+                            'token':token,
                         }]);
                 }else{
                     //alert("error");
