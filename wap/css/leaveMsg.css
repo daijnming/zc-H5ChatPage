@@ -72,6 +72,10 @@ body{
   height: 50px;
   display: inline-block;
   float: left;
+  max-width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /******end*******/
 .wrap-helper{
@@ -107,8 +111,8 @@ body{
   width:94%;
   display: inline-block;
   margin: 0 auto;
-  height: 80%;
-  line-height: 80%;
+  height: 100%;
+  line-height: 100%;
   padding-left: 10px;
   border-radius: 4px;
   border: 0;
@@ -116,6 +120,7 @@ body{
   text-decoration: none;
   outline: none;
   font-size: 0.9em;
+  background: transparent;
 }
 .wrap-content .content-msg{
   width: 100%;

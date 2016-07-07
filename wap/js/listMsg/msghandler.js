@@ -137,7 +137,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           $progress = $('#progress'+sys.config.uploadImgToken);
           $progressLayer = $('.js-progressLayer');
           oldH = $shadowLayer.height();
-          isUploadImg=false;
+          // isUploadImg=false;
       }
       //蒙版高度随百分比改变
       $progress.text(data+'%');
