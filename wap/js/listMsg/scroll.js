@@ -66,7 +66,9 @@ var ScrollHandler = function(global,node){
   };
   //下拉刷新
   That.pullDown = function(callback){
-    var t = $('.js-chatPanelList').children().first().attr('date');
+    var child = $('.js-chatPanelList').children().first().attr('date');
+    var nexChild = $('.js-chatPanelList').children().eq(1).attr('date');
+    var t = child?child:nexChild;
     //有更多历史记录
     if(scroll.y > 40&&global.flags.moreHistroy) {
       global.flags.pageNow+=1;//下拉刷新

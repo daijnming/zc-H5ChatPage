@@ -127,14 +127,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       },1000);
       msgBind(4,data);
     },
-    onUpLoadImgProgress:function(data){
+    onUpLoadImgProgress:function(ret){
+      var data = ret.percentage;
+      var token = ret.token;
       var $shadowLayer,
           $progress,
           $progressLayer,
           oldH;
       if(isUploadImg){
-          $shadowLayer = $('#img'+sys.config.uploadImgToken).find('.js-shadowLayer');
-          $progress = $('#progress'+sys.config.uploadImgToken);
+          $shadowLayer = $('#img'+token).find('.js-shadowLayer');
+          $progress = $('#progress'+token);
           $progressLayer = $('.js-progressLayer');
           oldH = $shadowLayer.height();
           // isUploadImg=false;
@@ -143,9 +145,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       $progress.text(data+'%');
       var floatData = data/100;//获取小数
       //蒙版高度
-      var cH = floatData * oldH;//获取计算后的高度值
+      //var cH = floatData * oldH;//获取计算后的高度值
       //计算
-      var newH = oldH - cH;
+      //var newH = oldH - cH;
       // $shadowLayer.height(newH);
       if(floatData>=1){
         isUploadImg=true;//开启上传图片
