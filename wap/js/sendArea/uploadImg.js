@@ -46,8 +46,7 @@ function uploadImg() {
                         listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
                         return;
                     }
-                    //console.log("压缩过的图片大小：");
-                    //console.log(results.base64Len);
+                    oData.append("sysNum",sysNum);
                     oData.append("base64",results.base64);
                     listener.trigger("sendArea.createUploadImg",[{
                         'result' : results.base64,
@@ -59,24 +58,15 @@ function uploadImg() {
                 })
                 .always(function () {
                     //console.log('不管是成功失败，都会执行')
-                });;
-                /*lrz(file, {quality: 0.7},function (results) {
-                    //console.log("压缩后的图片大小：");
-                    //console.log(results);
-                   listener.trigger("sendArea.createUploadImg",[{
-                    'result' : results.base64,
-                    'date':tp,
-                    'token':token
-                    }])
-                });*/
+                });
             }
             //oData.append("file",file);
-            oData.append("sysNum",sysNum);
             /*oData.append("type","msg");
             oData.append("countTag",1);
             oData.append("source",0);*/
             //上传,延迟一毫秒，先让图片在页面加载
             //onAjaxUploadUpHandler(oData)
+
             setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
         }else{
             //alert("请上传正确的图片格式");
@@ -101,7 +91,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
-        console.log("我是base64接口上传");
+        console.log("我是base64重新上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
