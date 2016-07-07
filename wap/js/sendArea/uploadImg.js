@@ -14,7 +14,6 @@ function uploadImg() {
     //传给聊天的url
     var parseDOM = function() {
     };
-
     var onFormDataUpHandler=function(){
         var oData = new FormData();
         var input = $(".js-upload")[0];
@@ -68,17 +67,6 @@ function uploadImg() {
         //清空文本域
         $(".js-upload").val("");
     }
-    /*var uploadProgress=function(e) { //进度上传过程
-        if (e.lengthComputable) {
-            var iPercentComplete = Math.round(e.loaded * 100 / e.total);
-            var percentage=iPercentComplete.toString();
-            console.log(percentage);
-            listener.trigger('sendArea.uploadImgProcess',percentage); 
-        } else {
-            //document.getElementById('progress').innerHTML = '无法计算';
-        }
-    }*/
-   
     var onAjaxUploadUpHandler=function(oData,tp,token){
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', 
@@ -109,7 +97,7 @@ function uploadImg() {
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'answer' : img,
                             'date':tp,
-                            'token':token,
+                            'token':token
                         }]);
                 }else{
                     //alert("error");
