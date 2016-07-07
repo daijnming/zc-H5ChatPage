@@ -16,18 +16,26 @@ function Dialog(spec) {
     var initDOM = function() {
         $layer = $(template.layer);
         var _html = doT.template(template.AlertTemplate)(conf);
-        $layer.html(_html);
+        $(document.body).append(_html);
     };
     var setInner = function(elm) {
         $(".model-body").html(elm);
         position();
     };
     var hide = function(e) {
+        //灰层要和内容分开，否则输入框弹起，内容不跟随弹起，导致文本被键盘遮住
         $layer.animate({
             'opacity' : 0
         },300, function() {
             setTimeout(function() {
                 $layer.remove();
+            },100);
+        });
+        $(".js-modeDialog").animate({
+            'opacity' : 0
+        },300, function() {
+            setTimeout(function() {
+                $(".js-modeDialog").remove();
             },100);
         });
         
@@ -41,7 +49,7 @@ function Dialog(spec) {
         /*$layer.on("click",function(e) { 
             e.stopPropagation();
         });*/
-        $layer.delegate(".close_button",'click',hide);
+        $(".js-modeDialog").delegate(".close_button",'click',hide);
         $(".wether span").on("click",toggleActive);
     };
     var position =function(){
@@ -53,6 +61,7 @@ function Dialog(spec) {
         //$(".js-modeDialog").css("top",top);
     };
     var show = function() {
+        //灰层要和内容分开，否则输入框弹起，内容不跟随弹起，导致文本被键盘遮住
         $(document.body).append($layer);
         $(".js-modeDialog").animate({
             'opacity' : 1
