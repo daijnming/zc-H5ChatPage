@@ -381,7 +381,8 @@ function TextArea(window) {
     //结束会话
     var endSessionHandler=function(status){
        switch(status) {
-            case -1://仅人工模式，转人工失败
+            case -2://仅人工模式，转人工失败,有客服排队中
+            case -1://仅人工模式，转人工失败,无客服
             case 1://客服自己离线了
             case 2://客服把你T了
             case 3://客服把你拉黑了
@@ -392,14 +393,15 @@ function TextArea(window) {
                 $endSession.show();
                 autoSizePhone();
                 sessionEnd=true;
-                if(status==-1){//仅人工模式，转人工失败
+                if(status==-1){//仅人工模式，转人工失败,无客服
                     //移除满意度评价
                     $(".js-satisfaction").remove();
                     //留言开关
                     if(global.apiConfig.msgflag==1){
                         $(".js-leaveMsgBtn").remove();
                     }
-                    //$textarea.attr("placeholder","排队中，请等待...")
+                }else if(status==-2){//仅人工模式，转人工失败,有客服排队中
+                    $textarea.attr("placeholder","排队中，请等待...").attr("contenteditable","false");
                 }
                 break;
         }
