@@ -43,7 +43,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var sysPromptLan ={
     L0001:'您与{0}的会话已经结束',
     L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
-    L0003:'您已在新窗口打开聊天页面',
+    L0003:'您已打开新窗口，刷新可继续会话',
     L0004:'客服正在输入...'
   };
 
