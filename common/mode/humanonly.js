@@ -80,6 +80,10 @@ function HumanOnly(global) {
         // console.log(ret,init,value);
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
+        if(manager) {
+            manager.destroy();
+        }
+        manager = socketFactory(ret,global);
         if(init) {
             //initHumanSession(value,ret,null);
             setTimeout(function() {
