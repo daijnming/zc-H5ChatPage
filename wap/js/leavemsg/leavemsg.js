@@ -14,6 +14,7 @@
       successLogo,//提交成功
       successLayer,//留言成功弹出层
       closeErrorBar,//关闭提示框
+      textAreaWrap,//textarea父元素-div
       submit;//提交按钮
 
   //FIXME  普通用户来源：0PC,1微信,2APP,3微博,4WAP,5融云,6呼叫中心
@@ -84,16 +85,14 @@
     var emailRegex = /^([a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*(?:@(?!-))(?:(?:[a-zA-Z0-9]*)(?:[a-zA-Z0-9](?!-))(?:\.(?!-)))+[a-zA-Z0-9]{2,})$/;
     if(!$email.val()){
       $(errorBar).addClass('show').find('.js-errorLine').text('请填写邮箱！');
+    }else if(!emailRegex.test($email.val())){
+      $(errorBar).addClass('show').find('.js-errorLine').text('邮箱格式错误！');
     }else if(!$emailMsg.val()){
       $(errorBar).addClass('show').find('.js-errorLine').text('请填写问题描述！');
     }else {
-      if(emailRegex.test($email.val())){
-        $(submit).off('click');
-        $(errorBar).removeClass('show');
-        onSave($email.val(),$emailMsg.val());//提交后台保存处理
-      }else{
-        $(errorBar).addClass('show').find('.js-errorLine').text('邮箱格式错误！');
-      }
+      $(submit).off('click');
+      $(errorBar).removeClass('show');
+      onSave($email.val(),$emailMsg.val());//提交后台保存处理
     }
   };
   //判断顶部返回栏
@@ -123,6 +122,7 @@
     successLogo = $('.js-success');
     successLayer = $('.js-submitLayer');//留言成功弹出层
     closeErrorBar = $('.js-errorIcon');
+    textAreaWrap = $('.js-content-msg');
   };
   var initPlugsin = function(){
     topBackHandler();
@@ -149,7 +149,7 @@
             source : uSource
         },
         success : (function(data) {
-          // console.log(data);
+
           document.title= data.robotName;//title 名称 使用客服昵称
           $(topTitle).text(data.robotName);
           $(topBack).css('background',data.color);//顶部返回栏
@@ -161,7 +161,9 @@
           var msgTmp='<div>'+data.msgTmp+'</div>';
           //该属性赋值显示不了
           // $($emailMsg).attr('placeholder',$(msgTmp).text());
-          $('.js-content-msg').append('<textarea name="name" placeholder="'+$(msgTmp).text()+'" rows="8" cols="40"></textarea maxlength="100">');
+          $(textAreaWrap).append('<textarea name="name" placeholder="'+$(msgTmp).text()+'" rows="8" cols="40"></textarea maxlength="100">');
+          //重新再绑定一下
+          $emailMsg = $('textarea');
         })
     });
   };
