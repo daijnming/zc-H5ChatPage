@@ -80,6 +80,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //系统消息显示处理
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
+      $('.input205').remove();//正在输入class 清除掉所有正在输入
       //生成时间戳
       var tp = +new Date();
       var msgTmp;
@@ -87,8 +88,8 @@ var SysmsgHandler = function(msgBind,myScroll){
       if(sysMsgKeyword.indexOf(status)>=0){
         sysMsgManager.push(tp);//用于系统提示判断
       }else if(status ==205){
+        //正在输入
         msgTmp='input205';
-        var $msgInput = $('.input205').remove();//正在输入class
       }
       var comf = $.extend({
         sysMsg:msg,
