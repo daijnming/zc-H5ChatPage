@@ -90,7 +90,7 @@ function HumanOnly(global) {
                     'status' : 'queue',
                     'data' : ret
                 });
-                listener.trigger("core.sessionclose",-1);
+                listener.trigger("core.sessionclose",-2);
             },1);
         } else {
             ret.content = str + " " + leaveMessageStr;
@@ -100,7 +100,7 @@ function HumanOnly(global) {
                 'status' : 'queue',
                 'data' : ret
             });
-            listener.trigger("core.sessionclose",-1);
+            listener.trigger("core.sessionclose",-2);
         }
     };
     var serverOffline = function(ret,init,value) {
