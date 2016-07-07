@@ -53,6 +53,8 @@ function uploadImg() {
                         'date':tp,
                         'token':token
                     }])
+                     //上传,延迟一毫秒，先让图片在页面加载
+                    setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
                 }).catch(function (err) {
                     console.log('图片压缩失败')
                 })
@@ -60,14 +62,7 @@ function uploadImg() {
                     //console.log('不管是成功失败，都会执行')
                 });
             }
-            //oData.append("file",file);
-            /*oData.append("type","msg");
-            oData.append("countTag",1);
-            oData.append("source",0);*/
-            //上传,延迟一毫秒，先让图片在页面加载
-            //onAjaxUploadUpHandler(oData)
-
-            setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
+           
         }else{
             //alert("请上传正确的图片格式");
             var imageError={type:'system',status:'imageError',data:{content:'请上传正确的图片格式'}}
@@ -91,7 +86,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
-        console.log("我是base64重新上传");
+        console.log("我是base64上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -121,7 +116,7 @@ function uploadImg() {
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', uploadProgress, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
-        //console.log("我是base64接口上传");
+        console.log("我是base64重新上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -130,7 +125,6 @@ function uploadImg() {
         oData.append("base64",data.base64);
         oXHR.send(oData);
         oXHR.onreadystatechange = function(req){
-           // console.log('base64上传成功');
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
