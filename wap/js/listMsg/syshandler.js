@@ -72,9 +72,10 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
-      console.log(data);
-      $('.js-title').text(data.data.aname);
-      document.title = data.data.aname;
+      // console.log(data);
+      var name = data.data.aname?data.data.aname:'未接入';
+      $('.js-title').text(name);
+      document.title = name;
       msgBind(2,data);
     },
     //系统消息显示处理
