@@ -122,7 +122,18 @@ function uploadImg() {
     var imgUploadAgain=function(data){
         var oData = new FormData();
         var oXHR = new XMLHttpRequest();
-        oXHR.upload.addEventListener('progress', uploadProgress, false);
+        var tp=+new Date();
+        oXHR.upload.addEventListener('progress',  
+            function(e){
+                if (e.lengthComputable) {
+                    var iPercentComplete = Math.round(e.loaded * 100 / e.total);
+                    var percentage=iPercentComplete.toString();
+                    console.log(percentage);
+                    listener.trigger('sendArea.uploadImgProcess',{"percentage":percentage,"token":data.token}); //
+                } else {
+                    //document.getElementById('progress').innerHTML = '无法计算';
+                } 
+            }, false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
         console.log("我是base64重新上传");
         //中止上传
