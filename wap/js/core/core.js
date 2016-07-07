@@ -2,6 +2,7 @@ var Core = function(window) {
     var promise = require('../../../common/initConfig.js')();
     var ManagerFactory = require('../../../common/mode/mode.js');
     var manager;
+    var heartBeat = require('../../../common/socket/heartbeat.js');
     var $evtDom;
     var global;
     var listener = require('../../../common/util/listener.js');
@@ -33,6 +34,7 @@ var Core = function(window) {
         global = data;
         init();
         listener.trigger('core.onload',[global]);
+        heartBeat(global);
     });
 };
 module.exports = Core;
