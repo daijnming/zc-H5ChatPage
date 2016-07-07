@@ -87,7 +87,7 @@ function uploadImg() {
                     var iPercentComplete = Math.round(e.loaded * 100 / e.total);
                     var percentage=iPercentComplete.toString();
                     console.log(percentage);
-                    listener.trigger('sendArea.uploadImgProcess',percentage); //{"percentage":percentage,"token":token}
+                    listener.trigger('sendArea.uploadImgProcess',{"percentage":percentage,"token":token}); //
                 } else {
                     //document.getElementById('progress').innerHTML = '无法计算';
                 } 
