@@ -318,18 +318,19 @@ p, ul, li {
     transform: rotate(-45deg);
     /*border:1px solid #999;*/
 }
-
-.wrap .header-back .title {
-    text-align: center;
-    vertical-align: middle;
-    width: 50%;
-    color: #f0f0f0;
-    line-height: 50px;
-    width: 50%;
-    height: 50px;
-    display: inline-block;
-    float: left;
-}
+.wrap .header-back .title{
+  text-align: center;
+  vertical-align: middle;
+  color:#f0f0f0;
+  line-height: 50px;
+  width: 50%;
+  height: 50px;
+  display: inline-block;
+  float: left;
+  max-width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 /******end*******/
 .wrap .pullDown {
     text-align: center;

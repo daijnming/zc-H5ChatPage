@@ -149,7 +149,7 @@
             source : uSource
         },
         success : (function(data) {
-          console.log(data);
+          // console.log(data);
           document.title= data.robotName;//title 名称 使用客服昵称
           $(topTitle).text(data.robotName);
           $(topBack).css('background',data.color);//顶部返回栏
@@ -159,13 +159,15 @@
           $(emailHelper).find('.js-helper').html(msg);
           //内容提示
           var msgTmp='<div>'+data.msgTmp+'</div>';
-           $($emailMsg).attr('placeholder',$(msgTmp).text());
+          //该属性赋值显示不了
+          // $($emailMsg).attr('placeholder',$(msgTmp).text());
+          $('.js-content-msg').append('<textarea name="name" placeholder="'+$(msgTmp).text()+'" rows="8" cols="40"></textarea maxlength="100">');
         })
     });
   };
   var init = function(){
-    initConfig();
     parseDom();
+    initConfig();
     initPlugsin();
     bindListener();
   };
