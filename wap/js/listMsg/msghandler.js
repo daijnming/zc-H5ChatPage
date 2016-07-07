@@ -146,7 +146,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var cH = floatData * oldH;//获取计算后的高度值
       //计算
       var newH = oldH - cH;
-      $shadowLayer.height(newH);
+      // $shadowLayer.height(newH);
       if(floatData>=1){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
