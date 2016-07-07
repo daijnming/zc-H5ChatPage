@@ -5,10 +5,8 @@
 function uploadImg() {
     var global;
     var listener = require("../../../common/util/listener.js");
-    //上传图片假消息时间戳
-    var token="",
-    tp="",
-    currentUid="",
+    
+    var currentUid="",
     sysNum="";
     /*
     //模板引擎
@@ -30,8 +28,8 @@ function uploadImg() {
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e){
-                tp=+new Date();
-                token= currentUid + tp;
+                var tp=+new Date();
+                var token= currentUid + tp;
                 //this.result 本地图片的数据流
                 //console.log("当前上传图片的大小：");
                 //console.log(file);
@@ -54,11 +52,10 @@ function uploadImg() {
                         'token':token
                     }])
                      //上传,延迟一毫秒，先让图片在页面加载
-                    setTimeout(function(){onAjaxUploadUpHandler(oData)},100)
+                    setTimeout(function(){onAjaxUploadUpHandler(oData,tp,token)},100)
                 }).catch(function (err) {
                     console.log('图片压缩失败')
-                })
-                .always(function () {
+                }).always(function () {
                     //console.log('不管是成功失败，都会执行')
                 });
             }
@@ -71,7 +68,7 @@ function uploadImg() {
         //清空文本域
         $(".js-upload").val("");
     }
-    var uploadProgress=function(e) { //进度上传过程
+    /*var uploadProgress=function(e) { //进度上传过程
         if (e.lengthComputable) {
             var iPercentComplete = Math.round(e.loaded * 100 / e.total);
             var percentage=iPercentComplete.toString();
@@ -80,11 +77,22 @@ function uploadImg() {
         } else {
             //document.getElementById('progress').innerHTML = '无法计算';
         }
-    }
+    }*/
    
-    var onAjaxUploadUpHandler=function(oData){
+    var onAjaxUploadUpHandler=function(oData,tp,token){
         var oXHR = new XMLHttpRequest();
-        oXHR.upload.addEventListener('progress', uploadProgress, false);
+        oXHR.upload.addEventListener('progress', 
+            function(e){
+                if (e.lengthComputable) {
+                    var iPercentComplete = Math.round(e.loaded * 100 / e.total);
+                    var percentage=iPercentComplete.toString();
+                    console.log(percentage);
+                    listener.trigger('sendArea.uploadImgProcess',{"percentage":percentage,"token":token}); //
+                } else {
+                    //document.getElementById('progress').innerHTML = '无法计算';
+                } 
+            }
+            , false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
         console.log("我是base64上传");
         //中止上传
