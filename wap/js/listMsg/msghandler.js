@@ -71,7 +71,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //发送消息
     onSend : function(data){
-      console.log(data);
+      //console.log(data);
       isUserSendMsg = true;//
       if(data[0].sendAgain){
         //消息重发
@@ -118,13 +118,15 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onUpLoadImg:function(data){
       // console.log(data);
       uploadImgId = data[0]['token'];
-      sendTimer = setInterval(function(){
-        if(sendTime>=60){//发送超过60秒判断上传失败
-          clearInterval(sendTimer);
-          $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-        }
-        sendTime +=1;
-      },1000);
+
+      // sendTimer = setInterval(function(){
+      //   if(sendTime>=60){//发送超过60秒判断上传失败
+      //     clearInterval(sendTimer);
+      //     $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
+      //   }
+      //   sendTime +=1;
+      // },1000);
+
       msgBind(4,data);
     },
     onUpLoadImgProgress:function(ret){
@@ -132,13 +134,13 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var token = ret.token;
       var $shadowLayer,
           $progress,
-          $progressLayer,
-          oldH;
+          $progressLayer;
+          // oldH;
       if(isUploadImg){
           $shadowLayer = $('#img'+token).find('.js-shadowLayer');
           $progress = $('#progress'+token);
-          $progressLayer = $('.js-progressLayer');
-          oldH = $shadowLayer.height();
+          $progressLayer = $progress.parent('.js-progressLayer');
+          // oldH = $shadowLayer.height();
           // isUploadImg=false;
       }
       //蒙版高度随百分比改变
@@ -152,7 +154,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       if(floatData>=1){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
-        $progress.remove();
+        // $progress.remove();
         $progressLayer.remove();
         myScroll.refresh();//刷新
       }
@@ -161,7 +163,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onUploadImgUrl:function(data){
       // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-      var $div = $('#img'+sys.config.uploadImgToken);
+      var $div = $('#img'+data[0]['token']);
       $div.find('p img:first-child').remove();
       $div.find('p').html(data[0]['answer']);
       sys.config.uploadImgToken='';//置空 一个流程完成
@@ -206,7 +208,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      console.log(data);
+      // console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
