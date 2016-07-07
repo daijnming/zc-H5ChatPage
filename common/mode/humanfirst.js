@@ -194,7 +194,7 @@ var HumanFirst = function(global) {
     };
 
     var blackListCallback = function(ret,init) {
-        ret.content = '暂时无法转接人工客服';
+        ret.content = '暂时无法转接人工客服' +' '+ leaveMessageStr;
         manager = new Robot(global);
         modeState.setCurrentState("robot");
         listener.trigger("core.system", {
