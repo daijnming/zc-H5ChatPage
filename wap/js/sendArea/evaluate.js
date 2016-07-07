@@ -43,11 +43,16 @@ function evaluate(currentStatus,global) {
         var _html = doT.template(template.sobotEvaluate_selfHtml)(conf);
         Alert.setInner(_html);
         $(".js-noques").addClass("active");
-        $(".js-isques").on("click",hideDialog);
+        $(".js-isques").on("click",EvaluateAjaxHandler);
         //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
-        $(".submit").on("click",EvaluateAjaxHandler)
+        $(".submit").on("click",EvaluateAjaxHandler);
+        $(".js-evaluateInner").keydown(function(){
+            if($(this).val().length>200){
+                $(this).val($(this).val().substring(0,200))
+            }
+        })
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -95,7 +100,7 @@ function evaluate(currentStatus,global) {
                         score=5;
                         Alert.hide();
                         //alert("感谢您的反馈");
-                        evaluateSuccess();
+                        EvaluateAjaxHandler();
                         break;
                      
                 }
@@ -141,50 +146,73 @@ function evaluate(currentStatus,global) {
                         score=5;
                         Alert.hide();
                         //alert("感谢您的反馈");
-                        evaluateSuccess();
+                        EvaluateAjaxHandler();
                         break;
                      
                 }
             }
         }
         $(".js-noques").addClass("active");
-        $(".js-isques").on("click",hideDialog);
+        $(".js-isques").on("click",EvaluateAjaxHandler);
         //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
-        $(".js-submit").on("click",EvaluateAjaxHandler)
+        $(".js-submit").on("click",EvaluateAjaxHandler);
+         $(".js-evaluateInner").keydown(function(){
+            if($(this).val().length>200){
+                $(this).val($(this).val().substring(0,200))
+            }
+        })
     };
     var EvaluateAjaxHandler=function(){
-        remark=$(".js-evaluateInner").val();
-        var tag=[];
-        for(var i=1;i<5;i++){
-            if($(".tag"+i).hasClass("active")){
-                tag.push(i)
-            }
-        };
-        tag=tag.join(",");
-        $.ajax({
-            type : "post",
-            url : "/chat/user/comment.action",
-            dataType : "json",
-            data : {
-                cid : global.apiInit.cid,
-                visitorId:global.apiInit.uid,
-                score:score,
-                tag:tag,
-                remark:remark,
-                type:currentStatus 
-            },
-            success:function(req){
-                //alert("感谢您的反馈");
-                Alert.hide();
-                evaluateSuccess();
-            }
-        });
-        //$('.js-satisfaction').remove();
-        $(".js-endSession span").css("width","45%");
-        //var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
-        //listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+            remark=$(".js-evaluateInner").val();
+            var tag=[];
+            for(var i=1;i<5;i++){
+                if($(".tag"+i).hasClass("active")){
+                    tag.push(i)
+                }
+            };
+            tag=tag.join(",");
+            $.ajax({
+                type : "post",
+                url : "/chat/user/comment.action",
+                dataType : "json",
+                data : {
+                    cid : global.apiInit.cid,
+                    visitorId:global.apiInit.uid,
+                    score:score,
+                    tag:tag,
+                    remark:remark,
+                    type:currentStatus 
+                },
+                success:function(req){
+                    //alert("感谢您的反馈");
+                    Alert.hide();
+                    var conf={};
+                    var evamsgHtml = doT.template(template.evamsgHtml)(conf);
+                    $('body').append(evamsgHtml);
+                    //居中弹窗位置
+                    position(); 
+                    setTimeout(function(){
+                        $('.js-evamsg').remove();
+                    },3000)
+                },
+                //请检查网络链接
+                error:function(){
+                    Alert.hide();
+                    var conf={};
+                    var evamsgHtml2 = doT.template(template.evamsgHtml2)(conf);
+                    $('body').append(evamsgHtml2);
+                    //居中弹窗位置
+                    position();
+                    setTimeout(function(){
+                        $('.js-evamsg').remove();
+                    },3000)
+                }
+            });
+            $(".js-endSession span").css("width","45%");
+     
+       
     };
     var starEvaluateHandler=function(iStar){
        
@@ -208,29 +236,42 @@ function evaluate(currentStatus,global) {
     };
     var hideDialog=function(){
         Alert.hide();
-        evaluateSuccess();
+        //evaluateSuccess();
         //$(".js-satisfaction").remove();
     };
     var evaluateSuccess=function(){
-        //感谢您的评价
-        var conf={};
-        var evamsgHtml = doT.template(template.evamsgHtml)(conf);
-        $('body').append(evamsgHtml);
-        setTimeout(function(){
-            $('.js-evamsg').remove();
-        },3000)
-        position(); 
+       /* if (navigator.onLine) { 
+            //谢谢您的反馈
+            var conf={};
+            var evamsgHtml = doT.template(template.evamsgHtml)(conf);
+            $('body').append(evamsgHtml);
+            setTimeout(function(){
+                $('.js-evamsg').remove();
+            },3000)
+        }
+        //执行离线状态时的任务
+        else {
+            //提交失败,请重试
+            var conf={};
+            var evamsgHtml2 = doT.template(template.evamsgHtml2)(conf);
+            $('body').append(evamsgHtml2);
+            setTimeout(function(){
+                $('.js-evamsg').remove();
+            },3000)
+        } 
+        
+        position(); */
     };
     var sobotbindListener = function() {
         //机器人评价
         $(".js-noques").on("click",sobotSetInnerStepTwoHtml);
-        $(".js-isques").on("click",hideDialog);
+        $(".js-isques").on("click",EvaluateAjaxHandler);
        
     };
     var humanbindListener = function() {
         //人工评价
-        $(".js-noques").on("click",humanSetInnerStepTwoHtml);
-        $(".js-isques").on("click",hideDialog)
+        //$(".js-noques").on("click",humanSetInnerStepTwoHtml);
+        $(".js-isques").on("click",EvaluateAjaxHandler)
     };
     var init = function() {
         //防止用户快速多次点击弹层
@@ -244,12 +285,13 @@ function evaluate(currentStatus,global) {
         }else{
             //humanInitPlugins();
             humanSetInnerStepOneHtml();
-            humanbindListener();
+            //humanbindListener();
         }
-        
+       
     };
     init();
     this.modeAlert = modeAlert;
+
 }
 
 module.exports = evaluate;

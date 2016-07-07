@@ -426,27 +426,28 @@ function TextArea(window) {
             },
             success:function(req){
                 isEvaluated=req.isComment
+                 //是否评价过
+                if(isEvaluated==false){
+                    if(isSpeak==true){
+                            //防止用户快速多次点击弹层
+                            var conf={};
+                            var _html = doT.template(template.layerOpacity0)(conf);
+                            $(document.body).append(_html);
+                            //评价
+                            evaluate(transferFlag,global);
+                    }else{
+                        var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
+                        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+                    }
+                 }else{
+                    var evaluateSystem={type:'system',status:'evaluated',data:{content:'您已完成评价'}}
+                    listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+                }
+                focusStatus=false;
             }
         });
-         //是否评价过
-        if(isEvaluated==false){
-            if(isSpeak==true){
-               
-                    //防止用户快速多次点击弹层
-                    var conf={};
-                    var _html = doT.template(template.layerOpacity0)(conf);
-                    $(document.body).append(_html);
-                    //评价
-                    evaluate(transferFlag,global);
-            }else{
-                var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'您还没发言,暂不能评论'}}
-                listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
-            }
-         }else{
-            var evaluateSystem={type:'system',status:'evaluated',data:{content:'单次会话只能评价一次,不能再评价'}}
-            listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
-        }
-        focusStatus=false;
+        
+        
     };
     var hideKeyboard=function(){
         //会话没结束的时候点击屏幕输入框失去焦点
