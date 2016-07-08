@@ -23,7 +23,7 @@ var Theme = function(global,node){
   };
   //设置主题样式
   var setThemeColor = function(){
-    var color = global.apiConfig.color;
+    var color = global.userInfo.color?global.userInfo.color: global.apiConfig.color;
     $(setStyle).html('.rightMsg .msgOuter::before{border-color:transparent ' + color + ' !important} '+
                      '.rightMsg .msgOuter{background-color:' + color + ' !important}'+
                      '.wrap .header-back{background-color:'+color+' !important}'

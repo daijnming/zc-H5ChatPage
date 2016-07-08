@@ -21,7 +21,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       sendTime=0,//发达消息超时时间 默认为0
       isUserSendMsg=false, //用户是否有发送内容
       isAdminSendMsg=false, //客服是否有发送内容
-      uploadImgId;//上传图片token 判断是否发送或上传成功
+      uploadImgHandler={};//上传图片token 判断是否发送或上传成功
 
 
   var sys={};
@@ -29,6 +29,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   sys.config.msgSendACK=[];//填装发送消息的容器 用于与消息确认匹配
   sys.config.uploadImgToken='';//锁定当前上传图片唯一标识
   sys.config.currentState='';//当前聊天对象状态  1 智能机器人  2人工客服
+
 
   //消息状态-类
   var MSGSTATUSCLASS={
@@ -44,13 +45,13 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     L0001:'您与{0}的会话已经结束',
     L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
     L0003:'您已打开新窗口，刷新可继续会话',
-    L0004:'客服正在输入...'
   };
 
   var msgTemplate = require('./template.js');
   var QQFace = require('../util/qqFace.js')();
   var Comm = require('../../../common/comm.js');
   var fnEvent = require('../../../common/util/listener.js');
+  require('./pinchzoom.js');
 
   sys.msg = {
     //相关搜索方法
@@ -117,15 +118,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //上传图片
     onUpLoadImg:function(data){
       // console.log(data);
-      uploadImgId = data[0]['token'];
-
-      // sendTimer = setInterval(function(){
-      //   if(sendTime>=60){//发送超过60秒判断上传失败
-      //     clearInterval(sendTimer);
-      //     $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-      //   }
-      //   sendTime +=1;
-      // },1000);
+      (function(timer){
+        sendTime=0;
+        uploadImgHandler[timer] = setInterval(function(){
+          if(sendTime>=60){//发送超过60秒判断上传失败
+            clearInterval(uploadImgHandler[timer]);
+            $('#userMsg'+timer).removeClass('close msg-close').addClass('error msg-fail');
+            fnEvent.trigger('leftMsg.closeUploadImg',timer);
+          }
+          sendTime +=1;
+        },1000);
+      })(data[0]['token']);
 
       msgBind(4,data);
     },
@@ -135,26 +138,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var $shadowLayer,
           $progress,
           $progressLayer;
-          // oldH;
       if(isUploadImg){
           $shadowLayer = $('#img'+token).find('.js-shadowLayer');
           $progress = $('#progress'+token);
           $progressLayer = $progress.parent('.js-progressLayer');
-          // oldH = $shadowLayer.height();
-          // isUploadImg=false;
       }
       //蒙版高度随百分比改变
       $progress.text(data+'%');
       var floatData = data/100;//获取小数
-      //蒙版高度
-      //var cH = floatData * oldH;//获取计算后的高度值
-      //计算
-      //var newH = oldH - cH;
-      // $shadowLayer.height(newH);
       if(floatData>=1){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
-        // $progress.remove();
         $progressLayer.remove();
         myScroll.refresh();//刷新
       }
@@ -164,8 +158,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+data[0]['token']);
-      $div.find('p img:first-child').remove();
-      $div.find('p').html(data[0]['answer']);
+      $div.find('p img:first-child').animate({'opacity':'0'},500,function(){
+        $div.find('p').html(data[0]['answer']);
+      });
       sys.config.uploadImgToken='';//置空 一个流程完成
     },
     //会话结束判断
@@ -214,9 +209,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
       if(isMsgId>=0){
         if(data.result=='success'){
-          if(uploadImgId == data.msgId){
-            sendTime=0;
-            clearInterval(sendTimer);
+          //判断图片是否上传成功
+          if(uploadImgHandler[data.msgId]){
+              // uploadImgHandler.splice(_index,1);
+              clearInterval(uploadImgHandler[data.msgId]);
           }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
@@ -255,7 +251,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }else{
           //图片
           sendType='img';
-          that.removeClass('error msg-sendAgain').addClass('msg-close close');//图片重发过程可点击取消
+          that.removeClass('error msg-fail').addClass('msg-close close');//图片重发过程可点击取消
           //FIXME 判断图片是否上传成功，若成功则只需重发图片，若不成功则需重新上传一次
           var $p = that.prev().find('p');
           if($p.find('img').hasClass('uploadedFile')){
@@ -282,7 +278,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }
       }else if(that.hasClass('close')){
         //点击关闭按钮 重新发送
-        that.removeClass('close msg-close').addClass('msg-sendAgain error');
+        that.removeClass('close msg-close').addClass('msg-fail error');
         fnEvent.trigger('leftMsg.closeUploadImg',msgId);
       }
     },
@@ -385,13 +381,24 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         });
       var tmpHtml = doT.template(msgTemplate.showMsgLayer)(comf);
       $(document.body).append(tmpHtml);
-
-      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200);
+      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200,function(){
+        // $('.js-showMsgLayer').each(function () {
+  	            // new RTP.PinchZoom($(this), {});
+  	        // });
+      });
       $('.js-showMsgLayer').on('click',function(){
         $(this).animate({'opacity':'0'},200,function(){
           $(this).remove();
         });
       });
+      //.on('touchmove',function(e){
+        //移动
+        //e.preventDefault();
+  			//e.stopPropagation();
+
+      //}).on('touchstart',function(e){
+        //alert(e.targetTouches.length);
+      //});
     }
   };
   var parseDOM = function(){
@@ -409,7 +416,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //FIXME EVENT
     $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
     $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
-    $('.js-chatPanelList').delegate('img','click',sys.msg.onShowImg);//图片展示
+    $('.js-chatPanelList').delegate('.js-msgOuter img','click',sys.msg.onShowImg);//图片展示
     // sys.msg.onShowImg();
   };
   var _timer ;

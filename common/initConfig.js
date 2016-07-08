@@ -234,7 +234,9 @@ var initConfig = function() {
                 qq : urlParams['qq'] ? urlParams['qq'] : '',
                 sex : urlParams['sex'] ? urlParams['sex'] : '',
                 birthday : urlParams['birthday'] ? urlParams['birthday'] : '',
-                remark : urlParams['remark'] ? urlParams['remark'] : ''
+                remark : urlParams['remark'] ? urlParams['remark'] : '',
+                color:urlParams['color']?urlParams['color']:'',//FIXME  默认优先从配置中取主题色
+                modulType:urlParams['modulType']?urlParams['modulType']:''//FIXME 默认优先客服模式从配置中取
             };
         },
         //FIXME 初始化SysNum系统 id
@@ -334,6 +336,12 @@ var initConfig = function() {
                     source : That.cacheInfo.userInfo.source
                 },
                 success : (function(data) {
+                    //FIXME  在此判断客服模式
+                    var mType =   That.cacheInfo.userInfo.modulType;
+                    if(typeof mType == 'number'&& (mType >=1&&mType<=4)){//现在模式只有1到4共四个等级
+                        mType = Math.floor(mType);
+                        data.type = mType;
+                    }
                     That.cacheInfo.apiConfig = data;
                     if(value === 'success') {
                         data.websocketUrl = "";

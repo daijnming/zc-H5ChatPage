@@ -162,7 +162,7 @@ footer button{
   background: transparent;
 }
 .showLayer{
-  position: absolute;
+  position: fixed;
   left:0;
   width: 100%;
   background: #ddd;
@@ -188,6 +188,8 @@ footer button{
   background: #fff;
   z-index: 10000;
   display: none;
+  /*display: block;*/
+  overflow: hidden;
 }
 .submitLayer.show{
   display: block;

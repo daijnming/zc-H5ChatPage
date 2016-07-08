@@ -107,7 +107,8 @@ var ListMsgHandler = function() {
                     var res;
                     if(index>=0){
                       //图片，文件 上传
-                      res = $('<div>'+itemChild.msg+'</div>').text();
+                      res = $('<div></div>').html(itemChild.msg).text();
+                      // res = itemChild.msg;
                     }else if(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0){
                       //富文本
                         res = itemChild.msg;
@@ -275,6 +276,7 @@ var ListMsgHandler = function() {
                       msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
+                    console.log(_data.type);
                       //客服正在输入
                       // msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                       msgHtml += systemHandler.sys.onSysMsgShow(sysPromptLan.L0004,_data.type,sysMsgList,sysMsgManager);

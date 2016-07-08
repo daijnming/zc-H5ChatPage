@@ -139,6 +139,7 @@
     uSource = params.source?params.source:uSource;
     back = params.back;
     uid=params.uid;
+    color= params.color;
 
     $.ajax({
         type : "post",
@@ -149,12 +150,12 @@
             source : uSource
         },
         success : (function(data) {
-
+          var _color = color?color:data.color;//默认从参数配置取
           document.title= data.robotName;//title 名称 使用客服昵称
           $(topTitle).text(data.robotName);
-          $(topBack).css('background',data.color);//顶部返回栏
-          $(submit).css('background',data.color);//提交按钮
-          $(successLogo).css('background-color',data.color);//留言成功
+          $(topBack).css('background',_color);//顶部返回栏
+          $(submit).css('background',_color);//提交按钮
+          $(successLogo).css('background-color',_color);//留言成功
           var msg = '<div>'+data.msgTxt+'</div>';
           $(emailHelper).find('.js-helper').html(msg);
           //内容提示
