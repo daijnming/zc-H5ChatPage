@@ -45,7 +45,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     L0001:'您与{0}的会话已经结束',
     L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
     L0003:'您已打开新窗口，刷新可继续会话',
-    L0004:'客服正在输入...'
   };
 
   var msgTemplate = require('./template.js');
@@ -139,26 +138,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var $shadowLayer,
           $progress,
           $progressLayer;
-          // oldH;
       if(isUploadImg){
           $shadowLayer = $('#img'+token).find('.js-shadowLayer');
           $progress = $('#progress'+token);
           $progressLayer = $progress.parent('.js-progressLayer');
-          // oldH = $shadowLayer.height();
-          // isUploadImg=false;
       }
       //蒙版高度随百分比改变
       $progress.text(data+'%');
       var floatData = data/100;//获取小数
-      //蒙版高度
-      //var cH = floatData * oldH;//获取计算后的高度值
-      //计算
-      //var newH = oldH - cH;
-      // $shadowLayer.height(newH);
       if(floatData>=1){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
-        // $progress.remove();
         $progressLayer.remove();
         myScroll.refresh();//刷新
       }
@@ -168,8 +158,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+data[0]['token']);
-      $div.find('p img:first-child').remove();
-      $div.find('p').html(data[0]['answer']);
+      $div.find('p img:first-child').animate({'opacity':'0'},500,function(){
+        $div.find('p').html(data[0]['answer']);
+      });
       sys.config.uploadImgToken='';//置空 一个流程完成
     },
     //会话结束判断
@@ -212,7 +203,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      console.log(data);
+      // console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
@@ -425,7 +416,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //FIXME EVENT
     $('.js-chatPanelList').delegate('.js-answerBtn','click',sys.msg.onSugguestionsEvent);//相关搜索答案点击事件
     $('.js-chatPanelList').delegate('.js-msgStatus','click',sys.msg.onMsgSendAgain);//消息重发
-    $('.js-chatPanelList').delegate('img','click',sys.msg.onShowImg);//图片展示
+    $('.js-chatPanelList').delegate('.js-msgOuter img','click',sys.msg.onShowImg);//图片展示
     // sys.msg.onShowImg();
   };
   var _timer ;

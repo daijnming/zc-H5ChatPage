@@ -80,7 +80,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     },
     //系统消息显示处理
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
-      $('.input205').remove();//正在输入class 清除掉所有正在输入
+      $('.js-input205').remove();//正在输入class 清除掉所有正在输入
       //生成时间戳
       var tp = +new Date();
       var msgTmp;
@@ -89,7 +89,7 @@ var SysmsgHandler = function(msgBind,myScroll){
         sysMsgManager.push(tp);//用于系统提示判断
       }else if(status ==205){
         //正在输入
-        msgTmp='input205';
+        msgTmp='js-input205';
       }
       var comf = $.extend({
         sysMsg:msg,
@@ -103,7 +103,7 @@ var SysmsgHandler = function(msgBind,myScroll){
     //正在输入处理
     onBeingInput:function(){
       var _t = setInterval(function(){
-          $('.input205').remove();
+          $('.js-input205').remove();
           myScroll.refresh();
       },5*1000);//每隔5秒处理正在输入提示消息
     },

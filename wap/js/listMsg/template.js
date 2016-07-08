@@ -11,7 +11,7 @@ var leftMsg =
                   '<p class="r-name">'+
                       '{{=it.customName}}'+
                   '</p>'+
-                  '<div class="msgOuter">'+
+                  '<div class="msgOuter js-msgOuter">'+
                       '<p>'+
                           '{{=it.customMsg}}'+
                       '</p>'+
@@ -27,7 +27,7 @@ var listSugguestionsMsg =
                   '<p class="r-name">'+
                       '{{=it.customName}}'+
                   '</p>'+
-                  '<div class="msgOuter">'+
+                  '<div class="msgOuter js-msgOuter">'+
                       '<p>'+
                           '{{=it.stripe}}'+
                       '</p>'+
@@ -53,7 +53,7 @@ var rightMsg =
                       '<div class="header">'+
                           '<img src="{{=it.userLogo}}" alt="" />'+
                       '</div>'+
-                      '<div class="msgOuter js-userMsgOuter">'+
+                      '<div class="msgOuter js-userMsgOuter js-msgOuter">'+
                           '<p>'+
                             '{{=it.userMsg}}'+
                           '</p>'+
@@ -67,7 +67,7 @@ var rightMsg =
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
-                        '<div id="img{{=it.token}}" class="msgOuter js-userMsgOuter">'+
+                        '<div id="img{{=it.token}}" class="msgOuter js-userMsgOuter js-msgOuter">'+
                             '<p>'+
                               '<img src="{{=it.uploadImg}}"'+
                             '</p>'+
