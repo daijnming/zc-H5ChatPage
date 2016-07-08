@@ -48,7 +48,7 @@ function TextArea(window) {
             //满意度评价
             $satisfaction.show();
             //提示文本
-            $textarea.attr("placeholder","当前是人工")
+            //$textarea.attr("placeholder","当前是人工")
         }else if(currentStatus == 'robot'){
             transferFlag=0;
             $uploadImg.hide();
@@ -135,6 +135,7 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
+            str=str.trim();
              _html=ZC_Face.analysis(str);
              isSpeak=true;
             //xss
@@ -327,8 +328,7 @@ function TextArea(window) {
         var textarea=document.getElementById('js-textarea');
         textarea.scrollTop = textarea.scrollHeight;
         //提示文本
-        //placeholder($textarea,"当前是人工");
-        $textarea.attr("placeholder","当前是人工")
+        //$textarea.attr("placeholder","当前是人工")
         //显示发送按钮
         manualmodeButton();
         //调整窗体高度

@@ -65,8 +65,8 @@ function evaluate(currentStatus,global) {
         Alert.setInner(_html);
         $aLi =$("#star li");
         var iStar = 0;
-        for (i = 1; i <= $aLi.length; i++){
-
+        for (i = 1; i <= $aLi.length; i++){ 
+             
             $aLi[i - 1].index = i;
             //鼠标移过显示分数
             $aLi[i - 1].onmouseover = function (){
@@ -77,7 +77,7 @@ function evaluate(currentStatus,global) {
                 fnPoint(this.index);
             };
             //点击后进行评分处理
-            $aLi[i - 1].onclick = function (){
+            $($aLi[i - 1]).bind("click",function (){
                 iStar = this.index;
                 switch(iStar) {
                     case 1://一星
@@ -104,7 +104,7 @@ function evaluate(currentStatus,global) {
                         break;
                      
                 }
-            }
+            })
         }
     };
     var humanSetInnerStepTwoHtml=function(iStar){

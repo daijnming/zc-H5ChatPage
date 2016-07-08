@@ -30,10 +30,8 @@ function uploadImg() {
                 var tp=+new Date();
                 var token= currentUid + tp;
                 //this.result 本地图片的数据流
-                //console.log("当前上传图片的大小：");
-                //console.log(file);
                 lrz(file, {
-                    quality: 0.7
+                    quality: 0.7//传4.82M剩于123k
                 }).then(function (results) {
                     // size单位为字节 5M = 5242880
                     if(results.base64Len >= 5242880) {
