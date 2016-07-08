@@ -96,10 +96,16 @@ var systemData =
 
 var showMsgLayer =
                   '<div class="js-showMsgLayer showMsgLayer">'+
-                    '<div class="msgLayer">'+
+                    '<div class="js-msgLayer msgLayer">'+
                       '<img src="{{=it.msg}}" />'+
                     '</div>'+
                   '</div>';
+
+var zoomImgLayer =
+                  '<section class="imgzoom_pack">'+
+                		'<div class="imgzoom_x">X</div>'+
+                		'<div class="imgzoom_img"><img src="" /></div>'+
+                	'</section>';
 
 template.leftMsg = leftMsg;
 template.rightMsg = rightMsg;
@@ -107,6 +113,7 @@ template.rightImg = rightImg;
 template.sysMsg = systemMsg;
 template.sysData = systemData;
 template.showMsgLayer = showMsgLayer;
+template.zoomImgLayer = zoomImgLayer;
 template.listSugguestionsMsg = listSugguestionsMsg;
 
 module.exports = template;

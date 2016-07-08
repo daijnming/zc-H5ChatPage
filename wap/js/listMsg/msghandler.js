@@ -21,7 +21,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       sendTime=0,//发达消息超时时间 默认为0
       isUserSendMsg=false, //用户是否有发送内容
       isAdminSendMsg=false, //客服是否有发送内容
-      uploadImgId;//上传图片token 判断是否发送或上传成功
+      uploadImgHandler={};//上传图片token 判断是否发送或上传成功
 
 
   var sys={};
@@ -29,6 +29,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   sys.config.msgSendACK=[];//填装发送消息的容器 用于与消息确认匹配
   sys.config.uploadImgToken='';//锁定当前上传图片唯一标识
   sys.config.currentState='';//当前聊天对象状态  1 智能机器人  2人工客服
+
 
   //消息状态-类
   var MSGSTATUSCLASS={
@@ -51,6 +52,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var QQFace = require('../util/qqFace.js')();
   var Comm = require('../../../common/comm.js');
   var fnEvent = require('../../../common/util/listener.js');
+  require('./pinchzoom.js');
 
   sys.msg = {
     //相关搜索方法
@@ -117,15 +119,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //上传图片
     onUpLoadImg:function(data){
       // console.log(data);
-      uploadImgId = data[0]['token'];
-
-      // sendTimer = setInterval(function(){
-      //   if(sendTime>=60){//发送超过60秒判断上传失败
-      //     clearInterval(sendTimer);
-      //     $('#userMsg'+data[0]['token']).removeClass('close msg-close').addClass('error msg-fail');
-      //   }
-      //   sendTime +=1;
-      // },1000);
+      (function(timer){
+        sendTime=0;
+        uploadImgHandler[timer] = setInterval(function(){
+          if(sendTime>=60){//发送超过60秒判断上传失败
+            clearInterval(uploadImgHandler[timer]);
+            $('#userMsg'+timer).removeClass('close msg-close').addClass('error msg-fail');
+            fnEvent.trigger('leftMsg.closeUploadImg',timer);
+          }
+          sendTime +=1;
+        },1000);
+      })(data[0]['token']);
 
       msgBind(4,data);
     },
@@ -208,15 +212,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      // console.log(data);
+      console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
       if(isMsgId>=0){
         if(data.result=='success'){
-          if(uploadImgId == data.msgId){
-            sendTime=0;
-            clearInterval(sendTimer);
+          //判断图片是否上传成功
+          if(uploadImgHandler[data.msgId]){
+              // uploadImgHandler.splice(_index,1);
+              clearInterval(uploadImgHandler[data.msgId]);
           }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
@@ -255,7 +260,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }else{
           //图片
           sendType='img';
-          that.removeClass('error msg-sendAgain').addClass('msg-close close');//图片重发过程可点击取消
+          that.removeClass('error msg-fail').addClass('msg-close close');//图片重发过程可点击取消
           //FIXME 判断图片是否上传成功，若成功则只需重发图片，若不成功则需重新上传一次
           var $p = that.prev().find('p');
           if($p.find('img').hasClass('uploadedFile')){
@@ -282,7 +287,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }
       }else if(that.hasClass('close')){
         //点击关闭按钮 重新发送
-        that.removeClass('close msg-close').addClass('msg-sendAgain error');
+        that.removeClass('close msg-close').addClass('msg-fail error');
         fnEvent.trigger('leftMsg.closeUploadImg',msgId);
       }
     },
@@ -385,13 +390,24 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         });
       var tmpHtml = doT.template(msgTemplate.showMsgLayer)(comf);
       $(document.body).append(tmpHtml);
-
-      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200);
+      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200,function(){
+        // $('.js-showMsgLayer').each(function () {
+  	            // new RTP.PinchZoom($(this), {});
+  	        // });
+      });
       $('.js-showMsgLayer').on('click',function(){
         $(this).animate({'opacity':'0'},200,function(){
           $(this).remove();
         });
       });
+      //.on('touchmove',function(e){
+        //移动
+        //e.preventDefault();
+  			//e.stopPropagation();
+
+      //}).on('touchstart',function(e){
+        //alert(e.targetTouches.length);
+      //});
     }
   };
   var parseDOM = function(){
