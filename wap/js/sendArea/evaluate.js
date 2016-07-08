@@ -108,9 +108,10 @@ function evaluate(currentStatus,global) {
         }
     };
     var humanSetInnerStepTwoHtml=function(iStar){
-        Alert.show();
+        //Alert.show();
         var conf={};
         var _html = doT.template(template.humanTwo_selfHtml)(conf);
+
         Alert.setInner(_html);
         $aLi =$("#star li");
         //var iStar = 0;

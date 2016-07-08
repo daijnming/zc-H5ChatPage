@@ -120,7 +120,7 @@ li {
     width: 36px;
     background-position:-41px 2px;
 }
-.activehide{
+.chatArea .activehide{
     display:none;
 }
 /* .keyboard {

@@ -53,7 +53,7 @@ function TextArea(window) {
             transferFlag=0;
             $uploadImg.hide();
             $satisfaction.show();
-            $textarea.attr("placeholder","当前是机器人")
+            $textarea.attr("placeholder","点击“+”号可转人工客服")
         }
     };
     var changeStatusHandler=function(data){
