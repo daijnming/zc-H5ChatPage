@@ -3,7 +3,8 @@
  */
 function Dialog(spec) {
     var template = require('./template.js');
-    var $layer;
+    var $layer="",
+        $AlertTemplate_html="";
     var _self = this;
     var conf = $.extend({
         "okText" : "确定",
@@ -15,8 +16,7 @@ function Dialog(spec) {
     },spec);
     var initDOM = function() {
         $layer = $(template.layer);
-        var _html = doT.template(template.AlertTemplate)(conf);
-        $(document.body).append(_html);
+        $AlertTemplate_html = doT.template(template.AlertTemplate)(conf);
     };
     var setInner = function(elm) {
         $(".model-body").html(elm);
@@ -34,7 +34,7 @@ function Dialog(spec) {
         $(".js-modeDialog").animate({
             'opacity' : 0
         },300, function() {
-            setTimeout(function() {
+            setTimeout(function() { 
                 $(".js-modeDialog").remove();
             },100);
         });
@@ -63,9 +63,10 @@ function Dialog(spec) {
     var show = function() {
         //灰层要和内容分开，否则输入框弹起，内容不跟随弹起，导致文本被键盘遮住
         $(document.body).append($layer);
-        $(".js-modeDialog").animate({
+        $(document.body).append($AlertTemplate_html);
+        /*$(".js-modeDialog").animate({
             'opacity' : 1
-        },300);
+        },300);*/
         bindListener();
         position();
     };
