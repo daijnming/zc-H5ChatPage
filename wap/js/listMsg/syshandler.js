@@ -68,34 +68,7 @@ var SysmsgHandler = function(msgBind,myScroll){
         myScroll.refresh();
         myScroll.scrollTo(0,myScroll.maxScrollY);
         $(window).scrollTop(Number($("#js-textarea").offset().top));
-
-      },300);
-      function IsIphone() {
-                  var userAgentInfo = navigator.userAgent;
-                  var Agents = [/*"Android", */"iPhone"/*,
-                              "SymbianOS", "Windows Phone",
-                              "iPad", "iPod"*/];
-                  var flag = true;
-                  for (var v = 0; v < Agents.length; v++) {
-                      if (userAgentInfo.indexOf(Agents[v]) > 0) {
-                          flag = false;
-                          break;
-                      }
-                  }
-                  return flag;
-              }
-              var aa=IsIphone();
-              if(!aa){
-                          
-                        $('.sendarea').focus(function(){
-                          var _this = this;
-                          //给窗口对象绑定滚动事件，保证页面滚动时div能吸附软键盘
-                          $(window).bind('scroll', function(){
-                              //设置输入框位置使其紧贴输入框
-                              $(".sendarea").css({'position':'absolute', 'top':afterScrollTopPos });
-                          });
-                        })
-              }
+    },300);
     },
     //转接人工
     onSessionOpen:function(data){
