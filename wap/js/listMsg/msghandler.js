@@ -13,16 +13,15 @@ var SysmsgHandler = function(global,msgBind,myScroll){
 
   //定义变量
   var autoTimer,//输入框高度延迟处理 解决与弹出键盘冲突
-      adminTime=0,//客户超时时间 默认为 0
-      userTime=0,//用户超时时间 默认为 0
-      userTimer,//用户超时任务
-      adminTimer,//客服超时任务
-      sendTimer,//发送消息超时
       sendTime=0,//发达消息超时时间 默认为0
-      isUserSendMsg=false, //用户是否有发送内容
-      isAdminSendMsg=false, //客服是否有发送内容
       uploadImgHandler={};//上传图片token 判断是否发送或上传成功
 
+  //超时提示
+  var overtimer,//超时提示时间任务
+      overtimeTask={
+      overtimeDaley:0,//超时提示时间
+      lastMsgType:0 //最后一句是谁发送的  0 表示客服  1 表示用户
+    };
 
   var sys={};
   sys.config ={};
@@ -72,8 +71,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //发送消息
     onSend : function(data){
-      //console.log(data);
-      isUserSendMsg = true;//
+      overtimeTask.lastMsgType=1;//最后一条为用户回复
+      overtimeTask.overtimeDaley=0;//重置超时提示时间为0
       if(data[0].sendAgain){
         //消息重发
         var oDiv = $('#userMsg'+data[0].dateuid).parents('div.rightMsg');
@@ -87,12 +86,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
-    //  console.log(data);
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
      }else if(data.type==='human'){
-       isAdminSendMsg = true;
+       overtimeTask.lastMsgType=0;//最后一条为用户回复
+       overtimeTask.overtimeDaley=0;//重置超时提示时间为0
        sys.config.currentState=2;
      }
       msgBind(1,data);
@@ -170,9 +169,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     // 4：长时间不说话
     // 6：有新窗口打开
     sessionCloseHander:function(data){
-      // console.log(data);
-      clearInterval(userTimer);//停止超时提示任务
-      clearInterval(adminTimer);
+      clearInterval(overtimer);//停止超时提示任务
       var msg='';
       if(data){
         switch (data.status) {
@@ -314,62 +311,40 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);
       return tmpHtml;
     },
-    adminTipTime:function(){
-      adminTimer = setInterval(function(){
-        //有消息发回 则重新计算超时时间
-        if(isAdminSendMsg){
-          adminTime=0;
-          isAdminSendMsg=false;
-          //清空系统提示语
-          // $('.js-sysMsg').remove();
-          // console.log('admins');
+
+    //超时提示
+    msgOvertimeTask:function(){
+      //判断最后一条消息来源
+      var userMsg =  global.apiConfig.userTipWord.indexOf('<')<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).text();//用户提示语
+      var adminMsg = global.apiConfig.adminTipWord.indexOf('<')<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).text();//客服提示语
+      var userDaley = global.apiConfig.userTipTime * 1000 * 60;//用户超时时间
+      var adminDaley = global.apiConfig.adminTipTime * 1000 * 60;//客服超时时间
+
+      overtimer = setInterval(function(){
+        var _msg,_daley;
+        if(!overtimeTask.lastMsgType){//取相反
+          //客服
+          _msg = userMsg;
+          _daley = userDaley;
+        }else{
+          //用户
+          _msg = adminMsg;
+          _daley= adminDaley;
         }
-        adminTime += 1;
-        if(adminTime * 1000 >= global.apiConfig.adminTipTime * 1000 * 60){
-        // if(adminTime * 1000 >= 1000 * 5){
-          adminTime=0;//清空
-          var index = global.apiConfig.adminTipWord.indexOf('<');
-          var msg = index<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).text();
-          //提示客服超时语
+        // console.log(overtimeTask.overtimeDaley+":"+_daley);
+        if(overtimeTask.overtimeDaley * 1000 >= _daley){
+          overtimeTask.overtimeDaley=0;//超时时间重置为0
           var data = {
             type:'system',
-            status:'adminoffline',
+            status:'overtime',
             data:{
-              content:msg,
+              content:_msg,
               status:0
             }
           };
           msgBind(2,data);
         }
-      },1000);
-    },
-    userTipTime:function(){
-      userTimer = setInterval(function(){
-        //有消息发送  则重新计算超时时间
-        if(isUserSendMsg){
-          userTime=0;
-          isUserSendMsg=false;
-          //清空系统提示语
-          // $('.js-sysMsg').remove();
-          // console.log('user');
-        }
-        userTime += 1;
-        if(userTime * 1000 >= global.apiConfig.userTipTime * 1000 * 60){
-        // if(userTime * 1000 >= 1000 * 3){
-          userTime=0;//清空
-          //提示客服超时语
-          var index = global.apiConfig.userTipWord.indexOf('<');
-          var msg = index<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).text();
-          var data = {
-            type:'system',
-            status:'useroffline',
-            data:{
-              content:msg,
-              status:0
-            }
-          };
-          msgBind(2,data);
-        }
+        overtimeTask.overtimeDaley+=1;//超时时间
       },1000);
     },
     //图片展示
@@ -419,14 +394,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     $('.js-chatPanelList').delegate('.js-msgOuter img','click',sys.msg.onShowImg);//图片展示
     // sys.msg.onShowImg();
   };
-  var _timer ;
   var initPlagsin=function(){
-    _timer = setInterval(function(){
+    var _timer = setInterval(function(){
       //若是人工则开始计算超时时间
       if(sys.config.currentState==2){
+        sys.msg.msgOvertimeTask();
         clearInterval(_timer);
-        sys.msg.adminTipTime();//客服超时提示
-        sys.msg.userTipTime();//用户超时提示
       }
     },1000);
 
