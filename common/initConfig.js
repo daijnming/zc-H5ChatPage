@@ -226,7 +226,8 @@ var initConfig = function() {
                 email : urlParams['email'] ? urlParams['email'] : '',
                 visitUrl : urlParams['visitUrl'] ? urlParams['visitUrl'] : Comm.preURLLink,
                 visitTitle : urlParams['visitTitle'] ? urlParams['visitTitle'] : '',
-                face : urlParams['face'] ? urlParams['face'] : getHanderImg(),//默认用户头像
+                // face : urlParams['face'] ? urlParams['face'] : getHanderImg(),//默认用户头像
+                face : urlParams['face'] ? urlParams['face'] : '',//默认用户头像
                 back : urlParams['back'] ? urlParams['back'] : '',
                 realname : urlParams['realname'] ? urlParams['realname'] : '',
                 weibo : urlParams['weibo'] ? urlParams['weibo'] : '',
@@ -260,41 +261,7 @@ var initConfig = function() {
         });
         return promise;
     };
-    //获取头像
-    var getHanderImg= function(){
-      var urlParams = Comm.getQueryParam();
-      var img;
-      switch (urlParams['source']) {
-        case 0:
-          //pc
-          img = 'http://img.sobot.com/chatres/common/face/pcType.png';
-          break;
-        case 1:
-        //微信
-        img = 'http://img.sobot.com/chatres/common/face/weixinType.png';
-          break;
-        case 2:
-        //app
-        img = 'http://img.sobot.com/chatres/common/face/appType.png';
-          break;
-        case 3:
-        //微博
-        img = 'http://img.sobot.com/chatres/common/face/weiboType.png';
-          break;
-        case 4:
-        //h5
-        img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-        case 5:
-        //融云
-        img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-        default:
-          img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-      }
-      return img;
-    };
+  
     var getLeaveMessage = function(params,global) {
         var arr = ['leaveMessage.html'];
         var count = 0;
@@ -358,22 +325,22 @@ var initConfig = function() {
                 url : api.init_url,
                 dataType : "json",
                 data : {
-                    sysNum : That.cacheInfo.sysNum,
-                    source : That.cacheInfo.userInfo.source,
-                    partnerId : That.cacheInfo.userInfo.partnerId,
-                    tel : That.cacheInfo.userInfo.tel,
-                    email : That.cacheInfo.userInfo.email,
-                    uname : That.cacheInfo.userInfo.uname,
-                    visitTitle : That.cacheInfo.userInfo.visitTitle,
-                    visitUsrl : That.cacheInfo.userInfo.visitUrl,
-                    face : That.cacheInfo.userInfo.face,
-                    realname : That.cacheInfo.userInfo.realname,
-                    weibo : That.cacheInfo.userInfo.weibo,
-                    weixin : That.cacheInfo.userInfo.weixin,
-                    qq : That.cacheInfo.userInfo.qq,
-                    sex : That.cacheInfo.userInfo.sex,
-                    birthday : That.cacheInfo.userInfo.birthday,
-                    remakr : That.cacheInfo.userInfo.remark
+                    sysNum : decodeURI(That.cacheInfo.sysNum),
+                    source : decodeURI(That.cacheInfo.userInfo.source),
+                    partnerId :decodeURI( That.cacheInfo.userInfo.partnerId),
+                    tel :decodeURI( That.cacheInfo.userInfo.tel),
+                    email :decodeURI( That.cacheInfo.userInfo.email),
+                    uname :decodeURI( That.cacheInfo.userInfo.uname),
+                    visitTitle :decodeURI( That.cacheInfo.userInfo.visitTitle),
+                    visitUsrl :decodeURI( That.cacheInfo.userInfo.visitUrl),
+                    face :decodeURI( That.cacheInfo.userInfo.face),
+                    realname :decodeURI( That.cacheInfo.userInfo.realname),
+                    weibo :decodeURI( That.cacheInfo.userInfo.weibo),
+                    weixin :decodeURI( That.cacheInfo.userInfo.weixin),
+                    qq :decodeURI( That.cacheInfo.userInfo.qq),
+                    sex :decodeURI( That.cacheInfo.userInfo.sex),
+                    birthday :decodeURI( That.cacheInfo.userInfo.birthday),
+                    remakr :decodeURI( That.cacheInfo.userInfo.remark)
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;

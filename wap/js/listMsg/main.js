@@ -89,7 +89,7 @@ var ListMsgHandler = function() {
             itemLan = 0,
             itemChild = '',
             msgHtml = '',
-            userLogo = 'http://img.sobot.com/console/common/face/user.png',
+            userLogo = '',
             customLogo = '',
             oldTime='',//上一次时间
             tempHtml = '',
@@ -224,6 +224,7 @@ var ListMsgHandler = function() {
     var bindMsg = function(msgType,data){
       // console.log(data);
       var msgHtml='',
+          userLogo = global.userInfo.face?global.userInfo.face:getHanderImg(),
           comf;
       if(data){
         switch (msgType) {
@@ -239,9 +240,8 @@ var ListMsgHandler = function() {
               // if(messageHandler.config.currentState==2){
                 // messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
               // }
-
               comf = $.extend({
-                  userLogo : global.userInfo.face,
+                  userLogo :userLogo,
                   userMsg : QQFace.analysis(msg),
                   date:data[0]['date'],
                   msgId:data[0]['dateuid'],
@@ -310,7 +310,7 @@ var ListMsgHandler = function() {
             messageHandler.config.uploadImgToken = data[0]['token'];
             messageHandler.config.msgSendACK.push(messageHandler.config.uploadImgToken);//暂存发送消息id
             comf = $.extend({
-               userLogo : global.userInfo.face,
+               userLogo : userLogo,
                uploadImg : data[0]['result'],
                progress:0,
                msgLoading:MSGSTATUSCLASS.MSG_CLOSE,
@@ -363,6 +363,41 @@ var ListMsgHandler = function() {
         $('.js-title').text(data[data.length-1].content[0]['senderName']);
       }
       showHistoryMsg(data,1);
+    };
+    //获取头像
+    var getHanderImg= function(){
+      var urlParams = Comm.getQueryParam();
+      var img;
+      switch (urlParams['source']) {
+        case 0:
+          //pc
+          img = 'http://img.sobot.com/chatres/common/face/pcType.png';
+          break;
+        case 1:
+        //微信
+        img = 'http://img.sobot.com/chatres/common/face/weixinType.png';
+          break;
+        case 2:
+        //app
+        img = 'http://img.sobot.com/chatres/common/face/appType.png';
+          break;
+        case 3:
+        //微博
+        img = 'http://img.sobot.com/chatres/common/face/weiboType.png';
+          break;
+        case 4:
+        //h5
+        img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+        case 5:
+        //融云
+        img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+        default:
+          img = 'http://img.sobot.com/chatres/common/face/moType.png';
+          break;
+      }
+      return img;
     };
     /********************************************************************************/
     /********************************************************************************/
