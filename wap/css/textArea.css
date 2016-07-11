@@ -89,10 +89,17 @@ li {
     text-align: center;
     margin-right: -4px;
 }
-.add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
+.add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.artificial,.addList .satisfactionbg,.addList .leaveMessagebg{
     background-image: url(../images/icoGroup2X.png);
     background-repeat:no-repeat;
     background-size:356px 276px;
+}
+.artificial {
+    display:inline-block;
+    height: 32px;
+    width: 45px;
+    margin-left:-9px;
+    background-position:-5px -61px;
 }
 .add {
     display:inline-block;
@@ -184,12 +191,12 @@ li {
 .addList .uploadImgbg:hover{
     background-position:-217px -44px;
 }
-.addList .artificialbg{
+/* .addList .artificialbg{
     background-position: 7px -44px;
 }
 .addList .artificialbg:hover{
     background-position: -67px -44px;
-}
+} */
 .addList .satisfactionbg{
     background-position:8px -120px;
 }
@@ -304,7 +311,7 @@ iphone6
 } */
 /* iphone6 Plus */
 @media (min-device-width : 414px){
-    .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.addList .artificialbg,.addList .satisfactionbg,.addList .leaveMessagebg{
+    .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.artificial,.addList .satisfactionbg,.addList .leaveMessagebg{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
     }

@@ -25,6 +25,14 @@ function evaluate(currentStatus,global) {
     var toggleActiveRepeat=function(){
         $(this).toggleClass("active")
     };
+    var textareaMaxlen = function (targetID, maxLen) {
+        // 限制留言框最大字符数为200
+        document.getElementById(targetID).addEventListener('input', function () {
+            if (this.value.length > maxLen) {
+                this.value = this.value.substr(0, maxLen);
+            }
+        }, false);
+    };
     var sobotSetInnerStepOneHtml = function() {
         Alert = new Alert({
             'title' : '机器人是否解决了您的问题',
@@ -35,9 +43,11 @@ function evaluate(currentStatus,global) {
             }
         });
         Alert.show();
-    }
+    };
     //自定义html添加到弹窗中
     var sobotSetInnerStepTwoHtml = function() {
+        //先将第一步弹窗移除
+        $(".js-modeDialog").remove();
         Alert.show();
         var conf={};
         var _html = doT.template(template.sobotEvaluate_selfHtml)(conf);
@@ -48,11 +58,8 @@ function evaluate(currentStatus,global) {
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
         $(".submit").on("click",EvaluateAjaxHandler);
-        $(".js-evaluateInner").keydown(function(){
-            if($(this).val().length>200){
-                $(this).val($(this).val().substring(0,200))
-            }
-        })
+        textareaMaxlen("js-evaluateInner",200);
+        
     };
     var humanSetInnerStepOneHtml=function(){
         Alert = new Alert({
@@ -159,11 +166,7 @@ function evaluate(currentStatus,global) {
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
         $(".js-submit").on("click",EvaluateAjaxHandler);
-         $(".js-evaluateInner").keydown(function(){
-            if($(this).val().length>200){
-                $(this).val($(this).val().substring(0,200))
-            }
-        })
+        textareaMaxlen("js-evaluateInner",200);
     };
     var EvaluateAjaxHandler=function(){
             remark=$(".js-evaluateInner").val();
