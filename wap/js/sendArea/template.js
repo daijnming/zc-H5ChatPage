@@ -10,7 +10,7 @@ var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
 									'<span class="tag3">一问三不知</span>'+
 									'<span class="tag4" style="margin-right:0">不礼貌</span>'+
 								'</div>'+
-								'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
+								'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 								'<a class="submit js-submit" href="#">提交评价</a>'+
 							 '</div>';
 var humanOne_selfHtml = '<div class="evaluate js-evaluate">'+
@@ -41,7 +41,7 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 								'<span class="tag3">一问三不知</span>'+
 								'<span class="tag4" style="margin-right:0">不礼貌</span>'+
 							'</div>'+
-							'<textarea class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
+							'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 							'<a class="submit js-submit" href="#">提交评价</a>'+
 						'</div>';
 var leaveMessageBtn= '<a class="js-leaveMsgBtn" href="'+

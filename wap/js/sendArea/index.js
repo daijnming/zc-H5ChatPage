@@ -44,24 +44,24 @@ function TextArea(window) {
             transferFlag=1;
             $(".qqFaceTip").removeClass("activehide");
             //上传图片按钮
-            $uploadImg.show();
+            $uploadImg.removeClass("activehide");
             //满意度评价
-            $satisfaction.show();
+            $satisfaction.removeClass("activehide");
             //提示文本
-            $textarea.attr("placeholder","当前是人工")
+            $textarea.attr("placeholder","")
         }else if(currentStatus == 'robot'){
             transferFlag=0;
-            $uploadImg.hide();
-            $satisfaction.show();
-            $textarea.attr("placeholder","点击“+”号可转人工客服")
+            $uploadImg.addClass("activehide");
+            $satisfaction.removeClass("activehide");
+            $textarea.attr("placeholder","请简要描述您的问题")
         }
     };
     var changeStatusHandler=function(data){
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
-            $artificial.hide();
+            $artificial.addClass("activehide");
         }else{
-            $artificial.show();
+            $artificial.removeClass("activehide");
         }
     }
     //用户输入，工作台提示
@@ -98,12 +98,10 @@ function TextArea(window) {
             $(".add").addClass("activehide")
             $(".addhover").addClass("activehide")
             hideChatAreaHandler();
-            //$textarea.css("width","78%");
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
             $(".add").removeClass("activehide")
-            //$textarea.css("width","83%");
         }
         if(document.activeElement.id=="js-textarea"){
             focusStatus=true;
@@ -115,12 +113,10 @@ function TextArea(window) {
             $sendBtn.removeClass("activehide")
             $(".add").addClass("activehide")
             $(".addhover").addClass("activehide")
-            //$textarea.css("width","67%");
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
             $(".add").removeClass("activehide")
-           // $textarea.css("width","83%");
             $textarea.blur();
             $textarea.focus();
         }
@@ -135,6 +131,7 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
+            str=str.trim();
              _html=ZC_Face.analysis(str);
              isSpeak=true;
             //xss
@@ -327,8 +324,7 @@ function TextArea(window) {
         var textarea=document.getElementById('js-textarea');
         textarea.scrollTop = textarea.scrollHeight;
         //提示文本
-        //placeholder($textarea,"当前是人工");
-        $textarea.attr("placeholder","当前是人工")
+        //$textarea.attr("placeholder","当前是人工")
         //显示发送按钮
         manualmodeButton();
         //调整窗体高度
@@ -486,10 +482,28 @@ function TextArea(window) {
             autoSizePhone();
         }
     };
+    var textareaMaxlen = function () {
+        // 限制留言框最大字符数为200
+        document.getElementById("js-textarea").addEventListener('input', function () {
+            //console.log($(".js-textarea").text().length)
+            if ($textarea.text().length > 1024) {
+                $textarea.text($textarea.text().substring(0,1024))
+            }
+        }, false);
+    };
    /* var hideplaceholder=function(){
         $placeholder.hide();
         $textarea.focus();
     };*/
+    var filterImage=function(e){
+        console.log(e.srcElement.innerText);
+        //如果为空 说明粘的是图片
+        /*var innerText = e.srcElement.innerText;
+        if(innerText==""){
+            $textarea.html("");
+        }*/
+       
+    };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
         $sendBtn = $(".js-sendBtn");
@@ -549,8 +563,9 @@ function TextArea(window) {
         $newMessage.on("click",newMessage);
         //评价弹窗
         $satisfaction.on("click",evaluateHandler);
-        //点击placeholder消失
-        //$placeholder.on("click",hideplaceholder)
+        //过滤粘贴板中的图片
+        $textarea.on("paste",filterImage);
+        
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -570,6 +585,7 @@ function TextArea(window) {
         $(".qqFaceTip").addClass("activehide");
         $(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
+   
     };
     (function(){
         parseDOM();
@@ -577,6 +593,8 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //改变当前状态
         listener.on("core.statechange",statusHandler);
+         //设置输入框最大输入字符
+        textareaMaxlen();
         
     })();
     listener.on("core.onload", function(data) {

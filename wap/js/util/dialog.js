@@ -64,9 +64,6 @@ function Dialog(spec) {
         //灰层要和内容分开，否则输入框弹起，内容不跟随弹起，导致文本被键盘遮住
         $(document.body).append($layer);
         $(document.body).append($AlertTemplate_html);
-        /*$(".js-modeDialog").animate({
-            'opacity' : 1
-        },300);*/
         bindListener();
         position();
     };
