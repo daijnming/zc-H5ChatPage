@@ -156,9 +156,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+data[0]['token']);
-      $div.find('p img:first-child').animate({'opacity':'0'},500,function(){
-        $div.find('p').html(data[0]['answer']);
-      });
+      $div.find('p').html(data[0]['answer']);
+      // $div.find('p img:first-child').animate({'opacity':'0'},100,function(){
+      //   $div.find('p').html(data[0]['answer']);
+      // });
       sys.config.uploadImgToken='';//置空 一个流程完成
     },
     //会话结束判断
