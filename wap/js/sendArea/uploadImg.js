@@ -29,6 +29,13 @@ function uploadImg() {
             reader.onload = function(e){
                 var tp=+new Date();
                 var token= currentUid + tp;
+                var fileRead = e.target.result;
+                //展示本地图
+                listener.trigger("sendArea.createUploadImg",[{
+                    'result' : fileRead,
+                    'date':tp,
+                    'token':token
+                }])
                 //this.result 本地图片的数据流
                 lrz(file, {
                     quality: 0.7//传4.82M剩于123k
@@ -43,11 +50,11 @@ function uploadImg() {
                     }
                     oData.append("sysNum",sysNum);
                     oData.append("base64",results.base64);
-                    listener.trigger("sendArea.createUploadImg",[{
+                    /*listener.trigger("sendArea.createUploadImg",[{
                         'result' : results.base64,
                         'date':tp,
                         'token':token
-                    }])
+                    }])*/
                      //上传,延迟一毫秒，先让图片在页面加载
                     setTimeout(function(){onAjaxUploadUpHandler(oData,tp,token)},100)
                 }).catch(function (err) {
@@ -72,7 +79,7 @@ function uploadImg() {
                 if (e.lengthComputable) {
                     var iPercentComplete = Math.round(e.loaded * 100 / e.total);
                     var percentage=iPercentComplete.toString();
-                    console.log(percentage);
+                    //console.log(percentage);
                     listener.trigger('sendArea.uploadImgProcess',{"percentage":percentage,"token":token}); //
                 } else {
                     //document.getElementById('progress').innerHTML = '无法计算';
@@ -80,7 +87,7 @@ function uploadImg() {
             }
             , false);
         oXHR.open('POST','/chat/webchat/fileuploadBase64.action');
-        console.log("我是base64上传");
+        //console.log("我是base64上传");
         //中止上传
         listener.on('leftMsg.closeUploadImg',function(){
             oXHR.abort();
@@ -89,9 +96,9 @@ function uploadImg() {
         oXHR.onreadystatechange = function(req){
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
-                    console.log('base64上传成功');
+                   // console.log('base64上传成功');
                     var url = JSON.parse(req.target.response).url;
-                    var img='<img class="webchat_img_upload uploadedFile" src="'+url+'">';
+                    var img=url/*'<img class="webchat_img_upload uploadedFile" src="'+url+'">'*/;
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'answer' : img,
                             'date':tp,
@@ -133,7 +140,7 @@ function uploadImg() {
             if(req.target.readyState == 4){
                 if(req.target.status == 200){
                     var url = JSON.parse(req.target.response).url;
-                    var img='<img class="webchat_img_upload uploadedFile" src="'+url+'">';
+                    var img=url/*'<img class="webchat_img_upload uploadedFile" src="'+url+'">'*/;
                         listener.trigger('sendArea.uploadImgUrl',[{
                             'answer' : img,
                             'date':tp,
