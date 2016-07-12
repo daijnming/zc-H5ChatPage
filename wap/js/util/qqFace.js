@@ -24,7 +24,9 @@ function ZC_Face() {
         //集合如果不存在，则创建
         if($('#faceBox').length <= 0) {
             var flag=0;
-            var str='<div id="faceBox" class="face">';
+            //ios下禁止复制粘贴
+            // unselectable="on" style="-moz-user-select:none;-webkit-user-select:none;" onselectstart="return false;"
+            var str='<div id="faceBox" class="face" unselectable="on" style="-moz-user-select:none;-webkit-user-select:none;" onselectstart="return false;">';
             for(var a in tip) { 
                 flag+=1;
                 if(flag==27){
