@@ -100,14 +100,15 @@ var ListMsgHandler = function() {
                 itemLan = item.length;
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
-                    //过滤 尼玛 忘记过滤什么了
-                    // var $tmp = $('<div></div>').html(itemChild.msg);
-                    // itemChild.msg = $tmp.text();
                     var index = itemChild.msg.indexOf('uploadedFile');
                     var res;
                     if(index>=0){
                       //图片，文件 上传
-                      res = $('<div></div>').html(itemChild.msg).text();
+                      if(itemChild.msg.indexOf('<img')>=0){
+                        res = itemChild.msg;
+                      }else{
+                        res = $('<div></div>').html(itemChild.msg).text();
+                      }
                       // res = itemChild.msg;
                     }else if(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0){
                       //富文本
