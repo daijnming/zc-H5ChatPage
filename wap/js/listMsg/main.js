@@ -119,7 +119,7 @@ var ListMsgHandler = function() {
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
-                            'userLogo' : itemChild.senderFace!='null'?itemChild.senderFace:imgHanlder.userLogo,
+                            'userLogo' : itemChild.senderFace?itemChild.senderFace:imgHanlder.userLogo,
                             'userMsg' : QQFace.analysis(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
@@ -135,7 +135,7 @@ var ListMsgHandler = function() {
                           msgHtml = messageHandler.msg.sugguestionsSearch(itemChild.sdkMsg,true);
                         }else{
                           comf = $.extend({
-                              'customLogo' : itemChild.senderFace!='null'?itemChild.senderFace:global.apiConfig.robotLogo,
+                              'customLogo' : itemChild.senderFace?itemChild.senderFace:global.apiConfig.robotLogo,
                               'customName' : itemChild.senderName,
                               'customMsg' : QQFace.analysis(res),
                               'date':itemChild.t
@@ -147,7 +147,10 @@ var ListMsgHandler = function() {
                     var curTime = new Date();
                     var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
                     if(oldTime){
-                      var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
+                      // var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
+                      var t1 = oldTime.replace(/-/g,'/');
+                      var t2 = itemChild.ts.replace(/-/g,'/');
+                      var _m = Math.abs(new Date(t1)- new Date(t2))/1000/60;
                       if(Number(_m)>1){
                         //大于一分钟  0 当天  1上一天 2更久历史
                         var type;
