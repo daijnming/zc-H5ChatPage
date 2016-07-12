@@ -50,7 +50,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var QQFace = require('../util/qqFace.js')();
   var Comm = require('../../../common/comm.js');
   var fnEvent = require('../../../common/util/listener.js');
-  require('./pinchzoom.js');
 
   sys.msg = {
     //相关搜索方法
