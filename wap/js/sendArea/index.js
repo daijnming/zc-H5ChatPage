@@ -491,14 +491,9 @@ function TextArea(window) {
         $placeholder.hide();
         $textarea.focus();
     };*/
-    var filterImage=function(e){
-        //console.log(e.srcElement.innerText);
-        //如果为空 说明粘的是图片
-        /*var innerText = e.srcElement.innerText;
-        if(innerText==""){
-            $textarea.html("");
-        }*/
-       
+    //禁止输入框滑动，ios下有bug
+    var noSliding=function(){
+        return false;
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -561,8 +556,8 @@ function TextArea(window) {
         $newMessage.on("click",newMessage);
         //评价弹窗
         $satisfaction.on("click",evaluateHandler);
-        //过滤粘贴板中的图片
-        $textarea.on("paste",filterImage);
+        //禁止滑动输入框
+        $chatArea.on('touchmove',noSliding)
         
     };
     var onEmotionClickHandler = function() {
