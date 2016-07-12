@@ -86,7 +86,6 @@ function TextArea(window) {
         //最大输入长度1024
         var str = $textarea.text();
         str=str.trim();
-        console.log(str.length)
         if (str.length > 1024) {
             $textarea.text(str.substring(0,1024))
         }
@@ -135,8 +134,6 @@ function TextArea(window) {
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
         str=str.trim();
-        console.log(str.length)
-       
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
@@ -227,7 +224,7 @@ function TextArea(window) {
                     $(".qqFaceTip").removeClass("activehide")
                 }
                 autoSizePhone();
-            },100)
+            },400)
         }
         focusStatus=false;
     };
@@ -264,7 +261,7 @@ function TextArea(window) {
                     }
                 }
                 autoSizePhone();
-            },100)
+            },400)
         }
         focusStatus=false;
     };
@@ -585,6 +582,7 @@ function TextArea(window) {
         $(".qqFaceTip").addClass("activehide");
         $(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
+    
    
     };
     (function(){
