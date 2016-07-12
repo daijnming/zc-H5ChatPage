@@ -447,8 +447,8 @@ function TextArea(window) {
     };
     var hideKeyboard=function(){
         //会话没结束的时候点击屏幕输入框失去焦点
+        $textarea.blur();
         if(!sessionEnd){
-            $textarea.blur();
             $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
             var _text = $textarea.text();
             if(transferFlag==0){
