@@ -358,7 +358,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var tmpHtml = doT.template(msgTemplate.showMsgLayer)(comf);
       $(document.body).append(tmpHtml);
 
-      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},200,function(){
+      $('.js-showMsgLayer').animate({'transform':'scale(1)','opacity':'1'},300,function(){
             var $layer = $('.js-showMsgLayer');
             var $img = $('.js-showMsgLayer').find('img');
             $img.css({'margin-top':($layer.height() - $img.height())/2 + 'px','opacity':'1'});
