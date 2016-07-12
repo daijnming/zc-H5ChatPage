@@ -60,6 +60,7 @@ function TextArea(window) {
         //hide,转人工按钮隐藏,当前为人工模式
         if(data.action=="hide"){
             $artificial.addClass("activehide");
+            $uploadImg.removeClass("activehide");
         }else{
             $artificial.removeClass("activehide");
         }
@@ -82,6 +83,12 @@ function TextArea(window) {
         },500)
     };
     var showSendBtnHandler = function(evt) {
+        //最大输入长度1024
+        var str = $textarea.text();
+        str=str.trim();
+        if (str.length > 1024) {
+            $textarea.text(str.substring(0,1024))
+        }
         //判断当前是否为人工模式
         if(transferFlag==0){
             robotmodeButton();
@@ -126,12 +133,12 @@ function TextArea(window) {
     };
     var onbtnSendHandler = function(evt) {
         var str = $textarea.text();
+        str=str.trim();
         //判断输入框是否为空
         if(str.length == 0 || /^\s+$/g.test(str)) {
             $textarea.html("")
             return false;
         } else {
-            str=str.trim();
              _html=ZC_Face.analysis(str);
              isSpeak=true;
             //xss
@@ -168,13 +175,6 @@ function TextArea(window) {
             $(".add").removeClass("activehide")
         }
         $sendBtn.addClass("activehide")
-        if(transferFlag==0){
-            //$textarea.css("width","83%");
-           
-        }else{
-            //$textarea.css("width","75%");
-             
-        }
         autoSizePhone();
     };
     var sendedKeepFocus=function(){
@@ -240,9 +240,6 @@ function TextArea(window) {
                 $chatArea.removeClass("showChatAdd");
                 $chatAdd.hide();
                 $chatEmotion.css("display","inline-block");
-                /*$chatArea.animate({
-                    bottom : "0"
-                },200);*/
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 if(transferFlag==0){
                     $(".qqFaceTiphover").addClass("activehide");
@@ -269,14 +266,12 @@ function TextArea(window) {
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {
-       // var _bottom="-"+213+"px";
-        //console.log(_bottom);
-       // setTimeout(function(){
+        //setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
-            $chatArea.removeClass("showChatArea").addClass("hideChatArea");/*css({
-                "bottom" : _bottom
-            });*/
+            //不能动画,否则会跟键盘不和谐
+            //$chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
+            $chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
@@ -304,9 +299,8 @@ function TextArea(window) {
                     $sendBtn.addClass("activehide");
                 }
             }
-       //  },200);
+         //},100);
        focusStatus=false;
-       //$(window).scrollTop($("#js-textarea").offset().top-16);  
     };
     //表情、加号切换
     var tabChatAreaHandler=function(){
@@ -335,13 +329,14 @@ function TextArea(window) {
         var _html=$textarea.text();
         if(_html.length==1){
             _html="";
+           
         }else{
             _html=$.trim(_html.substring(0,_html.length-1));
         }
         //$textarea.html("");
         $textarea.text(_html);
-        manualmodeButton();
-        autoSizePhone();
+        //manualmodeButton();
+        //autoSizePhone();
         focusStatus=false
     };
     var onImageUpload = function(data) {
@@ -484,19 +479,19 @@ function TextArea(window) {
     };
     var textareaMaxlen = function () {
         // 限制留言框最大字符数为200
-        document.getElementById("js-textarea").addEventListener('input', function () {
+        /*document.getElementById("js-textarea").addEventListener('input', function () {
             //console.log($(".js-textarea").text().length)
             if ($textarea.text().length > 1024) {
                 $textarea.text($textarea.text().substring(0,1024))
             }
-        }, false);
+        }, false);*/
     };
    /* var hideplaceholder=function(){
         $placeholder.hide();
         $textarea.focus();
     };*/
     var filterImage=function(e){
-        console.log(e.srcElement.innerText);
+        //console.log(e.srcElement.innerText);
         //如果为空 说明粘的是图片
         /*var innerText = e.srcElement.innerText;
         if(innerText==""){
@@ -540,6 +535,8 @@ function TextArea(window) {
         //qq表情
         $emotion.on("click",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
+        // 发送消息
+        document.getElementById("js-textarea").addEventListener('input',showSendBtnHandler, false);
         //$textarea.on("keydown",chatAdminshowtextHandler);
         $textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAddHandler);
@@ -585,6 +582,7 @@ function TextArea(window) {
         $(".qqFaceTip").addClass("activehide");
         $(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
+    
    
     };
     (function(){

@@ -111,6 +111,10 @@
   var onCloseErrorBar = function(){
     $(errorBar).removeClass('show');
   };
+  var onTouchmove = function(e){
+    e.preventDefault();
+    e.stopPropagation();
+  };
   var parseDom=function(){
     topBack = $('.js-header-back');
     topTitle = $('.js-header-back .js-title');
@@ -130,6 +134,7 @@
   var bindListener = function(){
     $(submit).on('click',onSubmit);
     $(closeErrorBar).on('click',onCloseErrorBar);
+    $(successLayer).on('touchmove',onTouchmove);
   };
   //初始化留言页面
   var initConfig = function(){
