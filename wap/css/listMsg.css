@@ -427,11 +427,12 @@ iframe, embed, table {
 .showMsgLayer .msgLayer {
     max-width: 100%;
     margin: 0 auto;
-    margin-top: 50%;
 }
 .showMsgLayer .msgLayer img {
+    display: inline-block;
     width: 100%;
     height: auto;
+    opacity: 0;
 }
 ul,li{
 	list-style:none;
