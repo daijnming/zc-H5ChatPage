@@ -139,6 +139,10 @@ p, ul, li {
     border-radius: 10px;
     text-align: center;
     background: url(../images/msg_loading.gif) no-repeat;
+    -webkit-transform:scale(0.5);
+    -moz-transform:scale(0.5);
+    -ms-transform:scale(0.5);
+    -o-transform:scale(0.5);
     transform: scale(0.5);
 }
 .msgStatus.statusRight {
@@ -159,7 +163,6 @@ p, ul, li {
     margin-top: -7px;
     width: 48px;
     height: 54px;
-    /*transform: scale(0.5);*/
     background-position: 0 -392px;
 }
 .msgStatus.statusRight.msg-close {
@@ -284,16 +287,6 @@ p, ul, li {
 .wrap .header-back .back a {
     color: #fff;
 }
-/*.wrap .header-back .back i::before{
- content: "";
- position: absolute;
- width:0;
- border-width: 6px 12px 10px 0;
- border-color: transparent #fff;
- border-style: solid;
- top:17px;
- left:9px;
- }*/
 .wrap .header-back .back i::before {
     content: '';
     position: absolute;
@@ -350,6 +343,10 @@ p, ul, li {
     background-image: url(../images/msg_loading.gif);
     width: 36px;
     height: 36px;
+    -webkit-transform:scale(0.5);
+    -moz-transform:scale(0.5);
+    -ms-transform:scale(0.5);
+    -o-transform:scale(0.5);
     transform: scale(0.5);
     position: absolute;
     left: 66px;

@@ -325,8 +325,6 @@ var ListMsgHandler = function() {
             break;
         }
         updateChatMsg(msgHtml);
-        scrollHanlder.scroll.refresh();//刷新
-        scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
     };
     //更新聊天记录
@@ -356,6 +354,8 @@ var ListMsgHandler = function() {
           $(this).remove();
         });
       }
+      scrollHanlder.scroll.refresh();//刷新
+      scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
     };
     //加欢迎语
     var getHello = function(data){
