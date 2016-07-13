@@ -267,7 +267,8 @@ p, ul, li {
     background-color: rgb(9, 174, 176);
     font-size: 1em;
     display: none;
-    position: fixed;
+    /*position: fixed;*/
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 10000;
