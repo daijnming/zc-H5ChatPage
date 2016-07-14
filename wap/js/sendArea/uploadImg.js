@@ -40,36 +40,46 @@ function uploadImg() {
                //等待加号关闭，再定位
                 setTimeout(function(){
                      listener.trigger('sendArea.autoSize',$(".js-chatArea"));
-                 },500)
+                 },700)
                 setTimeout(function(){
-                    //this.result 本地图片的数据流
-                    lrz(file, {
-                        quality: 0.9//0.7 传4.82M剩于123k
-                    }).then(function (results) {
-                        // size单位为字节 5M = 5242880
-                        if(results.base64Len >= 5242880) {
-                            //图片过大
-                            //alert("图片大于5M");
-                            var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
-                            listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
-                            return;
-                        }
-                         
-                        oData.append("sysNum",sysNum);
-                        oData.append("base64",results.base64);
-                        /*listener.trigger("sendArea.createUploadImg",[{
-                            'result' : results.base64,
-                            'date':tp,
-                            'token':token
-                        }])*/
-                         //上传,延迟一毫秒，先让图片在页面加载
+                    oData.append("sysNum",sysNum);
+                    //获取扩展名，如果是gif就不让他压缩
+                    var etc = fileRead.substring(fileRead.indexOf("data:image/")+11, fileRead.indexOf(";base64"));
+                    alert(etc);
+                    if(etc="git"){
+                        oData.append("base64",fileRead);
+                        //上传 
                         onAjaxUploadUpHandler(oData,tp,token)
-                    }).catch(function (err) {
-                        console.log('图片压缩失败')
-                    }).always(function () {
-                        //console.log('不管是成功失败，都会执行')
-                    });
-                },1000)
+                    }else{
+                        //this.result 本地图片的数据流
+                        lrz(file, {
+                            quality: 0.9//0.7 传4.82M剩于123k
+                        }).then(function (results) {
+
+                            // size单位为字节 5M = 5242880
+                            if(results.base64Len >= 5242880) {
+                                //图片过大
+                                //alert("图片大于5M");
+                                var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
+                                listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
+                                return;
+                            }
+                            oData.append("base64",results.base64);
+                            //alert(results.base64);
+                            /*listener.trigger("sendArea.createUploadImg",[{
+                                'result' : results.base64,
+                                'date':tp,
+                                'token':token
+                            }])*/
+                             //上传 
+                            onAjaxUploadUpHandler(oData,tp,token)
+                        }).catch(function (err) {
+                            console.log('图片压缩失败')
+                        }).always(function () {
+                            //console.log('不管是成功失败，都会执行')
+                        });
+                    }
+                },1500)
             }
            
         }else{
