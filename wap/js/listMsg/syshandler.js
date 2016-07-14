@@ -113,6 +113,8 @@ var SysmsgHandler = function(msgBind,myScroll){
     //仅人工 客服不在线
     onButtonChange:function(data){
       console.log(data);
+      //FIXME 1：仅人工 客服不在线 开启留言功能 直接跳转留言页 2：若排除则继续当前页排除 3：技能组大于1时先弹技能组 再走1OR2
+      
       if(data&&data.data){
         title.text('未接入');
         document.title = '未接入';
