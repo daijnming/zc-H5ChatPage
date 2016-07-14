@@ -119,7 +119,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       (function(timer){
         sendTime=0;
         uploadImgHandler[timer] = setInterval(function(){
-          if(sendTime>=5){//发送超过60秒判断上传失败
+          if(sendTime>=60){//发送超过60秒判断上传失败
             clearInterval(uploadImgHandler[timer]);
             var $uid = $('#userMsg'+timer);
             $uid.removeClass('close msg-close').addClass('error msg-fail');
