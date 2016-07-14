@@ -45,7 +45,7 @@ function uploadImg() {
                     oData.append("sysNum",sysNum);
                     //获取扩展名，如果是gif就不让他压缩
                     var etc = fileRead.substring(fileRead.indexOf("data:image/")+11, fileRead.indexOf(";base64"));
-                    alert(etc);
+                    console.log(etc);
                     if(etc="git"){
                         oData.append("base64",fileRead);
                         //上传 
