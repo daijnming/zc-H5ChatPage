@@ -356,6 +356,13 @@ var ListMsgHandler = function() {
       }
       scrollHanlder.scroll.refresh();//刷新
       scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+      //FIXME 处理android手机截断聊天内容问题 重新渲染一次
+      if(global.UAInfo.UA=='android'){
+        $(wrapBox).css('font-size','1em');
+        setTimeout(function(){
+          $(wrapBox).css('font-size','0.9em');
+        },100);
+      }
     };
     //加欢迎语
     var getHello = function(data){
@@ -411,6 +418,7 @@ var ListMsgHandler = function() {
     //core加载完成
     var onCoreOnload = function(data) {
         global = data[0];
+        // alert(global.UAInfo.UA+":"+global.browser.browser);
         console.log(global);
         initConfig();//配置参数
         //FIXME bindListener

@@ -111,6 +111,9 @@ p, ul, li {
     background-color: rgba(50,50,50,0.8) !important;
     text-align: center;
 }
+.msgOuter .shadowLayer.hide,.msgOuter .progressLayer.hide{
+  display: none;
+}
 .msgOuter .progressLayer {
     position: absolute;
     top: 0;

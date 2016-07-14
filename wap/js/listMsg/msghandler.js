@@ -119,9 +119,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       (function(timer){
         sendTime=0;
         uploadImgHandler[timer] = setInterval(function(){
-          if(sendTime>=60){//发送超过60秒判断上传失败
+          if(sendTime>=5){//发送超过60秒判断上传失败
             clearInterval(uploadImgHandler[timer]);
-            $('#userMsg'+timer).removeClass('close msg-close').addClass('error msg-fail');
+            var $uid = $('#userMsg'+timer);
+            $uid.removeClass('close msg-close').addClass('error msg-fail');
+            //发送失败去掉蒙层
+            sys.msg.maskLayer($uid,false);
             fnEvent.trigger('leftMsg.closeUploadImg',timer);
           }
           sendTime +=1;
@@ -129,6 +132,18 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       })(data[0]['token']);
 
       msgBind(4,data);
+    },
+    //处理图片失败遮罩问题
+    //openLayer 打开蒙板
+    maskLayer:function(ele,showMaskLayer){
+      if(showMaskLayer){
+        ele.parents('div.rightMsg').find('.js-shadowLayer').removeClass('hide');
+        ele.parents('div.rightMsg').find('.js-progressLayer').removeClass('hide');
+      }else{
+        ele.parents('div.rightMsg').find('.js-shadowLayer').addClass('hide');
+        ele.parents('div.rightMsg').find('.js-progressLayer').addClass('hide');
+      }
+
     },
     onUpLoadImgProgress:function(ret){
       var data = ret.percentage;
@@ -153,14 +168,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //回传图片路径地址
     onUploadImgUrl:function(data){
-      // console.log(data);
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
       var $div = $('#img'+data[0]['token']);
       var $img = $div.find('p img');
       $img.attr('src',data[0]['answer']);
-      // $div.find('p img:first-child').animate({'opacity':'0'},100,function(){
-      //   $div.find('p').html(data[0]['answer']);
-      // });
       sys.config.uploadImgToken='';//置空 一个流程完成
     },
     //会话结束判断
@@ -247,6 +258,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('error msg-fail').addClass('msg-loading');
           answer = that.prev().text().trim();
         }else{
+          //发送失败去掉蒙层
+          sys.msg.maskLayer(that,true);
           //图片
           sendType='img';
           that.removeClass('error msg-fail').addClass('msg-close close');//图片重发过程可点击取消
@@ -278,6 +291,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         //点击关闭按钮 重新发送
         that.removeClass('close msg-close').addClass('msg-fail error');
         fnEvent.trigger('leftMsg.closeUploadImg',msgId);
+        //发送失败去掉蒙层
+        sys.msg.maskLayer(that,false);
       }
     },
     //来自于客服的消息
