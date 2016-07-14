@@ -39,6 +39,7 @@ function transfer(global,promise,queueing) {
                 promise.resolve(null);
             },0);
         } else if(global.urlParams.groupId && global.urlParams.groupId.length) {
+
             //参数中配置了groupId
             var groupId = global.urlParams.groupId;
             setTimeout(function() {

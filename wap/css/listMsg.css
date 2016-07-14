@@ -400,6 +400,8 @@ p, ul, li {
     display: inline-block;
     margin: 0%;
     vertical-align: middle;
+    width: 23px;
+    height: 23px;
 }
 /******theme end ******/
 /****统一超链接颜色***/
