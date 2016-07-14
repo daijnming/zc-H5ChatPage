@@ -49,7 +49,7 @@ function evaluate(currentStatus,global) {
         //先将第一步弹窗移除
         $(".js-modeDialog").remove();
         Alert.show();
-        var conf={};
+        var conf={"inner1":"答非所问","inner2":"理解能力差","inner3":"一问三不知","inner4":"不礼貌"};
         var _html = doT.template(template.sobotEvaluate_selfHtml)(conf);
         Alert.setInner(_html);
         $(".js-noques").addClass("active");
@@ -116,7 +116,7 @@ function evaluate(currentStatus,global) {
     };
     var humanSetInnerStepTwoHtml=function(iStar){
         //Alert.show();
-        var conf={};
+        var conf={"inner1":"服务态度差","inner2":"回答不及时","inner3":"没解决问题","inner4":"不礼貌"};
         var _html = doT.template(template.humanTwo_selfHtml)(conf);
 
         Alert.setInner(_html);

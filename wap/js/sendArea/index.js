@@ -32,9 +32,9 @@ function TextArea(window) {
         //会话是否结束, 用于阻止某些事件
         sessionEnd=false,
         //判断用户是否说过话
-        isSpeak=false,
-        //是否评价过
-        isEvaluated=false;
+        //isSpeak=false,
+        //是否评价过 -1表示用户没有说过话，0表示说过话没有评论过，1表示评论过
+        isEvaluated= -1;
         //0为机器人，1为人工
     var transferFlag=0;
     //传给聊天的url
@@ -140,7 +140,7 @@ function TextArea(window) {
             return false;
         } else {
              _html=ZC_Face.analysis(str);
-             isSpeak=true;
+            // isSpeak=true;
             //xss
             var s = "";
             s = str.replace(/&/g, "&amp;");   
@@ -270,8 +270,8 @@ function TextArea(window) {
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
             //不能动画,否则会跟键盘不和谐
-            //$chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
-            $chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
+            $chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
+            //$chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
@@ -359,7 +359,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var artificialHandler=function(){
-        isSpeak=false;
+        //isSpeak=false;
         listener.trigger('sendArea.artificial');
         focusStatus=false;
     };
@@ -418,27 +418,28 @@ function TextArea(window) {
             dataType : "json",
             data : {
                 cid : global.apiInit.cid,
+                uid : global.apiInit.uid,
                 type: transferFlag
             },
             success:function(req){
-                isEvaluated=req.isComment
-                 //是否评价过
-                if(isEvaluated==false){
-                    if(isSpeak==true){
-                            //防止用户快速多次点击弹层
-                            var conf={};
-                            var _html = doT.template(template.layerOpacity0)(conf);
-                            $(document.body).append(_html);
-                            //评价
-                            evaluate(transferFlag,global);
-                    }else{
-                        var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
-                        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
-                    }
-                 }else{
+                isEvaluated=req.isComment;
+                //console.log(req.isComment);
+                 //1表示评论过
+                if(isEvaluated==1){
                     var evaluateSystem={type:'system',status:'evaluated',data:{content:'您已完成评价'}}
                     listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+                }else if(isEvaluated==0){//0表示说过话没有评论过
+                    //防止用户快速多次点击弹层
+                    var conf={};
+                    var _html = doT.template(template.layerOpacity0)(conf);
+                    $(document.body).append(_html);
+                    //评价
+                    evaluate(transferFlag,global);
+                }else{//-1表示用户没有说过话
+                    var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
+                    listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
                 }
+                
                 focusStatus=false;
             }
         });
@@ -557,8 +558,9 @@ function TextArea(window) {
         //评价弹窗
         $satisfaction.on("click",evaluateHandler);
         //禁止滑动输入框
-        $chatArea.on('touchmove',noSliding)
-        
+        $chatArea.on('touchmove',noSliding);
+        //上传图片收起加号域
+        listener.on("sendArea.closeAddarea",hideChatAreaHandler);
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -587,6 +589,7 @@ function TextArea(window) {
         listener.on("core.statechange",statusHandler);
          //设置输入框最大输入字符
         textareaMaxlen();
+
         
     })();
     listener.on("core.onload", function(data) {
