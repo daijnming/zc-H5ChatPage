@@ -121,7 +121,7 @@ var ListMsgHandler = function() {
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace?itemChild.senderFace:imgHanlder.userLogo,
-                            'userMsg' : QQFace.analysis(res),
+                            'userMsg' : QQFace.analysisRight(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
@@ -400,7 +400,7 @@ var ListMsgHandler = function() {
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         initScroll();//初始化&配置scroll
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
-        systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
+        systemHandler = SystemHandler(global,bindMsg,scrollHanlder.scroll);
 
     };
     //初始化Dom
