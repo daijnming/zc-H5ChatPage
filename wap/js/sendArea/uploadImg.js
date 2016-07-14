@@ -15,14 +15,14 @@ function uploadImg() {
     var parseDOM = function() {
     };
     var onFormDataUpHandler=function(){
+        //展示图片之前先隐藏加号  
+        //listener.trigger('sendArea.closeAddarea');
         var oData = new FormData();
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        
-        //console.log(file);
-        //判断上传文件是否为图片
-        if(/^(image)/.test(file.type)){
+        //判断上传文件是否为图片，file.type==""兼容魅族选择图库--wallpapers--任意图片--完成
+        if(/^(image)/.test(file.type)||file.type==""){
             //创建本地图片数据流
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -35,33 +35,41 @@ function uploadImg() {
                     'result' : fileRead,
                     'date':tp,
                     'token':token
-                }])
-                //this.result 本地图片的数据流
-                lrz(file, {
-                    quality: 0.7//传4.82M剩于123k
-                }).then(function (results) {
-                    // size单位为字节 5M = 5242880
-                    if(results.base64Len >= 5242880) {
-                        //图片过大
-                        //alert("图片大于5M");
-                        var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
-                        listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
-                        return;
-                    }
-                    oData.append("sysNum",sysNum);
-                    oData.append("base64",results.base64);
-                    /*listener.trigger("sendArea.createUploadImg",[{
-                        'result' : results.base64,
-                        'date':tp,
-                        'token':token
-                    }])*/
-                     //上传,延迟一毫秒，先让图片在页面加载
-                    setTimeout(function(){onAjaxUploadUpHandler(oData,tp,token)},100)
-                }).catch(function (err) {
-                    console.log('图片压缩失败')
-                }).always(function () {
-                    //console.log('不管是成功失败，都会执行')
-                });
+                }]);
+                listener.trigger("sendArea.closeAddarea");
+               //等待加号关闭，再定位
+                setTimeout(function(){
+                     listener.trigger('sendArea.autoSize',$(".js-chatArea"));
+                 },500)
+                setTimeout(function(){
+                    //this.result 本地图片的数据流
+                    lrz(file, {
+                        quality: 0.9//0.7 传4.82M剩于123k
+                    }).then(function (results) {
+                        // size单位为字节 5M = 5242880
+                        if(results.base64Len >= 5242880) {
+                            //图片过大
+                            //alert("图片大于5M");
+                            var imageLarge={type:'system',status:'imageLarge',data:{content:'图片大于5M,不能发送'}}
+                            listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
+                            return;
+                        }
+                         
+                        oData.append("sysNum",sysNum);
+                        oData.append("base64",results.base64);
+                        /*listener.trigger("sendArea.createUploadImg",[{
+                            'result' : results.base64,
+                            'date':tp,
+                            'token':token
+                        }])*/
+                         //上传,延迟一毫秒，先让图片在页面加载
+                        onAjaxUploadUpHandler(oData,tp,token)
+                    }).catch(function (err) {
+                        console.log('图片压缩失败')
+                    }).always(function () {
+                        //console.log('不管是成功失败，都会执行')
+                    });
+                },1000)
             }
            
         }else{
@@ -71,8 +79,10 @@ function uploadImg() {
         }
         //清空文本域
         $(".js-upload").val("");
+          
     }
-    var onAjaxUploadUpHandler=function(oData,tp,token){
+    var onAjaxUploadUpHandler=function(oData,tp,token){  
+        //listener.trigger('sendArea.autoSize',$(".js-chatArea"));
         var oXHR = new XMLHttpRequest();
         oXHR.upload.addEventListener('progress', 
             function(e){
