@@ -139,8 +139,8 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
-             _html=ZC_Face.analysis(str);
-            // isSpeak=true;
+            //过滤表情
+            //ZC_Face.analysisRight(str);
             //xss
             var s = "";
             s = str.replace(/&/g, "&amp;");   

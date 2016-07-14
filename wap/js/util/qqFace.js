@@ -7,6 +7,7 @@ function ZC_Face() {
     var listener = require("../../../common/util/listener.js");
     var weixinJson = require('./face/weixin.json');
     var weixinSymbol = require('./face/weixinsymbol.json');
+    var weixinSymbolRight = require('./face/weixinsymbolRight.json');
     var reg = require('./face/Reg.js');
     //模板引擎
     var template = require('./template.js');
@@ -14,6 +15,7 @@ function ZC_Face() {
     var tip = weixinJson,
     //analysis
     tip2 = weixinSymbol,
+    tip2Right = weixinSymbolRight,
     qqfaceReg = reg.qqfaceReg,
     qqfaceReg2 = reg.qqfaceReg2;
     var that = {};
@@ -68,6 +70,7 @@ function ZC_Face() {
             
         });
     };
+    //工作台和历史记录发送的消息调用
     var analysis = function(str) {//将文本框内的表情字符转化为表情
         //容错处理，防传null
         if(str) {
@@ -75,12 +78,35 @@ function ZC_Face() {
         } else {
             return false;
         }
-
         //将匹配到的结果放到icoAry这个数组里面，来获取长度
         if(icoAry) {
             for(var i = 0;i < icoAry.length;i++) {
                 var ico = qqfaceReg2.exec(str);
+                console.log(ico[0]);
                 var pathname = tip2[ico[0]];
+                //重新匹配到第一个符合条件的表情字符
+                str = str.replace(qqfaceReg2,'<img class="faceimg" src="/wap/images/qqarclist/' + pathname + '.png" border="0" />');
+                //str = str.replace(qqfaceReg2,'<span class="msgfaceIco faceIco faceIco'+pathname+'" /></span>');
+
+            }
+        }
+        //console.log(str);
+        //listener.trigger('sendArea.sendfaceStr',str)
+        return str;
+    };
+    //聊天页发送的消息调用
+    var analysisRight = function(str) {//将文本框内的表情字符转化为表情
+        //容错处理，防传null
+        if(str) {
+            var icoAry = str.match(qqfaceReg);
+        } else {
+            return false;
+        }
+        //将匹配到的结果放到icoAry这个数组里面，来获取长度
+        if(icoAry) {
+            for(var i = 0;i < icoAry.length;i++) {
+                var ico = qqfaceReg2.exec(str);
+                var pathname = tip2Right[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
                 //str = str.replace(qqfaceReg2,'<img class="faceimg" src="' + path + pathname + '.gif" border="0" />');
                 str = str.replace(qqfaceReg2,'<span class="msgfaceIco faceIco faceIco'+pathname+'" /></span>');
@@ -91,6 +117,7 @@ function ZC_Face() {
         //listener.trigger('sendArea.sendfaceStr',str)
         return str;
     };
+    
 
     var hasEmotion = function(str) {//将文本框内的表情字符转化为表情
         return this.qqfaceReg.test(str)
@@ -111,8 +138,8 @@ function ZC_Face() {
     };
 
     init();
-  
     that.analysis = analysis;
+    that.analysisRight = analysisRight;
     return that;
 }
 
