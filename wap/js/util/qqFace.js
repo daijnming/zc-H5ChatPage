@@ -51,7 +51,7 @@ function ZC_Face() {
             $faceGroup.append(str);
              //模拟退格键
             $(".backDelete").unbind();
-            $(".backDelete").bind("touchend",function(){
+            $(".backDelete").bind("click",function(){
                 listener.trigger('sendArea.backDelete');
             });
         }
@@ -59,7 +59,7 @@ function ZC_Face() {
     };
     var sendTotextArea = function() {
         $(".js-faceIco").unbind();
-        $(".js-faceIco").bind("touchend", function(e) {
+        $(".js-faceIco").bind("click", function(e) {
             var elm = e.currentTarget;
             var src = $(elm).attr("data-src");
             var reg = /u([0-9A-Za-z]{5})/;

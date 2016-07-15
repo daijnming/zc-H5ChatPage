@@ -40,13 +40,14 @@ function uploadImg() {
                //等待加号关闭，再定位
                 setTimeout(function(){
                      listener.trigger('sendArea.autoSize',$(".js-chatArea"));
+                     listener.trigger('sendArea.specialModels');
                  },700)
                 setTimeout(function(){
                     oData.append("sysNum",sysNum);
                     //获取扩展名，如果是gif就不让他压缩
                     var etc = fileRead.substring(fileRead.indexOf("data:image/")+11, fileRead.indexOf(";base64"));
-                    console.log(etc);
-                    if(etc="git"){
+                    //console.log(etc);
+                    if(etc=="gif"){
                         oData.append("base64",fileRead);
                         //上传 
                         onAjaxUploadUpHandler(oData,tp,token)

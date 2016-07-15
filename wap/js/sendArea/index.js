@@ -179,14 +179,13 @@ function TextArea(window) {
     };
     var sendedKeepFocus=function(){
         //var t1=document.getElementById("js-textarea");
-        
-         
     };
     var showChatAddHandler=function(){
         //与键盘优化
-        if($chatArea.hasClass("showChatAdd")){
+        if($chatAdd.hasClass("showChatAdd")){
             //隐藏
             hideChatAreaHandler();
+            specialModelsHandler();
             //0为机器人模式
             if(transferFlag==0){
                 $(".addhover").addClass("activehide")
@@ -199,18 +198,12 @@ function TextArea(window) {
                 $(".qqFaceTiphover").addClass("activehide")
                 $(".qqFaceTip").removeClass("activehide")
             }
-
         } else {
             setTimeout(function(){
                 //显示
-                $chatArea.addClass("showChatAdd");
-                $chatArea.removeClass("showChatEmotion");
-                $chatAdd.show();
-                $chatEmotion.hide();
-                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
-                /*$chatArea.animate({
-                    bottom : "0"
-                },200);*/
+                $chatAdd.addClass("showChatAdd");
+                $chatEmotion.removeClass("showChatEmotion");
+                $chatArea/*.removeClass("hideChatArea")*/.addClass("showChatArea");
                 //0为机器人模式
                 if(transferFlag==0){ 
                     $(".qqFaceTiphover").addClass("activehide")
@@ -224,23 +217,24 @@ function TextArea(window) {
                     $(".qqFaceTip").removeClass("activehide")
                 }
                 autoSizePhone();
+                specialModelshideKeyboardHandler();
             },400)
         }
+         
         focusStatus=false;
     };
     var showChatEmotionHandler=function(){
         //与键盘优化
-        if($chatArea.hasClass("showChatEmotion")){
+        if($chatEmotion.hasClass("showChatEmotion")){
             //隐藏
-            hideChatAreaHandler()
+            hideChatAreaHandler();
+            specialModelsHandler();
         } else {
             setTimeout(function(){
                 //显示
-                $chatArea.addClass("showChatEmotion");
-                $chatArea.removeClass("showChatAdd");
-                $chatAdd.hide();
-                $chatEmotion.css("display","inline-block");
-                $chatArea.removeClass("hideChatArea").addClass("showChatArea");
+                $chatEmotion.addClass("showChatEmotion");
+                $chatAdd.removeClass("showChatAdd");
+                $chatArea/*.removeClass("hideChatArea")*/.addClass("showChatArea");
                 if(transferFlag==0){
                     $(".qqFaceTiphover").addClass("activehide");
                     $(".qqFaceTip").addClass("activehide");
@@ -259,19 +253,18 @@ function TextArea(window) {
                         $(".add").removeClass("activehide")
                         $sendBtn.addClass("activehide");
                     }
-                }
+                };
                 autoSizePhone();
+                specialModelshideKeyboardHandler();
             },400)
         }
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {
-        //setTimeout(function(){
-            $chatArea.removeClass("showChatAdd");
-            $chatArea.removeClass("showChatEmotion");
             //不能动画,否则会跟键盘不和谐
-            $chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
-            //$chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
+            $chatArea.removeClass("showChatArea")/*.addClass("hideChatArea")*/; 
+            $chatAdd.removeClass("showChatAdd");
+            $chatEmotion.removeClass("showChatEmotion");
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
@@ -299,14 +292,20 @@ function TextArea(window) {
                     $sendBtn.addClass("activehide");
                 }
             }
-         //},100);
+
+            specialModelshideKeyboardHandler();
        focusStatus=false;
     };
+    
     //表情、加号切换
-    var tabChatAreaHandler=function(){
+    var tabChatAreaHandler=function(){ 
+        $chatEmotion.addClass("activehide");
+        $chatAdd.addClass("activehide");
         //当点表情按钮的时候再给加号添加切换卡类名，否则动画效果会被覆盖
         var id=$(this).attr("data-id");
         $(id).removeClass("activehide");
+ 
+        
     };
      //定位光标
     var gotoxyHandler=function(data){
@@ -343,6 +342,7 @@ function TextArea(window) {
         //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         //var date= currentUid + +new Date();
+        specialModelsHandler();
         var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'">';
         listener.trigger('sendArea.send',[{
          'answer' :img,
@@ -356,11 +356,14 @@ function TextArea(window) {
          'sendAgain':false,
          'currentStatus':currentStatus
          }]);
+        autoSizePhone();
         focusStatus=false;
     };
     var artificialHandler=function(){
         //isSpeak=false;
         listener.trigger('sendArea.artificial');
+        //特殊机型定位
+        specialModelsHandler();
         focusStatus=false;
     };
     //宽高自适应手机
@@ -447,10 +450,13 @@ function TextArea(window) {
         
     };
     var hideKeyboard=function(){
+        specialModelsHandler();
         //会话没结束的时候点击屏幕输入框失去焦点
         $textarea.blur();
         if(!sessionEnd){
-            $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
+            $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+            $chatAdd.removeClass("showChatAdd");
+            $chatEmotion.removeClass("showChatEmotion");
             var _text = $textarea.text();
             if(transferFlag==0){
                 if(_text) {
@@ -479,19 +485,34 @@ function TextArea(window) {
             autoSizePhone();
         }
     };
-    var textareaMaxlen = function () {
-        // 限制留言框最大字符数为200
-        /*document.getElementById("js-textarea").addEventListener('input', function () {
-            //console.log($(".js-textarea").text().length)
-            if ($textarea.text().length > 1024) {
-                $textarea.text($textarea.text().substring(0,1024))
-            }
-        }, false);*/
+    //特殊机型输入框处理，降低
+    var specialModelsHandler=function(){
+        var browserType= navigator.userAgent;
+        //alert(browserType);
+        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+           $chatArea.css({"top":"592px"})
+        };
+        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
+           $chatArea.css({"top":"592px"})
+        };
+        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
+           $chatArea.css({"top":"437px"})
+        }
     };
-   /* var hideplaceholder=function(){
-        $placeholder.hide();
-        $textarea.focus();
-    };*/
+    //特殊机型输入框处理，抬高
+    var specialModelshideKeyboardHandler=function(){
+        var browserType= navigator.userAgent;
+        //alert(browserType);
+        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+           $chatArea.css({"top":"357px"})
+        };
+        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
+           $chatArea.css({"top":"357px"})
+        };
+        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
+           $chatArea.css({"top":"250px"})
+        }
+    };
     //禁止输入框滑动，ios下有bug
     var noSliding=function(){
         return false;
@@ -535,11 +556,12 @@ function TextArea(window) {
         // 发送消息
         document.getElementById("js-textarea").addEventListener('input',showSendBtnHandler, false);
         //$textarea.on("keydown",chatAdminshowtextHandler);
+        //表情、加号切换
+        //$tab.on("click",tabChatAreaHandler)
         $textarea.on("focus",hideChatAreaHandler);
         $add.on("click",showChatAddHandler);
         $emotion.on("click",showChatEmotionHandler);
-        //表情、加号切换
-        $tab.on("click",tabChatAreaHandler)
+        
         //定位光标
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
@@ -561,6 +583,7 @@ function TextArea(window) {
         $chatArea.on('touchmove',noSliding);
         //上传图片收起加号域
         listener.on("sendArea.closeAddarea",hideChatAreaHandler);
+        listener.on("sendArea.specialModels",specialModelsHandler);
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -587,9 +610,6 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //改变当前状态
         listener.on("core.statechange",statusHandler);
-         //设置输入框最大输入字符
-        textareaMaxlen();
-
         
     })();
     listener.on("core.onload", function(data) {
