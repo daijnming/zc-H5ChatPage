@@ -46,7 +46,7 @@ var ScrollHandler = function(global,node){
         maxY = scroll.maxScrollY - y;
     if(global.flags.moreHistroy){
       if(y >= 40) {
-          $(pullDown).text('正在加载中...');
+          $(pullDown).text('加载中...');
           $(pullDown).addClass('loading');
           // $(pullDown).addClass('down');
           // $(pullDown).removeClass('up');

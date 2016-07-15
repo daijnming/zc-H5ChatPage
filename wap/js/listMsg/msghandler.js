@@ -44,6 +44,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     L0001:'您与{0}的会话已经结束',
     L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
     L0003:'您已打开新窗口，刷新可继续会话',
+    L0004:'您已长时间未说话，系统自动关闭本次会话，刷新可继续会话'
   };
 
   var msgTemplate = require('./template.js');
@@ -85,9 +86,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+     console.log(data,'robotoffline');
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
+       //机器人离线判断 0
+       if(data.list[0]['ustatus']===0){
+         var data = {type:'system',status:'robotoffline',data:{content:sysPromptLan.L0004,status:0}};
+         msgBind(2,data);
+         fnEvent.trigger('listMsg.robotAutoOffLine');
+         return;
+       }
      }else if(data.type==='human'){
        overtimeTask.lastMsgType=0;//最后一条为用户回复
        overtimeTask.overtimeDaley=0;//重置超时提示时间为0
@@ -362,6 +371,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }
         overtimeTask.overtimeDaley+=1;//超时时间
       },1000);
+      console.log(sys.config.currentState);
     },
     //图片展示
     onShowImg:function(){

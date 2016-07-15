@@ -238,12 +238,6 @@ var ListMsgHandler = function() {
               //FIXME 机器人与人工客服都要进行消息确认
               var msgClass = MSGSTATUSCLASS.MSG_LOADING;
               messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
-
-              //FIXME 消息确认 只在与客服聊天时添加
-              // var msgClass = messageHandler.config.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
-              // if(messageHandler.config.currentState==2){
-                // messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
-              // }
               comf = $.extend({
                   userLogo :userLogo,
                   userMsg : QQFace.analysisRight(msg),
@@ -358,10 +352,10 @@ var ListMsgHandler = function() {
       scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次
       if(global.UAInfo.UA=='android'){
-        $(wrapBox).css('font-size','1em');
+        $(wrapBox).css('font-size','0.9em');
         setTimeout(function(){
-          $(wrapBox).css('font-size','0.9em');
-        },100);
+          $(wrapBox).css('font-size','1em');
+        },200);
       }
     };
     //加欢迎语
@@ -374,6 +368,11 @@ var ListMsgHandler = function() {
         $('.js-title').text(data[data.length-1].content[0]['senderName']);
       }
       showHistoryMsg(data,1);
+    };
+    //禁止默认事件
+    var onStopEvent=function(e){
+      e.preventDefault();
+      e.stopPropagation();
     };
     /********************************************************************************/
     /********************************************************************************/
@@ -401,7 +400,6 @@ var ListMsgHandler = function() {
         initScroll();//初始化&配置scroll
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
         systemHandler = SystemHandler(global,bindMsg,scrollHanlder.scroll);
-
     };
     //初始化Dom
     var parseDOM = function() {
@@ -418,6 +416,7 @@ var ListMsgHandler = function() {
 
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
+        $('.js-chatPanelList').on('click',onStopEvent);
     };
     var init = function() {
         parseDOM();
