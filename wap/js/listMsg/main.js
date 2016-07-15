@@ -128,8 +128,6 @@ var ListMsgHandler = function() {
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
-                        // console.log(global.apiConfig.robotLogo);
-                        // console.log(itemChild);
                         if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
                           //FIXME 相关问题搜索
                           // msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
@@ -148,7 +146,6 @@ var ListMsgHandler = function() {
                     var curTime = new Date();
                     var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
                     if(oldTime){
-                      // var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
                       var t1 = oldTime.replace(/-/g,'/');
                       var t2 = itemChild.ts.replace(/-/g,'/');
                       var _m = Math.abs(new Date(t1)- new Date(t2))/1000/60;
@@ -160,8 +157,6 @@ var ListMsgHandler = function() {
                         }else{
                             type = _t>1&&_t<=2?1:2;
                         }
-                        // var type = _t<=1?0:_t>1&&_t<=2?1:2;
-                        // var retMsg = sysHander.getTimeLine(type,itemChild.ts);
                         var retMsg = systemHandler.sys.getTimeLine(type,itemChild.ts);
                         msgHtml += retMsg?retMsg:'';
                       }
@@ -178,13 +173,27 @@ var ListMsgHandler = function() {
         }
         //刷新
         // scrollHanlder.scroll.refresh();
+        //首次进入加载记录
         if(isFirstData){
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
           systemHandler.sys.nowTimer();//显示当前时间
+          //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
+          if(data&&data.length>0){
+            var _ret = data[data.length-1]['content'][0];
+            global.apiConfig.customInfo = {
+              type:"human",
+              data:{
+                  aface:_ret.senderFace,
+                  aname:_ret.senderName,
+                  content:"",
+                  status:1
+              }
+            };
+          }
+
         }else{
           setTimeout(function(){
             var _y = -($(scrollChatList).height() - scrollerInitHeight);
-            // console.log($(scrollChatList).height()+':'+_y);
             scrollHanlder.scroll.scrollTo(0,_y);
             scrollerInitHeight = $(scrollChatList).height();
           },2000);
@@ -226,7 +235,6 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      // console.log(data);
       var msgHtml='',
           userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
@@ -274,9 +282,7 @@ var ListMsgHandler = function() {
                       msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
-                    console.log(_data.type);
                       //客服正在输入
-                      // msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                       msgHtml += systemHandler.sys.onSysMsgShow(sysPromptLan.L0004,_data.type,sysMsgList,sysMsgManager);
                       break;
                   }
@@ -284,7 +290,6 @@ var ListMsgHandler = function() {
               }
             break;
           case 2:
-          // console.log(data);
           //系统提示 人工，机器 人欢迎语
               var _type = data.type;
               var _data = data.data;
@@ -323,7 +328,6 @@ var ListMsgHandler = function() {
     };
     //更新聊天记录
     var updateChatMsg = function(tempHtml){
-      // console.log(tempHtml);
       if(chatPanelList&&chatPanelList.children().length){
           var lastDom = chatPanelList.children().last();
           var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
@@ -360,7 +364,6 @@ var ListMsgHandler = function() {
     };
     //加欢迎语
     var getHello = function(data){
-      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];

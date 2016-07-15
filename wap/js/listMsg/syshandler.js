@@ -72,7 +72,17 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
-      console.log(data);
+      if(data.data){
+        global.apiConfig.customInfo = {
+          type:"human",
+          data:{
+              aface:data.data.aface,
+              aname:data.data.aname,
+              content:"",
+              status:1
+          }
+        };
+      }
       var name = data.data.aname?data.data.aname:'未接入';
       $('.js-title').text(name);
       document.title = name;
@@ -112,7 +122,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //仅人工 客服不在线
     onButtonChange:function(data){
-      // console.log(data);
       if(data&&data.data){
         //FIXME 1：仅人工 客服不在线 开启留言功能 直接跳转留言页 2：若排除则继续当前页排除 3：技能组大于1时先弹技能组 再走1OR2
         if(data.data.status==2&&!global.apiConfig.groupflag&&!global.apiConfig.msgflag){
