@@ -82,7 +82,7 @@ function ZC_Face() {
         if(icoAry) {
             for(var i = 0;i < icoAry.length;i++) {
                 var ico = qqfaceReg2.exec(str);
-                console.log(ico[0]);
+                //console.log(ico[0]);
                 var pathname = tip2[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
                 str = str.replace(qqfaceReg2,'<img class="faceimg" src="/wap/images/qqarclist/' + pathname + '.png" border="0" />');
