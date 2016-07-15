@@ -374,8 +374,12 @@ var ListMsgHandler = function() {
     };
     //禁止默认事件
     var onStopEvent=function(e){
+      //空白处点击 隐藏键盘
       e.preventDefault();
       e.stopPropagation();
+    };
+    var hideKeyboard = function(e){
+      fnEvent.trigger('listMsg.hideKeyboard');
     };
     /********************************************************************************/
     /********************************************************************************/
@@ -390,10 +394,9 @@ var ListMsgHandler = function() {
         initConfig();//配置参数
         //FIXME bindListener
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
-        $('.js-chatMsgList').on('click',function(){
-          //空白处点击 隐藏键盘
-          fnEvent.trigger('listMsg.hideKeyboard');
-        });
+        // $('.js-chatMsgList').on('click',function(e){
+        //   fnEvent.trigger('listMsg.hideKeyboard');
+        // });
     };
     //初始化h5页面配置信息
     var initConfig = function() {
@@ -419,7 +422,8 @@ var ListMsgHandler = function() {
 
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        $('.js-chatPanelList').on('click',onStopEvent);
+        // $('.js-chatPanelList').on('click',onStopEvent);
+        $('.js-chatPanelList').on('click',hideKeyboard);
     };
     var init = function() {
         parseDOM();

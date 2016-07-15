@@ -203,6 +203,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var $img = $div.find('p img');
       $img.attr('src',data[0]['answer']);
       sys.config.uploadImgToken='';//置空 一个流程完成
+      $('#userMsg'+data[0].token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
     },
     //会话结束判断
     // 1：人工客服离线导致用户下线

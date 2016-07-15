@@ -281,8 +281,7 @@ p, ul, li {
 }
 .wrap .header-back .back {
     color: #fff;
-    line-height: 50px;
-    text-align: center;
+    /*line-height: 50px;*/
     position: relative;
     width: 25%;
     display: inline-block;
@@ -290,13 +289,18 @@ p, ul, li {
 }
 .wrap .header-back .back a {
     color: #fff;
+    margin-left: 30px;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    vertical-align: middle;
 }
 .wrap .header-back .back i::before {
     content: '';
     position: absolute;
-    width: 15px;
+    width: 10px;
     height: 2px;
-    top: 28px;
+    top: 27px;
     left: 9px;
     background: #fff;
     -webkit-transform: rotate(45deg);
@@ -307,8 +311,8 @@ p, ul, li {
     content: '';
     position: absolute;
     height: 2px;
-    width: 15px;
-    top: 18px;
+    width: 10px;
+    top: 21px;
     left: 9px;
     background: #fff;
     -webkit-transform: rotate(-45deg);
