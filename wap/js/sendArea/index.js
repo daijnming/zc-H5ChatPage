@@ -77,7 +77,7 @@ function TextArea(window) {
                 data : {
                     cid :currentCid,
                     uid:currentUid,
-                    content:content 
+                    content:content
                 }
             });
         },500)
@@ -96,7 +96,7 @@ function TextArea(window) {
             manualmodeButton();
         }
         chatAdminshowtextHandler()
-        
+
     };
     var robotmodeButton=function(){
         var _text = $textarea.text();
@@ -143,12 +143,12 @@ function TextArea(window) {
             //ZC_Face.analysisRight(str);
             //xss
             var s = "";
-            s = str.replace(/&/g, "&amp;");   
-            s = s.replace(/</g, "&lt;");   
-            s = s.replace(/>/g, "&gt;");   
-            s = s.replace(/ /g, "&nbsp;");   
-            s = s.replace(/\'/g, "&#39;");   
-            s = s.replace(/\"/g, "&quot;");   
+            s = str.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\'/g, "&#39;");
+            s = s.replace(/\"/g, "&quot;");
             s = s.replace(/\n/g, "<br>");
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
@@ -179,8 +179,8 @@ function TextArea(window) {
     };
     var sendedKeepFocus=function(){
         //var t1=document.getElementById("js-textarea");
-        
-         
+
+
     };
     var showChatAddHandler=function(){
         //与键盘优化
@@ -212,7 +212,7 @@ function TextArea(window) {
                     bottom : "0"
                 },200);*/
                 //0为机器人模式
-                if(transferFlag==0){ 
+                if(transferFlag==0){
                     $(".qqFaceTiphover").addClass("activehide")
                     $(".qqFaceTip").addClass("activehide")
                     $(".addhover").removeClass("activehide")
@@ -270,8 +270,8 @@ function TextArea(window) {
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
             //不能动画,否则会跟键盘不和谐
-            $chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
-            //$chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
+            $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+            //$chatArea.css({"bottom":"-213px"}).removeClass("showChatArea");
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
@@ -329,7 +329,7 @@ function TextArea(window) {
         var _html=$textarea.text();
         if(_html.length==1){
             _html="";
-           
+
         }else{
             _html=$.trim(_html.substring(0,_html.length-1));
         }
@@ -439,12 +439,12 @@ function TextArea(window) {
                     var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
                     listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
                 }
-                
+
                 focusStatus=false;
             }
         });
-        
-        
+
+
     };
     var hideKeyboard=function(){
         //会话没结束的时候点击屏幕输入框失去焦点
@@ -540,7 +540,7 @@ function TextArea(window) {
         //提示
         //$placeholder=$(".js-placeholder");
     };
-    
+
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
@@ -565,7 +565,7 @@ function TextArea(window) {
         listener.on("listMsg.hideKeyboard",hideKeyboard);
         //转人工
         $artificial.on("click",artificialHandler);
-        
+
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
@@ -604,7 +604,7 @@ function TextArea(window) {
         listener.on("core.statechange",statusHandler);
         
 
-        
+
     })();
     listener.on("core.onload", function(data) {
         global = data[0];

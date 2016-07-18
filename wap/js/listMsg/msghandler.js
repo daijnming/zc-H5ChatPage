@@ -44,6 +44,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     L0001:'您与{0}的会话已经结束',
     L0002:'您已经很长时间未说话了哟，有问题尽管咨询',
     L0003:'您已打开新窗口，刷新可继续会话',
+    L0004:'您已长时间未说话，系统自动关闭本次会话，刷新可继续会话'
   };
 
   var msgTemplate = require('./template.js');
@@ -85,13 +86,43 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+     console.log(data,'onReceive');
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
+       //机器人离线判断 0
+       if(data.list[0].ustatus===0){
+         var _data = {
+                      type:'system',
+                      status:'robotoffline',
+                      data:{
+                          content:sysPromptLan.L0004,
+                          status:0
+                      }};
+         msgBind(2,_data);
+         fnEvent.trigger('listMsg.robotAutoOffLine');//弹起新会话按钮
+         return;
+       }
      }else if(data.type==='human'){
        overtimeTask.lastMsgType=0;//最后一条为用户回复
        overtimeTask.overtimeDaley=0;//重置超时提示时间为0
        sys.config.currentState=2;
+       //用户 客服超时提示语
+       if(data&&data.list.length>0){
+         for(var i=0,_list=data.list;i<_list.length;i++){
+           if(_list.type==202){//客服发的消息
+             global.apiConfig.customInfo = {
+               type:"human",
+               data:{
+                   aface:_list.aface,
+                   aname:_list.aname,
+                   content:"",
+                   status:1
+               }
+             };
+           }
+         }
+       }
      }
       msgBind(1,data);
     },
@@ -115,7 +146,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //上传图片
     onUpLoadImg:function(data){
-      // console.log(data);
       (function(timer){
         sendTime=0;
         uploadImgHandler[timer] = setInterval(function(){
@@ -173,6 +203,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var $img = $div.find('p img');
       $img.attr('src',data[0]['answer']);
       sys.config.uploadImgToken='';//置空 一个流程完成
+      $('#userMsg'+data[0].token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
     },
     //会话结束判断
     // 1：人工客服离线导致用户下线
@@ -212,7 +243,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //消息确认方法
     msgReceived:function(data){
-      // console.log(data);
       var sendType,//发送类型
           answer;//发送内容
       var isMsgId = sys.config.msgSendACK.indexOf(data.msgId);
@@ -298,9 +328,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //来自于客服的消息
     //type --> robot human
     onMsgFromCustom:function(type,data){
+      // console.log(data);
       var logo,name,msg;
       if(type=='robot'){
-        // console.log(data.answer);
         msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
         // msg = data.answer;
         logo = global.apiConfig.robotLogo;
@@ -347,18 +377,19 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           _msg = adminMsg;
           _daley= adminDaley;
         }
-        // console.log(overtimeTask.overtimeDaley+":"+_daley);
         if(overtimeTask.overtimeDaley * 1000 >= _daley){
           overtimeTask.overtimeDaley=0;//超时时间重置为0
-          var data = {
-            type:'system',
-            status:'overtime',
-            data:{
-              content:_msg,
-              status:0
-            }
-          };
-          msgBind(2,data);
+          // var data = {
+          //   type:'system',
+          //   status:'overtime',
+          //   data:{
+          //     content:_msg,
+          //     status:0
+          //   }
+          // };
+          // msgBind(2,data);
+          global.apiConfig.customInfo.data.content=_msg;//超时提示语
+          msgBind(2,global.apiConfig.customInfo);
         }
         overtimeTask.overtimeDaley+=1;//超时时间
       },1000);
