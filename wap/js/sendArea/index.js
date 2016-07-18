@@ -32,9 +32,9 @@ function TextArea(window) {
         //会话是否结束, 用于阻止某些事件
         sessionEnd=false,
         //判断用户是否说过话
-        isSpeak=false,
-        //是否评价过
-        isEvaluated=false;
+        //isSpeak=false,
+        //是否评价过 -1表示用户没有说过话，0表示说过话没有评论过，1表示评论过
+        isEvaluated= -1;
         //0为机器人，1为人工
     var transferFlag=0;
     //传给聊天的url
@@ -77,7 +77,7 @@ function TextArea(window) {
                 data : {
                     cid :currentCid,
                     uid:currentUid,
-                    content:content 
+                    content:content
                 }
             });
         },500)
@@ -96,7 +96,7 @@ function TextArea(window) {
             manualmodeButton();
         }
         chatAdminshowtextHandler()
-        
+
     };
     var robotmodeButton=function(){
         var _text = $textarea.text();
@@ -139,16 +139,16 @@ function TextArea(window) {
             $textarea.html("")
             return false;
         } else {
-             _html=ZC_Face.analysis(str);
-             isSpeak=true;
+            //过滤表情
+            //ZC_Face.analysisRight(str);
             //xss
             var s = "";
-            s = str.replace(/&/g, "&amp;");   
-            s = s.replace(/</g, "&lt;");   
-            s = s.replace(/>/g, "&gt;");   
-            s = s.replace(/ /g, "&nbsp;");   
-            s = s.replace(/\'/g, "&#39;");   
-            s = s.replace(/\"/g, "&quot;");   
+            s = str.replace(/&/g, "&amp;");
+            s = s.replace(/</g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/ /g, "&nbsp;");
+            s = s.replace(/\'/g, "&#39;");
+            s = s.replace(/\"/g, "&quot;");
             s = s.replace(/\n/g, "<br>");
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
@@ -179,8 +179,8 @@ function TextArea(window) {
     };
     var sendedKeepFocus=function(){
         //var t1=document.getElementById("js-textarea");
-        
-         
+
+
     };
     var showChatAddHandler=function(){
         //与键盘优化
@@ -212,7 +212,7 @@ function TextArea(window) {
                     bottom : "0"
                 },200);*/
                 //0为机器人模式
-                if(transferFlag==0){ 
+                if(transferFlag==0){
                     $(".qqFaceTiphover").addClass("activehide")
                     $(".qqFaceTip").addClass("activehide")
                     $(".addhover").removeClass("activehide")
@@ -270,8 +270,8 @@ function TextArea(window) {
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
             //不能动画,否则会跟键盘不和谐
-            //$chatArea.removeClass("showChatArea").addClass("hideChatArea"); 
-            $chatArea.css({"bottom":"-213px"}).removeClass("showChatArea"); 
+            $chatArea.removeClass("showChatArea").addClass("hideChatArea");
+            //$chatArea.css({"bottom":"-213px"}).removeClass("showChatArea");
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
@@ -329,7 +329,7 @@ function TextArea(window) {
         var _html=$textarea.text();
         if(_html.length==1){
             _html="";
-           
+
         }else{
             _html=$.trim(_html.substring(0,_html.length-1));
         }
@@ -343,8 +343,9 @@ function TextArea(window) {
         //onFileTypeHandler(data);
         //通过textarea.send事件将用户的数据传到显示台
         //var date= currentUid + +new Date();
+        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'">';
         listener.trigger('sendArea.send',[{
-         'answer' :data[0].answer,
+         'answer' :img,
          'uid' : currentUid,
          'cid' : currentCid,
          //时间戳
@@ -358,7 +359,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var artificialHandler=function(){
-        isSpeak=false;
+        //isSpeak=false;
         listener.trigger('sendArea.artificial');
         focusStatus=false;
     };
@@ -417,37 +418,38 @@ function TextArea(window) {
             dataType : "json",
             data : {
                 cid : global.apiInit.cid,
+                uid : global.apiInit.uid,
                 type: transferFlag
             },
             success:function(req){
-                isEvaluated=req.isComment
-                 //是否评价过
-                if(isEvaluated==false){
-                    if(isSpeak==true){
-                            //防止用户快速多次点击弹层
-                            var conf={};
-                            var _html = doT.template(template.layerOpacity0)(conf);
-                            $(document.body).append(_html);
-                            //评价
-                            evaluate(transferFlag,global);
-                    }else{
-                        var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
-                        listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
-                    }
-                 }else{
+                isEvaluated=req.isComment;
+                //console.log(req.isComment);
+                 //1表示评论过
+                if(isEvaluated==1){
                     var evaluateSystem={type:'system',status:'evaluated',data:{content:'您已完成评价'}}
                     listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
+                }else if(isEvaluated==0){//0表示说过话没有评论过
+                    //防止用户快速多次点击弹层
+                    var conf={};
+                    var _html = doT.template(template.layerOpacity0)(conf);
+                    $(document.body).append(_html);
+                    //评价
+                    evaluate(transferFlag,global);
+                }else{//-1表示用户没有说过话
+                    var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
+                    listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
                 }
+
                 focusStatus=false;
             }
         });
-        
-        
+
+
     };
     var hideKeyboard=function(){
         //会话没结束的时候点击屏幕输入框失去焦点
+        $textarea.blur();
         if(!sessionEnd){
-            $textarea.blur();
             $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
             var _text = $textarea.text();
             if(transferFlag==0){
@@ -477,27 +479,37 @@ function TextArea(window) {
             autoSizePhone();
         }
     };
-    var textareaMaxlen = function () {
-        // 限制留言框最大字符数为200
-        /*document.getElementById("js-textarea").addEventListener('input', function () {
-            //console.log($(".js-textarea").text().length)
-            if ($textarea.text().length > 1024) {
-                $textarea.text($textarea.text().substring(0,1024))
-            }
-        }, false);*/
+    //特殊机型输入框处理，降低
+    var specialModelsHandler=function(){
+        var browserType= navigator.userAgent;
+        //alert(browserType);
+        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+           $chatArea.css({"top":"592px"})
+        };
+        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
+           $chatArea.css({"top":"592px"})
+        };
+        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
+           $chatArea.css({"top":"437px"})
+        }
     };
-   /* var hideplaceholder=function(){
-        $placeholder.hide();
-        $textarea.focus();
-    };*/
-    var filterImage=function(e){
-        //console.log(e.srcElement.innerText);
-        //如果为空 说明粘的是图片
-        /*var innerText = e.srcElement.innerText;
-        if(innerText==""){
-            $textarea.html("");
-        }*/
-       
+    //特殊机型输入框处理，抬高
+    var specialModelshideKeyboardHandler=function(){
+        var browserType= navigator.userAgent;
+        //alert(browserType);
+        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+           $chatArea.css({"top":"357px"})
+        };
+        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
+           $chatArea.css({"top":"357px"})
+        };
+        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
+           $chatArea.css({"top":"250px"})
+        }
+    };
+    //禁止输入框滑动，ios下有bug
+    var noSliding=function(){
+        return false;
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -528,7 +540,7 @@ function TextArea(window) {
         //提示
         //$placeholder=$(".js-placeholder");
     };
-    
+
     var bindLitener = function() {
         //发送按钮
         $sendBtn.on("click",onbtnSendHandler);
@@ -553,16 +565,17 @@ function TextArea(window) {
         listener.on("listMsg.hideKeyboard",hideKeyboard);
         //转人工
         $artificial.on("click",artificialHandler);
-        
+
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
         $newMessage.on("click",newMessage);
         //评价弹窗
         $satisfaction.on("click",evaluateHandler);
-        //过滤粘贴板中的图片
-        $textarea.on("paste",filterImage);
-        
+        //禁止滑动输入框
+        $chatArea.on('touchmove',noSliding);
+        //上传图片收起加号域
+        listener.on("sendArea.closeAddarea",hideChatAreaHandler);
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -582,8 +595,6 @@ function TextArea(window) {
         $(".qqFaceTip").addClass("activehide");
         $(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
-    
-   
     };
     (function(){
         parseDOM();
@@ -591,9 +602,9 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //改变当前状态
         listener.on("core.statechange",statusHandler);
-         //设置输入框最大输入字符
-        textareaMaxlen();
         
+
+
     })();
     listener.on("core.onload", function(data) {
         global = data[0];

@@ -5,10 +5,18 @@ var template = {};
 var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
 								'<p class="h2">是否有以下情况</p>'+
 								'<div class="situation">'+
-									'<span class="tag1">答非所问</span>'+
-									'<span class="tag2" style="margin-right:0">理解能力差</span>'+
-									'<span class="tag3">一问三不知</span>'+
-									'<span class="tag4" style="margin-right:0">不礼貌</span>'+
+									'<span class="tag1">'+
+									'{{=it.inner1}}'+
+									'</span>'+
+									'<span class="tag2" style="margin-right:0">'+
+									'{{=it.inner2}}'+
+									'</span>'+
+									'<span class="tag3">'+
+									'{{=it.inner3}}'+
+									'</span>'+
+									'<span class="tag4" style="margin-right:0">'+
+									'{{=it.inner4}}'+
+									'</span>'+
 								'</div>'+
 								'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 								'<a class="submit js-submit" href="#">提交评价</a>'+
@@ -36,10 +44,18 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 							'</div>'+
 							'<p class="h2">是否有以下情况</p>'+
 							'<div class="situation">'+
-								'<span class="tag1">答非所问</span>'+
-								'<span class="tag2" style="margin-right:0">理解能力差</span>'+
-								'<span class="tag3">一问三不知</span>'+
-								'<span class="tag4" style="margin-right:0">不礼貌</span>'+
+								'<span class="tag1">'+
+									'{{=it.inner1}}'+
+									'</span>'+
+								'<span class="tag2" style="margin-right:0">'+
+									'{{=it.inner2}}'+
+									'</span>'+
+								'<span class="tag3">'+
+									'{{=it.inner3}}'+
+									'</span>'+
+								'<span class="tag4" style="margin-right:0">'+
+									'{{=it.inner4}}'+
+									'</span>'+
 							'</div>'+
 							'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
 							'<a class="submit js-submit" href="#">提交评价</a>'+

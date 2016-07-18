@@ -100,14 +100,15 @@ var ListMsgHandler = function() {
                 itemLan = item.length;
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
-                    //过滤 尼玛 忘记过滤什么了
-                    // var $tmp = $('<div></div>').html(itemChild.msg);
-                    // itemChild.msg = $tmp.text();
                     var index = itemChild.msg.indexOf('uploadedFile');
                     var res;
                     if(index>=0){
                       //图片，文件 上传
-                      res = $('<div></div>').html(itemChild.msg).text();
+                      if(itemChild.msg.indexOf('<img')>=0){
+                        res = itemChild.msg;
+                      }else{
+                        res = $('<div></div>').html(itemChild.msg).text();
+                      }
                       // res = itemChild.msg;
                     }else if(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0){
                       //富文本
@@ -120,15 +121,13 @@ var ListMsgHandler = function() {
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
                             'userLogo' : itemChild.senderFace?itemChild.senderFace:imgHanlder.userLogo,
-                            'userMsg' : QQFace.analysis(res),
+                            'userMsg' : QQFace.analysisRight(res),
                             'date':itemChild.t,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
-                        // console.log(global.apiConfig.robotLogo);
-                        // console.log(itemChild);
                         if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
                           //FIXME 相关问题搜索
                           // msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
@@ -147,7 +146,6 @@ var ListMsgHandler = function() {
                     var curTime = new Date();
                     var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
                     if(oldTime){
-                      // var _m = Math.abs(new Date(oldTime)- new Date(itemChild.ts))/1000/60;
                       var t1 = oldTime.replace(/-/g,'/');
                       var t2 = itemChild.ts.replace(/-/g,'/');
                       var _m = Math.abs(new Date(t1)- new Date(t2))/1000/60;
@@ -159,8 +157,6 @@ var ListMsgHandler = function() {
                         }else{
                             type = _t>1&&_t<=2?1:2;
                         }
-                        // var type = _t<=1?0:_t>1&&_t<=2?1:2;
-                        // var retMsg = sysHander.getTimeLine(type,itemChild.ts);
                         var retMsg = systemHandler.sys.getTimeLine(type,itemChild.ts);
                         msgHtml += retMsg?retMsg:'';
                       }
@@ -177,13 +173,27 @@ var ListMsgHandler = function() {
         }
         //刷新
         // scrollHanlder.scroll.refresh();
+        //首次进入加载记录
         if(isFirstData){
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
           systemHandler.sys.nowTimer();//显示当前时间
+          //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
+          if(data&&data.length>0){
+            var _ret = data[data.length-1]['content'][0];
+            global.apiConfig.customInfo = {
+              type:"human",
+              data:{
+                  aface:_ret.senderFace,
+                  aname:_ret.senderName,
+                  content:"",
+                  status:1
+              }
+            };
+          }
+
         }else{
           setTimeout(function(){
             var _y = -($(scrollChatList).height() - scrollerInitHeight);
-            // console.log($(scrollChatList).height()+':'+_y);
             scrollHanlder.scroll.scrollTo(0,_y);
             scrollerInitHeight = $(scrollChatList).height();
           },2000);
@@ -225,9 +235,8 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      // console.log(data);
       var msgHtml='',
-          userLogo = global.userInfo.face?global.userInfo.face:getHanderImg(),
+          userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
       if(data){
         switch (msgType) {
@@ -237,15 +246,9 @@ var ListMsgHandler = function() {
               //FIXME 机器人与人工客服都要进行消息确认
               var msgClass = MSGSTATUSCLASS.MSG_LOADING;
               messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
-
-              //FIXME 消息确认 只在与客服聊天时添加
-              // var msgClass = messageHandler.config.currentState==1?MSGSTATUSCLASS.MSG_SERVED:MSGSTATUSCLASS.MSG_LOADING;
-              // if(messageHandler.config.currentState==2){
-                // messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
-              // }
               comf = $.extend({
                   userLogo :userLogo,
-                  userMsg : QQFace.analysis(msg),
+                  userMsg : QQFace.analysisRight(msg),
                   date:data[0]['date'],
                   msgId:data[0]['dateuid'],
                   msgLoading:msgClass //消息确认
@@ -279,9 +282,7 @@ var ListMsgHandler = function() {
                       msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
-                    console.log(_data.type);
                       //客服正在输入
-                      // msgHtml += sysHander.onSysMsgShow(sysPromptLan.L0004,_data.type);
                       msgHtml += systemHandler.sys.onSysMsgShow(sysPromptLan.L0004,_data.type,sysMsgList,sysMsgManager);
                       break;
                   }
@@ -289,7 +290,6 @@ var ListMsgHandler = function() {
               }
             break;
           case 2:
-          // console.log(data);
           //系统提示 人工，机器 人欢迎语
               var _type = data.type;
               var _data = data.data;
@@ -324,13 +324,10 @@ var ListMsgHandler = function() {
             break;
         }
         updateChatMsg(msgHtml);
-        scrollHanlder.scroll.refresh();//刷新
-        scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       }
     };
     //更新聊天记录
     var updateChatMsg = function(tempHtml){
-      // console.log(tempHtml);
       if(chatPanelList&&chatPanelList.children().length){
           var lastDom = chatPanelList.children().last();
           var _m = Math.abs(new Date()- new Date(Number(lastDom.attr('date'))))/1000/60;
@@ -355,10 +352,18 @@ var ListMsgHandler = function() {
           $(this).remove();
         });
       }
+      scrollHanlder.scroll.refresh();//刷新
+      scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+      //FIXME 处理android手机截断聊天内容问题 重新渲染一次
+      if(global.UAInfo.UA=='android'){
+        $(wrapBox).css('font-size','0.9em');
+        setTimeout(function(){
+          $(wrapBox).css('font-size','1em');
+        },200);
+      }
     };
     //加欢迎语
     var getHello = function(data){
-      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];
@@ -367,40 +372,14 @@ var ListMsgHandler = function() {
       }
       showHistoryMsg(data,1);
     };
-    //获取头像
-    var getHanderImg= function(){
-      var urlParams = Comm.getQueryParam();
-      var img;
-      switch (urlParams['source']) {
-        case 0:
-          //pc
-          img = 'http://img.sobot.com/chatres/common/face/pcType.png';
-          break;
-        case 1:
-        //微信
-        img = 'http://img.sobot.com/chatres/common/face/weixinType.png';
-          break;
-        case 2:
-        //app
-        img = 'http://img.sobot.com/chatres/common/face/appType.png';
-          break;
-        case 3:
-        //微博
-        img = 'http://img.sobot.com/chatres/common/face/weiboType.png';
-          break;
-        case 4:
-        //h5
-        img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-        case 5:
-        //融云
-        img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-        default:
-          img = 'http://img.sobot.com/chatres/common/face/moType.png';
-          break;
-      }
-      return img;
+    //禁止默认事件
+    var onStopEvent=function(e){
+      //空白处点击 隐藏键盘
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    var hideKeyboard = function(e){
+      fnEvent.trigger('listMsg.hideKeyboard');
     };
     /********************************************************************************/
     /********************************************************************************/
@@ -410,14 +389,14 @@ var ListMsgHandler = function() {
     //core加载完成
     var onCoreOnload = function(data) {
         global = data[0];
+        // alert(global.UAInfo.UA+":"+global.browser.browser);
         console.log(global);
         initConfig();//配置参数
         //FIXME bindListener
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口
-        $('.js-chatMsgList').on('click',function(){
-          //空白处点击 隐藏键盘
-          fnEvent.trigger('listMsg.hideKeyboard');
-        });
+        // $('.js-chatMsgList').on('click',function(e){
+        //   fnEvent.trigger('listMsg.hideKeyboard');
+        // });
     };
     //初始化h5页面配置信息
     var initConfig = function() {
@@ -426,8 +405,7 @@ var ListMsgHandler = function() {
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         initScroll();//初始化&配置scroll
         messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
-        systemHandler = SystemHandler(bindMsg,scrollHanlder.scroll);
-
+        systemHandler = SystemHandler(global,bindMsg,scrollHanlder.scroll);
     };
     //初始化Dom
     var parseDOM = function() {
@@ -444,6 +422,8 @@ var ListMsgHandler = function() {
 
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
+        // $('.js-chatPanelList').on('click',onStopEvent);
+        $('.js-chatPanelList').on('click',hideKeyboard);
     };
     var init = function() {
         parseDOM();

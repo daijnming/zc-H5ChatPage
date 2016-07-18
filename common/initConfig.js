@@ -261,7 +261,7 @@ var initConfig = function() {
         });
         return promise;
     };
-  
+
     var getLeaveMessage = function(params,global) {
         var arr = ['leaveMessage.html'];
         var count = 0;
@@ -305,10 +305,13 @@ var initConfig = function() {
                 success : (function(data) {
                     //FIXME  在此判断客服模式
                     var mType =   That.cacheInfo.userInfo.modulType;
+                    var mColor = That.cacheInfo.userInfo.color;
                     if(typeof mType == 'number'&& (mType >=1&&mType<=4)){//现在模式只有1到4共四个等级
                         mType = Math.floor(mType);
                         data.type = mType;
                     }
+                    data.color = mColor?decodeURIComponent(mColor):data.color;
+                    That.cacheInfo.userInfo.color = data.color;
                     That.cacheInfo.apiConfig = data;
                     if(value === 'success') {
                         data.websocketUrl = "";
