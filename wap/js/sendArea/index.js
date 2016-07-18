@@ -382,6 +382,7 @@ function TextArea(window) {
             case 3://客服把你拉黑了
             case 4://长时间不说话
             case 6://有新窗口打开
+            case 7://机器人超时下线
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 $keepSession.hide();
                 $endSession.show();
@@ -620,6 +621,9 @@ function TextArea(window) {
         $chatArea.on('touchmove',noSliding);
         //上传图片收起加号域
         listener.on("sendArea.closeAddarea",hideChatAreaHandler);
+        //机器人超时会话
+        listener.on("listMsg.robotAutoOffLine",endSessionHandler);
+        
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
