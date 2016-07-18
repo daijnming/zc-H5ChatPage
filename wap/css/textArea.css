@@ -109,10 +109,10 @@ li {
     background-position:-89px 2px;
 }
 .addhover {
-    display:inline-block;
-    height: 32px;
-    width: 45px;
-    margin-right:-13px;
+   /*  display:inline-block;
+   height: 32px;
+   width: 45px;
+   margin-right:-13px; */
     background-position:-137px 2px;
 }
 .qqFaceTip {
@@ -122,9 +122,9 @@ li {
     background-position:7px 2px;
 }
 .qqFaceTiphover{
-    display:inline-block;
-    height: 32px;
-    width: 36px;
+   /*  display:inline-block;
+   height: 32px;
+   width: 36px; */
     background-position:-41px 2px;
 }
 .chatArea .activehide{
@@ -188,7 +188,7 @@ li {
 .addList .uploadImgbg{
     background-position:-142px -44px;
 }
-.addList .uploadImgbg:hover{
+.addList .uploadImgbgHover{
     background-position:-217px -44px;
 }
 /* .addList .artificialbg{
@@ -200,13 +200,13 @@ li {
 .addList .satisfactionbg{
     background-position:8px -120px;
 }
-.addList .satisfactionbg:hover{
+.addList .satisfactionbgHover{
     background-position:-67px -120px;
 }
 .addList .leaveMessagebg{
     background-position: -142px -118px;
 }
-.addList .leaveMessagebg:hover{
+.addList .leaveMessagebgHover{
     background-position: -218px -118px;
 }
 .showChatAdd {/* display:block; */
