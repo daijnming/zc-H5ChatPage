@@ -21,8 +21,8 @@ function uploadImg() {
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        //判断上传文件是否为图片，file.type==""兼容魅族选择图库--wallpapers--任意图片--完成
-        if(/^(image)/.test(file.type)||file.type==""){
+        //判断上传文件是否为图片
+        if(/^(image)/.test(file.type)){
             //创建本地图片数据流
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -30,6 +30,7 @@ function uploadImg() {
                 var tp=+new Date();
                 var token= currentUid + tp;
                 var fileRead = e.target.result;
+                //alert(fileRead);
                 //展示本地图
                 listener.trigger("sendArea.createUploadImg",[{
                     'result' : fileRead,

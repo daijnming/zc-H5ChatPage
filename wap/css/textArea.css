@@ -4,30 +4,29 @@ li {
 }
 @keyframes hideChatArea
    {
-   0%   {height:213px;}
-   100%  {height:0;}
+   0%   {bottom:0;}
+   100%  {bottom:-213px;}
    }
 @keyframes showChatArea
    {
-   0%   {height:0px;}
-   100%  {height:213px;}
+   0%   {bottom:-213px;}
+   100%  {bottom:0px;}
    }
 @-webkit-keyframes hideChatArea
    {
-   0%   {height:213px;}
-   100%  {height:0;}
+   0%   {bottom:0;}
+   100%  {bottom:-213px;}
    }
 @-webkit-keyframes showChatArea
    {
-   0%   {height:0px;}
-   100%  {height:213px;}
+   0%   {bottom:-213px;}
+   100%  {bottom:0px;}
    }
 .chatArea {
     width: 100%;
-    /*position: fixed; */
-    position: absolute;
+    position: fixed;
     left: 0;
-    bottom:49px;
+    bottom:-213px;
     background: #fff;
     z-index: 10;
 }
@@ -43,7 +42,6 @@ li {
     display: flex;
     border-top: 1px solid #cacaca;
     border-bottom: 1px solid #cacaca;
-    background:#fff;
 }
 .hideChatArea{
     animation:hideChatArea 0.2s;
@@ -132,9 +130,6 @@ li {
 .chatArea .activehide{
     display:none;
 }
-.chatArea .activeshow{
-    display:block;
-}
 /* .keyboard {
     display:none;
     height: 35px;
@@ -146,14 +141,10 @@ li {
     background-position:-142px -3px;
     background-size: 273px 240px;
 } */
-.chatArea .showChatAdd {
-    height:213px;
-}
-
 .chatAdd {
     overflow: hidden;
     width: 100%;
-    height: 0;
+    height: 212px;
     background:#fafcfb;
 }
 .addList{
@@ -164,7 +155,7 @@ li {
     float: left;
     position:relative;
     width:70px;
-    margin:3%;
+    margin:16px;
 }
 .addList .uploadImg{
     /* display:none; */
@@ -218,7 +209,8 @@ li {
 .addList .leaveMessagebg:hover{
     background-position: -218px -118px;
 }
-
+.showChatAdd {/* display:block; */
+}
 .tab-active{
     display:none;
 }
