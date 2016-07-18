@@ -86,7 +86,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
-     console.log(data,'onReceive');
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -173,7 +172,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         ele.parents('div.rightMsg').find('.js-shadowLayer').addClass('hide');
         ele.parents('div.rightMsg').find('.js-progressLayer').addClass('hide');
       }
-
     },
     onUpLoadImgProgress:function(ret){
       var data = ret.percentage;
@@ -190,11 +188,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       $progress.text(data+'%');
       var floatData = data/100;//获取小数
       if(floatData>=1){
+        $('#userMsg'+token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
         $progressLayer.remove();
         myScroll.refresh();//刷新
-        $('#userMsg'+token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
       }
     },
     //回传图片路径地址
@@ -328,7 +326,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //来自于客服的消息
     //type --> robot human
     onMsgFromCustom:function(type,data){
-      // console.log(data);
       var logo,name,msg;
       if(type=='robot'){
         msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
@@ -386,15 +383,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }
         if(overtimeTask.overtimeDaley * 1000 >= _daley){
           overtimeTask.overtimeDaley=0;//超时时间重置为0
-          // var data = {
-          //   type:'system',
-          //   status:'overtime',
-          //   data:{
-          //     content:_msg,
-          //     status:0
-          //   }
-          // };
-          // msgBind(2,data);
           global.apiConfig.customInfo.data.content=_msg;//超时提示语
           msgBind(2,global.apiConfig.customInfo);
         }
