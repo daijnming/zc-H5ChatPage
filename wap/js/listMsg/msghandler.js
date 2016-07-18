@@ -100,7 +100,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
                           status:0
                       }};
          msgBind(2,_data);
-         fnEvent.trigger('listMsg.robotAutoOffLine');//弹起新会话按钮
+         fnEvent.trigger('listMsg.robotAutoOffLine',7);//弹起新会话按钮
          return;
        }
      }else if(data.type==='human'){
@@ -194,6 +194,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         $shadowLayer.remove();
         $progressLayer.remove();
         myScroll.refresh();//刷新
+        $('#userMsg'+token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
       }
     },
     //回传图片路径地址
@@ -203,7 +204,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var $img = $div.find('p img');
       $img.attr('src',data[0]['answer']);
       sys.config.uploadImgToken='';//置空 一个流程完成
-      $('#userMsg'+data[0].token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
     },
     //会话结束判断
     // 1：人工客服离线导致用户下线
@@ -340,10 +340,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         logo = data.aface;
         name = data.aname;
       }
-      var index = msg.indexOf('uploadedFile');
-      var res;
+      var index = msg.indexOf('webchat_img_upload');
+          index2 = msg.indexOf('uploadedFile');
+      var res,
+          imgStatus;
       //判断是否是富文本
-      if(index>=0||(msg.indexOf('<')>=0 && msg.indexOf('>')>=0)){
+      if(index>=0||index2>=0){
+        imgStatus='imgStatus';
+        res = msg;
+      }
+      if(msg.indexOf('<')>=0 && msg.indexOf('>')>=0){
         res = msg;
       }else{
         res = Comm.getNewUrlRegex(msg);
@@ -352,6 +358,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           customLogo : logo,
           customName : name,
           customMsg : res,
+          imgStatus:imgStatus,
           date:+new Date()
         });
       var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);

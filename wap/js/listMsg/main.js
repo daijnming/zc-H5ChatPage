@@ -81,7 +81,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      console.log(data);
+      // console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -93,6 +93,7 @@ var ListMsgHandler = function() {
             customLogo = '',
             oldTime='',//上一次时间
             tempHtml = '',
+            imgStatus='',//消息是否为图片
             reg = /target="_self"/g;
         if(data && data.length > 0) {
             for(var i = 0;i < dataLen;i++) {
@@ -100,6 +101,7 @@ var ListMsgHandler = function() {
                 itemLan = item.length;
                 for(var j = 0;j < itemLan;j++) {
                     itemChild = item[j];
+                    imgStatus='';
                     var index = itemChild.msg.indexOf('uploadedFile');
                     var res;
                     if(index>=0){
@@ -116,6 +118,10 @@ var ListMsgHandler = function() {
                     }else{
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
+                    //判断加载是否是图片
+                    if(res.indexOf('<img')===0){
+                      imgStatus="imgStatus";
+                    }
                     //FIXME 消息展示时类型判断
                     //用户
                     if(itemChild.senderType === 0) {
@@ -123,6 +129,7 @@ var ListMsgHandler = function() {
                             'userLogo' : itemChild.senderFace?itemChild.senderFace:imgHanlder.userLogo,
                             'userMsg' : QQFace.analysisRight(res),
                             'date':itemChild.t,
+                            'imgStatus':imgStatus,
                             'msgLoading':MSGSTATUSCLASS.MSG_SERVED//历史记录 标记发送成功
                         });
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
@@ -130,13 +137,13 @@ var ListMsgHandler = function() {
                         //机器人：1    人工客服：2
                         if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
                           //FIXME 相关问题搜索
-                          // msgHtml = msgHandler.sugguestionsSearch(itemChild.sdkMsg,true);
                           msgHtml = messageHandler.msg.sugguestionsSearch(itemChild.sdkMsg,true);
                         }else{
                           comf = $.extend({
                               'customLogo' : itemChild.senderFace?itemChild.senderFace:global.apiConfig.robotLogo,
                               'customName' : itemChild.senderName,
                               'customMsg' : QQFace.analysis(res),
+                              'imgStatus':imgStatus,
                               'date':itemChild.t
                           });
                           msgHtml = doT.template(msgTemplate.leftMsg)(comf);

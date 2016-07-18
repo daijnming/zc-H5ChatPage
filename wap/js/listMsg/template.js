@@ -4,7 +4,7 @@
 var template ={};
 
 var leftMsg =
-              '<div class="msgwrap leftMsg" date="{{=it.date}}">'+
+              '<div class="msgwrap leftMsg {{=it.imgStatus}}" date="{{=it.date}}">'+
                   '<div class="header">'+
                       '<img src="{{=it.customLogo}}" alt="" />'+
                   '</div>'+
@@ -49,7 +49,7 @@ var listSugguestionsMsg =
               '</div>';
 
 var rightMsg =
-                  '<div class="msgwrap rightMsg" date="{{=it.date}}">'+
+                  '<div class="msgwrap rightMsg {{=it.imgStatus}}" date="{{=it.date}}">'+
                       '<div class="header">'+
                           '<img src="{{=it.userLogo}}" alt="" />'+
                       '</div>'+
@@ -63,7 +63,7 @@ var rightMsg =
               '</div>';
 
   var rightImg =
-                    '<div class="msgwrap rightMsg" date="{{=it.date}}">'+
+                    '<div class="msgwrap rightMsg rightImg" date="{{=it.date}}">'+
                         '<div class="header">'+
                             '<img src="{{=it.userLogo}}" alt="" />'+
                         '</div>'+
