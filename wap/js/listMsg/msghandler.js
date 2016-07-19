@@ -198,10 +198,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //回传图片路径地址
     onUploadImgUrl:function(data){
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-      var $div = $('#img'+data[0]['token']);
+      var token = data[0]['token'];
+      var img = data[0]['answer'];
+      var $div = $('#img'+token);
       var $img = $div.find('p img');
-      $img.attr('src',data[0]['answer']);
+      $img.attr('src',img);
       sys.config.uploadImgToken='';//置空 一个流程完成
+      sys.msg.maskLayer($('#userMsg'+token),false);
+      $('#userMsg'+token).remove();
     },
     //会话结束判断
     // 1：人工客服离线导致用户下线
@@ -248,8 +252,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         if(data.result=='success'){
           //判断图片是否上传成功
           if(uploadImgHandler[data.msgId]){
-              // uploadImgHandler.splice(_index,1);
               clearInterval(uploadImgHandler[data.msgId]);
+              sys.msg.maskLayer('userMsg'+data.msgId,false);
           }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
@@ -286,7 +290,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('error msg-fail').addClass('msg-loading');
           answer = that.prev().text().trim();
         }else{
-          //发送失败去掉蒙层
+          //发送成功开启蒙层
           sys.msg.maskLayer(that,true);
           //图片
           sendType='img';
