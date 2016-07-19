@@ -38,7 +38,7 @@ li, ul, div, p, h1 {
     background-repeat:no-repeat;
     background-size:801px 22px;
 }
-.faceGroup .backDelete{
+.backDelete{
     float:left;
     overflow:hidden;
     width: 24px;
@@ -136,14 +136,14 @@ background-position:2px 2px;
     background-position:-778px 2px;
 }
 @media (min-device-width : 320px){
-    
 }
 @media (min-device-width : 360px){
-   .faceIco{
-        margin:3% 3.5%;
+   .face .faceIco{ 
+        margin:3% 3.3%;
         width: 25px;
         height: 25px;
     }
+   
 }
 /* iphone6 */
 @media (min-device-width : 375px){

@@ -57,10 +57,9 @@ function TextArea(window) {
         }
     };
     var changeStatusHandler=function(data){
-        //hide,转人工按钮隐藏,当前为人工模式
+        //hide,转人工按钮隐藏
         if(data.action=="hide"){
             $artificial.addClass("activehide");
-            $uploadImg.removeClass("activehide");
         }else{
             $artificial.removeClass("activehide");
         }
@@ -396,6 +395,10 @@ function TextArea(window) {
                 if(global.apiConfig.msgflag==1){
                     $(".js-leaveMsgBtn").addClass("activehide");
                 }
+                //flex兼容处理
+                if($(".sendarea").css("display")!="flex"){
+                    $(".endSession").css({"display":"inline-block"});
+                };
                 break;
         }
     };
@@ -497,7 +500,7 @@ function TextArea(window) {
     //特殊机型输入框处理，抬高
     var specialModelshideKeyboardHandler=function(){
         var browserType= navigator.userAgent;
-        //alert(browserType);
+       
        /* if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
            $chatArea.css({"top":"357px"})
         };
@@ -554,6 +557,11 @@ function TextArea(window) {
             },300)
         });
         
+    };
+    var flexcompatible=function(){
+        $(".textarea").css({"width":"70%"});
+        $(".endSession span").css({"display":"inline-block"});
+        $(".endSession span").css({"width":"28%"});
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -645,6 +653,10 @@ function TextArea(window) {
         $sendBtn.addClass("activehide");
         //hover效果
         initHover();
+        //flex兼容处理
+        if($(".sendarea").css("display")!="flex"){
+           flexcompatible();
+        }
     };
     (function(){
         parseDOM();

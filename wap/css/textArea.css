@@ -24,9 +24,9 @@ li {
    }
 .chatArea {
     width: 100%;
-    position: fixed;
+    position: absolute;
     left: 0;
-    bottom:-213px;
+    bottom:0px;
     background: #fff;
     z-index: 10;
 }
@@ -56,8 +56,6 @@ li {
     -webkit-animation-fill-mode : forwards;
 }
 .textarea {
-    
-    max-width:100%;
     background-color: #ddd;
     line-height: 19px;
     padding: 7px 5px;
@@ -243,9 +241,8 @@ li {
 }
 .endSession span{
     display:inline-block;
-    /*  float:left; */
-    /*  width:29%; */
-    width:100%;
+    /* float:left;  */
+    /* width:29%;  */
     margin:2%;
     border-radius:10px;
     text-align:center;
