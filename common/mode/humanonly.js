@@ -7,6 +7,7 @@ function HumanOnly(global) {
     var DateUtil = require('../util/date.js');
     var Robot = require('../socket/robot.js');
     var WebSocket = require('../socket/websocket.js');
+    var setCurrentState = require('./currentState.js');
     var Rolling = require('../socket/rolling.js');
     var modeState = require('./currentState.js');
     var transfer = require('./transfer.js');
@@ -52,6 +53,39 @@ function HumanOnly(global) {
 
     };
 
+    var onReceive = function(data) {
+        var list = data.list || [];
+        for(var i = 0,
+            len = list.length;i < len;i++) {
+            var item = list[i];
+            var ret = item;
+            if(item.type === 200) {
+                if(manager) {
+                    manager.destroy();
+                }
+                manager = socketFactory(ret,global);
+                tempManager = null;
+                setCurrentState.setCurrentState('human');
+                listener.trigger("core.system", {
+                    'type' : 'system',
+                    'status' : "transfer",
+                    'data' : {
+                        'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                    }
+                });
+                ret.content = global.apiConfig.adminHelloWord;
+                listener.trigger("core.system", {
+                    'type' : 'human',
+                    'data' : ret
+                });
+                listener.trigger("core.buttonchange", {
+                    'type' : 'transfer',
+                    'action' : 'hide'
+                });
+                break;
+            }
+        }
+    };
     var transferFail = function() {
         if(false) {
             var value = [];
@@ -205,6 +239,7 @@ function HumanOnly(global) {
     };
 
     var bindListener = function() {
+        listener.on("core.onreceive",onReceive);
     };
 
     var initPlugins = function() {
