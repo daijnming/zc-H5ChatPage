@@ -103,7 +103,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
          return;
        }
      }else if(data.type==='human'){
-       overtimeTask.lastMsgType=0;//最后一条为用户回复
+       overtimeTask.lastMsgType=0;//最后一条为客服回复
        overtimeTask.overtimeDaley=0;//重置超时提示时间为0
        sys.config.currentState=2;
        //用户 客服超时提示语

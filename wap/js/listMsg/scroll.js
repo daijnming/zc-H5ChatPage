@@ -18,7 +18,6 @@ var ScrollHandler = function(global,node){
 
   //初始化滚动插件
   var initScroll = function(){
-
     if(scroll){
       return;
     }else{

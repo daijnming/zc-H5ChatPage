@@ -67,7 +67,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         $(wrapScroll).height(offsetTop);
         myScroll.refresh();
         myScroll.scrollTo(0,myScroll.maxScrollY);
-        $(window).scrollTop(Number($("#js-textarea").offset().top));
+        // $(window).scrollTop(Number($("#js-textarea").offset().top));
     },300);
     },
     //转接人工
