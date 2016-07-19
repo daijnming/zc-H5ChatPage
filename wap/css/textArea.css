@@ -77,7 +77,6 @@ li {
 .sendBtn {
     display: inline-block;
    /*  float: left; */
-    background-color: #09aeb0;
     width: 55px;
     height: 34px;
     line-height: 34px;
@@ -101,7 +100,7 @@ li {
     background-position:-5px -61px;
 }
 .add {
-    display:inline-block;
+    display:block;
     height: 32px;
     width: 45px;
     margin-right:-13px;
@@ -115,7 +114,7 @@ li {
     background-position:-137px 2px;
 }
 .qqFaceTip {
-    display:inline-block;
+    display:block;
     height: 32px;
     width: 36px;
     background-position:7px 2px;

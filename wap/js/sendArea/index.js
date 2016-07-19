@@ -371,7 +371,7 @@ function TextArea(window) {
     var endSessionHandler=function(status){
        switch(status) {
             case -2://仅人工模式，转人工失败,有客服排队中
-                $textarea.attr("placeholder","排队中，请等待...").attr("contenteditable","false");
+                $textarea.attr("placeholder","排队中，请稍候...").attr("contenteditable","false");
                 $artificial.addClass("activehide");
                 $satisfaction.addClass("activehide");
                 break;
@@ -408,7 +408,9 @@ function TextArea(window) {
             if(ua.match(/MicroMessenger/i)=="micromessenger") {
                 //微信内置浏览器必须使用添加随机数此方法
                 var random=+new Date();
-                window.location.href=window.location.href+"&refresh="+random;
+                str=window.location.href.replace("#","");
+                //alert(str)
+                window.location.href=str+"&refresh="+random;
             } else {
                 window.location.reload();
             }
@@ -558,8 +560,8 @@ function TextArea(window) {
         });
         
     };
-    var flexcompatible=function(){
-        $(".textarea").css({"width":"70%"});
+    var flexcompatible=function(){ 
+         $(".textarea").css({"width":"60%"}); 
         $(".endSession span").css({"display":"inline-block"});
         $(".endSession span").css({"width":"28%"});
     };
@@ -651,6 +653,7 @@ function TextArea(window) {
         $qqFaceTip.addClass("activehide");
         //$(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
+
         //hover效果
         initHover();
         //flex兼容处理
@@ -686,6 +689,9 @@ function TextArea(window) {
             $endSession.append(_html2);
         };
         $(".js-endSession").hide();
+        //用户设置样式
+        var userColor=global.userInfo.color;
+        $sendBtn.css({"background-color":userColor})
         init();
     });
 
