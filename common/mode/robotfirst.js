@@ -291,6 +291,7 @@ var RobotFirst = function(global) {
             getWelcome();
             setCurrentState.setCurrentState('robot');
         } else {
+            queueing = true;
             if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);
             } else if(status == -1) {

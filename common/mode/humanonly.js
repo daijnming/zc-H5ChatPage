@@ -172,7 +172,6 @@ function HumanOnly(global) {
     };
     var transferSuccess = function(groupId,promise,init) {
         var init = !!init;
-        queueing = false;
         initSession(global,promise).then(function(value,promise) {
             $.ajax({
                 'url' : '/chat/user/chatconnect.action',
@@ -187,7 +186,6 @@ function HumanOnly(global) {
                 },
                 'success' : function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
-                    console.log(ret,1);
                     if(ret.status == 2) {
                         //暂无客服在线
                         serverOffline(ret,init,value);
@@ -244,6 +242,7 @@ function HumanOnly(global) {
 
     var initPlugins = function() {
         var status = global.apiInit.ustatus;
+        queueing = (status !== 0);
         if(status == 0 || status == 1 || status == -2) {
             transferConnect(null,null,true);
         }
