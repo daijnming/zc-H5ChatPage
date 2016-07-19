@@ -312,11 +312,11 @@ var initConfig = function() {
                     }
                     //颜色只能传#666 或 #ffddaa
                     var _color;
-                    var testColor = /^((#[a-fA-F0-9]{3})|(#[a-fA-F0-9]{6}))$/;
+                    var testColor = /^(([a-fA-F0-9]{3})|([a-fA-F0-9]{6}))$/;
                     if(mColor){
                       _color = decodeURIComponent(mColor);
                       if(testColor.test(_color)){
-                        data.color = _color;
+                        data.color = '#'+_color;
                       }
                     }
                     That.cacheInfo.userInfo.color = data.color;

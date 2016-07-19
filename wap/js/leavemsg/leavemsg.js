@@ -156,6 +156,7 @@
         },
         success : (function(data) {
           var _color = color?color:data.color;//默认从参数配置取
+          _color = '#'+_color;
           document.title= data.robotName;//title 名称 使用客服昵称
           $(topTitle).text(data.robotName);
           $(topBack).css('background',_color);//顶部返回栏
