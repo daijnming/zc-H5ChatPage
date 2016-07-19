@@ -42,7 +42,7 @@ function TextArea(window) {
         currentStatus=data;
         if(currentStatus=="human"){
             transferFlag=1;
-            $(".qqFaceTip").removeClass("activehide");
+            $qqFaceTip.removeClass("activehide");
             //上传图片按钮
             $uploadImg.removeClass("activehide");
             //满意度评价
@@ -57,10 +57,9 @@ function TextArea(window) {
         }
     };
     var changeStatusHandler=function(data){
-        //hide,转人工按钮隐藏,当前为人工模式
+        //hide,转人工按钮隐藏
         if(data.action=="hide"){
             $artificial.addClass("activehide");
-            $uploadImg.removeClass("activehide");
         }else{
             $artificial.removeClass("activehide");
         }
@@ -102,13 +101,13 @@ function TextArea(window) {
         var _text = $textarea.text();
         if(_text) {
             $sendBtn.removeClass("activehide")
-            $(".add").addClass("activehide")
-            $(".addhover").addClass("activehide")
+            $add.addClass("activehide")
+            //$(".addhover").addClass("activehide")
             hideChatAreaHandler();
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
-            $(".add").removeClass("activehide")
+            $add.removeClass("activehide")
         }
         if(document.activeElement.id=="js-textarea"){
             focusStatus=true;
@@ -118,12 +117,12 @@ function TextArea(window) {
         var _text = $textarea.text();
         if(_text) {
             $sendBtn.removeClass("activehide")
-            $(".add").addClass("activehide")
-            $(".addhover").addClass("activehide")
+            $add.addClass("activehide")
+           // $(".addhover").addClass("activehide")
         } else {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
-            $(".add").removeClass("activehide")
+            $add.removeClass("activehide")
             $textarea.blur();
             $textarea.focus();
         }
@@ -172,7 +171,7 @@ function TextArea(window) {
             $textarea.blur();
             $textarea.focus();
         }else{
-            $(".add").removeClass("activehide")
+            $add.removeClass("activehide")
         }
         $sendBtn.addClass("activehide")
         autoSizePhone();
@@ -189,15 +188,15 @@ function TextArea(window) {
             hideChatAreaHandler();
             //0为机器人模式
             if(transferFlag==0){
-                $(".addhover").addClass("activehide")
-                $(".add").removeClass("activehide")
-                $(".qqFaceTiphover").addClass("activehide")
-                $(".qqFaceTip").addClass("activehide")
+               // $(".addhover").addClass("activehide")
+                $add.removeClass("activehide")
+                //$(".qqFaceTiphover").addClass("activehide")
+                $qqFaceTip.addClass("activehide")
             }else{
-                $(".addhover").addClass("activehide")
-                $(".add").removeClass("activehide")
-                $(".qqFaceTiphover").addClass("activehide")
-                $(".qqFaceTip").removeClass("activehide")
+                //$(".addhover").addClass("activehide")
+                $add.removeClass("activehide")
+                //$(".qqFaceTiphover").addClass("activehide")
+                $qqFaceTip.removeClass("activehide")
             }
 
         } else {
@@ -208,20 +207,17 @@ function TextArea(window) {
                 $chatAdd.show();
                 $chatEmotion.hide();
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
-                /*$chatArea.animate({
-                    bottom : "0"
-                },200);*/
                 //0为机器人模式
                 if(transferFlag==0){
-                    $(".qqFaceTiphover").addClass("activehide")
-                    $(".qqFaceTip").addClass("activehide")
-                    $(".addhover").removeClass("activehide")
-                    $(".add").addClass("activehide")
+                    //$(".qqFaceTiphover").addClass("activehide")
+                    $qqFaceTip.addClass("activehide")
+                    //$(".addhover").removeClass("activehide")
+                    //$add.addClass("activehide")
                 }else{
-                    $(".addhover").removeClass("activehide")
-                    $(".add").addClass("activehide")
-                    $(".qqFaceTiphover").addClass("activehide")
-                    $(".qqFaceTip").removeClass("activehide")
+                    //$(".addhover").removeClass("activehide")
+                    //$add.addClass("activehide")
+                    //$(".qqFaceTiphover").addClass("activehide")
+                    $qqFaceTip.removeClass("activehide")
                 }
                 autoSizePhone();
             },400)
@@ -242,21 +238,21 @@ function TextArea(window) {
                 $chatEmotion.css("display","inline-block");
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 if(transferFlag==0){
-                    $(".qqFaceTiphover").addClass("activehide");
-                    $(".qqFaceTip").addClass("activehide");
-                    $(".addhover").addClass("activehide")
-                    $(".add").removeClass("activehide")
+                    //$(".qqFaceTiphover").addClass("activehide");
+                    $qqFaceTip.addClass("activehide");
+                    //$(".addhover").addClass("activehide")
+                    $add.removeClass("activehide")
                 }else{
                     var _text=$textarea.text();
-                    $(".qqFaceTiphover").removeClass("activehide")
-                    $(".qqFaceTip").addClass("activehide");
-                    $(".addhover").addClass("activehide")
+                    //$(".qqFaceTiphover").removeClass("activehide")
+                    //$qqFaceTip.addClass("activehide");
+                    //$(".addhover").addClass("activehide")
                     if(_text){
-                         $(".add").addClass("activehide")
-                        $(".addhover").addClass("activehide")
+                         $add.addClass("activehide")
+                        //$(".addhover").addClass("activehide")
                         $sendBtn.removeClass("activehide")
                     }else{
-                        $(".add").removeClass("activehide")
+                        $add.removeClass("activehide")
                         $sendBtn.addClass("activehide");
                     }
                 }
@@ -266,6 +262,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {
+        specialModelshideKeyboardHandler();
         //setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
@@ -275,27 +272,27 @@ function TextArea(window) {
             autoSizePhone();
             var _text=$textarea.text();
             if(transferFlag==0){
-                $(".qqFaceTiphover").addClass("activehide");
-                $(".qqFaceTip").addClass("activehide");
-                $(".addhover").addClass("activehide");
+                //$(".qqFaceTiphover").addClass("activehide");
+                $qqFaceTip.addClass("activehide");
+                //$(".addhover").addClass("activehide");
                 if(_text){
-                    $(".add").addClass("activehide");
-                    $(".addhover").addClass("activehide");
+                    $add.addClass("activehide");
+                    //$(".addhover").addClass("activehide");
                     $sendBtn.removeClass("activehide");
                 }else{
-                    $(".add").removeClass("activehide");
+                    $add.removeClass("activehide");
                     $sendBtn.addClass("activehide");
                 }
             }else{
-                $(".qqFaceTiphover").addClass("activehide");
-                $(".qqFaceTip").removeClass("activehide");
-                $(".addhover").addClass("activehide");
+                //$(".qqFaceTiphover").addClass("activehide");
+                $qqFaceTip.removeClass("activehide");
+                //$(".addhover").addClass("activehide");
                 if(_text){
-                    $(".add").addClass("activehide");
-                    $(".addhover").addClass("activehide");
+                    $add.addClass("activehide");
+                    //$(".addhover").addClass("activehide");
                     $sendBtn.removeClass("activehide");
                 }else{
-                    $(".add").removeClass("activehide");
+                    $add.removeClass("activehide");
                     $sendBtn.addClass("activehide");
                 }
             }
@@ -374,7 +371,7 @@ function TextArea(window) {
     var endSessionHandler=function(status){
        switch(status) {
             case -2://仅人工模式，转人工失败,有客服排队中
-                $textarea.attr("placeholder","排队中，请等待...").attr("contenteditable","false");
+                $textarea.attr("placeholder","排队中，请稍候...").attr("contenteditable","false");
                 $artificial.addClass("activehide");
                 $satisfaction.addClass("activehide");
                 break;
@@ -384,6 +381,7 @@ function TextArea(window) {
             case 3://客服把你拉黑了
             case 4://长时间不说话
             case 6://有新窗口打开
+            case 7://机器人超时下线
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
                 $keepSession.hide();
                 $endSession.show();
@@ -397,6 +395,10 @@ function TextArea(window) {
                 if(global.apiConfig.msgflag==1){
                     $(".js-leaveMsgBtn").addClass("activehide");
                 }
+                //flex兼容处理
+                if($(".sendarea").css("display")!="flex"){
+                    $(".endSession").css({"display":"inline-block"});
+                };
                 break;
         }
     };
@@ -406,12 +408,15 @@ function TextArea(window) {
             if(ua.match(/MicroMessenger/i)=="micromessenger") {
                 //微信内置浏览器必须使用添加随机数此方法
                 var random=+new Date();
-                window.location.href=window.location.href+"&refresh="+random;
+                str=window.location.href.replace("#","");
+                //alert(str)
+                window.location.href=str+"&refresh="+random;
             } else {
                 window.location.reload();
             }
     };
     var evaluateHandler=function(){
+
         $.ajax({
             type : "post",
             url : "/chat/user/isComment.action",
@@ -454,36 +459,37 @@ function TextArea(window) {
             var _text = $textarea.text();
             if(transferFlag==0){
                 if(_text) {
-                    $(".qqFaceTiphover").addClass("activehide");
-                    $(".addhover").addClass("activehide");
-                    $(".qqFaceTip").addClass("activehide");
+                    //$(".qqFaceTiphover").addClass("activehide");
+                    //$(".addhover").addClass("activehide");
+                    $qqFaceTip.addClass("activehide");
                 } else {
-                    $(".qqFaceTiphover").addClass("activehide");
-                    $(".addhover").addClass("activehide");
-                    $(".add").removeClass("activehide");
-                    $(".qqFaceTip").addClass("activehide");
+                   // $(".qqFaceTiphover").addClass("activehide");
+                   // $(".addhover").addClass("activehide");
+                    $add.removeClass("activehide");
+                    $qqFaceTip.addClass("activehide");
                 }
             }else{
                 if(_text) {
-                    $(".qqFaceTiphover").addClass("activehide");
-                    $(".addhover").addClass("activehide");
-                    $(".qqFaceTip").removeClass("activehide");
+                   // $(".qqFaceTiphover").addClass("activehide");
+                    //$(".addhover").addClass("activehide");
+                    $qqFaceTip.removeClass("activehide");
                 } else {
-                    $(".qqFaceTiphover").addClass("activehide");
-                    $(".addhover").addClass("activehide");
-                    $(".add").removeClass("activehide");
-                    $(".qqFaceTip").removeClass("activehide");
+                   // $(".qqFaceTiphover").addClass("activehide");
+                   // $(".addhover").addClass("activehide");
+                    $add.removeClass("activehide");
+                    $qqFaceTip.removeClass("activehide");
                 }
             }
             focusStatus=false;
             autoSizePhone();
+            specialModelsHandler();
         }
     };
     //特殊机型输入框处理，降低
     var specialModelsHandler=function(){
         var browserType= navigator.userAgent;
         //alert(browserType);
-        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+       /* if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
            $chatArea.css({"top":"592px"})
         };
         if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
@@ -491,13 +497,13 @@ function TextArea(window) {
         };
         if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
            $chatArea.css({"top":"437px"})
-        }
+        }*/
     };
     //特殊机型输入框处理，抬高
     var specialModelshideKeyboardHandler=function(){
         var browserType= navigator.userAgent;
-        //alert(browserType);
-        if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
+       
+       /* if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
            $chatArea.css({"top":"357px"})
         };
         if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
@@ -505,11 +511,59 @@ function TextArea(window) {
         };
         if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
            $chatArea.css({"top":"250px"})
-        }
+        }*/
     };
     //禁止输入框滑动，ios下有bug
     var noSliding=function(){
-        return false;
+        //return false;//内容框超过五行也不能滑动
+    };
+    var initHover=function(){
+        $add.on("touchstart",function(){
+            $(this).addClass("addhover");
+        });
+        $add.on("touchend",function(){
+            setTimeout(function(){
+                $add.removeClass("addhover")
+            },300)
+        });
+        $qqFaceTip.on("touchstart",function(){
+            $(this).addClass("qqFaceTiphover");
+        });
+        $qqFaceTip.on("touchend",function(){
+            setTimeout(function(){
+                $qqFaceTip.removeClass("qqFaceTiphover")
+            },300)
+        });
+        $uploadImg.on("touchstart",function(){
+            $(".uploadImgbg").addClass("uploadImgbgHover");
+        });
+        $uploadImg.on("touchend",function(){
+            setTimeout(function(){
+                $(".uploadImgbg").removeClass("uploadImgbgHover")
+            },300)
+        });
+        $satisfaction.on("touchstart",function(){
+            $(".satisfactionbg").addClass("satisfactionbgHover");
+        });
+        $satisfaction.on("touchend",function(){
+            setTimeout(function(){
+                $(".satisfactionbg").removeClass("satisfactionbgHover")
+            },300)
+        });
+        $leaveMessage.on("touchstart",function(){
+            $(".leaveMessagebg").addClass("leaveMessagebgHover");
+        });
+        $leaveMessage.on("touchend",function(){
+            setTimeout(function(){
+                $(".leaveMessagebg").removeClass("leaveMessagebgHover")
+            },300)
+        });
+        
+    };
+    var flexcompatible=function(){ 
+         $(".textarea").css({"width":"60%"}); 
+        $(".endSession span").css({"display":"inline-block"});
+        $(".endSession span").css({"width":"28%"});
     };
     var parseDOM = function() {
         $chatArea=$(".js-chatArea");
@@ -539,6 +593,7 @@ function TextArea(window) {
         $leaveMessage= $(".js-leaveMessage");
         //提示
         //$placeholder=$(".js-placeholder");
+        $qqFaceTip=$(".qqFaceTip");
     };
 
     var bindLitener = function() {
@@ -576,6 +631,9 @@ function TextArea(window) {
         $chatArea.on('touchmove',noSliding);
         //上传图片收起加号域
         listener.on("sendArea.closeAddarea",hideChatAreaHandler);
+        //机器人超时会话
+        listener.on("listMsg.robotAutoOffLine",endSessionHandler);
+        
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -591,10 +649,17 @@ function TextArea(window) {
         initPlugsin();
         bindLitener();
     //初始化按钮
-        $(".addhover").addClass("activehide");
-        $(".qqFaceTip").addClass("activehide");
-        $(".qqFaceTiphover").addClass("activehide");
+        //$(".addhover").addClass("activehide");
+        $qqFaceTip.addClass("activehide");
+        //$(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
+
+        //hover效果
+        initHover();
+        //flex兼容处理
+        if($(".sendarea").css("display")!="flex"){
+           flexcompatible();
+        }
     };
     (function(){
         parseDOM();
@@ -602,9 +667,6 @@ function TextArea(window) {
         listener.on("core.buttonchange",changeStatusHandler);
         //改变当前状态
         listener.on("core.statechange",statusHandler);
-        
-
-
     })();
     listener.on("core.onload", function(data) {
         global = data[0];
@@ -627,6 +689,9 @@ function TextArea(window) {
             $endSession.append(_html2);
         };
         $(".js-endSession").hide();
+        //用户设置样式
+        var userColor=global.userInfo.color;
+        $sendBtn.css({"background-color":userColor})
         init();
     });
 

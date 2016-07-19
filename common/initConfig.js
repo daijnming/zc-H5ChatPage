@@ -310,7 +310,15 @@ var initConfig = function() {
                         mType = Math.floor(mType);
                         data.type = mType;
                     }
-                    data.color = mColor?decodeURIComponent(mColor):data.color;
+                    //颜色只能传#666 或 #ffddaa
+                    var _color;
+                    var testColor = /^((#[a-fA-F0-9]{3})|(#[a-fA-F0-9]{6}))$/;
+                    if(mColor){
+                      _color = decodeURIComponent(mColor);
+                      if(testColor.test(_color)){
+                        data.color = _color;
+                      }
+                    }
                     That.cacheInfo.userInfo.color = data.color;
                     That.cacheInfo.apiConfig = data;
                     if(value === 'success') {
@@ -343,7 +351,7 @@ var initConfig = function() {
                     qq :decodeURI( That.cacheInfo.userInfo.qq),
                     sex :decodeURI( That.cacheInfo.userInfo.sex),
                     birthday :decodeURI( That.cacheInfo.userInfo.birthday),
-                    remakr :decodeURI( That.cacheInfo.userInfo.remark)
+                    remark :decodeURI( That.cacheInfo.userInfo.remark)
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;

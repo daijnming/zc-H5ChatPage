@@ -86,7 +86,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
-     console.log(data,'onReceive');
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -100,7 +99,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
                           status:0
                       }};
          msgBind(2,_data);
-         fnEvent.trigger('listMsg.robotAutoOffLine');//弹起新会话按钮
+         fnEvent.trigger('listMsg.robotAutoOffLine',7);//弹起新会话按钮
          return;
        }
      }else if(data.type==='human'){
@@ -173,7 +172,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         ele.parents('div.rightMsg').find('.js-shadowLayer').addClass('hide');
         ele.parents('div.rightMsg').find('.js-progressLayer').addClass('hide');
       }
-
     },
     onUpLoadImgProgress:function(ret){
       var data = ret.percentage;
@@ -190,6 +188,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       $progress.text(data+'%');
       var floatData = data/100;//获取小数
       if(floatData>=1){
+        $('#userMsg'+token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
         $progressLayer.remove();
@@ -199,11 +198,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //回传图片路径地址
     onUploadImgUrl:function(data){
       //FIXME 若是回传上传图片路径则不需要追加消息到聊天列表 直接去替换img即可
-      var $div = $('#img'+data[0]['token']);
+      var token = data[0]['token'];
+      var img = data[0]['answer'];
+      var $div = $('#img'+token);
       var $img = $div.find('p img');
-      $img.attr('src',data[0]['answer']);
+      $img.attr('src',img);
       sys.config.uploadImgToken='';//置空 一个流程完成
-      $('#userMsg'+data[0].token).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
+      sys.msg.maskLayer($('#userMsg'+token),false);
+      $('#userMsg'+token).remove();
     },
     //会话结束判断
     // 1：人工客服离线导致用户下线
@@ -250,8 +252,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         if(data.result=='success'){
           //判断图片是否上传成功
           if(uploadImgHandler[data.msgId]){
-              // uploadImgHandler.splice(_index,1);
               clearInterval(uploadImgHandler[data.msgId]);
+              sys.msg.maskLayer('userMsg'+data.msgId,false);
           }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
@@ -288,7 +290,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           that.removeClass('error msg-fail').addClass('msg-loading');
           answer = that.prev().text().trim();
         }else{
-          //发送失败去掉蒙层
+          //发送成功开启蒙层
           sys.msg.maskLayer(that,true);
           //图片
           sendType='img';
@@ -328,7 +330,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //来自于客服的消息
     //type --> robot human
     onMsgFromCustom:function(type,data){
-      // console.log(data);
       var logo,name,msg;
       if(type=='robot'){
         msg =QQFace.analysis( data.answer?data.answer:'');//过滤表情;
@@ -340,10 +341,16 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         logo = data.aface;
         name = data.aname;
       }
-      var index = msg.indexOf('uploadedFile');
-      var res;
+      var index = msg.indexOf('webchat_img_upload');
+          index2 = msg.indexOf('uploadedFile');
+      var res,
+          imgStatus;
       //判断是否是富文本
-      if(index>=0||(msg.indexOf('<')>=0 && msg.indexOf('>')>=0)){
+      if(index>=0||index2>=0){
+        imgStatus='imgStatus';
+        res = msg;
+      }
+      if(msg.indexOf('<')>=0 && msg.indexOf('>')>=0){
         res = msg;
       }else{
         res = Comm.getNewUrlRegex(msg);
@@ -352,6 +359,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           customLogo : logo,
           customName : name,
           customMsg : res,
+          imgStatus:imgStatus,
           date:+new Date()
         });
       var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);
@@ -379,15 +387,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         }
         if(overtimeTask.overtimeDaley * 1000 >= _daley){
           overtimeTask.overtimeDaley=0;//超时时间重置为0
-          // var data = {
-          //   type:'system',
-          //   status:'overtime',
-          //   data:{
-          //     content:_msg,
-          //     status:0
-          //   }
-          // };
-          // msgBind(2,data);
           global.apiConfig.customInfo.data.content=_msg;//超时提示语
           msgBind(2,global.apiConfig.customInfo);
         }

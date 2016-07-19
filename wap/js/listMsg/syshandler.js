@@ -72,11 +72,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
+      var face = data.data.aface?data.data.aface:'http://img.sobot.com/console/common/face/admin.png';
       if(data.data){
         global.apiConfig.customInfo = {
           type:"human",
           data:{
-              aface:data.data.aface,
+              aface:face,
               aname:data.data.aname,
               content:"",
               status:1
