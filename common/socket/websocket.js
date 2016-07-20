@@ -4,10 +4,12 @@
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
     var url = global.apiConfig.websocketUrl;
+    url = "ws://test.sobot.com/";
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
     var websocket;
+    var timer;
     var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
@@ -95,6 +97,9 @@ function ZcWebSocket(puid,url,global) {
         websocket.send(JSON.stringify(obj));
     };
     var onMessage = function(evt) {
+        if(evt.data === 'pong') {
+            return;
+        }
         var data = JSON.parse(evt.data);
         messageConfirm(data);
         if(data.type == 301) {
@@ -106,7 +111,7 @@ function ZcWebSocket(puid,url,global) {
         }
     };
 
-    var onClosed = function() {
+    var reConnect = function() {
         if(connRetryTime++ >= 3) {
             listener.trigger("core.system", {
                 'type' : 'system',
@@ -118,10 +123,23 @@ function ZcWebSocket(puid,url,global) {
             listener.trigger("core.sessionclose",-2);
             return;
         }
-        websocket = new WebSocket(url);
+        setTimeout(function() {
+            websocket = new WebSocket(url);
+        },2000);
+    };
+    var onClosed = function() {
+        console.log('close')
+        reConnect();
     };
     var bindListener = function() {
+        websocket.onerror = function() {
+            console.log('error')
+        };
         websocket.onopen = function() {
+            console.log("open")
+            timer = setInterval(function() {
+                websocket.send("ping");
+            },5 * 1000);
             var start = {
                 "t" : ROLE_USER,
                 "u" : global.apiInit.uid,
