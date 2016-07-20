@@ -87,7 +87,7 @@ function TextArea(window) {
         str=str.trim();
         if (str.length > 1024) {
             $textarea.text(str.substring(0,1024))
-        }
+        };
         //判断当前是否为人工模式
         if(transferFlag==0){
             robotmodeButton();
@@ -561,7 +561,7 @@ function TextArea(window) {
         
     };
     var flexcompatible=function(){ 
-         $(".textarea").css({"width":"60%"}); 
+         $(".textarea").css({"width":"70%"}); 
         $(".endSession span").css({"display":"inline-block"});
         $(".endSession span").css({"width":"28%"});
     };
@@ -659,7 +659,7 @@ function TextArea(window) {
         //flex兼容处理
         if($(".sendarea").css("display")!="flex"){
            flexcompatible();
-        }
+        } 
     };
     (function(){
         parseDOM();
