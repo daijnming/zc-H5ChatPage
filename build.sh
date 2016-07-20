@@ -29,5 +29,7 @@ if [ "$TYPE"x = "wap"x ];then
 	if [ "$TEST"x = ""x ];then
 		find dist/wap -name "*.html" -type f | xargs -I {}  sh replace.sh {} $JAR $CONF 
 	fi
+	rm -rf "./dist/wap/images/static"
+	cp -r wap/images/static dist/wap/images
 fi
 
