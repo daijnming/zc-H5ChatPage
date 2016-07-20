@@ -86,6 +86,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+     console.log(data);
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -437,6 +438,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   };
   var initPlagsin=function(){
     var _timer = setInterval(function(){
+      console.log(sys.config.currentState);
       //若是人工则开始计算超时时间
       if(sys.config.currentState==2){
         sys.msg.msgOvertimeTask();

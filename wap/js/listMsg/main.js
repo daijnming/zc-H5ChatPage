@@ -148,25 +148,7 @@ var ListMsgHandler = function() {
                           msgHtml = doT.template(msgTemplate.leftMsg)(comf);
                         }
                     }
-                    //时间线显示
-                    var curTime = new Date();
-                    var _t = Math.abs(curTime - new Date(itemChild.ts.substr(0,itemChild.ts.indexOf(' '))))/1000/60/60/24;
-                    if(oldTime){
-                      var t1 = oldTime.replace(/-/g,'/');
-                      var t2 = itemChild.ts.replace(/-/g,'/');
-                      var _m = Math.abs(new Date(t1)- new Date(t2))/1000/60;
-                      if(Number(_m)>1){
-                        //大于一分钟  0 当天  1上一天 2更久历史
-                        var type;
-                        if(_t<=1){
-                            type = 0;
-                        }else{
-                            type = _t>1&&_t<=2?1:2;
-                        }
-                        var retMsg = systemHandler.sys.getTimeLine(type,itemChild.ts);
-                        msgHtml += retMsg?retMsg:'';
-                      }
-                    }
+                    msgHtml = systemHandler.sys.getTimeLine2(data,itemChild.ts,oldTime) + msgHtml;
                     oldTime = itemChild.ts;
                     tempHtml=(tempHtml+msgHtml).replace(reg,'target="_blank"');
                 }
@@ -182,21 +164,7 @@ var ListMsgHandler = function() {
         //首次进入加载记录
         if(isFirstData){
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
-          systemHandler.sys.nowTimer();//显示当前时间
-          //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
-          if(data&&data.length>0){
-            var _ret = data[data.length-1]['content'][0];
-            global.apiConfig.customInfo = {
-              type:"human",
-              data:{
-                  aface:_ret.senderFace,
-                  aname:_ret.senderName,
-                  content:"",
-                  status:1
-              }
-            };
-          }
-
+          // systemHandler.sys.nowTimer();//显示当前时间
         }else{
           setTimeout(function(){
             var _y = -($(scrollChatList).height() - scrollerInitHeight);
@@ -241,6 +209,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
+      // console.log(msgType,data);
       var msgHtml='',
           userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
@@ -371,11 +340,22 @@ var ListMsgHandler = function() {
     var getHello = function(data){
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
-        messageHandler.config.currentState = data[data.length-1].content[0]['senderType'];
-        document.title = data[data.length-1].content[0]['senderName'];
-        $('.js-title').text(data[data.length-1].content[0]['senderName']);
+        var _data = data[data.length-1].content[0];
+        messageHandler.config.currentState = _data.senderType;
+        document.title = _data.senderName;
+        $('.js-title').text(_data.senderName);
+        //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
+          global.apiConfig.customInfo = {
+            type:"human",
+            data:{
+                aface:_data.senderFace,
+                aname:_data.senderName,
+                content:"",
+                status:1
+            }
+        };
+        showHistoryMsg(data,1);
       }
-      showHistoryMsg(data,1);
     };
     //禁止默认事件
     var onStopEvent=function(e){
