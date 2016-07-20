@@ -151,6 +151,7 @@ function ZcWebSocket(puid,url,global) {
         };
         websocket.onclose = function() {
             onClosed();
+            clearTimeout(timer);
         };
         websocket.onmessage = onMessage;
         listener.on("sendArea.send",onSend);
