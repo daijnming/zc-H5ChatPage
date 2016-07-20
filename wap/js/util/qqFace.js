@@ -85,7 +85,7 @@ function ZC_Face() {
                 //console.log(ico[0]);
                 var pathname = tip2[ico[0]];
                 //重新匹配到第一个符合条件的表情字符
-                str = str.replace(qqfaceReg2,'<img class="faceimg" src="/wap/images/qqarclist/' + pathname + '.png" border="0" />');
+                str = str.replace(qqfaceReg2,'<img class="faceimg" src="/chat/wap/images/qqarclist/' + pathname + '.png" border="0" />');
                 //str = str.replace(qqfaceReg2,'<span class="msgfaceIco faceIco faceIco'+pathname+'" /></span>');
 
             }
