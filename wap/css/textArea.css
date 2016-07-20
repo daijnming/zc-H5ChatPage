@@ -24,7 +24,7 @@ li {
    }
 .chatArea {
     width: 100%;
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom:0px;
     background: #fff;
