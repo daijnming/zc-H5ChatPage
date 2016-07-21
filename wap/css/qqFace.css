@@ -147,7 +147,7 @@ background-position:2px 2px;
 }
 /* iphone6 */
 @media (min-device-width : 375px){
-    .faceIco{
+    .face .faceIco{
         margin:3% 3.5%;
         width: 25px;
         height: 25px;
@@ -155,7 +155,7 @@ background-position:2px 2px;
 }
 /* iphone6 Plus */
 @media (min-device-width : 411px){
-    .faceIco{
+    .face .faceIco{
         margin:3% 3.9%;
         width: 25px;
         height: 25px;
@@ -168,7 +168,7 @@ background-position:2px 2px;
 }
 /*  */
 @media (min-device-width : 600px){
-    .faceIco{
+    .face .faceIco{
         margin:1.6% 4.9%;
         width: 25px;
         height: 25px;
@@ -179,7 +179,7 @@ background-position:2px 2px;
 }
 /*  */
 @media (min-device-width : 640px){
-    .faceIco{
+    .face .faceIco{
         margin:1.6% 4.9%;
         width: 25px;
         height: 25px;
@@ -190,7 +190,7 @@ background-position:2px 2px;
 }
 /* iphone6puls橫屏 */
 @media (min-device-width : 736px){
-    .faceIco{
+    .face .faceIco{
         margin:1.6% 5.3%;
         width: 25px;
         height: 25px;
@@ -201,7 +201,7 @@ background-position:2px 2px;
 }
 /*  */
 @media (min-device-width : 1280px){
-    .faceIco{
+    .face .faceIco{
         margin:1.6% 4.9%;
         width: 25px;
         height: 25px;
@@ -212,7 +212,7 @@ background-position:2px 2px;
 }
 /*  */
 @media (min-device-width : 1600px){
-    .faceIco{
+    .face .faceIco{
         margin:0.6% 5.9%;
         width: 25px;
         height: 25px;
