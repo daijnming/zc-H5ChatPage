@@ -6,6 +6,7 @@ function Rolling(puid,pu,global) {
     var listener = require('../util/listener.js');
     var socketType = 'human';
     var timer;
+    var ROLE_USER = 0;
     var onSend = function(args,retry) {
         var retry = retry || 0;
         var data = args[0];
@@ -52,6 +53,32 @@ function Rolling(puid,pu,global) {
         clearInterval(timer);
     };
 
+    var messageConfirm = function(list) {
+        var arr = [];
+        for(var i = 0,
+            len = list.length;i < len;i++) {
+            var item = list[i];
+            var obj = {
+                'type' : 300,
+                'utype' : ROLE_USER,
+                'cid' : item.cid,
+                'uid' : item.uid,
+                'msgId' : item.msgId
+            };
+            arr.push(obj);
+        }
+        if(arr.length > 0)
+            $.ajax({
+                'url' : '/chat/user/msg/ack.action',
+                'dataType' : 'json',
+                'data' : {
+                    'content' : JSON.stringify(arr),
+                    'tnk' : +new Date()
+                },
+                'type' : 'POST',
+            });
+    };
+
     var getMessage = function() {
         $.ajax({
             'url' : '/chat/user/msg.action',
@@ -66,8 +93,8 @@ function Rolling(puid,pu,global) {
                     for(var i = 0,
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
+                        alert(ret[i]);
                         arr.push(item);
-
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
                             if(item.status == 2) {
@@ -82,6 +109,7 @@ function Rolling(puid,pu,global) {
                         }
 
                     }
+                    messageConfirm(arr);
                     listener.trigger("core.onreceive", {
                         'type' : socketType,
                         'list' : arr

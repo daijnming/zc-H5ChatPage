@@ -4,7 +4,7 @@
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
     var url = global.apiConfig.websocketUrl;
-    url = "ws://test.sobot.com/";
+    // url = "ws://test.sobot.com/";
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
@@ -100,7 +100,9 @@ function ZcWebSocket(puid,url,global) {
         if(evt.data === 'pong') {
             return;
         }
+        alert(evt.data);
         var data = JSON.parse(evt.data);
+
         messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
