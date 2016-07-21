@@ -230,6 +230,7 @@ var HumanFirst = function(global) {
                         //排队
                         global.urlParams.groupId = groupId;
                         queueWait(ret,init,value);
+                        listener.trigger("core.sessionclose",-2);
                     } else if(ret.status == 1) {
                         queueing = false;
                         if(init) {

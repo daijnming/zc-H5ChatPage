@@ -384,6 +384,7 @@ function TextArea(window) {
             case -2://仅人工模式，转人工失败,有客服排队中
                 $textarea.attr("placeholder","排队中，请稍候...").attr("contenteditable","false");
                 $artificial.addClass("activehide");
+                $qqFaceTip.addClass("activehide");
                 //$satisfaction.addClass("activehide");
                 break;
             case -1://仅人工模式，转人工失败,无客服
