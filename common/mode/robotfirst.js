@@ -286,12 +286,12 @@ var RobotFirst = function(global) {
         });
         var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
+	queueing == status == -2;
         if(status == 0) {
             manager = new Robot(global);
             getWelcome();
             setCurrentState.setCurrentState('robot');
         } else {
-            queueing = true;
             if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);
             } else if(status == -1) {

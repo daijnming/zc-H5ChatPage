@@ -242,7 +242,7 @@ function HumanOnly(global) {
 
     var initPlugins = function() {
         var status = global.apiInit.ustatus;
-        queueing = (status !== 0);
+        queueing = (status == -2);
         if(status == 0 || status == 1 || status == -2) {
             transferConnect(null,null,true);
         }
