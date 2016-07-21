@@ -22,6 +22,7 @@ function HumanOnly(global) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
         var word = word || global.apiConfig.robotHelloWord;
+        var curStatus = global.apiInit.ustatus == -2?1:0;//-2为排队中
         if(!value) {
             value = [];
         }
@@ -29,7 +30,8 @@ function HumanOnly(global) {
         var obj = {
             "date" : DateUtil.formatDate(now),
             "content" : [{
-                'senderType' : (!!word) ? 2 : 1,
+                // 'senderType' : (!!word) ? 2 : 1,
+                'senderType':curStatus?1:(!!word) ? 2 : 1,
                 't' : +now,
                 'msg' : word,
                 'ts' : DateUtil.formatDate(now,true),

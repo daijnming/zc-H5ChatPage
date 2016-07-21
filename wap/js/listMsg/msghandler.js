@@ -86,6 +86,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
+     console.log(data);
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -165,7 +166,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //处理图片失败遮罩问题
     //openLayer 打开蒙板
     maskLayer:function(ele,showMaskLayer){
-      if(showMaskLayer){
+      if(ele&&showMaskLayer){
         ele.parents('div.rightMsg').find('.js-shadowLayer').removeClass('hide');
         ele.parents('div.rightMsg').find('.js-progressLayer').removeClass('hide');
       }else{
@@ -253,7 +254,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           //判断图片是否上传成功
           if(uploadImgHandler[data.msgId]){
               clearInterval(uploadImgHandler[data.msgId]);
-              sys.msg.maskLayer('userMsg'+data.msgId,false);
+              sys.msg.maskLayer($('userMsg'+data.msgId),false);
           }
           sys.config.msgSendACK.splice(isMsgId,1);//从数组中删除
           $('#userMsg'+data.msgId).removeClass('error msg-loading msg-fail msg-close msg-sendAgain').addClass('msg-served');
@@ -342,11 +343,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         name = data.aname;
       }
       var index = msg.indexOf('webchat_img_upload');
-          index2 = msg.indexOf('uploadedFile');
+          // index2 = msg.indexOf('uploadedFile');
       var res,
           imgStatus;
       //判断是否是富文本
-      if(index>=0||index2>=0){
+      if(index>=0){
         imgStatus='imgStatus';
         res = msg;
       }

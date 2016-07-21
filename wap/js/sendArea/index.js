@@ -34,8 +34,9 @@ function TextArea(window) {
         //判断用户是否说过话
         //isSpeak=false,
         //是否评价过 -1表示用户没有说过话，0表示说过话没有评论过，1表示评论过
-        isEvaluated= -1;
+        isEvaluated= -1,
         //0为机器人，1为人工
+        isRepeat=false;
     var transferFlag=0;
     //传给聊天的url
     var statusHandler=function(data){
@@ -198,7 +199,7 @@ function TextArea(window) {
                 //$(".qqFaceTiphover").addClass("activehide")
                 $qqFaceTip.removeClass("activehide")
             }
-
+            autoSizePhone();
         } else {
             setTimeout(function(){
                 //显示
@@ -228,7 +229,8 @@ function TextArea(window) {
         //与键盘优化
         if($chatArea.hasClass("showChatEmotion")){
             //隐藏
-            hideChatAreaHandler()
+            hideChatAreaHandler();
+            autoSizePhone();
         } else {
             setTimeout(function(){
                 //显示
@@ -357,7 +359,16 @@ function TextArea(window) {
     };
     var artificialHandler=function(){
         //isSpeak=false;
-        listener.trigger('sendArea.artificial');
+        
+        if(isRepeat==false){
+            isRepeat=true;
+            listener.trigger('sendArea.artificial');
+            //防止快速点击转人工按钮
+            setTimeout(function(){
+                isRepeat=false;
+            },2000)
+        }
+        
         focusStatus=false;
     };
     //宽高自适应手机
@@ -373,7 +384,7 @@ function TextArea(window) {
             case -2://仅人工模式，转人工失败,有客服排队中
                 $textarea.attr("placeholder","排队中，请稍候...").attr("contenteditable","false");
                 $artificial.addClass("activehide");
-                $satisfaction.addClass("activehide");
+                //$satisfaction.addClass("activehide");
                 break;
             case -1://仅人工模式，转人工失败,无客服
             case 1://客服自己离线了
@@ -481,7 +492,7 @@ function TextArea(window) {
                 }
             }
             focusStatus=false;
-            autoSizePhone();
+            //autoSizePhone();
             specialModelsHandler();
         }
     };
