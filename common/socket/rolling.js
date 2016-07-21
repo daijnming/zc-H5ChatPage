@@ -67,7 +67,9 @@ function Rolling(puid,pu,global) {
             };
             arr.push(obj);
         }
-        if(arr.length > 0)
+        if(arr.length <= 0)
+            return;
+        if(window.confirm("是否发送消息回执"))
             $.ajax({
                 'url' : '/chat/user/msg/ack.action',
                 'dataType' : 'json',
