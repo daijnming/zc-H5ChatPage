@@ -39,25 +39,53 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         msgBind(3,_timer);
       }
     },
-    //type 0 今天  1 昨天  2 更早在历史记录
-    getTimeLine:function(type,time){
-      //获取时间线显示
-      var _timer;
-      if(type==2){
-        _timer= time.substring(0,time.lastIndexOf(':'));
-      }else{
-        var t = type===0?'今天':'昨天';
-        _timer = t + time.substring(time.indexOf(' '),time.lastIndexOf(':'));
+    getTimeLine2:function(data,tp,oldTp){
+      //时间线显示
+      var ret='',//返回结果
+          tl,//时间线
+          type;//0 当天  1上一天 2更久历史
+      var curTime = new Date();
+      var _t = Math.abs(curTime - new Date(tp.substr(0,tp.indexOf(' '))))/1000/60/60/24;
+      if(oldTp){
+        oldTp = oldTp.replace(/-/g,'/');
+        tp = tp.replace(/-/g,'/');
+        var _m = Math.abs(new Date(oldTp)- new Date(tp))/1000/60;
+        if(Number(_m)>1){ //大于一分钟 才有意义继续执行
+          //0 当天  1上一天 2更久历史
+          type = _t<=1 ? 0 : _t>1 && _t<=2 ? 1 : 2;
+          var _date = tp.substring(0,tp.lastIndexOf(':'));
+          var _time = tp.substring(tp.indexOf(' '),tp.lastIndexOf(':'));
+          switch (type) {
+            case 0:
+              tl= '今天'+ _time;
+              break;
+            case 1:
+              tl = '昨天'+_time;
+              break;
+            case 2:
+              tl = _date;
+              break;
+          }
+          var comf = $.extend({
+            sysData:tl,
+            date:+new Date()
+          });
+          ret = doT.template(msgTemplate.sysData)(comf);
+        }
       }
-      var comf = $.extend({
-        sysData:_timer,
-        date:+new Date()
-      });
-      var str = doT.template(msgTemplate.sysData)(comf);
-
-      if(_timer){
-        return str;
+      //FIXME 首次进入 显示时间线
+      if(data&&data.length == 1&&data[0].content.length==1){
+        var _time = new Date();
+        var _hour = _time.getHours()>9?_time.getHours():'0'+_time.getHours();
+        var _minutes = _time.getMinutes()>9?_time.getMinutes():'0'+_time.getMinutes();
+        var _ret = '今天 '+_hour+':'+_minutes;
+        var comf = $.extend({
+          sysData:_ret,
+          date:+_time
+        });
+        ret = doT.template(msgTemplate.sysData)(comf);
       }
+      return ret;
     },
     //输入栏高度变化设置
     onAutoSize : function(node){
@@ -72,17 +100,19 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //转接人工
     onSessionOpen:function(data){
-      var face = data.data.aface?data.data.aface:'http://img.sobot.com/console/common/face/admin.png';
-      if(data.data){
-        global.apiConfig.customInfo = {
-          type:"human",
-          data:{
-              aface:face,
-              aname:data.data.aname,
-              content:"",
-              status:1
-          }
-        };
+      if(data.type!='system'){
+        var face = data.data.aface?data.data.aface:'http://img.sobot.com/console/common/face/admin.png';
+        if(data.data){
+          global.apiConfig.customInfo = {
+            type:"human",
+            data:{
+                aface:face,
+                aname:data.data.aname,
+                content:"",
+                status:1
+            }
+          };
+        }
       }
       var name = data.data.aname?data.data.aname:'未接入';
       $('.js-title').text(name);
