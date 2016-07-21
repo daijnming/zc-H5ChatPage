@@ -52,6 +52,7 @@ var RobotFirst = function(global) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
         var word = word || global.apiConfig.robotHelloWord;
+        var curStatus = global.apiInit.ustatus == -2?1:0;//-2为排队中
         initSession(global).then(function(value,promise) {
             if(!value) {
                 value = [];
@@ -60,7 +61,8 @@ var RobotFirst = function(global) {
             var obj = {
                 "date" : DateUtil.formatDate(now),
                 "content" : [{
-                    'senderType' : (!!word) ? 2 : 1,
+                    // 'senderType' : (!!word) ? 2 : 1,
+                    'senderType':curStatus?1:(!!word) ? 2 : 1,
                     't' : +now,
                     'msg' : word,
                     'ts' : DateUtil.formatDate(now,true),
@@ -286,12 +288,12 @@ var RobotFirst = function(global) {
         });
         var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
+	queueing == status == -2;
         if(status == 0) {
             manager = new Robot(global);
             getWelcome();
             setCurrentState.setCurrentState('robot');
         } else {
-            queueing = true;
             if(status == 1 || status == -2) {
                 transferBtnClickHandler(null,true);
             } else if(status == -1) {

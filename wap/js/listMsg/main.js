@@ -209,7 +209,6 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      // console.log(msgType,data);
       var msgHtml='',
           userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
@@ -338,6 +337,7 @@ var ListMsgHandler = function() {
     };
     //加欢迎语
     var getHello = function(data){
+      console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         var _data = data[data.length-1].content[0];

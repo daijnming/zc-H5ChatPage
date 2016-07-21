@@ -438,7 +438,6 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   };
   var initPlagsin=function(){
     var _timer = setInterval(function(){
-      console.log(sys.config.currentState);
       //若是人工则开始计算超时时间
       if(sys.config.currentState==2){
         sys.msg.msgOvertimeTask();
