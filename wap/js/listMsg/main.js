@@ -399,12 +399,11 @@ var ListMsgHandler = function() {
         chatPanelList = $('.js-chatPanelList');
         wrapBox = $('.js-wrapBox');
         scrollChatList = $('.js-scroller');
-
     };
-
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        $('.js-chatPanelList').on('click',hideKeyboard);
+        $('.js-chatPanelList').on('click',hideKeyboard);//隐藏键盘
+        $('.js-chatPanelList').on('touchmove',hideKeyboard);//隐藏键盘
     };
     var init = function() {
         parseDOM();
