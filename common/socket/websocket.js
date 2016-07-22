@@ -101,8 +101,6 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         var data = JSON.parse(evt.data);
-        alert(evt.data);
-        if(window.confirm("是否发送回执"))
             messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
