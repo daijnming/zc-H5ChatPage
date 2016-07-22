@@ -130,7 +130,7 @@ function ZcWebSocket(puid,url,global) {
             websocket.onopen = onOpen;
             websocket.onclose = onClose;
             websocket.onmessage = onMessage;
-        },2000);
+        },5000);
     };
     var onClosed = function() {
         alert('close');
@@ -148,9 +148,13 @@ function ZcWebSocket(puid,url,global) {
             "u" : global.apiInit.uid,
             's' : global.sysNum
         };
+        var count = 0;
+        for(var el in retryList) {
+            count++;
+        }
         connRetryTime = 0;
         websocket.send(JSON.stringify(start));
-        alert('open');
+        alert('open retry count=' + count);
         setInterval(retry,1000);
     };
 
