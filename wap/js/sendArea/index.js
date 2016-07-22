@@ -391,6 +391,7 @@ function TextArea(window) {
                 $qqFaceTip.addClass("activehide");
                 //$satisfaction.addClass("activehide");
                 break;
+            case -4://websocket中断，重连三次关闭
             case -1://仅人工模式，转人工失败,无客服
             case 1://客服自己离线了
             case 2://客服把你T了
@@ -497,7 +498,7 @@ function TextArea(window) {
                 }
             }
             focusStatus=false;
-            //autoSizePhone();
+            autoSizePhone();
             specialModelsHandler();
         }
     };
@@ -649,7 +650,6 @@ function TextArea(window) {
         listener.on("sendArea.closeAddarea",hideChatAreaHandler);
         //机器人超时会话
         listener.on("listMsg.robotAutoOffLine",endSessionHandler);
-        
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
