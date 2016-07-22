@@ -101,7 +101,7 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         var data = JSON.parse(evt.data);
-            messageConfirm(data);
+        messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
@@ -138,7 +138,6 @@ function ZcWebSocket(puid,url,global) {
             console.log('error');
         };
         websocket.onopen = function() {
-            alert('open');
             console.log("open");
             timer = setInterval(function() {
                 websocket.send("ping");
@@ -150,6 +149,7 @@ function ZcWebSocket(puid,url,global) {
             };
             connRetryTime = 0;
             websocket.send(JSON.stringify(start));
+            alert('open');
             setInterval(retry,1000);
         };
         websocket.onclose = function() {
@@ -170,7 +170,7 @@ function ZcWebSocket(puid,url,global) {
     var start = function() {
         websocket = new WebSocket(url);
         init();
-        HearBeat();
+        HearBeat(global);
     };
 
     var stop = function() {
