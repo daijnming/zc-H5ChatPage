@@ -118,7 +118,7 @@ var ListMsgHandler = function() {
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
                     //判断加载是否是图片
-                    if(res.indexOf('<img')===0){
+                    if(res.indexOf('webchat_img_upload')>=0){
                       imgStatus="imgStatus";
                     }
                     //FIXME 消息展示时类型判断
