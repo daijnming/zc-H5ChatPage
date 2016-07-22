@@ -73,8 +73,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           ret = doT.template(msgTemplate.sysData)(comf);
         }
       }
+      console.log(chatPanelList.children().length);
       //FIXME 首次进入 显示时间线
-      if(data&&data.length == 1&&data[0].content.length==1){
+      if(!chatPanelList.children().length){
         var _time = new Date();
         var _hour = _time.getHours()>9?_time.getHours():'0'+_time.getHours();
         var _minutes = _time.getMinutes()>9?_time.getMinutes():'0'+_time.getMinutes();

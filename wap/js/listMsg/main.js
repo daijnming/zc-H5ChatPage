@@ -118,7 +118,7 @@ var ListMsgHandler = function() {
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
                     //判断加载是否是图片
-                    if(res.indexOf('<img')===0){
+                    if(res.indexOf('webchat_img_upload')>=0){
                       imgStatus="imgStatus";
                     }
                     //FIXME 消息展示时类型判断
@@ -399,12 +399,11 @@ var ListMsgHandler = function() {
         chatPanelList = $('.js-chatPanelList');
         wrapBox = $('.js-wrapBox');
         scrollChatList = $('.js-scroller');
-
     };
-
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        $('.js-chatPanelList').on('click',hideKeyboard);
+        $('.js-chatPanelList').on('click',hideKeyboard);//隐藏键盘
+        $('.js-chatPanelList').on('touchmove',hideKeyboard);//隐藏键盘
     };
     var init = function() {
         parseDOM();
