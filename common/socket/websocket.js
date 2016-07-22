@@ -3,8 +3,6 @@
  */
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
-    var url = global.apiConfig.websocketUrl;
-    // url = "ws://test.sobot.com/";
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
