@@ -99,8 +99,10 @@ function ZcWebSocket(puid,url,global) {
         if(evt.data === 'pong') {
             return;
         }
-        alert(evt.data);
         var data = JSON.parse(evt.data);
+        if(data.type = 301)
+            return;
+        alert(evt.data);
         if(window.confirm("是否发送回执"))
             messageConfirm(data);
         if(data.type == 301) {
