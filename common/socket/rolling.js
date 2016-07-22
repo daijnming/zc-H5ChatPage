@@ -7,6 +7,7 @@ function Rolling(puid,pu,global) {
     var socketType = 'human';
     var timer;
     var ROLE_USER = 0;
+    var messageCache = {};
     var onSend = function(args,retry) {
         var retry = retry || 0;
         var data = args[0];
@@ -95,7 +96,10 @@ function Rolling(puid,pu,global) {
                     for(var i = 0,
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
-                        alert(ret[i]);
+                        if(messageCache[item.msgId]) {
+                            continue;
+                        }
+                        messageCache[item.msgId] = true;
                         arr.push(item);
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);

@@ -6,6 +6,7 @@ function ZcWebSocket(puid,url,global) {
     this.puid = puid;
     // url = "ws://test.sobot.com/";
     var socketType = 'human';
+    var messageCache = {};
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
     var websocket;
@@ -102,6 +103,9 @@ function ZcWebSocket(puid,url,global) {
         }
         var data = JSON.parse(evt.data);
         messageConfirm(data);
+        if(messageCache[data.msgId])
+            return;
+        messageCache[data.msgId] = true;
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
