@@ -1,11 +1,12 @@
 /**
  * @author Treagzhao
  */
+var HearBeat = require("./heartbeat.js");
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
-    var url = global.apiConfig.websocketUrl;
-    url = "ws://test.sobot.com/";
+    // url = "ws://test.sobot.com/";
     var socketType = 'human';
+    var messageCache = {};
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
     var websocket;
@@ -102,6 +103,9 @@ function ZcWebSocket(puid,url,global) {
         }
         var data = JSON.parse(evt.data);
         messageConfirm(data);
+        if(messageCache[data.msgId])
+            return;
+        messageCache[data.msgId] = true;
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
@@ -120,39 +124,62 @@ function ZcWebSocket(puid,url,global) {
                     'content' : "与服务器连接中断"
                 }
             });
-            listener.trigger("core.sessionclose",-2);
+            listener.trigger("core.sessionclose",-4);
             return;
         }
         setTimeout(function() {
+            alert("reconnect");
             websocket = new WebSocket(url);
-        },2000);
+            websocket.onerror = onError;
+            websocket.onopen = onOpen;
+            websocket.onclose = onClose;
+            websocket.onmessage = onMessage;
+        },5000);
     };
     var onClosed = function() {
-        console.log('close')
+        alert('close');
+        console.log('close');
         reConnect();
     };
+
+    var onOpen = function() {
+        console.log("open");
+        timer = setInterval(function() {
+            websocket.send("ping");
+        },5 * 1000);
+        var start = {
+            "t" : ROLE_USER,
+            "u" : global.apiInit.uid,
+            's' : global.sysNum
+        };
+        var count = 0;
+        for(var el in retryList) {
+            count++;
+        }
+        connRetryTime = 0;
+        websocket.send(JSON.stringify(start));
+        for(var el in retryList) {
+            var msg = retryList[el];
+            websocket.send(JSON.stringify(msg));
+        }
+        alert('open retry count=' + count);
+        setInterval(retry,1000);
+    };
+
+    var onClose = function() {
+        onClosed();
+        clearTimeout(timer);
+    };
+
+    var onError = function() {
+        alert('error');
+        console.log('error');
+    };
+
     var bindListener = function() {
-        websocket.onerror = function() {
-            console.log('error')
-        };
-        websocket.onopen = function() {
-            console.log("open")
-            timer = setInterval(function() {
-                websocket.send("ping");
-            },5 * 1000);
-            var start = {
-                "t" : ROLE_USER,
-                "u" : global.apiInit.uid,
-                's' : global.sysNum
-            };
-            connRetryTime = 0;
-            websocket.send(JSON.stringify(start));
-            setInterval(retry,1000);
-        };
-        websocket.onclose = function() {
-            onClosed();
-            clearTimeout(timer);
-        };
+        websocket.onerror = onError;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
         websocket.onmessage = onMessage;
         listener.on("sendArea.send",onSend);
     };
@@ -167,6 +194,7 @@ function ZcWebSocket(puid,url,global) {
     var start = function() {
         websocket = new WebSocket(url);
         init();
+        HearBeat(global);
     };
 
     var stop = function() {
