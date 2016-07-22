@@ -63,11 +63,6 @@ function HumanOnly(global) {
             var item = list[i];
             var ret = item;
             if(item.type === 200) {
-                if(manager) {
-                    manager.destroy();
-                }
-                manager = socketFactory(ret,global);
-                tempManager = null;
                 setCurrentState.setCurrentState('human');
                 listener.trigger("core.system", {
                     'type' : 'system',
