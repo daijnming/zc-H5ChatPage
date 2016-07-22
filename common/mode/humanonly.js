@@ -22,7 +22,8 @@ function HumanOnly(global) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
         var word = word || global.apiConfig.robotHelloWord;
-        var curStatus = global.apiInit.ustatus == -2?1:0;//-2为排队中
+        var curStatus = global.apiInit.ustatus == -2 ? 1 : 0;
+        //-2为排队中
         if(!value) {
             value = [];
         }
@@ -31,7 +32,7 @@ function HumanOnly(global) {
             "date" : DateUtil.formatDate(now),
             "content" : [{
                 // 'senderType' : (!!word) ? 2 : 1,
-                'senderType':curStatus?1:(!!word) ? 2 : 1,
+                'senderType' : curStatus ? 1 : (!!word) ? 2 : 1,
                 't' : +now,
                 'msg' : word,
                 'ts' : DateUtil.formatDate(now,true),
@@ -62,11 +63,6 @@ function HumanOnly(global) {
             var item = list[i];
             var ret = item;
             if(item.type === 200) {
-                if(manager) {
-                    manager.destroy();
-                }
-                manager = socketFactory(ret,global);
-                tempManager = null;
                 setCurrentState.setCurrentState('human');
                 listener.trigger("core.system", {
                     'type' : 'system',
@@ -244,7 +240,7 @@ function HumanOnly(global) {
 
     var initPlugins = function() {
         var status = global.apiInit.ustatus;
-        queueing = (status == -2);
+        //queueing = (status == -2);
         if(status == 0 || status == 1 || status == -2) {
             transferConnect(null,null,true);
         }

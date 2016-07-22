@@ -1,10 +1,10 @@
 /**
  * @author Treagzhao
  */
+var HearBeat = require("./heartbeat.js");
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
-    var url = global.apiConfig.websocketUrl;
-    url = "ws://test.sobot.com/";
+    // url = "ws://test.sobot.com/";
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
@@ -101,7 +101,9 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         var data = JSON.parse(evt.data);
-        messageConfirm(data);
+        alert(evt.data);
+        if(window.confirm("是否发送回执"))
+            messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
@@ -170,6 +172,7 @@ function ZcWebSocket(puid,url,global) {
     var start = function() {
         websocket = new WebSocket(url);
         init();
+        HearBeat();
     };
 
     var stop = function() {

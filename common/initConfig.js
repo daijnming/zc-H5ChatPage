@@ -336,6 +336,7 @@ var initConfig = function() {
                 url : api.init_url,
                 dataType : "json",
                 data : {
+                    'ack':1,
                     sysNum : decodeURI(That.cacheInfo.sysNum),
                     source : decodeURI(That.cacheInfo.userInfo.source),
                     partnerId :decodeURI( That.cacheInfo.userInfo.partnerId),
