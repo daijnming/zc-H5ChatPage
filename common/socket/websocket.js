@@ -126,6 +126,10 @@ function ZcWebSocket(puid,url,global) {
         setTimeout(function() {
             alert("reconnect");
             websocket = new WebSocket(url);
+            websocket.onerror = onError;
+            websocket.onopen = onOpen;
+            websocket.onclose = onClose;
+            websocket.onmessage = onMessage;
         },2000);
     };
     var onClosed = function() {
@@ -133,30 +137,37 @@ function ZcWebSocket(puid,url,global) {
         console.log('close');
         reConnect();
     };
+
+    var onOpen = function() {
+        console.log("open");
+        timer = setInterval(function() {
+            websocket.send("ping");
+        },5 * 1000);
+        var start = {
+            "t" : ROLE_USER,
+            "u" : global.apiInit.uid,
+            's' : global.sysNum
+        };
+        connRetryTime = 0;
+        websocket.send(JSON.stringify(start));
+        alert('open');
+        setInterval(retry,1000);
+    };
+
+    var onClose = function() {
+        onClosed();
+        clearTimeout(timer);
+    };
+
+    var onError = function() {
+        alert('error');
+        console.log('error');
+    };
+
     var bindListener = function() {
-        websocket.onerror = function() {
-            alert('error');
-            console.log('error');
-        };
-        websocket.onopen = function() {
-            console.log("open");
-            timer = setInterval(function() {
-                websocket.send("ping");
-            },5 * 1000);
-            var start = {
-                "t" : ROLE_USER,
-                "u" : global.apiInit.uid,
-                's' : global.sysNum
-            };
-            connRetryTime = 0;
-            websocket.send(JSON.stringify(start));
-            alert('open');
-            setInterval(retry,1000);
-        };
-        websocket.onclose = function() {
-            onClosed();
-            clearTimeout(timer);
-        };
+        websocket.onerror = onError;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
         websocket.onmessage = onMessage;
         listener.on("sendArea.send",onSend);
     };
