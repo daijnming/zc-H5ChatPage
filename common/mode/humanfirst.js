@@ -128,6 +128,7 @@ var HumanFirst = function(global) {
         tempManager.start();
         manager = new Robot(global);
         modeState.setCurrentState("robot");
+        listener.trigger("core.sessionclose",-3);
     };
 
     var onReceive = function(data) {
@@ -232,7 +233,6 @@ var HumanFirst = function(global) {
                         //排队
                         global.urlParams.groupId = groupId;
                         queueWait(ret,init,value);
-                        listener.trigger("core.sessionclose",-2);
                     } else if(ret.status == 1) {
                         queueing = false;
                         if(init) {

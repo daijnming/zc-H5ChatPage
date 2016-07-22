@@ -381,6 +381,10 @@ function TextArea(window) {
     //结束会话
     var endSessionHandler=function(status){
        switch(status) {
+            case -3://人工优先模式，转人工失败,有客服排队中
+                $qqFaceTip.addClass("activehide");
+                //$satisfaction.addClass("activehide");
+                break;
             case -2://仅人工模式，转人工失败,有客服排队中
                 $textarea.attr("placeholder","排队中，请稍候...").attr("contenteditable","false");
                 $artificial.addClass("activehide");
