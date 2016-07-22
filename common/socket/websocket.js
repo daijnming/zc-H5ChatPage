@@ -101,9 +101,7 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         var data = JSON.parse(evt.data);
-        alert(evt.data);
-        if(window.confirm("是否发送回执"))
-            messageConfirm(data);
+        messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
@@ -126,7 +124,12 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         setTimeout(function() {
+            alert("reconnect");
             websocket = new WebSocket(url);
+            websocket.onerror = onError;
+            websocket.onopen = onOpen;
+            websocket.onclose = onClose;
+            websocket.onmessage = onMessage;
         },2000);
     };
     var onClosed = function() {
@@ -134,30 +137,37 @@ function ZcWebSocket(puid,url,global) {
         console.log('close');
         reConnect();
     };
+
+    var onOpen = function() {
+        console.log("open");
+        timer = setInterval(function() {
+            websocket.send("ping");
+        },5 * 1000);
+        var start = {
+            "t" : ROLE_USER,
+            "u" : global.apiInit.uid,
+            's' : global.sysNum
+        };
+        connRetryTime = 0;
+        websocket.send(JSON.stringify(start));
+        alert('open');
+        setInterval(retry,1000);
+    };
+
+    var onClose = function() {
+        onClosed();
+        clearTimeout(timer);
+    };
+
+    var onError = function() {
+        alert('error');
+        console.log('error');
+    };
+
     var bindListener = function() {
-        websocket.onerror = function() {
-            alert('error');
-            console.log('error');
-        };
-        websocket.onopen = function() {
-            alert('open');
-            console.log("open");
-            timer = setInterval(function() {
-                websocket.send("ping");
-            },5 * 1000);
-            var start = {
-                "t" : ROLE_USER,
-                "u" : global.apiInit.uid,
-                's' : global.sysNum
-            };
-            connRetryTime = 0;
-            websocket.send(JSON.stringify(start));
-            setInterval(retry,1000);
-        };
-        websocket.onclose = function() {
-            onClosed();
-            clearTimeout(timer);
-        };
+        websocket.onerror = onError;
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
         websocket.onmessage = onMessage;
         listener.on("sendArea.send",onSend);
     };
@@ -172,7 +182,7 @@ function ZcWebSocket(puid,url,global) {
     var start = function() {
         websocket = new WebSocket(url);
         init();
-        HearBeat();
+        HearBeat(global);
     };
 
     var stop = function() {
