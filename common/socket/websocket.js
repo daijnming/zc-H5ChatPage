@@ -1,6 +1,7 @@
 /**
  * @author Treagzhao
  */
+var HearBeat = require("./heartbeat.js");
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
     // url = "ws://test.sobot.com/";
@@ -168,6 +169,7 @@ function ZcWebSocket(puid,url,global) {
     var start = function() {
         websocket = new WebSocket(url);
         init();
+        HearBeat();
     };
 
     var stop = function() {
