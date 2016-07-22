@@ -3,6 +3,7 @@
  */
 function ZcWebSocket(puid,url,global) {
     this.puid = puid;
+    // url = "ws://test.sobot.com/";
     var socketType = 'human';
     var listener = require('../util/listener.js');
     var dateUtil = require('../util/date.js');
@@ -100,8 +101,8 @@ function ZcWebSocket(puid,url,global) {
         }
         alert(evt.data);
         var data = JSON.parse(evt.data);
-
-        messageConfirm(data);
+        if(window.confirm("是否发送回执"))
+            messageConfirm(data);
         if(data.type == 301) {
             ackConfirmMessageHandler(data);
         } else if(data.type == 202) {
