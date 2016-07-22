@@ -124,6 +124,7 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         setTimeout(function() {
+            alert("reconnect");
             websocket = new WebSocket(url);
         },2000);
     };
