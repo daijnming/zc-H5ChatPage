@@ -120,7 +120,7 @@ function ZcWebSocket(puid,url,global) {
                     'content' : "与服务器连接中断"
                 }
             });
-            listener.trigger("core.sessionclose",-2);
+            listener.trigger("core.sessionclose",-4);
             return;
         }
         setTimeout(function() {
