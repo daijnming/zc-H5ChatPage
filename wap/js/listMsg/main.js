@@ -154,15 +154,25 @@ var ListMsgHandler = function() {
                 }
             }
             //
-            updateChatList(tempHtml);
+            updateChatList(tempHtml,isFirstData);
         } else {
             //没有更多消息
             global.flags.moreHistroy = false;
         }
+    };
+    //更新聊天信息列表
+    var updateChatList = function(tmpHtml,isFirstData) {
+        var _chatPanelList = chatPanelList,
+            _chatPanelChildren = _chatPanelList.children();
+        if(_chatPanelChildren && _chatPanelChildren.length) {
+            chatPanelList.children().first().before(tmpHtml);
+        } else {
+            chatPanelList.append(tmpHtml);
+        }
         //刷新
         //首次进入加载记录
         if(isFirstData){
-          console.log(chatPanelList.children().length);
+          // console.log(chatPanelList.children().length);
           if(chatPanelList.children().length==1){
             //只有欢迎语 添加时间线
             var tmsg = systemHandler.sys.getTimeLine2(null,new Date(),false,true);
@@ -178,16 +188,6 @@ var ListMsgHandler = function() {
             scrollerInitHeight = $(scrollChatList).height();
           },2000);
         }
-    };
-    //更新聊天信息列表
-    var updateChatList = function(tmpHtml) {
-        var _chatPanelList = chatPanelList,
-            _chatPanelChildren = _chatPanelList.children();
-            if(_chatPanelChildren && _chatPanelChildren.length) {
-                chatPanelList.children().first().before(tmpHtml);
-            } else {
-                chatPanelList.append(tmpHtml);
-            }
     };
 
     var initScroll = function(){
