@@ -215,7 +215,7 @@ p, ul, li {
   padding-right: 2px;
   padding-bottom: 2px;
   padding-left: 2px;
-  width: 40%;
+  max-width: 40%;
 }
 .leftMsg .msgOuter p{
   color:#333;
@@ -258,7 +258,7 @@ p, ul, li {
   padding-right: 2px;
   padding-bottom: 2px;
   padding-left: 2px;
-  width: 40%;
+  max-width: 40%;
 }
 .sysMsg {
     text-align: center;
@@ -500,6 +500,7 @@ table,tr,td,tt{
   display: block;
   /*max-height: 150px !important;*/
   margin: 0 auto;
+  min-width: 40px;
 }
 .loadingHistoryMask{
   position: fixed;
