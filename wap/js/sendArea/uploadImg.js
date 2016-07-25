@@ -5,7 +5,8 @@
 function uploadImg() {
     var global;
     var listener = require("../../../common/util/listener.js");
-    
+    //模板引擎
+    var template = require('./template.js');
     var currentUid="",
     sysNum="";
     /*
@@ -15,16 +16,15 @@ function uploadImg() {
     var parseDOM = function() {
     };
     var onFormDataUpHandler=function(){
-        swatting();
-        //展示图片之前先隐藏加号  
-        //listener.trigger('sendArea.closeAddarea');
         var oData = new FormData();
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
-        
         //判断上传文件是否为图片
         if(/^(image)/.test(file.type)){
+            swatting();
+            //展示图片之前先隐藏加号 
+            listener.trigger("sendArea.closeAddarea");
             //创建本地图片数据流
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -39,7 +39,6 @@ function uploadImg() {
                     'date':tp,
                     'token':token
                 }]);*/
-                listener.trigger("sendArea.closeAddarea");
                //等待加号关闭，再定位
                 setTimeout(function(){
                      listener.trigger('sendArea.autoSize',$(".js-chatArea"));
@@ -59,7 +58,12 @@ function uploadImg() {
                         lrz(file, {
                             quality: 0.9//0.7 传4.82M剩于123k
                         }).then(function (results) {
-
+                            listener.trigger("sendArea.createUploadImg",[{
+                                'result' : results.base64,
+                                'date':tp,
+                                'token':token
+                            }])
+                            $(".js-allScreen").remove();
                             // size单位为字节 5M = 5242880
                             if(results.base64Len >= 5242880) {
                                 //图片过大
@@ -70,12 +74,6 @@ function uploadImg() {
                             }
                             oData.append("base64",results.base64);
                             //alert(results.base64);
-                            listener.trigger("sendArea.createUploadImg",[{
-                                'result' : results.base64,
-                                'date':tp,
-                                'token':token
-                            }])
-                            $(".js-loadingUploadImg").remove();
                              //上传 
                             onAjaxUploadUpHandler(oData,tp,token)
                         }).catch(function (err) {
@@ -179,8 +177,10 @@ function uploadImg() {
         
     }
     var swatting=function(){
-        var mask = '<div class="js-loadingUploadImg loadingUploadImg"><i></i><p>正在发送，请稍候...</p></div>';
-        $(document.body).append(mask);
+        
+        var conf={};
+        var _html = doT.template(template.waitingUploadImg)(conf);
+        $(document.body).append(_html);
         $('.loadingUploadImg').css("top",(($(document).height() -$('.loadingUploadImg').height())/2)+"px");
         $('.loadingUploadImg').css("left",(($(document).width() - $('.loadingUploadImg').width())/2)+"px");
     }
@@ -189,7 +189,7 @@ function uploadImg() {
         //alert(browserType);
         //htc
         if(browserType=="mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30"){
-            alert('htcccccc')
+            alert(browserType);
             $(".js-upload").remove();
             $(".js-uploadImg").on("click",function(){
                 var imageLarge={type:'system',status:'imageLarge',data:{content:'抱歉，此浏览器不支持上传图片！'}}

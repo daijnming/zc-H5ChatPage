@@ -325,6 +325,7 @@ body {
     text-align:center;
     background:#fff;
     z-index:20;
+    border-radius:4px;
 }
 .modeDialog .close{
     overflow:hidden;
