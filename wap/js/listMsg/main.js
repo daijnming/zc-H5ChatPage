@@ -412,8 +412,8 @@ var ListMsgHandler = function() {
     };
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        $('.js-chatPanelList').on('click',hideKeyboard);//隐藏键盘
-        chatMsgList.on('touchmove',hideKeyboard);//隐藏键盘
+        chatPanelList.on('click',hideKeyboard);//隐藏键盘
+        chatMsgList.on('touchstart',hideKeyboard);//滑动隐藏键盘
     };
     var init = function() {
         parseDOM();
