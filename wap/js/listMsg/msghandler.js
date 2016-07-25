@@ -193,7 +193,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         isUploadImg=true;//开启上传图片
         $shadowLayer.remove();
         $progressLayer.remove();
-        myScroll.refresh();//刷新
+        // myScroll.refresh();//刷新
+        myScroll.myRefresh();//刷新
       }
     },
     //回传图片路径地址

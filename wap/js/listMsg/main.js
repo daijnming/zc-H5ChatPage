@@ -160,7 +160,6 @@ var ListMsgHandler = function() {
             global.flags.moreHistroy = false;
         }
         //刷新
-        // scrollHanlder.scroll.refresh();
         //首次进入加载记录
         if(isFirstData){
           console.log(chatPanelList.children().length);
@@ -169,7 +168,8 @@ var ListMsgHandler = function() {
             var tmsg = systemHandler.sys.getTimeLine2(null,new Date(),false,true);
             chatPanelList.prepend(tmsg);
           }
-          scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+          scrollHanlder.myRefresh();
+          // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
           // systemHandler.sys.nowTimer();//显示当前时间
         }else{
           setTimeout(function(){
@@ -334,8 +334,9 @@ var ListMsgHandler = function() {
           $(this).remove();
         });
       }
-      scrollHanlder.scroll.refresh();//刷新
-      scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+      scrollHanlder.myRefresh();//刷新
+      // scrollHanlder.scroll.refresh();//刷新
+      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次
       if(global.UAInfo.UA=='android'){
         $(wrapBox).css('font-size','0.9em');
@@ -395,8 +396,8 @@ var ListMsgHandler = function() {
         scrollHanlder = Scroll(global,wrapBox);//初始化scroll
         scrollerInitHeight = scrollChatList.height();//获取滚动scroll初始化高度
         initScroll();//初始化&配置scroll
-        messageHandler = MessageHandler(global,bindMsg,scrollHanlder.scroll);
-        systemHandler = SystemHandler(global,bindMsg,scrollHanlder.scroll);
+        messageHandler = MessageHandler(global,bindMsg,scrollHanlder);
+        systemHandler = SystemHandler(global,bindMsg,scrollHanlder);
     };
     //初始化Dom
     var parseDOM = function() {
@@ -412,7 +413,7 @@ var ListMsgHandler = function() {
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
         $('.js-chatPanelList').on('click',hideKeyboard);//隐藏键盘
-        $('.js-chatPanelList').on('touchmove',hideKeyboard);//隐藏键盘
+        chatMsgList.on('touchmove',hideKeyboard);//隐藏键盘
     };
     var init = function() {
         parseDOM();
