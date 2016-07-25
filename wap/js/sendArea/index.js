@@ -470,10 +470,15 @@ function TextArea(window) {
 
 
     };
-    var hideKeyboard=function(){
+    var hideKeyboard=function(data){
         //会话没结束的时候点击屏幕输入框失去焦点
         $textarea.blur();
-        if(!sessionEnd){
+        var viewHeight = $(document).height()-$(".sendarea").height();
+        //console.log(data);
+        //console.log(viewHeight);
+        //data<viewHeight说明当前文本框处于抬起状态
+        if(!sessionEnd&&data<viewHeight){
+            console.log("我进来了")
             $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
             var _text = $textarea.text();
             if(transferFlag==0){

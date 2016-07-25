@@ -15,12 +15,15 @@ function uploadImg() {
     var parseDOM = function() {
     };
     var onFormDataUpHandler=function(){
+        swatting();
+        $(".js-loadingHistoryMask").addClass("show");
         //展示图片之前先隐藏加号  
         //listener.trigger('sendArea.closeAddarea');
         var oData = new FormData();
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
+        
         //判断上传文件是否为图片
         if(/^(image)/.test(file.type)){
             //创建本地图片数据流
@@ -73,6 +76,7 @@ function uploadImg() {
                                 'date':tp,
                                 'token':token
                             }])*/
+                            $(".js-loadingHistoryMask").removeClass("show");
                              //上传 
                             onAjaxUploadUpHandler(oData,tp,token)
                         }).catch(function (err) {
@@ -175,7 +179,27 @@ function uploadImg() {
         }
         
     }
+    var swatting=function(){
+        var mask = '<div class="js-loadingHistoryMask loadingHistoryMask"><i></i></div>';
+        $(document.body).append(mask);
+        var $i=$('.js-loadingHistoryMask i');
+        var $body = $(document.body);
+        $i.offset({top:($body.height() -$i.height())/2,left:($body.width() - $i.width())/2});
+    }
     var bindLitener = function() {
+        var browserType= navigator.userAgent.toLowerCase();
+        //alert(browserType);
+        //htc
+        if(browserType=="mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30"){
+            alert('htcccccc')
+            $(".js-upload").remove();
+            $(".js-uploadImg").on("click",function(){
+                var imageLarge={type:'system',status:'imageLarge',data:{content:'抱歉，此浏览器不支持上传图片！'}}
+                listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
+            });
+           
+        }
+        
         $(".js-upload").on("change",onFormDataUpHandler);
         listener.on('listMsg.imgUploadAgain',imgUploadAgain)
        
