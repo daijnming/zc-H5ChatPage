@@ -290,6 +290,7 @@ var RobotFirst = function(global) {
         var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
         //queueing == status == -2;
+        // 0 没有会话保持 1 转人工成功 -2 表示正在排队 -1 会话已结束
         if(status == 0) {
             manager = new Robot(global);
             getWelcome();
