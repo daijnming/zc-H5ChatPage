@@ -138,12 +138,13 @@ function ZcWebSocket(puid,url,global) {
     };
     var onClosed = function() {
         alert('close');
-        console.log('close');
+        // console.log('close');
         reConnect();
     };
 
     var onOpen = function() {
-        console.log("open");
+        alert('open');
+        // console.log("open");
         timer = setInterval(function() {
             websocket.send("ping");
         },5 * 1000);
@@ -173,7 +174,7 @@ function ZcWebSocket(puid,url,global) {
 
     var onError = function() {
         alert('error');
-        console.log('error');
+        // console.log('error');
     };
 
     var bindListener = function() {

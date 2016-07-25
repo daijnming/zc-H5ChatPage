@@ -39,14 +39,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         msgBind(3,_timer);
       }
     },
-    getTimeLine2:function(data,tp,oldTp){
+    getTimeLine2:function(data,tp,oldTp,theFirst){
       //时间线显示
       var ret='',//返回结果
           tl,//时间线
           type;//0 当天  1上一天 2更久历史
-      var curTime = new Date();
-      var _t = Math.abs(curTime - new Date(tp.substr(0,tp.indexOf(' '))))/1000/60/60/24;
       if(oldTp){
+        var curTime = new Date();
+        var _t = Math.abs(curTime - new Date(tp.substr(0,tp.indexOf(' '))))/1000/60/60/24;
         oldTp = oldTp.replace(/-/g,'/');
         tp = tp.replace(/-/g,'/');
         var _m = Math.abs(new Date(oldTp)- new Date(tp))/1000/60;
@@ -73,9 +73,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           ret = doT.template(msgTemplate.sysData)(comf);
         }
       }
-      console.log(chatPanelList.children().length);
       //FIXME 首次进入 显示时间线
-      if(!chatPanelList.children().length){
+      if(theFirst){
         var _time = new Date();
         var _hour = _time.getHours()>9?_time.getHours():'0'+_time.getHours();
         var _minutes = _time.getMinutes()>9?_time.getMinutes():'0'+_time.getMinutes();
@@ -164,7 +163,19 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         var data = {type:'system',status:'hunmanonly',data:{content:data.data.content,status:0}};
         msgBind(2,data);
       }
+    },
+    //加载历史记录蒙板
+    isLoadingHistoryMask:function(){
+      var mask = '<div class="js-loadingHistoryMask loadingHistoryMask"><i></i></div>';
+      $(document.body).append(mask);
+      var $i=$('.js-loadingHistoryMask i');
+      var $body = $(document.body);
+      $i.offset({top:($body.height() -$i.height())/2,left:($body.width() - $i.width())/2});
     }
+  };
+  var onLoadingHistoryMask= function(e){
+    e.stopPropagation();
+    e.preventDefault();
   };
   var parseDOM = function(){
     topTitleBar = $('.js-header-back');
@@ -178,10 +189,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     fnEvent.on('core.system',config.sys.onSessionOpen);//转人工事件
     fnEvent.on('sendArea.sendAreaSystemMsg',config.sys.onSendAreaSysMsg);//输入框相关提示系统消息
     fnEvent.on('core.buttonchange',config.sys.onButtonChange);//仅人工 且客服不在线
+    $(document.body).delegate('.js-loadingHistoryMask','touchmove',onLoadingHistoryMask);
   };
   var initPlagsin=function(){
     // config.sys.nowTimer();//显示当前时间
     config.sys.onBeingInput();//正在输入处理
+    config.sys.isLoadingHistoryMask();
   };
   var init =function (){
     parseDOM();

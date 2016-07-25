@@ -163,6 +163,12 @@ var ListMsgHandler = function() {
         // scrollHanlder.scroll.refresh();
         //首次进入加载记录
         if(isFirstData){
+          console.log(chatPanelList.children().length);
+          if(chatPanelList.children().length==1){
+            //只有欢迎语 添加时间线
+            var tmsg = systemHandler.sys.getTimeLine2(null,new Date(),false,true);
+            chatPanelList.prepend(tmsg);
+          }
           scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
           // systemHandler.sys.nowTimer();//显示当前时间
         }else{
@@ -190,10 +196,12 @@ var ListMsgHandler = function() {
     };
     //下拉刷新
     var onPullDown = function(){
+      $('.js-loadingHistoryMask').addClass('show');
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
           showHistoryMsg(data,0);
           setTimeout(function(){
+            $('.js-loadingHistoryMask').removeClass('show');
             $(pullDown).removeClass('loading');
             $(pullDown).text('下拉加载更多');
           },2000);
@@ -201,6 +209,7 @@ var ListMsgHandler = function() {
         }else{
           //没有历史记录
           global.flags.moreHistroy = false;
+          $('.js-loadingHistoryMask').removeClass('show');
         }
       });
     };
