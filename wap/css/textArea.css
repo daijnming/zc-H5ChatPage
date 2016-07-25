@@ -291,6 +291,9 @@ li {
 .endSession .span3 i{
      background-position: -237px -7px;
 }
+.loadingUploadImg{position:absolute;z-index:100;width:120px;height:120px;border-radius:8px;background:rgba(0,0,0,0.5)}
+.loadingUploadImg i{display:inline-block;width:30px;height:30px;margin:36px 46px 21px 46px;background:url(../images/watingUploadImg.gif) no-repeat;background-size:30px 30px;}
+.loadingUploadImg p{color:#fff;font-size:12px;width:100%;text-align:center;}
 /* @media (min-device-width : 320px){
     .endSession span i{
          width:51%;

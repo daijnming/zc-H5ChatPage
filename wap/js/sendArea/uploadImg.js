@@ -16,7 +16,6 @@ function uploadImg() {
     };
     var onFormDataUpHandler=function(){
         swatting();
-        $(".js-loadingHistoryMask").addClass("show");
         //展示图片之前先隐藏加号  
         //listener.trigger('sendArea.closeAddarea');
         var oData = new FormData();
@@ -35,11 +34,11 @@ function uploadImg() {
                 var fileRead = e.target.result;
                 //alert(fileRead);
                 //展示本地图
-                listener.trigger("sendArea.createUploadImg",[{
+                /*listener.trigger("sendArea.createUploadImg",[{
                     'result' : fileRead,
                     'date':tp,
                     'token':token
-                }]);
+                }]);*/
                 listener.trigger("sendArea.closeAddarea");
                //等待加号关闭，再定位
                 setTimeout(function(){
@@ -71,12 +70,12 @@ function uploadImg() {
                             }
                             oData.append("base64",results.base64);
                             //alert(results.base64);
-                            /*listener.trigger("sendArea.createUploadImg",[{
+                            listener.trigger("sendArea.createUploadImg",[{
                                 'result' : results.base64,
                                 'date':tp,
                                 'token':token
-                            }])*/
-                            $(".js-loadingHistoryMask").removeClass("show");
+                            }])
+                            $(".js-loadingUploadImg").remove();
                              //上传 
                             onAjaxUploadUpHandler(oData,tp,token)
                         }).catch(function (err) {
@@ -180,11 +179,10 @@ function uploadImg() {
         
     }
     var swatting=function(){
-        var mask = '<div class="js-loadingHistoryMask loadingHistoryMask"><i></i></div>';
+        var mask = '<div class="js-loadingUploadImg loadingUploadImg"><i></i><p>正在发送，请稍候...</p></div>';
         $(document.body).append(mask);
-        var $i=$('.js-loadingHistoryMask i');
-        var $body = $(document.body);
-        $i.offset({top:($body.height() -$i.height())/2,left:($body.width() - $i.width())/2});
+        $('.loadingUploadImg').css("top",(($(document).height() -$('.loadingUploadImg').height())/2)+"px");
+        $('.loadingUploadImg').css("left",(($(document).width() - $('.loadingUploadImg').width())/2)+"px");
     }
     var bindLitener = function() {
         var browserType= navigator.userAgent.toLowerCase();
