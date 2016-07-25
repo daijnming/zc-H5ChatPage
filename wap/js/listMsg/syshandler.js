@@ -93,8 +93,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       autoTimer =  setTimeout(function(){
         var offsetTop = node.offset().top-$(topTitleBar).height();
         $(wrapScroll).height(offsetTop);
-        myScroll.refresh();
-        myScroll.scrollTo(0,myScroll.maxScrollY);
+        // myScroll.refresh();
+        // myScroll.scrollTo(0,myScroll.maxScrollY);
+        myScroll.myRefresh();
         // $(window).scrollTop(Number($("#js-textarea").offset().top));
     },300);
     },
@@ -144,7 +145,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onBeingInput:function(){
       var _t = setInterval(function(){
           $('.input205').remove();
-          myScroll.refresh();
+          // myScroll.refresh();
+          myScroll.myRefresh();
       },5*1000);//每隔5秒处理正在输入提示消息
     },
     //输入框相关提示系统消息

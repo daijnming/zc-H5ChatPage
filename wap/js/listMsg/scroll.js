@@ -86,6 +86,13 @@ var ScrollHandler = function(global,node){
         });
     }
   };
+  //刷新页面
+  That.myRefresh=function(){
+    setTimeout(function(){
+      scroll.refresh();//刷新
+      scroll.scrollTo(0,scroll.maxScrollY);
+    },200);
+  };
   var parseDom = function(){
     pullDown = $(node).find('.js-pullDownLabel');
     wrapScroll = $('.js-wrapper');
