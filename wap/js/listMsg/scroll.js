@@ -60,7 +60,7 @@ var ScrollHandler = function(global,node){
     }else{
       $(pullDown).text('没有更多消息');
       $(pullDown).removeClass('loading');
-      $('.js-loadingHistoryMask').removeClass('show');
+      // $('.js-loadingHistoryMask').removeClass('show');
       // $(pullDown).removeClass('up down');
     }
   };
@@ -70,7 +70,7 @@ var ScrollHandler = function(global,node){
     var nexChild = $('.js-chatPanelList').children().eq(1).attr('date');
     var t = child?child:nexChild;
     //有更多历史记录
-    if(scroll.y > 40&&global.flags.moreHistroy) {
+    if(scroll.y >= 40&&global.flags.moreHistroy) {
       global.flags.pageNow+=1;//下拉刷新
         $.ajax({
             type : "post",

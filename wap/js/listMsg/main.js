@@ -196,12 +196,12 @@ var ListMsgHandler = function() {
     };
     //下拉刷新
     var onPullDown = function(){
-      $('.js-loadingHistoryMask').addClass('show');
+      // $('.js-loadingHistoryMask').addClass('show');
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
           showHistoryMsg(data,0);
           setTimeout(function(){
-            $('.js-loadingHistoryMask').removeClass('show');
+            // $('.js-loadingHistoryMask').removeClass('show');
             $(pullDown).removeClass('loading');
             $(pullDown).text('下拉加载更多');
           },2000);
@@ -209,7 +209,7 @@ var ListMsgHandler = function() {
         }else{
           //没有历史记录
           global.flags.moreHistroy = false;
-          $('.js-loadingHistoryMask').removeClass('show');
+          // $('.js-loadingHistoryMask').removeClass('show');
         }
       });
     };
