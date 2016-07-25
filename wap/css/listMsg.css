@@ -243,7 +243,7 @@ p, ul, li {
     width: 0;
     position: absolute;
     top: 12px;
-    right: -12px;
+    right: -11px;
     border-style: solid;
     border-color: transparent #09aeb0;
     border-width: 8px 0 8px 12px;
@@ -441,7 +441,9 @@ iframe, embed, table {
 .msgOuter audio {
     /*width: 200px !important;*/
     display: block !important;
-    width: 120px !important;
+    width: 100px !important;
+    overflow: hidden;
+    /*padding-right: 40px !important;*/
 }
 
 .showMsgLayer {

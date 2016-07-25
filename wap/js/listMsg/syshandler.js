@@ -13,7 +13,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       wrapScroll;//滚动窗体
 
   //定义变量
-  var autoTimer;//输入框高度延迟处理 解决与弹出键盘冲突
+  var autoTimer,//输入框高度延迟处理 解决与弹出键盘冲突
+      chatMsgList;//最外层滚动列表
 
   var msgTemplate = require('./template.js');
   var QQFace = require('../util/qqFace.js')();
@@ -92,9 +93,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       clearInterval(autoTimer);
       autoTimer =  setTimeout(function(){
         var offsetTop = node.offset().top-$(topTitleBar).height();
+        scrollWrapHeight= offsetTop;//盒子高度
         $(wrapScroll).height(offsetTop);
         // myScroll.refresh();
         // myScroll.scrollTo(0,myScroll.maxScrollY);
+
         myScroll.myRefresh();
         // $(window).scrollTop(Number($("#js-textarea").offset().top));
     },300);
@@ -145,8 +148,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onBeingInput:function(){
       var _t = setInterval(function(){
           $('.input205').remove();
-          // myScroll.refresh();
-          myScroll.myRefresh();
+          myScroll.scroll.refresh();
+          // myScroll.myRefresh();
       },5*1000);//每隔5秒处理正在输入提示消息
     },
     //输入框相关提示系统消息
@@ -179,10 +182,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     e.stopPropagation();
     e.preventDefault();
   };
+ var hideKeyboard = function(e){
+    fnEvent.trigger('listMsg.hideKeyboard',scrollWrapHeight);
+  };
   var parseDOM = function(){
     topTitleBar = $('.js-header-back');
     wrapScroll = $('.js-wrapper');
     chatPanelList = $('.js-chatPanelList');
+    chatMsgList = $('.js-chatMsgList');
     title = $('.js-title');
     pullDownLabel = $('.js-pullDownLabel');
   };
@@ -197,6 +204,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     // config.sys.nowTimer();//显示当前时间
     config.sys.onBeingInput();//正在输入处理
     config.sys.isLoadingHistoryMask();
+    chatMsgList.on('click',hideKeyboard);//隐藏键盘
+    chatMsgList.on('touchstart',hideKeyboard);//滑动隐藏键盘
   };
   var init =function (){
     parseDOM();
