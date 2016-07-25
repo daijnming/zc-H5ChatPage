@@ -440,6 +440,7 @@ iframe, embed, table {
 }
 .msgOuter audio {
     /*width: 200px !important;*/
+    display: block !important;
     width: 120px !important;
 }
 

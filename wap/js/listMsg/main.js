@@ -373,9 +373,6 @@ var ListMsgHandler = function() {
       e.preventDefault();
       e.stopPropagation();
     };
-    var hideKeyboard = function(e){
-      fnEvent.trigger('listMsg.hideKeyboard');
-    };
     /********************************************************************************/
     /********************************************************************************/
     /*************************************基本配置**********************************/
@@ -412,8 +409,6 @@ var ListMsgHandler = function() {
     };
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        chatPanelList.on('click',hideKeyboard);//隐藏键盘
-        chatMsgList.on('touchstart',hideKeyboard);//滑动隐藏键盘
     };
     var init = function() {
         parseDOM();
