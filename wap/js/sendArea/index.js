@@ -61,6 +61,8 @@ function TextArea(window) {
         //hide,转人工按钮隐藏
         if(data.action=="hide"){
             $artificial.addClass("activehide");
+            //解禁输入框
+            $textarea.attr("placeholder","").attr("contenteditable","true")
         }else{
             $artificial.removeClass("activehide");
         }
