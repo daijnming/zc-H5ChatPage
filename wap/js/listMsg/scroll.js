@@ -60,6 +60,7 @@ var ScrollHandler = function(global,node){
     }else{
       $(pullDown).text('没有更多消息');
       $(pullDown).removeClass('loading');
+      $('.js-loadingHistoryMask').removeClass('show');
       // $(pullDown).removeClass('up down');
     }
   };
