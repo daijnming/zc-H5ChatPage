@@ -35,6 +35,34 @@ var RobotFirst = function(global) {
         }
     };
 
+    var initHumanSession = function(value,ret,word) {
+        var success = !!word;
+        var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
+        var name = (!!word) ? ret.aname : global.apiConfig.robotName;
+        var word = word || global.apiConfig.robotHelloWord;
+        var curStatus = global.apiInit.ustatus == -2 ? 1 : 0;
+        //-2为排队中
+        if(!value) {
+            value = [];
+        }
+        var now = new Date();
+        var obj = {
+            "date" : DateUtil.formatDate(now),
+            "content" : [{
+                // 'senderType' : (!!word) ? 2 : 1,
+                'senderType' : curStatus ? 1 : (!!word) ? 2 : 1,
+                't' : +now,
+                'msg' : word,
+                'ts' : DateUtil.formatDate(now,true),
+                'senderFace' : face,
+                'senderName' : name
+            }]
+        };
+        value.push(obj);
+        setTimeout(function() {
+            listener.trigger("core.initsession",value);
+        },0);
+    };
     var blackListCallback = function(ret,init) {
         ret.content = '暂时无法转接人工客服' + ' ' + leaveMessageStr;
         ret.aname = '未接入';
