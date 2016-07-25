@@ -204,7 +204,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     config.sys.onBeingInput();//正在输入处理
     config.sys.isLoadingHistoryMask();
     chatMsgList.on('click',hideKeyboard);//隐藏键盘
-    // chatMsgList.on('touchstart',hideKeyboard);//滑动隐藏键盘
+    chatMsgList.on('touchstart',hideKeyboard);//滑动隐藏键盘
   };
   var init =function (){
     parseDOM();

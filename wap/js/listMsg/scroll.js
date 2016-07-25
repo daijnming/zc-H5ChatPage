@@ -88,7 +88,6 @@ var ScrollHandler = function(global,node){
   };
   //刷新页面
   That.myRefresh=function(){
-    console.log('dd');
     setTimeout(function(){
       scroll.refresh();//刷新
       scroll.scrollTo(0,scroll.maxScrollY);
