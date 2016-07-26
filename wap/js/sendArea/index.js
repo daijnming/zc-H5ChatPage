@@ -478,7 +478,6 @@ function TextArea(window) {
         //console.log(viewHeight);
         //data<viewHeight说明当前文本框处于抬起状态
         if(!sessionEnd&&data<viewHeight){
-            console.log("我进来了")
             $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
             var _text = $textarea.text();
             if(transferFlag==0){
@@ -585,7 +584,7 @@ function TextArea(window) {
         
     };
     var flexcompatible=function(){ 
-         $(".textarea").css({"width":"70%"}); 
+        $(".textarea").css({"width":"70%"}); 
         $(".endSession span").css({"display":"inline-block"});
         $(".endSession span").css({"width":"28%"});
     };
