@@ -186,10 +186,10 @@ function uploadImg() {
     }
     var bindLitener = function() {
         var browserType= navigator.userAgent.toLowerCase();
-        //alert(browserType);
-        //htc
-        if(browserType=="mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30"){
-            alert(browserType);
+        //console.log(browserType);
+        //mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30
+        if(browserType.indexOf("htc")!=-1&&browserType.indexOf("safari/534.30")!=-1){
+            console.log(browserType);
             $(".js-upload").remove();
             $(".js-uploadImg").on("click",function(){
                 var imageLarge={type:'system',status:'imageLarge',data:{content:'抱歉，此浏览器不支持上传图片！'}}
