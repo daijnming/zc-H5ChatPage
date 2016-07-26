@@ -439,11 +439,12 @@ iframe, embed, table {
     width: 100% !important;
 }
 .msgOuter audio {
-    /*width: 200px !important;*/
+    width: 100% !important;
     display: block !important;
-    width: 100px !important;
-    overflow: hidden;
-    /*padding-right: 40px !important;*/
+}
+.msgOuter .audio{
+  width: 200px !important;
+  overflow: hidden;
 }
 
 .showMsgLayer {
