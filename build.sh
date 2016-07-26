@@ -2,6 +2,7 @@ CONF="WEB-INF/replace.conf"
 JAR="WEB-INF/lib/replace.jar"
 TYPE=
 TEST=
+DIRECTORY=
 while [ $# -gt 0 ]
 do
 	case $1 in 
@@ -20,6 +21,9 @@ do
 	;;
 	-t)
 		TEST="-T"
+	;;
+	-d)
+	     DIRECTORY=$2
 	;;
 	esac
 	shift;
