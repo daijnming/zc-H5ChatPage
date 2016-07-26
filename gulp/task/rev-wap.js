@@ -10,7 +10,7 @@ if(!options.d){
 }
 var targetDir = options.d;
 gulp.task('move-html-wap',function(){
-	return gulp.src('./dest/'+targetDir+'/**/*.html').
+	return gulp.src('./dest/wap/**/*.html').
 	pipe(htmlMin({
 	    removeComments: true,
             removeCommentsFromCDATA: true,
@@ -22,7 +22,7 @@ gulp.task('move-html-wap',function(){
             removeEmptyAttributes: false,
             removeOptionalTags: false
         })).
-	pipe(gulp.dest('./dist/wap'));
+	pipe(gulp.dest('./dist/'+targetDir));
 });
 gulp.task('rev-wap',['move-html-wap'],function(){
 	return gulp.src(['./dest/wap/**/*.js','./dest/wap/**/*.css','./dest/wap/**/*.png','./dest/wap/**/*.jpeg','./dest/wap/**/*.jpg','./dest/wap/**/*.gif','./dest/wap/**/*.mp3']).
