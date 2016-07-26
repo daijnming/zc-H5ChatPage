@@ -5,7 +5,8 @@
 function uploadImg() {
     var global;
     var listener = require("../../../common/util/listener.js");
-    
+    //模板引擎
+    var template = require('./template.js');
     var currentUid="",
     sysNum="";
     /*
@@ -15,14 +16,15 @@ function uploadImg() {
     var parseDOM = function() {
     };
     var onFormDataUpHandler=function(){
-        //展示图片之前先隐藏加号  
-        //listener.trigger('sendArea.closeAddarea');
         var oData = new FormData();
         var input = $(".js-upload")[0];
         //创建请求头
         var file = input.files[0];
         //判断上传文件是否为图片
         if(/^(image)/.test(file.type)){
+            swatting();
+            //展示图片之前先隐藏加号 
+            listener.trigger("sendArea.closeAddarea");
             //创建本地图片数据流
             var reader = new FileReader();
             reader.readAsDataURL(file);
@@ -32,12 +34,11 @@ function uploadImg() {
                 var fileRead = e.target.result;
                 //alert(fileRead);
                 //展示本地图
-                listener.trigger("sendArea.createUploadImg",[{
+                /*listener.trigger("sendArea.createUploadImg",[{
                     'result' : fileRead,
                     'date':tp,
                     'token':token
-                }]);
-                listener.trigger("sendArea.closeAddarea");
+                }]);*/
                //等待加号关闭，再定位
                 setTimeout(function(){
                      listener.trigger('sendArea.autoSize',$(".js-chatArea"));
@@ -57,7 +58,12 @@ function uploadImg() {
                         lrz(file, {
                             quality: 0.9//0.7 传4.82M剩于123k
                         }).then(function (results) {
-
+                            listener.trigger("sendArea.createUploadImg",[{
+                                'result' : results.base64,
+                                'date':tp,
+                                'token':token
+                            }])
+                            $(".js-allScreen").remove();
                             // size单位为字节 5M = 5242880
                             if(results.base64Len >= 5242880) {
                                 //图片过大
@@ -68,11 +74,6 @@ function uploadImg() {
                             }
                             oData.append("base64",results.base64);
                             //alert(results.base64);
-                            /*listener.trigger("sendArea.createUploadImg",[{
-                                'result' : results.base64,
-                                'date':tp,
-                                'token':token
-                            }])*/
                              //上传 
                             onAjaxUploadUpHandler(oData,tp,token)
                         }).catch(function (err) {
@@ -175,7 +176,28 @@ function uploadImg() {
         }
         
     }
+    var swatting=function(){
+        
+        var conf={};
+        var _html = doT.template(template.waitingUploadImg)(conf);
+        $(document.body).append(_html);
+        $('.loadingUploadImg').css("top",(($(document).height() -$('.loadingUploadImg').height())/2)+"px");
+        $('.loadingUploadImg').css("left",(($(document).width() - $('.loadingUploadImg').width())/2)+"px");
+    }
     var bindLitener = function() {
+        var browserType= navigator.userAgent.toLowerCase();
+        //console.log(browserType);
+        //mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30
+        if(browserType.indexOf("htc")!=-1&&browserType.indexOf("safari/534.30")!=-1){
+            console.log(browserType);
+            $(".js-upload").remove();
+            $(".js-uploadImg").on("click",function(){
+                var imageLarge={type:'system',status:'imageLarge',data:{content:'抱歉，此浏览器不支持上传图片！'}}
+                listener.trigger('sendArea.sendAreaSystemMsg',imageLarge);
+            });
+           
+        }
+        
         $(".js-upload").on("change",onFormDataUpHandler);
         listener.on('listMsg.imgUploadAgain',imgUploadAgain)
        

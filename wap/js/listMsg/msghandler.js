@@ -110,12 +110,13 @@ var SysmsgHandler = function(global,msgBind,myScroll){
        //用户 客服超时提示语
        if(data&&data.list.length>0){
          for(var i=0,_list=data.list;i<_list.length;i++){
-           if(_list.type==202){//客服发的消息
+           var _data = _list[i];
+           if(_data.type==202||_data.type==210){//202 客服发的消息   210 转接用户
              global.apiConfig.customInfo = {
                type:"human",
                data:{
-                   aface:_list.aface,
-                   aname:_list.aname,
+                   aface:_data.aface?_data.aface:_data.face,
+                   aname:_data.aname?_data.aname:_data.name,
                    content:"",
                    status:1
                }

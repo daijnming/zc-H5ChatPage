@@ -81,6 +81,7 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
+      console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -114,6 +115,10 @@ var ListMsgHandler = function() {
                     }else if(itemChild.msg.indexOf('<')>=0&&itemChild.msg.indexOf('>')>=0){
                       //富文本
                         res = itemChild.msg;
+                        if(itemChild.msg.indexOf('audio')>=0){
+                          //发送语音
+                          res = '<div class="audio">'+itemChild.msg+'</div>';
+                        }
                     }else{
                       res=Comm.getNewUrlRegex(itemChild.msg);
                     }
@@ -125,7 +130,8 @@ var ListMsgHandler = function() {
                     //用户
                     if(itemChild.senderType === 0) {
                         comf = $.extend({
-                            'userLogo' : itemChild.senderFace?itemChild.senderFace:imgHanlder.userLogo,
+                            //senderFace 传入有可能是"null"字符串 比较诡异
+                            'userLogo' : itemChild.senderFace&&itemChild.senderFace!='null'?itemChild.senderFace:imgHanlder.userLogo,
                             'userMsg' : QQFace.analysisRight(res),
                             'date':itemChild.t,
                             'imgStatus':imgStatus,
@@ -154,15 +160,25 @@ var ListMsgHandler = function() {
                 }
             }
             //
-            updateChatList(tempHtml);
+            updateChatList(tempHtml,isFirstData);
         } else {
             //没有更多消息
             global.flags.moreHistroy = false;
         }
+    };
+    //更新聊天信息列表
+    var updateChatList = function(tmpHtml,isFirstData) {
+        var _chatPanelList = chatPanelList,
+            _chatPanelChildren = _chatPanelList.children();
+        if(_chatPanelChildren && _chatPanelChildren.length) {
+            chatPanelList.children().first().before(tmpHtml);
+        } else {
+            chatPanelList.append(tmpHtml);
+        }
         //刷新
         //首次进入加载记录
         if(isFirstData){
-          console.log(chatPanelList.children().length);
+          // console.log(chatPanelList.children().length);
           if(chatPanelList.children().length==1){
             //只有欢迎语 添加时间线
             var tmsg = systemHandler.sys.getTimeLine2(null,new Date(),false,true);
@@ -179,16 +195,6 @@ var ListMsgHandler = function() {
           },2000);
         }
     };
-    //更新聊天信息列表
-    var updateChatList = function(tmpHtml) {
-        var _chatPanelList = chatPanelList,
-            _chatPanelChildren = _chatPanelList.children();
-            if(_chatPanelChildren && _chatPanelChildren.length) {
-                chatPanelList.children().first().before(tmpHtml);
-            } else {
-                chatPanelList.append(tmpHtml);
-            }
-    };
 
     var initScroll = function(){
       scrollHanlder.scroll.on('slideDown',onPullDown);
@@ -196,12 +202,12 @@ var ListMsgHandler = function() {
     };
     //下拉刷新
     var onPullDown = function(){
-      $('.js-loadingHistoryMask').addClass('show');
+      // $('.js-loadingHistoryMask').addClass('show');
       scrollHanlder.pullDown(function(data){
         if(data.length>0){
           showHistoryMsg(data,0);
           setTimeout(function(){
-            $('.js-loadingHistoryMask').removeClass('show');
+            // $('.js-loadingHistoryMask').removeClass('show');
             $(pullDown).removeClass('loading');
             $(pullDown).text('下拉加载更多');
           },2000);
@@ -209,7 +215,7 @@ var ListMsgHandler = function() {
         }else{
           //没有历史记录
           global.flags.moreHistroy = false;
-          $('.js-loadingHistoryMask').removeClass('show');
+          // $('.js-loadingHistoryMask').removeClass('show');
         }
       });
     };
@@ -218,6 +224,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
+      // console.log(data);
       var msgHtml='',
           userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
@@ -373,9 +380,6 @@ var ListMsgHandler = function() {
       e.preventDefault();
       e.stopPropagation();
     };
-    var hideKeyboard = function(e){
-      fnEvent.trigger('listMsg.hideKeyboard');
-    };
     /********************************************************************************/
     /********************************************************************************/
     /*************************************基本配置**********************************/
@@ -412,8 +416,6 @@ var ListMsgHandler = function() {
     };
     var bindListener = function() {
         fnEvent.on('core.onload',onCoreOnload);
-        $('.js-chatPanelList').on('click',hideKeyboard);//隐藏键盘
-        chatMsgList.on('touchmove',hideKeyboard);//隐藏键盘
     };
     var init = function() {
         parseDOM();

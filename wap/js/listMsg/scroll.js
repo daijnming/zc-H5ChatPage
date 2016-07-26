@@ -60,8 +60,17 @@ var ScrollHandler = function(global,node){
     }else{
       $(pullDown).text('没有更多消息');
       $(pullDown).removeClass('loading');
-      $('.js-loadingHistoryMask').removeClass('show');
+      // $('.js-loadingHistoryMask').removeClass('show');
       // $(pullDown).removeClass('up down');
+    }
+    if((y < scroll.maxScrollY) && (scroll.pointY < 1)){
+        // scroll.scrollTo(0, scroll.maxScrollY,400);
+        That.myRefresh();
+        return;
+    } else if (scroll.y > 0 && (scroll.pointY > window.innerHeight - 1)) {
+        // scroll.scrollTo(0, 0,400);
+        That.myRefresh();
+        return;
     }
   };
   //下拉刷新
@@ -70,7 +79,7 @@ var ScrollHandler = function(global,node){
     var nexChild = $('.js-chatPanelList').children().eq(1).attr('date');
     var t = child?child:nexChild;
     //有更多历史记录
-    if(scroll.y > 40&&global.flags.moreHistroy) {
+    if(scroll.y >= 40&&global.flags.moreHistroy) {
       global.flags.pageNow+=1;//下拉刷新
         $.ajax({
             type : "post",

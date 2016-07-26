@@ -67,6 +67,7 @@ function ZcWebSocket(puid,url,global) {
         });
     };
     var systemMessageHandler = function(data) {
+      console.log(data,'socket');
         if(data.type == 204) {
             listener.trigger("core.sessionclose",data.status);
             if(data.status == 2) {
@@ -128,7 +129,7 @@ function ZcWebSocket(puid,url,global) {
             return;
         }
         setTimeout(function() {
-            alert("reconnect");
+            // alert("reconnect");
             websocket = new WebSocket(url);
             websocket.onerror = onError;
             websocket.onopen = onOpen;
@@ -137,13 +138,13 @@ function ZcWebSocket(puid,url,global) {
         },5000);
     };
     var onClosed = function() {
-        alert('close');
+        // alert('close');
         // console.log('close');
         reConnect();
     };
 
     var onOpen = function() {
-        alert('open');
+        // alert('open');
         // console.log("open");
         timer = setInterval(function() {
             websocket.send("ping");
@@ -163,7 +164,7 @@ function ZcWebSocket(puid,url,global) {
             var msg = retryList[el];
             websocket.send(JSON.stringify(msg));
         }
-        alert('open retry count=' + count);
+        // alert('open retry count=' + count);
         setInterval(retry,1000);
     };
 
@@ -173,7 +174,7 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var onError = function() {
-        alert('error');
+        // alert('error');
         // console.log('error');
     };
 
