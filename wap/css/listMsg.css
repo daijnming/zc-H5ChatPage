@@ -47,8 +47,8 @@ p, ul, li {
     margin: 0;
 }
 .msgwrap {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .chatMsgList .leftMsg {
     float: left;
@@ -83,7 +83,7 @@ p, ul, li {
 .chatMsgList .leftMsg .msgOuter {
     background-color: #fff;
     margin-left: 15px;
-    margin-top: 25px;
+    margin-top: 17px;
     float: left;
     max-width: 65%;
     word-break: break-all;
