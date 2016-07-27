@@ -67,6 +67,7 @@ function ZcWebSocket(puid,url,global) {
         });
     };
     var systemMessageHandler = function(data) {
+      console.log(data,'socket');
         if(data.type == 204) {
             listener.trigger("core.sessionclose",data.status);
             if(data.status == 2) {

@@ -63,6 +63,15 @@ var ScrollHandler = function(global,node){
       // $('.js-loadingHistoryMask').removeClass('show');
       // $(pullDown).removeClass('up down');
     }
+    if((y < scroll.maxScrollY) && (scroll.pointY < 1)){
+        // scroll.scrollTo(0, scroll.maxScrollY,400);
+        That.myRefresh();
+        return;
+    } else if (scroll.y > 0 && (scroll.pointY > window.innerHeight - 1)) {
+        // scroll.scrollTo(0, 0,400);
+        That.myRefresh();
+        return;
+    }
   };
   //下拉刷新
   That.pullDown = function(callback){
