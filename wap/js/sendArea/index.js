@@ -266,7 +266,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {
-        specialModelshideKeyboardHandler();
+         
         //setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
@@ -505,36 +505,25 @@ function TextArea(window) {
             }
             focusStatus=false;
             autoSizePhone();
-            specialModelsHandler();
+            
         }
     };
     //特殊机型输入框处理，降低
     var specialModelsHandler=function(){
-        var browserType= navigator.userAgent;
-        //alert(browserType);
-       /* if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
-           $chatArea.css({"top":"592px"})
-        };
-        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
-           $chatArea.css({"top":"592px"})
-        };
-        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
-           $chatArea.css({"top":"437px"})
-        }*/
+       
     };
     //特殊机型输入框处理，抬高
     var specialModelshideKeyboardHandler=function(){
-        var browserType= navigator.userAgent;
+       var browserType= navigator.userAgent.toLowerCase();
+        //alert(browserType);
+        //mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30
+        if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1){
+            //alert($(document).height());
+            //$(document).scrollTop('500');
+
+//           $(document).bottom('500');
+        }
        
-       /* if(browserType.indexOf("MZ-MX5 Build/LRX22C")>-1){
-           $chatArea.css({"top":"357px"})
-        };
-        if(browserType.indexOf("MZ-m2 note Build/LMY47D")>-1){
-           $chatArea.css({"top":"357px"})
-        };
-        if(browserType.indexOf("H60-L03 Build/HDH60-L03")>-1||browserType.indexOf("HUAWEI_H60_L03/5.0")>-1){
-           $chatArea.css({"top":"250px"})
-        }*/
     };
     //禁止输入框滑动，ios下有bug
     var noSliding=function(){
@@ -681,7 +670,8 @@ function TextArea(window) {
         //flex兼容处理
         if($(".sendarea").css("display")!="flex"){
            flexcompatible();
-        } 
+        }
+        specialModelshideKeyboardHandler();
     };
     (function(){
         parseDOM();

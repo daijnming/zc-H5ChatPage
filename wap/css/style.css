@@ -327,11 +327,11 @@ body {
 }
 .modeDialog{
     position:absolute;
-    width:90%;
+    width:84%;
     text-align:center;
     background:#fff;
     z-index:20;
-    border-radius:4px;
+    border-radius:6px;
 }
 .modeDialog .close{
     overflow:hidden;

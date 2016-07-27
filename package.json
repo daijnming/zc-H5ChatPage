@@ -50,6 +50,7 @@
     "gulp-useref": "^3.1.0",
     "gulp-watch": "^4.3.8",
     "mustache": "^2.2.1",
+    "minimist":"^1.2.0",
     "requiredir": "^1.0.7"
   }
 }

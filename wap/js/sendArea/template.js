@@ -3,7 +3,7 @@
  */
 var template = {};
 var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
-								'<p class="h2">是否有以下情况</p>'+
+								'<p class="h2">是否有以下情况？</p>'+
 								'<div class="situation">'+
 									'<span class="tag1">'+
 									'{{=it.inner1}}'+
@@ -18,7 +18,7 @@ var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
 									'{{=it.inner4}}'+
 									'</span>'+
 								'</div>'+
-								'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
+								'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议~"></textarea>'+
 								'<a class="submit js-submit" href="#">提交评价</a>'+
 							 '</div>';
 var humanOne_selfHtml = '<div class="evaluate js-evaluate">'+
@@ -42,7 +42,7 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 									'<li><a href="javascript:;">5</a></li>'+
 								'</ul>'+
 							'</div>'+
-							'<p class="h2">是否有以下情况</p>'+
+							'<p class="h2">是否有以下情况？</p>'+
 							'<div class="situation">'+
 								'<span class="tag1">'+
 									'{{=it.inner1}}'+
@@ -57,7 +57,7 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 									'{{=it.inner4}}'+
 									'</span>'+
 							'</div>'+
-							'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议"></textarea>'+
+							'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议~"></textarea>'+
 							'<a class="submit js-submit" href="#">提交评价</a>'+
 						'</div>';
 var leaveMessageBtn= '<a class="js-leaveMsgBtn" href="'+

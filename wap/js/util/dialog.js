@@ -55,7 +55,7 @@ function Dialog(spec) {
     var position =function(){
         //居中
         var left,top;
-        left=($(window).width()-($(window).width()*0.9))/2+"px";
+        left=($(window).width()-($(window).width()*0.84))/2+"px";
         top=($(window).height()-$(".js-modeDialog").height())/2+"px";
         $(".js-modeDialog").css({"left":left,"top":top});
         //$(".js-modeDialog").css("top",top);
