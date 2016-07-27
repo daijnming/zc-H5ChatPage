@@ -27,7 +27,7 @@ li {
     position: fixed;
     left: 0;
     bottom:0px;
-    background: #fff;
+    background: #fafbfd;
     z-index: 10;
 }
 .sendarea {
@@ -56,7 +56,7 @@ li {
     -webkit-animation-fill-mode : forwards;
 }
 .textarea {
-    background-color: #ddd;
+    background-color: #fff;
     line-height: 19px;
     padding: 7px 5px;
     border-radius: 4px;
@@ -69,10 +69,11 @@ li {
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     flex: 1;
+    border:1px solid #c4cccc;
 }
 .textarea[placeholder]:empty:before {
     content: attr(placeholder);
-    color: #999;
+    color: #c8cccc;
 }
 .sendBtn {
     display: inline-block;

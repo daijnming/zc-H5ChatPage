@@ -38,11 +38,12 @@
 	height:68px;
 	margin:auto;
 	margin-bottom:25px;
-	background:#f0f0f0;
+	background:#f1f5f6;
 	font-size:0.8em;
 	color:#676c6f;
 	padding:10px;
-	border-radius:3px;
+	border-radius:6px;
+	border:1px solid #c4cccc;
 }
 .evaluate .submit{
 	display:inline-block;
