@@ -341,9 +341,6 @@ var ListMsgHandler = function() {
           $(this).remove();
         });
       }
-      scrollHanlder.myRefresh();//刷新
-      // scrollHanlder.scroll.refresh();//刷新
-      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次
       if(global.UAInfo.UA=='android'){
         $(wrapBox).css('font-size','0.9em');
@@ -351,10 +348,16 @@ var ListMsgHandler = function() {
           $(wrapBox).css('font-size','1em');
         },200);
       }
+      scrollHanlder.myRefresh();//刷新
+      // setTimeout(function(){
+      //
+      // },2000);
+      // scrollHanlder.scroll.refresh();//刷新
+      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
     };
     //加欢迎语
     var getHello = function(data){
-      console.log(data);
+      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         var _data = data[data.length-1].content[0];
