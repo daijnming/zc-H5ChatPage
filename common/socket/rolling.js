@@ -96,6 +96,9 @@ function Rolling(puid,pu,global) {
                     for(var i = 0,
                         len = ret.length;i < len;i++) {
                         var item = JSON.parse(ret[i]);
+                        if(!item.msgId) {
+                            item.msgId = +new Date() + Math.random().toString(36).substr(2) + data.type;
+                        }
                         if(messageCache[item.msgId]) {
                             continue;
                         }
@@ -103,7 +106,7 @@ function Rolling(puid,pu,global) {
                         arr.push(item);
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
-                            if(item.status == 2) {
+                            if(item.status == 2 || item.status == 4) {
                                 listener.trigger("core.system", {
                                     'type' : 'system',
                                     'status' : 'kickout',

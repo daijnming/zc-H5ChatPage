@@ -23,7 +23,8 @@ function transfer(global,promise,queueing) {
             layer.remove();
         });
         //分组颜色
-        $('.js-item').css('color',global.apiConfig.color);
+        $('.js-item').css('background-color',global.apiConfig.color);
+        $('.js-cancel-btn').css('color',global.apiConfig.color);
     };
     var init = function() {
         if(global.apiInit.ustatus !== 0) {
