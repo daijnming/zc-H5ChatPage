@@ -67,10 +67,9 @@ function ZcWebSocket(puid,url,global) {
         });
     };
     var systemMessageHandler = function(data) {
-      console.log(data,'socket');
         if(data.type == 204) {
             listener.trigger("core.sessionclose",data.status);
-            if(data.status == 2) {
+            if(data.status == 2 || data.status == 4) {
                 listener.trigger("core.system", {
                     'type' : 'system',
                     'status' : 'kickout',
@@ -104,6 +103,9 @@ function ZcWebSocket(puid,url,global) {
         }
         var data = JSON.parse(evt.data);
         messageConfirm(data);
+        if(!data.msgId) {
+            data.msgId = +new Date() + Math.random().toString(36).substr(2) + data.type;
+        }
         if(messageCache[data.msgId])
             return;
         messageCache[data.msgId] = true;
@@ -138,14 +140,10 @@ function ZcWebSocket(puid,url,global) {
         },5000);
     };
     var onClosed = function() {
-        // alert('close');
-        // console.log('close');
         reConnect();
     };
 
     var onOpen = function() {
-        // alert('open');
-        // console.log("open");
         timer = setInterval(function() {
             websocket.send("ping");
         },5 * 1000);
@@ -174,8 +172,6 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var onError = function() {
-        // alert('error');
-        // console.log('error');
     };
 
     var bindListener = function() {

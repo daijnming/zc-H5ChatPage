@@ -103,7 +103,7 @@ function Rolling(puid,pu,global) {
                         arr.push(item);
                         if(item.type === 204) {
                             listener.trigger("core.sessionclose",item.status);
-                            if(item.status == 2) {
+                            if(item.status == 2 || item.status == 4) {
                                 listener.trigger("core.system", {
                                     'type' : 'system',
                                     'status' : 'kickout',
