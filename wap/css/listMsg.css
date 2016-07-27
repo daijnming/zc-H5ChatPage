@@ -406,11 +406,13 @@ p, ul, li {
     left: 75px;
 }
 .msgOuter ul.sugguestions {
-    width: 80%;
+    /*width: 80%;*/
+    width: 100%;
     margin: 20px auto;
 }
 .msgOuter ul.sugguestions li {
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
+    margin-top: 20px;
 }
 .msgOuter ul.sugguestions li a {
     word-break: break-all;
@@ -433,7 +435,8 @@ p, ul, li {
 /******theme end ******/
 /****统一超链接颜色***/
 .leftMsg .msgOuter a, .sysMsgText a {
-    color: rgb(25,161,227) !important;
+    /*color: rgb(25,161,227) !important;*/
+    color: #15a0e8 !important;
 }
 iframe, embed, table {
     width: 100% !important;
