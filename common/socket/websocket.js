@@ -162,7 +162,6 @@ function ZcWebSocket(puid,url,global) {
             var msg = retryList[el];
             websocket.send(JSON.stringify(msg));
         }
-        // alert('open retry count=' + count);
         setInterval(retry,1000);
     };
 
