@@ -334,16 +334,14 @@ var ListMsgHandler = function() {
           }
       }
       chatPanelList.append(tempHtml);
-      //FIXME 永存消息只显示最新的一条
-      if(sysMsgManager.length>1){
+      //FIXME 永存消息只显示最新的一条  当转人工后 需删除排除或不在线提示
+      if(sysMsgManager.length>1||messageHandler.config.currentState === 2){
         var sign = sysMsgManager.shift();
         $('#'+sign).animate({'margin-top':'-50px',opacity:'0.1'},500,function(){
           $(this).remove();
         });
       }
-      scrollHanlder.myRefresh();//刷新
-      // scrollHanlder.scroll.refresh();//刷新
-      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+      // console.log(sysMsgManager,messageHandler.config.currentState,1);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次
       if(global.UAInfo.UA=='android'){
         $(wrapBox).css('font-size','0.9em');
@@ -351,15 +349,21 @@ var ListMsgHandler = function() {
           $(wrapBox).css('font-size','1em');
         },200);
       }
+      scrollHanlder.myRefresh();//刷新
+      // setTimeout(function(){
+      //
+      // },2000);
+      // scrollHanlder.scroll.refresh();//刷新
+      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
     };
     //加欢迎语
     var getHello = function(data){
-      console.log(data);
+      // console.log(data);
       //判断智能机器人还是人工客服 1 robot 2 human
       if(data && data.length){
         var _data = data[data.length-1].content[0];
         messageHandler.config.currentState = _data.senderType;
-        document.title = _data.senderName;
+        document.title = _data.senderName+'_'+global.apiConfig.companyName;
         $('.js-title').text(_data.senderName);
         //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
           global.apiConfig.customInfo = {

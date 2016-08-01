@@ -630,9 +630,9 @@ function TextArea(window) {
         listener.on("sendArea.uploadImgUrl",onImageUpload);
         $(window).on("resize",autoSizePhone);
         listener.on("listMsg.hideKeyboard",hideKeyboard);
+        listener.on("listMsg.realScrollBottom",autoSizePhone);
         //转人工
         $artificial.on("click",artificialHandler);
-
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
