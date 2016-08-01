@@ -125,11 +125,10 @@ var HumanFirst = function(global) {
         if (manager) {
             manager.destroy();
         }
-        if (tempManager) {
-            tempManager.destroy();
+        if (!tempManager) {
+            tempManager = socketFactory(ret, global);
+            tempManager.start();
         }
-        tempManager = socketFactory(ret, global);
-        tempManager.start();
         manager = new Robot(global);
         modeState.setCurrentState("robot");
         listener.trigger("core.sessionclose", -3);
@@ -217,6 +216,12 @@ var HumanFirst = function(global) {
     var transferSuccess = function(groupId, promise, init) {
         var init = !!init;
         initSession(global, promise).then(function(value, promise) {
+            var way;
+            if (tempManager) {
+                way = tempManager.type == 'websocket' ? 8 : 1;
+            } else {
+                way = 1;
+            }
             $.ajax({
                 'url': '/chat/user/chatconnect.action',
                 'type': 'post',
@@ -224,7 +229,7 @@ var HumanFirst = function(global) {
                 'data': {
                     'sysNum': global.sysNum,
                     'uid': global.apiInit.uid,
-                    'way': 1,
+                    'way': way,
                     'current': queueing,
                     'groupId': groupId
                 },

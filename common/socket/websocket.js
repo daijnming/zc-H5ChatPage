@@ -198,7 +198,7 @@ function ZcWebSocket(puid, url, global) {
     };
 
     var stop = function() {};
-
+    this.type = "websocket";
     this.destroy = destroy;
     this.start = start;
     this.stop = stop;

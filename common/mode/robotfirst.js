@@ -107,11 +107,12 @@ var RobotFirst = function(global) {
     var queueWait = function(ret, init) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
-        if (tempManager) {
-            tempManager.destroy();
+        console.log('queue')
+        if (!tempManager) {
+            tempManager = socketFactory(ret, global);
+            tempManager.start();
         }
-        tempManager = socketFactory(ret, global);
-        tempManager.start();
+
         if (manager) {
             manager.destroy();
         }
@@ -186,6 +187,12 @@ var RobotFirst = function(global) {
     var transferBtnClickHandler = function(evt, init) {
         var init = !!init;
         transfer(global, null, queueing).then(function(groupId, promise) {
+            var way;
+            if (tempManager) {
+                way = tempManager.type == 'websocket' ? 8 : 1;
+            } else {
+                way = 1;
+            }
             $.ajax({
                 'url': '/chat/user/chatconnect.action',
                 'type': 'post',
@@ -193,7 +200,7 @@ var RobotFirst = function(global) {
                 'data': {
                     'sysNum': global.sysNum,
                     'uid': global.apiInit.uid,
-                    'way': 1,
+                    'way': way,
                     'current': queueing,
                     'groupId': groupId || ''
                 },
