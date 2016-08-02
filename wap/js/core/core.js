@@ -7,12 +7,10 @@ var Core = function(window) {
     var global;
     var listener = require('../../../common/util/listener.js');
 
-    var parseDOM = function() {
-    };
+    var parseDOM = function() {};
 
     var bindListener = function() {
-        listener.on("system.send", function(data) {
-        });
+        listener.on("system.send", function(data) {});
     };
 
     var initPlugins = function() {
@@ -28,12 +26,12 @@ var Core = function(window) {
     };
     promise.then(function(data) {
         $(".white-layer").remove();
-        $(document.body).trigger("core.onload",[{
-            data : data
+        $(document.body).trigger("core.onload", [{
+            data: data
         }]);
         global = data;
         init();
-        listener.trigger('core.onload',[global]);
+        listener.trigger('core.onload', [global]);
         heartBeat(global);
     });
 };
