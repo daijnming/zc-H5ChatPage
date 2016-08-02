@@ -363,7 +363,7 @@ var ListMsgHandler = function() {
       if(data && data.length){
         var _data = data[data.length-1].content[0];
         messageHandler.config.currentState = _data.senderType;
-        document.title = _data.senderName+'_'+global.apiConfig.companyName;
+        document.title = '咨询客服_'+global.apiConfig.companyName;
         $('.js-title').text(_data.senderName);
         //FIXME 获取最后一条客服聊天消息 机器人 OR  人工客服
           global.apiConfig.customInfo = {

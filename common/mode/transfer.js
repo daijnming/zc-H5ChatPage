@@ -25,6 +25,11 @@ function transfer(global,promise,queueing) {
         //分组颜色
         $('.js-item').css('background-color',global.apiConfig.color);
         $('.js-cancel-btn').css('color',global.apiConfig.color);
+        // var w = $('.group-outer').width();
+        // var h = $('.group-outer').height();
+        // var W = $(document.body).width();
+        // var H = $(document.body).height();
+        // $('.group-outer').offset({'width':(W-w)/2,'height':(H-h)/2});
     };
     var init = function() {
         if(global.apiInit.ustatus !== 0) {
