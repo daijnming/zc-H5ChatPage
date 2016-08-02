@@ -237,7 +237,8 @@ var initConfig = function() {
                 birthday : urlParams['birthday'] ? urlParams['birthday'] : '',
                 remark : urlParams['remark'] ? urlParams['remark'] : '',
                 color:urlParams['color']?urlParams['color']:'',//FIXME  默认优先从配置中取主题色
-                modulType:urlParams['modulType']?urlParams['modulType']:''//FIXME 默认优先客服模式从配置中取
+                modulType:urlParams['modulType']?urlParams['modulType']:'',//FIXME 默认优先客服模式从配置中取
+                params:urlParams['params']?urlParams['params']:''//FIXME 自定义字段
             };
         },
         //FIXME 初始化SysNum系统 id
@@ -352,7 +353,8 @@ var initConfig = function() {
                     qq :decodeURI( That.cacheInfo.userInfo.qq),
                     sex :decodeURI( That.cacheInfo.userInfo.sex),
                     birthday :decodeURI( That.cacheInfo.userInfo.birthday),
-                    remark :decodeURI( That.cacheInfo.userInfo.remark)
+                    remark :decodeURI( That.cacheInfo.userInfo.remark),
+                    params :decodeURI( That.cacheInfo.userInfo.params)
                 },
                 success : function(res) {
                     var data = res.data ? res.data : res;

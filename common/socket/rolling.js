@@ -1,50 +1,50 @@
 /**
  * @author Treagzhao
  */
-function Rolling(puid,pu,global) {
+function Rolling(puid, pu, global) {
     this.puid = puid;
     var listener = require('../util/listener.js');
     var socketType = 'human';
     var timer;
     var ROLE_USER = 0;
     var messageCache = {};
-    var onSend = function(args,retry) {
+    var onSend = function(args, retry) {
         var retry = retry || 0;
         var data = args[0];
-        if(data.currentStatus !== 'human') {
+        if (data.currentStatus !== 'human') {
             return;
         }
-        if(!data.date) {
+        if (!data.date) {
             data.ts = +new Date();
         } else {
             data.ts = data.date;
         }
         $.ajax({
-            'url' : '/chat/user/chatsend.action',
-            'data' : {
-                'puid' : puid,
-                'cid' : data.cid,
-                'uid' : data.uid,
-                'content' : data.answer
+            'url': '/chat/user/chatsend.action',
+            'data': {
+                'puid': puid,
+                'cid': data.cid,
+                'uid': data.uid,
+                'content': data.answer
             },
-            'dataType' : 'json',
-            'type' : "POST",
-            'success' : function(ret) {
+            'dataType': 'json',
+            'type': "POST",
+            'success': function(ret) {
                 listener.trigger("core.msgresult", {
-                    'msgId' : data.dateuid,
-                    'result' : 'success'
+                    'msgId': data.dateuid,
+                    'result': 'success'
                 });
             },
-            'error' : function(ret) {
-                if(retry >= 3) {
+            'error': function(ret) {
+                if (retry >= 3) {
                     listener.trigger("core.msgresult", {
-                        'msgId' : data.dateuid,
-                        'result' : 'fail'
+                        'msgId': data.dateuid,
+                        'result': 'fail'
                     });
                 } else {
                     setTimeout(function() {
-                        onSend([data],retry + 1);
-                    },1000);
+                        onSend([data], retry + 1);
+                    }, 1000);
                 }
             }
         });
@@ -56,62 +56,62 @@ function Rolling(puid,pu,global) {
 
     var messageConfirm = function(list) {
         var arr = [];
-        for(var i = 0,
-            len = list.length;i < len;i++) {
+        for (var i = 0,
+                len = list.length; i < len; i++) {
             var item = list[i];
             var obj = {
-                'type' : 300,
-                'utype' : ROLE_USER,
-                'cid' : item.cid,
-                'uid' : item.uid,
-                'msgId' : item.msgId
+                'type': 300,
+                'utype': ROLE_USER,
+                'cid': item.cid,
+                'uid': item.uid,
+                'msgId': item.msgId
             };
             arr.push(obj);
         }
-        if(arr.length <= 0)
+        if (arr.length <= 0)
             return;
-        if(window.confirm("是否发送消息回执"))
+        if (window.confirm("是否发送消息回执"))
             $.ajax({
-                'url' : '/chat/user/msg/ack.action',
-                'dataType' : 'json',
-                'data' : {
-                    'content' : JSON.stringify(arr),
-                    'tnk' : +new Date()
+                'url': '/chat/user/msg/ack.action',
+                'dataType': 'json',
+                'data': {
+                    'content': JSON.stringify(arr),
+                    'tnk': +new Date()
                 },
-                'type' : 'POST',
+                'type': 'POST',
             });
     };
 
     var getMessage = function() {
         $.ajax({
-            'url' : '/chat/user/msg.action',
-            'dataType' : 'json',
-            'data' : {
-                'puid' : puid
+            'url': '/chat/user/msg.action',
+            'dataType': 'json',
+            'data': {
+                'puid': puid
             },
-            'type' : "get",
-            'success' : function(ret) {
-                if(ret && ret.length) {
+            'type': "get",
+            'success': function(ret) {
+                if (ret && ret.length) {
                     var arr = [];
-                    for(var i = 0,
-                        len = ret.length;i < len;i++) {
+                    for (var i = 0,
+                            len = ret.length; i < len; i++) {
                         var item = JSON.parse(ret[i]);
-                        if(!item.msgId) {
+                        if (!item.msgId) {
                             item.msgId = +new Date() + Math.random().toString(36).substr(2) + data.type;
                         }
-                        if(messageCache[item.msgId]) {
+                        if (messageCache[item.msgId]) {
                             continue;
                         }
                         messageCache[item.msgId] = true;
                         arr.push(item);
-                        if(item.type === 204) {
-                            listener.trigger("core.sessionclose",item.status);
-                            if(item.status == 2 || item.status == 4) {
+                        if (item.type === 204) {
+                            listener.trigger("core.sessionclose", item.status);
+                            if (item.status == 2 || item.status == 4) {
                                 listener.trigger("core.system", {
-                                    'type' : 'system',
-                                    'status' : 'kickout',
-                                    'data' : {
-                                        'content' : "您与客服" + item.aname + "的会话已经关闭"
+                                    'type': 'system',
+                                    'status': 'kickout',
+                                    'data': {
+                                        'content': "您与客服" + item.aname + "的会话已经关闭"
                                     }
                                 });
                             }
@@ -120,25 +120,25 @@ function Rolling(puid,pu,global) {
                     }
                     messageConfirm(arr);
                     listener.trigger("core.onreceive", {
-                        'type' : socketType,
-                        'list' : arr
+                        'type': socketType,
+                        'list': arr
                     });
                 }
             },
-            'fail' : function() {
-            }
+            'fail': function() {}
         });
-        timer = setTimeout(getMessage,1500);
+        timer = setTimeout(getMessage, 1500);
     };
 
     var bindListener = function() {
-        listener.on("sendArea.send",onSend);
+        listener.on("sendArea.send", onSend);
     };
 
     var init = function() {
         bindListener();
     };
     init();
+    this.type = "rolling";
     this.destroy = destroy;
     this.start = getMessage;
 }

@@ -120,7 +120,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       }
       var name = data.data.aname?data.data.aname:'未接入';
       $('.js-title').text(name);
-      document.title = name;
+      document.title = '咨询客服_'+global.apiConfig.companyName;
       msgBind(2,data);
     },
     //系统消息显示处理
@@ -164,7 +164,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           window.location.href = global.apiConfig.leaveMsgUrl;//跳转到留言页
         }
         title.text('未接入');
-        document.title = '未接入';
+        document.title = '咨询客服_'+global.apiConfig.companyName;
         var data = {type:'system',status:'hunmanonly',data:{content:data.data.content,status:0}};
         msgBind(2,data);
       }

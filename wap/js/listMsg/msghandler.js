@@ -9,7 +9,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
   var chatPanelList;//滚动列表
 
   //定义变量
-  var isUploadImg=true;//是否为上传图片操作
+  var isUploadImg=true,//是否为上传图片操作
+      scrollTimer;//实时定位接收的消息到最底端
 
   //定义变量
   var autoTimer,//输入框高度延迟处理 解决与弹出键盘冲突
@@ -86,7 +87,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //接收回复
    onReceive : function(data){
-     console.log(data);
+    //  console.log(data);
      //判断当前聊天状态
      if(data.type==='robot'){
        sys.config.currentState=1;
@@ -126,6 +127,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
        }
      }
       msgBind(1,data);
+      //接收消息 实时滚动到最底部  主要用于解决接收大图片页面不能定位到最底端
+      clearInterval(scrollTimer);
+      scrollTimer = setTimeout(function(){
+          fnEvent.trigger('listMsg.realScrollBottom');
+      },500);
+
     },
     //相关搜索答案点击事件
    onSugguestionsEvent : function(){

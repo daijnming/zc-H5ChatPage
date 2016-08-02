@@ -22,59 +22,59 @@ var RobotFirst = function(global) {
         $transferBtn = $(".temp_test");
     };
 
-    var getWelcome = function(value,promise) {
+    var getWelcome = function(value, promise) {
         var promise = promise || new Promise();
-        initSession(global,promise).then(function(value,promise) {
-            if(!value) {
+        initSession(global, promise).then(function(value, promise) {
+            if (!value) {
                 value = [];
             }
             var now = new Date();
             var obj = {
-                "date" : DateUtil.formatDate(now),
-                "content" : [{
-                    'senderType' : 1,
-                    't' : +now,
-                    'msg' : global.apiConfig.robotHelloWord,
-                    'ts' : DateUtil.formatDate(now,true),
-                    'senderFace' : global.apiConfig.robotLogo,
-                    'senderName' : global.apiConfig.robotName
+                "date": DateUtil.formatDate(now),
+                "content": [{
+                    'senderType': 1,
+                    't': +now,
+                    'msg': global.apiConfig.robotHelloWord,
+                    'ts': DateUtil.formatDate(now, true),
+                    'senderFace': global.apiConfig.robotLogo,
+                    'senderName': global.apiConfig.robotName
                 }]
             };
             value.push(obj);
             setTimeout(function() {
-                listener.trigger("core.initsession",value);
-            },0);
+                listener.trigger("core.initsession", value);
+            }, 0);
             return promise;
         });
         return promise;
     };
-    var initHumanSession = function(word,ret) {
+    var initHumanSession = function(word, ret) {
         var face = (!!word) ? ret.aface : global.apiConfig.robotLogo;
         var name = (!!word) ? ret.aname : global.apiConfig.robotName;
         var word = word || global.apiConfig.robotHelloWord;
         var curStatus = global.apiInit.ustatus == -2 ? 1 : 0;
         //-2为排队中
-        initSession(global).then(function(value,promise) {
-            if(!value) {
+        initSession(global).then(function(value, promise) {
+            if (!value) {
                 value = [];
             }
             var now = new Date();
             var obj = {
-                "date" : DateUtil.formatDate(now),
-                "content" : [{
+                "date": DateUtil.formatDate(now),
+                "content": [{
                     // 'senderType' : (!!word) ? 2 : 1,
-                    'senderType' : curStatus ? 1 : (!!word) ? 2 : 1,
-                    't' : +now,
-                    'msg' : word,
-                    'ts' : DateUtil.formatDate(now,true),
-                    'senderFace' : face,
-                    'senderName' : name
+                    'senderType': curStatus ? 1 : (!!word) ? 2 : 1,
+                    't': +now,
+                    'msg': word,
+                    'ts': DateUtil.formatDate(now, true),
+                    'senderFace': face,
+                    'senderName': name
                 }]
             };
             value.push(obj);
             setTimeout(function() {
-                listener.trigger("core.initsession",value);
-            },0);
+                listener.trigger("core.initsession", value);
+            }, 0);
             return promise;
         });
 
@@ -82,99 +82,101 @@ var RobotFirst = function(global) {
     /**
      * 客服已离线
      */
-    var serverOffline = function(ret,init) {
-        if(init) {
-            initHumanSession(null,ret);
+    var serverOffline = function(ret, init) {
+        if (init) {
+            initHumanSession(null, ret);
             setTimeout(function() {
                 ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
                 listener.trigger("core.system", {
-                    'type' : 'system',
-                    'status' : 'offline',
-                    'data' : ret
+                    'type': 'system',
+                    'status': 'offline',
+                    'data': ret
                 });
-            },1);
+            }, 1);
         } else {
             ret.content = global.apiConfig.adminNonelineTitle + leaveMessageStr;
             listener.trigger("core.system", {
-                'type' : 'system',
-                'status' : 'offline',
-                'data' : ret
+                'type': 'system',
+                'status': 'offline',
+                'data': ret
             });
         }
         setCurrentState.setCurrentState('robot');
     };
 
-    var queueWait = function(ret,init) {
+    var queueWait = function(ret, init) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
-        if(!tempManager) {
-            tempManager = socketFactory(ret,global);
+        console.log('queue')
+        if (!tempManager) {
+            tempManager = socketFactory(ret, global);
             tempManager.start();
         }
-        if(manager) {
+
+        if (manager) {
             manager.destroy();
         }
 
         manager = new Robot(global);
-        if(init) {
-            initHumanSession(null,ret);
+        if (init) {
+            initHumanSession(null, ret);
             setTimeout(function() {
                 ret.content = str + " " + leaveMessageStr;
                 listener.trigger("core.system", {
-                    'type' : 'system',
-                    'status' : "queue",
-                    'data' : ret
+                    'type': 'system',
+                    'status': "queue",
+                    'data': ret
                 });
-            },1);
+            }, 1);
         } else {
             ret.content = str + " " + leaveMessageStr;
             listener.trigger("core.system", {
-                'type' : 'system',
-                'status' : "queue",
-                'data' : ret
+                'type': 'system',
+                'status': "queue",
+                'data': ret
             });
         }
         setCurrentState.setCurrentState("robot");
     };
 
-    var transferHumanSucess = function(ret,init) {
-        if(manager) {
+    var transferHumanSucess = function(ret, init) {
+        if (manager) {
             manager.destroy();
         }
         queueing = false;
-        manager = socketFactory(ret,global);
+        manager = socketFactory(ret, global);
         manager.start();
         setCurrentState.setCurrentState('human');
-        if(init) {
-            initHumanSession(global.apiConfig.adminHelloWord,ret);
+        if (init) {
+            initHumanSession(global.apiConfig.adminHelloWord, ret);
         } else {
             listener.trigger("core.system", {
-                'type' : 'system',
-                'status' : "transfer",
-                'data' : {
-                    'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                'type': 'system',
+                'status': "transfer",
+                'data': {
+                    'content': "您好，客服" + ret.aname + "接受了您的请求"
                 }
             });
             ret.content = global.apiConfig.adminHelloWord;
             listener.trigger("core.system", {
-                'type' : 'human',
-                'data' : ret
+                'type': 'human',
+                'data': ret
             });
         }
         listener.trigger("core.buttonchange", {
-            'type' : 'transfer',
-            'action' : 'hide'
+            'type': 'transfer',
+            'action': 'hide'
         });
     };
 
-    var blackListCallback = function(ret,init) {
+    var blackListCallback = function(ret, init) {
         ret.content = '暂时无法转接人工客服' + ' ' + leaveMessageStr;
         listener.trigger("core.system", {
-            'type' : 'system',
-            'status' : 'blacklist',
-            'data' : ret
+            'type': 'system',
+            'status': 'blacklist',
+            'data': ret
         });
-        if(init) {
+        if (init) {
             initRobotSession();
         }
     };
@@ -182,37 +184,42 @@ var RobotFirst = function(global) {
      *
      * @param {Object} init 是通过事件点击触发，还是自动触发
      */
-    var transferBtnClickHandler = function(evt,init) {
+    var transferBtnClickHandler = function(evt, init) {
         var init = !!init;
-        transfer(global,null,queueing).then(function(groupId,promise) {
+        transfer(global, null, queueing).then(function(groupId, promise) {
+            var way;
+            if (tempManager) {
+                way = tempManager.type == 'websocket' ? 8 : 1;
+            } else {
+                way = 1;
+            }
             $.ajax({
-                'url' : '/chat/user/chatconnect.action',
-                'type' : 'post',
-                'dataType' : 'json',
-                'data' : {
-                    'sysNum' : global.sysNum,
-                    'uid' : global.apiInit.uid,
-                    'way' : 1,
-                    'current' : queueing,
-                    'groupId' : groupId || ''
+                'url': '/chat/user/chatconnect.action',
+                'type': 'post',
+                'dataType': 'json',
+                'data': {
+                    'sysNum': global.sysNum,
+                    'uid': global.apiInit.uid,
+                    'way': way,
+                    'current': queueing,
+                    'groupId': groupId || ''
                 },
-                'success' : function(ret) {
+                'success': function(ret) {
                     //[0:排队，2：无客服在线，3：黑名单，1：成功]
-                    if(ret.status == 2) {
-                        serverOffline(ret,init);
+                    if (ret.status == 2) {
+                        serverOffline(ret, init);
                         //暂无客服在线
-                    } else if(ret.status == 0) {
+                    } else if (ret.status == 0) {
                         //排队
                         global.urlParams.groupId = groupId;
-                        queueWait(ret,init);
-                    } else if(ret.status == 1) {
-                        transferHumanSucess(ret,init);
-                    } else if(ret.status == 3) {
-                        blackListCallback(ret,init);
+                        queueWait(ret, init);
+                    } else if (ret.status == 1) {
+                        transferHumanSucess(ret, init);
+                    } else if (ret.status == 3) {
+                        blackListCallback(ret, init);
                     }
                 },
-                'fail' : function() {
-                }
+                'fail': function() {}
             });
 
         }, function() {
@@ -221,84 +228,84 @@ var RobotFirst = function(global) {
 
     };
 
-    var initRobotSession = function(value,promise) {
-        if(!value) {
+    var initRobotSession = function(value, promise) {
+        if (!value) {
             value = [];
         }
         var now = new Date();
         var obj = {
-            "date" : DateUtil.formatDate(now),
-            "content" : [{
-                'senderType' : 1,
-                't' : +now,
-                'msg' : global.apiConfig.robotHelloWord,
-                'ts' : DateUtil.formatDate(now,true),
-                'senderFace' : global.apiConfig.robotLogo,
-                'senderName' : global.apiConfig.robotName
+            "date": DateUtil.formatDate(now),
+            "content": [{
+                'senderType': 1,
+                't': +now,
+                'msg': global.apiConfig.robotHelloWord,
+                'ts': DateUtil.formatDate(now, true),
+                'senderFace': global.apiConfig.robotLogo,
+                'senderName': global.apiConfig.robotName
             }]
         };
         value.push(obj);
         setTimeout(function() {
-            listener.trigger("core.initsession",value);
-        },0);
+            listener.trigger("core.initsession", value);
+        }, 0);
         manager = new Robot(global);
         setCurrentState.setCurrentState('robot');
     };
     var onReceive = function(data) {
         var list = data.list || [];
-        for(var i = 0,
-            len = list.length;i < len;i++) {
+        for (var i = 0,
+                len = list.length; i < len; i++) {
             var item = list[i];
             var ret = item;
-            if(item.type === 200) {
-                if(manager) {
+            if (item.type === 200) {
+                if (manager) {
                     manager.destroy();
                 }
                 manager = tempManager;
                 tempManager = null;
                 setCurrentState.setCurrentState('human');
                 listener.trigger("core.system", {
-                    'type' : 'system',
-                    'status' : "transfer",
-                    'data' : {
-                        'content' : "您好，客服" + ret.aname + "接受了您的请求"
+                    'type': 'system',
+                    'status': "transfer",
+                    'data': {
+                        'content': "您好，客服" + ret.aname + "接受了您的请求"
                     }
                 });
                 ret.content = global.apiConfig.adminHelloWord;
                 listener.trigger("core.system", {
-                    'type' : 'human',
-                    'data' : ret
+                    'type': 'human',
+                    'data': ret
                 });
                 listener.trigger("core.buttonchange", {
-                    'type' : 'transfer',
-                    'action' : 'hide'
+                    'type': 'transfer',
+                    'action': 'hide'
                 });
                 break;
             }
         }
     };
     var bindListener = function() {
-        listener.on("sendArea.artificial",transferBtnClickHandler);
-        listener.on("core.onreceive",onReceive);
+        listener.on("sendArea.artificial", transferBtnClickHandler);
+        listener.on("core.onreceive", onReceive);
     };
 
     var initPlugins = function() {
         listener.trigger("core.buttonchange", {
-            'type' : 'transfer',
-            'action' : 'show'
+            'type': 'transfer',
+            'action': 'show'
         });
         var status = global.apiInit.ustatus;
         //首先发送机器人欢迎语
         //queueing == status == -2;
         // 0 没有会话保持 1 转人工成功 -2 表示正在排队 -1 会话已结束
-        if(status == 0) {
+        if (status == 0) {
             manager = new Robot(global);
             getWelcome();
             setCurrentState.setCurrentState('robot');
         } else {
-            if(status == 1 || status == -2) {
-                transferBtnClickHandler(null,true);
-            } else if(status == -1) {
+            if (status == 1 || status == -2) {
+                transferBtnClickHandler(null, true);
+            } else if (status == -1) {
                 initSession(global).then(initRobotSession);
             }
         }

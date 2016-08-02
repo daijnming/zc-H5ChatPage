@@ -312,7 +312,7 @@ body {
     position: absolute;
     z-index: 2000;
     background-color: white;
-    background-image: url(../images/static/loading@3x.gif);
+    background-image: url(../images/loading@3x.gif);
     background-repeat: no-repeat;
     background-position: center center;
 }

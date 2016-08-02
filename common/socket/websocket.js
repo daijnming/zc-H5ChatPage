@@ -2,9 +2,9 @@
  * @author Treagzhao
  */
 var HearBeat = require("./heartbeat.js");
-function ZcWebSocket(puid,url,global) {
+
+function ZcWebSocket(puid, url, global) {
     this.puid = puid;
-    // url = "ws://test.sobot.com/";
     var socketType = 'human';
     var messageCache = {};
     var listener = require('../util/listener.js');
@@ -19,13 +19,13 @@ function ZcWebSocket(puid,url,global) {
 
     var retry = function() {
         var now = +new Date();
-        for(var el in retryList) {
+        for (var el in retryList) {
             var item = retryList[el];
-            if(now - item.sendTime >= TIMEOUT_DURATION) {
+            if (now - item.sendTime >= TIMEOUT_DURATION) {
                 delete retryList[el];
                 listener.trigger("core.msgresult", {
-                    'msgId' : item.dateuid,
-                    'result' : 'fail'
+                    'msgId': item.dateuid,
+                    'result': 'fail'
                 });
             }
         }
@@ -33,15 +33,15 @@ function ZcWebSocket(puid,url,global) {
 
     var onSend = function(data) {
         var item = data;
-        if(Object.prototype.toString.call(data).indexOf("Array") >= 0) {
+        if (Object.prototype.toString.call(data).indexOf("Array") >= 0) {
             item = data[0];
         }
-        if(item.currentStatus !== 'human') {
+        if (item.currentStatus !== 'human') {
             return;
         }
         var d = !!item.date ? new Date(item.date) : new Date();
         item.t = +d;
-        item.ts = dateUtil.formatDate(d,true);
+        item.ts = dateUtil.formatDate(d, true);
         item.type = 103;
         item.msgId = item['dateuid'];
         item.sendTime = item.date;
@@ -54,64 +54,64 @@ function ZcWebSocket(puid,url,global) {
 
     var ackConfirmMessageHandler = function(data) {
         listener.trigger("core.msgresult", {
-            'msgId' : data.msgId,
-            'result' : 'success'
+            'msgId': data.msgId,
+            'result': 'success'
         });
         delete retryList[data.msgId];
     };
 
     var commonMessageHandler = function(data) {
         listener.trigger("core.onreceive", {
-            'type' : socketType,
-            'list' : [data]
+            'type': socketType,
+            'list': [data]
         });
     };
     var systemMessageHandler = function(data) {
-        if(data.type == 204) {
-            listener.trigger("core.sessionclose",data.status);
-            if(data.status == 2 || data.status == 4) {
+        if (data.type == 204) {
+            listener.trigger("core.sessionclose", data.status);
+            if (data.status == 2 || data.status == 4) {
                 listener.trigger("core.system", {
-                    'type' : 'system',
-                    'status' : 'kickout',
-                    'data' : {
-                        'content' : "您与客服" + data.aname + "的会话已经关闭"
+                    'type': 'system',
+                    'status': 'kickout',
+                    'data': {
+                        'content': "您与客服" + data.aname + "的会话已经关闭"
                     }
                 });
             }
         }
         listener.trigger("core.onreceive", {
-            'type' : socketType,
-            'list' : [data]
+            'type': socketType,
+            'list': [data]
         });
     };
 
     var messageConfirm = function(data) {
-        if(data.type == 301) {
+        if (data.type == 301) {
             return;
         }
         var obj = {
-            'type' : 300,
-            'msgId' : data.msgId,
-            'utype' : ROLE_USER,
-            'data' : [data]
+            'type': 300,
+            'msgId': data.msgId,
+            'utype': ROLE_USER,
+            'data': [data]
         };
         websocket.send(JSON.stringify(obj));
     };
     var onMessage = function(evt) {
-        if(evt.data === 'pong') {
+        if (evt.data === 'pong') {
             return;
         }
         var data = JSON.parse(evt.data);
         messageConfirm(data);
-        if(!data.msgId) {
+        if (!data.msgId) {
             data.msgId = +new Date() + Math.random().toString(36).substr(2) + data.type;
         }
-        if(messageCache[data.msgId])
+        if (messageCache[data.msgId])
             return;
         messageCache[data.msgId] = true;
-        if(data.type == 301) {
+        if (data.type == 301) {
             ackConfirmMessageHandler(data);
-        } else if(data.type == 202) {
+        } else if (data.type == 202) {
             commonMessageHandler(data);
         } else {
             systemMessageHandler(data);
@@ -119,15 +119,15 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var reConnect = function() {
-        if(connRetryTime++ >= 3) {
+        if (connRetryTime++ >= 3) {
             listener.trigger("core.system", {
-                'type' : 'system',
-                'status' : 'kickout',
-                'data' : {
-                    'content' : "与服务器连接中断"
+                'type': 'system',
+                'status': 'kickout',
+                'data': {
+                    'content': "与服务器连接中断"
                 }
             });
-            listener.trigger("core.sessionclose",-4);
+            listener.trigger("core.sessionclose", -4);
             return;
         }
         setTimeout(function() {
@@ -137,7 +137,7 @@ function ZcWebSocket(puid,url,global) {
             websocket.onopen = onOpen;
             websocket.onclose = onClose;
             websocket.onmessage = onMessage;
-        },5000);
+        }, 5000);
     };
     var onClosed = function() {
         reConnect();
@@ -146,23 +146,23 @@ function ZcWebSocket(puid,url,global) {
     var onOpen = function() {
         timer = setInterval(function() {
             websocket.send("ping");
-        },5 * 1000);
+        }, 5 * 1000);
         var start = {
-            "t" : ROLE_USER,
-            "u" : global.apiInit.uid,
-            's' : global.sysNum
+            "t": ROLE_USER,
+            "u": global.apiInit.uid,
+            's': global.sysNum
         };
         var count = 0;
-        for(var el in retryList) {
+        for (var el in retryList) {
             count++;
         }
         connRetryTime = 0;
         websocket.send(JSON.stringify(start));
-        for(var el in retryList) {
+        for (var el in retryList) {
             var msg = retryList[el];
             websocket.send(JSON.stringify(msg));
         }
-        setInterval(retry,1000);
+        setInterval(retry, 1000);
     };
 
     var onClose = function() {
@@ -170,15 +170,14 @@ function ZcWebSocket(puid,url,global) {
         clearTimeout(timer);
     };
 
-    var onError = function() {
-    };
+    var onError = function() {};
 
     var bindListener = function() {
         websocket.onerror = onError;
         websocket.onopen = onOpen;
         websocket.onclose = onClose;
         websocket.onmessage = onMessage;
-        listener.on("sendArea.send",onSend);
+        listener.on("sendArea.send", onSend);
     };
 
     var init = function() {
@@ -186,6 +185,10 @@ function ZcWebSocket(puid,url,global) {
     };
 
     var destroy = function() {
+        if (websocket) {
+            websocket.close()
+            clearTimeout(timer);
+        }
     };
 
     var start = function() {
@@ -194,9 +197,8 @@ function ZcWebSocket(puid,url,global) {
         HearBeat(global);
     };
 
-    var stop = function() {
-    };
-
+    var stop = function() {};
+    this.type = "websocket";
     this.destroy = destroy;
     this.start = start;
     this.stop = stop;
