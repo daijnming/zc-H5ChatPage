@@ -301,6 +301,7 @@ function TextArea(window) {
                 }
             }
          //},100);
+        specialModelshideKeyboardHandler();
        focusStatus=false;
     };
     //表情、加号切换
@@ -515,15 +516,24 @@ function TextArea(window) {
     //特殊机型输入框处理，抬高
     var specialModelshideKeyboardHandler=function(){
        var browserType= navigator.userAgent.toLowerCase();
-        //alert(browserType);
-        //mozilla/5.0 (linux; u; android 4.4.4; zh-cn; htc d820mu build/ktu84p) applewebkit/534.30 (khtml, like gecko) version/4.0 mobile safari/534.30
-        if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1){
-            //alert($(document).height());
-            //$(document).scrollTop('500');
-
-//           $(document).bottom('500');
+        //iphone6-plus
+        if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==414){
+            //$(".chatArea").css("position","relative");
+           /* $(".js-textarea").focus(function(){
+                $('.js-heighter').height("282px");
+            })
+            $(".js-textarea").blur(function(){
+                $('.js-heighter').height("352px");
+            })*/
         }
-       
+         //iphone6
+        if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==375){
+           
+        }
+        //iphone5
+        if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==320){
+            
+        }
     };
     //禁止输入框滑动，ios下有bug
     var noSliding=function(){
@@ -671,7 +681,7 @@ function TextArea(window) {
         if($(".sendarea").css("display")!="flex"){
            flexcompatible();
         }
-        specialModelshideKeyboardHandler();
+        
     };
     (function(){
         parseDOM();
