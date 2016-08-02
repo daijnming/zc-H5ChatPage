@@ -178,6 +178,7 @@ function TextArea(window) {
         }
         $sendBtn.addClass("activehide")
         autoSizePhone();
+       // specialModelshideKeyboardHandler();
     };
     var sendedKeepFocus=function(){
         //var t1=document.getElementById("js-textarea");
@@ -266,7 +267,6 @@ function TextArea(window) {
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {
-         
         //setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
@@ -301,7 +301,7 @@ function TextArea(window) {
                 }
             }
          //},100);
-        specialModelshideKeyboardHandler();
+        //specialModelshideKeyboardHandler();
        focusStatus=false;
     };
     //表情、加号切换
@@ -519,16 +519,29 @@ function TextArea(window) {
         //iphone6-plus
         if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==414){
             //$(".chatArea").css("position","relative");
-           /* $(".js-textarea").focus(function(){
-                $('.js-heighter').height("282px");
+            /*$(".js-textarea").focus(function(){
+                $(".js-wrapper").height("100px")
+                //$('.js-heighter').height("282px");
             })
             $(".js-textarea").blur(function(){
-                $('.js-heighter').height("352px");
+                $(".js-wrapper").height("100px")
+                //$('.js-heighter').height("352px");
             })*/
         }
          //iphone6
         if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==375){
-           
+          /* $(".js-textarea").focus(function(){
+                $(".js-wrapper").css("height","242px")
+                $(".js-chatArea").css("top","242px")
+                $(".js-chatArea").css("height","50px")
+                $(".js-chatAdd").css("display","none")
+            })
+            $(".js-textarea").blur(function(){
+                $(".js-wrapper").css("height","100%")
+                $(".js-chatArea").css("top","auto")
+                $(".js-chatArea").css("height","262px")
+                $(".js-chatAdd").css("display","block")
+            })*/
         }
         //iphone5
         if(browserType.indexOf("iphone")!=-1&&browserType.indexOf("safari")!=-1&&$(window).width()==320){

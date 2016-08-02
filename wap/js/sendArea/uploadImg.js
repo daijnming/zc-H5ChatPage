@@ -50,6 +50,7 @@ function uploadImg() {
                     var etc = fileRead.substring(fileRead.indexOf("data:image/")+11, fileRead.indexOf(";base64"));
                     //console.log(etc);
                     if(etc=="gif"){
+                        $(".js-allScreen").remove();
                         oData.append("base64",fileRead);
                         //上传 
                         onAjaxUploadUpHandler(oData,tp,token)
@@ -144,7 +145,7 @@ function uploadImg() {
                 if (e.lengthComputable) {
                     var iPercentComplete = Math.round(e.loaded * 100 / e.total);
                     var percentage=iPercentComplete.toString();
-                    console.log(percentage);
+                    //console.log(percentage);
                     listener.trigger('sendArea.uploadImgProcess',{"percentage":percentage,"token":data.token}); //
                 } else {
                     //document.getElementById('progress').innerHTML = '无法计算';
