@@ -263,7 +263,13 @@ p, ul, li {
 .sysMsg {
     text-align: center;
     line-height: 24px;
-    margin-bottom: 20px;
+    text-align: center;
+    color: #676e6f;
+    margin: 10px 0 10px 0;
+    font-size: 0.8em;
+    padding: 5px 0 5px 0;
+    width: 100%;
+    display: inline-block;
 }
 .sysMsg .sysMsgText {
     color: #b1b5b5;
