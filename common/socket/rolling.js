@@ -70,16 +70,15 @@ function Rolling(puid, pu, global) {
         }
         if (arr.length <= 0)
             return;
-        if (window.confirm("是否发送消息回执"))
-            $.ajax({
-                'url': '/chat/user/msg/ack.action',
-                'dataType': 'json',
-                'data': {
-                    'content': JSON.stringify(arr),
-                    'tnk': +new Date()
-                },
-                'type': 'POST',
-            });
+        $.ajax({
+            'url': '/chat/user/msg/ack.action',
+            'dataType': 'json',
+            'data': {
+                'content': JSON.stringify(arr),
+                'tnk': +new Date()
+            },
+            'type': 'POST',
+        });
     };
 
     var getMessage = function() {
