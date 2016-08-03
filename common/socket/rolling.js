@@ -96,7 +96,7 @@ function Rolling(puid, pu, global) {
                             len = ret.length; i < len; i++) {
                         var item = JSON.parse(ret[i]);
                         if (!item.msgId) {
-                            item.msgId = +new Date() + Math.random().toString(36).substr(2) + data.type;
+                            item.msgId = (+new Date()) + Math.random().toString(36).substr(2) + item.type;
                         }
                         if (messageCache[item.msgId]) {
                             continue;
