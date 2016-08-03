@@ -42,6 +42,7 @@ li {
     display: flex;
     border-top: 1px solid #c4cccc;
     border-bottom: 1px solid #c4cccc;
+        background: #fafcfb;
 }
 .hideChatArea{
     animation:hideChatArea 0.2s;
@@ -102,7 +103,7 @@ li {
 }
 .add {
     display:block;
-    height: 32px;
+    height: 34px;
     width: 32px;
     margin:0 0px 0 10px;
     background-position:-94px 2px;
@@ -116,7 +117,7 @@ li {
 }
 .qqFaceTip {
     display:block;
-    height: 32px;
+    height: 34px;
     width: 32px;
     margin:0 4px 0 10px;
     background-position:2px 2px;
@@ -155,7 +156,6 @@ li {
     float: left;
     position:relative;
     width:70px;
-    margin:16px;
 }
 .addList .uploadImg{
     /* display:none; */
@@ -204,10 +204,10 @@ li {
     background-position:-67px -120px;
 }
 .addList .leaveMessagebg{
-    background-position: -142px -118px;
+    background-position: -142px -120px;
 }
 .addList .leaveMessagebgHover{
-    background-position: -218px -118px;
+    background-position: -218px -120px;
 }
 .showChatAdd {/* display:block; */
 }
@@ -297,59 +297,42 @@ li {
 .loadingUploadImg{position:absolute;z-index:100;width:120px;height:120px;border-radius:8px;background:rgba(0,0,0,0.5)}
 .loadingUploadImg i{display:inline-block;width:30px;height:30px;margin:36px 46px 21px 46px;background:url(../images/watingUploadImg.gif) no-repeat;background-size:30px 30px;}
 .loadingUploadImg p{color:#fff;font-size:12px;width:100%;text-align:center;}
-/* @media (min-device-width : 320px){
-    .endSession span i{
-         width:51%;
-    }
-
-@media (min-device-width : 360px){
-    .endSession span i{
-         width:44%;
-    }
+/*iphone4/iphone5*/
+ @media (min-device-width : 320px){
+ .addList{margin:0 10px;}
+ .addList li{margin:16px 2px}  
 }
-iphone6
+@media (min-device-width : 360px){
+  .addList{margin:0 10px;}
+  .addList li{margin:20px 7px} 
+}
+/* iphone6 */
 @media (min-device-width : 375px){
-    .endSession span i{
-         width:44%;
-    }
-} */
+  .addList{margin:0 10px;}
+  .addList li{margin:23px 9px} 
+} 
 /* iphone6 Plus */
 @media (min-device-width : 414px){
     .add,.addhover,.qqFaceTip,.qqFaceTiphover,.keyboard,.addList .uploadImgbg,.artificial,.addList .satisfactionbg,.addList .leaveMessagebg{
         background-image: url(../images/icoGroup3X.png);
         background-size:356px 275px;
     }
-    /* .endSession span i{
-        width:40%;
-    } */
+    .addList{margin:0 13px;}
+    .addList li{margin:30px 13px} 
+   
 }
-/* @media (min-device-width : 480px){
-    .endSession span i{
-         width:36%;
-    }
+ @media (min-device-width : 480px){
 }
 
 
 @media (min-device-width : 640px){
-    .endSession span i{
-        width:24%;
-    }
 }
-iphone6puls橫屏
+/* iphone6puls橫屏 */
 @media (min-device-width : 736px){
-    .endSession span i{
-        width:23%;
-    }
 }
 
 @media (min-device-width : 1280px){
-    .endSession span i{
-        width:13%;
-    }
 }
 
 @media (min-device-width : 1600px){
-    .endSession span i{
-        width:11%;
-    }
-} */
+}
