@@ -233,7 +233,7 @@ var initConfig = function() {
                 weibo : urlParams['weibo'] ? urlParams['weibo'] : '',
                 weixin : urlParams['weixin'] ? urlParams['weixin'] : '',
                 qq : urlParams['qq'] ? urlParams['qq'] : '',
-                sex : urlParams['sex'] ? urlParams['sex'] : '',
+                sex : urlParams['sex'] ? urlParams['sex'] : urlParams['sex']===0?0:'',
                 birthday : urlParams['birthday'] ? urlParams['birthday'] : '',
                 remark : urlParams['remark'] ? urlParams['remark'] : '',
                 color:urlParams['color']?urlParams['color']:'',//FIXME  默认优先从配置中取主题色
