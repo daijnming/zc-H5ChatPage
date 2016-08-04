@@ -169,7 +169,7 @@ function evaluate(currentStatus,global) {
         textareaMaxlen("js-evaluateInner",200);
     };
     var EvaluateAjaxHandler=function(){
-            remark=$(".js-evaluateInner").val();
+            remark=$(".js-evaluateInner").val()||'';
             var tag=[];
             for(var i=1;i<5;i++){
                 if($(".tag"+i).hasClass("active")){
