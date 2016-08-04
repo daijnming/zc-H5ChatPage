@@ -82,7 +82,7 @@ var rightMsg =
                 '</div>';
 
 var systemMsg =
-                  '<p class="js-sysMsg sysMsg {{=it.msgTmp}}" id={{=it.sysMsgSign}} date="{{=it.date}}">'+
+                  '<p class="js-sysMsg sysMsg {{=it.msgType}} {{=it.msgTmp}}" id={{=it.sysMsgSign}} date="{{=it.date}}">'+
                   '<span class="sysMsgText"> '+
                       '{{=it.sysMsg}}'+
                   '</span>'+
