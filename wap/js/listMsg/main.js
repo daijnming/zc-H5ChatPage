@@ -335,11 +335,20 @@ var ListMsgHandler = function() {
       }
       chatPanelList.append(tempHtml);
       //FIXME 永存消息只显示最新的一条  当转人工后 需删除排除或不在线提示
-      if(sysMsgManager.length>1||messageHandler.config.currentState === 2){
+      if(sysMsgManager.length>1){
         var sign = sysMsgManager.shift();
-        $('#'+sign).animate({'margin-top':'-50px',opacity:'0.1'},500,function(){
+        $('#'+sign).animate({'margin-top':'-30px',opacity:'0'},100,function(){
           $(this).remove();
         });
+      }
+      if(messageHandler.config.currentState===2){
+        var sign = sysMsgManager[0];
+        var $sign = $('#'+sign);
+        if(!$sign.hasClass('firstEvaluate') && !$sign.hasClass('evaluated')){
+          $sign.animate({'margin-top':'-30px',opacity:'0'},100,function(){
+            $(this).remove();
+          });
+        }
       }
       // console.log(sysMsgManager,messageHandler.config.currentState,1);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次

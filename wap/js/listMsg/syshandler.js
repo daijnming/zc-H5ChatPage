@@ -127,10 +127,14 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
       //生成时间戳
       var tp = +new Date();
-      var msgTmp;
+      var msgTmp='',
+          msgIndex,//消息下标
+          msgType;//是否是永驻信息提示
       //是否包含需要处理的系统提示语
-      if(sysMsgKeyword.indexOf(status)>=0){
+      msgIndex = sysMsgKeyword.indexOf(status);
+      if(msgIndex>=0){
         sysMsgManager.push(tp);//用于系统提示判断
+        msgType = sysMsgKeyword[msgIndex];
       }else if(status ==205){
         msgTmp='input205';
         var $msgInput = $('.input205').remove();//正在输入class
@@ -139,7 +143,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
         sysMsg:msg,
         sysMsgSign:tp,
         date:tp,
-        msgTmp:msgTmp
+        msgTmp:msgTmp,
+        msgType:msgType
       });
       var msgHtml = doT.template(msgTemplate.sysMsg)(comf);
       return msgHtml;
