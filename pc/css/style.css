@@ -262,7 +262,7 @@ textarea {
  
 .footer {
 	background: #fff;
-	display: none;
+	display: block;
 	height: 105px;
 	border-top: 1px solid #d9d9d9;
 	box-sizing: border-box;
@@ -589,7 +589,8 @@ textarea {
 	 border-right: 1px solid #d9d9d9;*/
 	overflow-y: auto;
 	overflow-x: hidden;
-	height: 315px;
+	/* height: 315px; */
+	height: 433px;
 	width: auto;
 	padding: 0;
 	margin-right: -20px;

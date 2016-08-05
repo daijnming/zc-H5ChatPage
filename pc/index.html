@@ -10,17 +10,17 @@
         <link href="css/style.css?version=ZC_V2.0.1" rel="stylesheet" type="text/css">
         <style id="setStyle"></style>
         <script>
-            try {
+          /*  try {
                 if(/Android|Windows Phone|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent) && !/MI PAD/i.test(navigator.userAgent)) {
                     var oUrl = this.location.href.toString();
                     var nUrl = oUrl.replace("pc","h5");
                     this.location = nUrl;
                 }
             } catch (e) {
-            }
+            }*/
         </script>
     </head>
-    <body>
+    <body class="singlePage">
         <div class="mainBox">
             <div id="zcChat" class="zcChat" style="border:0;">
                 <div id="header" class="header h60" style="background: transparent">
@@ -45,7 +45,38 @@
                     </div>
                 </div>
                 <div id="chatPanel" class="chatPanel">
-                    <ul id="chatPanelList" class="chatPanelList"></ul>
+                    <ul id="chatPanelList" class="chatPanelList js-chatPanel">
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                        <li class="clearfix magBox leftMsg"><p class="leftName">我是机大智</p><div class="msgDiv"><div class="msgText">microsoft advanced streaming format，ASF...... </div></div></li>
+                        <li class="clearfix magBox rightMsg"><div class="msgDiv"><div class="msgText">你是智大机</div></div></li>
+                    </ul>
                 </div>
                 <div id="footer" class="footer">
                     <div class="footer-on">
@@ -87,32 +118,18 @@
             </div>
             <audio src="css/voice.mp3" type="audio/mpeg" id="zcAudio" style="display:none"></audio>
         </div>
-        <script src="js/LAB.min.js"></script>
-
-        <script type="text/javascript" src="js/jquery.min.js"></script>
-        <!-- build:js(./) ../chatres/common/js/zhichichat.js -->
+         <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+        <script type="text/javascript" src="js/listMsg/index.js"></script>
+        <!--<script src="js/LAB.min.js"></script>
         <script type="text/javascript" src="/chatres/common/js/zhichichat.js"></script>
-        <!-- endbuild  -->
-        <!-- build:js(./) ../chatres/common/js/zhichiapi.js -->
         <script type="text/javascript" src="/chatres/common/js/src/zhichiapi.js"></script>
-        <!-- endbuild -->
-        <!-- build:js(./) ../chatres/common/js/app.js -->
         <script type="text/javascript" src="/chatres/common/js/src/app.js"></script>
-        <!-- endbuild -->
-        <!-- build:js(./) js/upload.js -->
         <script type="text/javascript" src="/pc/src/js/upload.js"></script>
-        <!-- endbuild -->
-        <!-- build:js(./) js/face.js -->
         <script type="text/javascript" src="/pc/src/js/face.js"></script>
-        <!-- endbuild -->
-        <!-- build:js(./) js/imageReq.js -->
         <script type="text/javascript" src="/pc/src/js/imgReq.js"></script>
-        <!-- endbuild -->
-        <!-- build:js(./) js/main.js -->
-        <script type="text/javascript" src="/pc/src/js/main.js"></script>
-        <!-- endbuild -->
+        <script type="text/javascript" src="/pc/src/js/main.js"></script>-->
         <script>
-            var fun = function(w,d,e) {
+          /*  var fun = function(w,d,e) {
                 var b = location.href,
                     c = d.referrer,
                     f,
@@ -138,7 +155,7 @@
                 _();
             };
             if(isImgReqOk())
-                fun(window,document,encodeURIComponent);
+                fun(window,document,encodeURIComponent);*/
         </script>
     </body>
 </html>

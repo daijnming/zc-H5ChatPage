@@ -5,18 +5,17 @@ var template = {};
 var sobotEvaluate_selfHtml = '<div class="evaluate js-evaluate">'+
 								'<p class="h2">是否有以下情况？</p>'+
 								'<div class="situation">'+
-									'<span class="tag1">'+
-									'{{=it.inner1}}'+
-									'</span>'+
-									'<span class="tag2" style="margin-right:0">'+
-									'{{=it.inner2}}'+
-									'</span>'+
-									'<span class="tag3">'+
-									'{{=it.inner3}}'+
-									'</span>'+
-									'<span class="tag4" style="margin-right:0">'+
-									'{{=it.inner4}}'+
-									'</span>'+
+									'{{for(var i=0;i<it.length;i++){}}'+
+										'{{if(i%2==0){}}'+
+											'<span class="tag">'+
+												'{{=it[i]}}'+
+											'</span>'+
+										'{{}else{}}'+
+											'<span class="tag" style="margin-right:0">'+
+												'{{=it[i]}}'+
+											'</span>'+
+										'{{}}}'+
+									'{{}}}'+
 								'</div>'+
 								'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议~"></textarea>'+
 								'<a class="submit js-submit" href="#">提交评价</a>'+
@@ -44,18 +43,17 @@ var humanTwo_selfHtml = '<div class="evaluate js-evaluate">'+
 							'</div>'+
 							'<p class="h2">是否有以下情况？</p>'+
 							'<div class="situation">'+
-								'<span class="tag1">'+
-									'{{=it.inner1}}'+
-									'</span>'+
-								'<span class="tag2" style="margin-right:0">'+
-									'{{=it.inner2}}'+
-									'</span>'+
-								'<span class="tag3">'+
-									'{{=it.inner3}}'+
-									'</span>'+
-								'<span class="tag4" style="margin-right:0">'+
-									'{{=it.inner4}}'+
-									'</span>'+
+								'{{for(var i=0;i<it.length;i++){}}'+
+									'{{if(i%2==0){}}'+
+										'<span class="tag">'+
+											'{{=it[i]}}'+
+										'</span>'+
+									'{{}else{}}'+
+										'<span class="tag" style="margin-right:0">'+
+											'{{=it[i]}}'+
+										'</span>'+
+									'{{}}}'+
+								'{{}}}'+
 							'</div>'+
 							'<textarea id="js-evaluateInner" class="js-evaluateInner" placeholder="欢迎给我们的服务提建议~"></textarea>'+
 							'<a class="submit js-submit" href="#">提交评价</a>'+
