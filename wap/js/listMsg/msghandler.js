@@ -72,6 +72,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //发送消息
     onSend : function(data){
+      if(data&&data[0].answer.indexOf('&nbsp;')>=0){
+        var msg = data[0].answer;
+        msg = msg.replace(/&nbsp;/g,' ');
+        msg = msg.replace(/\s+/g,' ');
+        data[0].answer = msg;
+      }
       overtimeTask.lastMsgType=1;//最后一条为用户回复
       overtimeTask.overtimeDaley=0;//重置超时提示时间为0
       if(data[0].sendAgain){
