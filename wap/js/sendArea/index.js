@@ -731,7 +731,7 @@ function TextArea(window) {
         var wurl=global.apiConfig.wurl||"";
         if(wurl){
             $(".js-artificial").remove()
-            $(".js-textarea").before('<a class="artificial" href="'+wurl+'"></a>')
+            $(".js-textarea").before('<a class="artificial" target="_parent" href="'+wurl+'"></a>')
         }
         init();
     });
