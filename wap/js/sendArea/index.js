@@ -727,6 +727,12 @@ function TextArea(window) {
         //用户设置样式
         var userColor=global.userInfo.color;
         $sendBtn.css({"background-color":userColor})
+        //转人工的url（需求)
+        var wurl=global.apiConfig.wurl||"";
+        if(wurl){
+            $(".js-artificial").remove()
+            $(".js-textarea").before('<a class="artificial" target="_parent" href="'+wurl+'"></a>')
+        }
         init();
     });
 

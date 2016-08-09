@@ -72,6 +72,12 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //发送消息
     onSend : function(data){
+      if(data&&data[0].answer.indexOf('&nbsp;')>=0){
+        var msg = data[0].answer;
+        msg = msg.replace(/&nbsp;/g,' ');
+        msg = msg.replace(/\s+/g,' ');
+        data[0].answer = msg;
+      }
       overtimeTask.lastMsgType=1;//最后一条为用户回复
       overtimeTask.overtimeDaley=0;//重置超时提示时间为0
       if(data[0].sendAgain){
@@ -140,7 +146,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       if(_txt){
         //获取点击内容
         // var _msg = _txt.substr(_txt.indexOf(':')+1,_txt.length).trim();
-        var _msg = _txt.substr(0,_txt.indexOf(':')).trim();
+        var _msg = _txt.substr(0,_txt.indexOf('.')).trim();
         fnEvent.trigger('sendArea.send',[{
                 'answer' : _msg,
                 'uid' : global.apiInit.uid,
@@ -379,8 +385,10 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     //超时提示
     msgOvertimeTask:function(){
       //判断最后一条消息来源
-      var userMsg =  global.apiConfig.userTipWord.indexOf('<')<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).text();//用户提示语
-      var adminMsg = global.apiConfig.adminTipWord.indexOf('<')<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).text();//客服提示语
+      // var userMsg =  global.apiConfig.userTipWord.indexOf('<')<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).html();//用户提示语
+      // var adminMsg = global.apiConfig.adminTipWord.indexOf('<')<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).html();//客服提示语
+      var userMsg =  global.apiConfig.userTipWord;//用户提示语
+      var adminMsg = global.apiConfig.adminTipWord;//客服提示语
       var userDaley = global.apiConfig.userTipTime * 1000 * 60;//用户超时时间
       var adminDaley = global.apiConfig.adminTipTime * 1000 * 60;//客服超时时间
 

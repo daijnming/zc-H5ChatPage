@@ -49,11 +49,12 @@ function evaluate(currentStatus,global) {
         //先将第一步弹窗移除
         $(".js-modeDialog").remove();
         Alert.show();
-        var conf={"inner1":"答非所问","inner2":"理解能力差","inner3":"一问三不知","inner4":"不礼貌"};
+        //var conf={"inner1":"答非所问","inner2":"理解能力差","inner3":"一问三不知","inner4":"不礼貌"};
+        var conf=global.apiConfig.robotCommentTitle.split(",");
         var _html = doT.template(template.sobotEvaluate_selfHtml)(conf);
         Alert.setInner(_html);
         $(".js-noques").addClass("active");
-        $(".js-isques").on("click",EvaluateAjaxHandler);
+        $(".js-isques").on("click",beforeEvaluateAjaxHandler);
         //$(".js-isques").on("click",evaluateSuccess);
         $(".wether span").on("click",toggleActive);
         $(".situation span").on("click",toggleActiveRepeat);
@@ -116,7 +117,8 @@ function evaluate(currentStatus,global) {
     };
     var humanSetInnerStepTwoHtml=function(iStar){
         //Alert.show();
-        var conf={"inner1":"服务态度差","inner2":"回答不及时","inner3":"没解决问题","inner4":"不礼貌"};
+        //var conf={"inner1":"服务态度差","inner2":"回答不及时","inner3":"没解决问题","inner4":"不礼貌"};
+        var conf=global.apiConfig.manualCommentTitle.split(",");
         var _html = doT.template(template.humanTwo_selfHtml)(conf);
 
         Alert.setInner(_html);
@@ -168,8 +170,13 @@ function evaluate(currentStatus,global) {
         $(".js-submit").on("click",EvaluateAjaxHandler);
         textareaMaxlen("js-evaluateInner",200);
     };
+    var beforeEvaluateAjaxHandler=function(){
+        //机器人评价，score为1，则为是，为0则为否
+        score=5;
+        EvaluateAjaxHandler();
+    };
     var EvaluateAjaxHandler=function(){
-            remark=$(".js-evaluateInner").val();
+            remark=$(".js-evaluateInner").val()||'';
             var tag=[];
             for(var i=1;i<5;i++){
                 if($(".tag"+i).hasClass("active")){
@@ -269,7 +276,7 @@ function evaluate(currentStatus,global) {
     var sobotbindListener = function() {
         //机器人评价
         $(".js-noques").on("click",sobotSetInnerStepTwoHtml);
-        $(".js-isques").on("click",EvaluateAjaxHandler);
+        $(".js-isques").on("click",beforeEvaluateAjaxHandler);
        
     };
     var humanbindListener = function() {
