@@ -182,8 +182,9 @@ function TextArea(window) {
             //输入框遮挡兼容处理
             if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
                 $add.removeClass("activehide");
-
-                specialModelshideKeyboardHandler();
+                setTimeout(function(){
+                    specialModelshideKeyboardHandler();
+                },100)
             }/*else{
                 $textarea.blur();
                 $textarea.focus();
@@ -400,6 +401,11 @@ function TextArea(window) {
             case 6://有新窗口打开
             case 7://机器人超时下线
                 $chatArea.removeClass("hideChatArea").addClass("showChatArea");
+                $(".js-textarea").blur();
+                 //为了iphone下的输入框遮挡兼容
+                setTimeout(function(){
+                    $(".js-chatArea").css("height","64px");
+                },100)
                 $keepSession.hide();
                 $endSession.show();
                 autoSizePhone();
@@ -416,8 +422,7 @@ function TextArea(window) {
                 if($(".sendarea").css("display")!="flex"){
                     $(".endSession").css({"display":"inline-block"});
                 };
-                //为了iphone下的输入框遮挡兼容
-                $(".js-chatArea").css("height","64px")
+               
                 break;
         }
     };
