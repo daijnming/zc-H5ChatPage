@@ -40,6 +40,9 @@ function TextArea(window) {
     var transferFlag=0;
     var browserType="";
     var phoneType="";
+    var browserInfo="";
+    //判断当前机型是否为不兼容输入框弹起机型的浏览器,false为兼容，true为不兼容
+    var browserFlag=false;
     //传给聊天的url
     var statusHandler=function(data){
         currentStatus=data;
@@ -180,11 +183,11 @@ function TextArea(window) {
             $textarea.blur();
             $textarea.focus();
             //输入框遮挡兼容处理
-            if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+            if(browserFlag==true){
                 $add.removeClass("activehide");
                 setTimeout(function(){
                     specialModelshideKeyboardHandler();
-                },100)
+                },10)
             }/*else{
                 $textarea.blur();
                 $textarea.focus();
@@ -440,7 +443,6 @@ function TextArea(window) {
             }
     };
     var evaluateHandler=function(){
-
         $.ajax({
             type : "post",
             url : "/chat/user/isComment.action",
@@ -468,12 +470,9 @@ function TextArea(window) {
                     var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
                     listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
                 }
-
                 focusStatus=false;
             }
         });
-
-
     };
     var hideKeyboard=function(data){
         //会话没结束的时候点击屏幕输入框失去焦点
@@ -505,7 +504,6 @@ function TextArea(window) {
             inputUPHandler();
             focusStatus=false;
             autoSizePhone();
-            
         }
     };
     //特殊机型输入框处理，降低
@@ -516,30 +514,50 @@ function TextArea(window) {
     var specialModelshideKeyboardHandler=function(){
        //console.log(browserType);
        //console.log(phoneType);
-       //ios下输入框只能输入单行，否则出兼容问题
-       if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+       //输入框遮罩只能输入单行，否则出兼容问题
+       if(browserFlag==true){
             $(".js-textarea").css("max-height","20px");
         }
         if(browserType=="safari"&&phoneType=="iphone-6+"){
-                $(".js-wrapper").css("height","288px");
-                $(".js-chatArea").css({"top":"288px","height":"50px"});
-                $(window).scrollTop('1'); 
+            $(".js-wrapper").css("height","288px");
+            $(".js-chatArea").css({"top":"288px","height":"50px"});
+            $(window).scrollTop('1'); 
         }
          //iphone6
         if(browserType=="safari"&&phoneType=="iphone-6"){
-                $(".js-wrapper").css("height","229px");
-                $(".js-chatArea").css({"top":"229px"});
-                $(window).scrollTop('1');
+            $(".js-wrapper").css("height","229px");
+            $(".js-chatArea").css({"top":"229px","height":"50px"});
+            $(window).scrollTop('1');
         }
         //iphone5
         if(browserType=="safari"&&phoneType=="iphone-5"){
-            
+            $(".js-wrapper").css("height","129px");
+            $(".js-chatArea").css({"top":"129px","height":"50px"});
+            $(window).scrollTop('1');
+        }
+        //华为荣耀6
+        if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
+            $(".js-wrapper").css("height","249px");
+            $(".js-chatArea").css({"top":"249px","height":"50px"});
+            $(window).scrollTop('1');
+        }
+        //魅族note2
+        if(browserType=="safari"&&browserInfo.indexOf('mz-m2')!=-1){
+            $(".js-wrapper").css("height","358px");
+            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(window).scrollTop('1');
+        }
+        //魅族mx5
+        if(browserType=="safari"&&browserInfo.indexOf('mz-mx5')!=-1){
+            $(".js-wrapper").css("height","358px");
+            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(window).scrollTop('1');
         }
         autoSizePhone();
     };
     //禁止输入框滑动，ios下有bug
     var noSliding=function(){
-        if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+        if(browserFlag==true){
              return false;//内容框超过五行也不能滑动
         }
     };
@@ -591,8 +609,8 @@ function TextArea(window) {
         $(".endSession span").css({"display":"inline-block"});
         $(".endSession span").css({"width":"28%"});
     };
-    var inputUPHandler=function(){
-        if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+    var inputUPHandler=function(e){ 
+        if(browserFlag==true){
             $(".js-wrapper").css("height","100%");
             $(".js-chatArea").css({"top":"auto","height":"262px","bottom":"0"})
         };
@@ -690,18 +708,14 @@ function TextArea(window) {
         initPlugsin();
         bindLitener();
     //初始化按钮
-        //$(".addhover").addClass("activehide");
         $qqFaceTip.addClass("activehide");
-        //$(".qqFaceTiphover").addClass("activehide");
         $sendBtn.addClass("activehide");
-
         //hover效果
         initHover();
         //flex兼容处理
         if($(".sendarea").css("display")!="flex"){
            flexcompatible();
         }
-        
     };
     (function(){
         parseDOM();
@@ -719,6 +733,11 @@ function TextArea(window) {
         //获取当前浏览器的版本
         browserType=global.browser.browser;
         phoneType=global.UAInfo.iphoneVersion;
+        browserInfo= navigator.userAgent.toLowerCase();
+        if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"||browserInfo.indexOf('h60-l03')!=-1||browserInfo.indexOf('mz-m2')!=-1||browserInfo.indexOf('mz-mx5')!=-1){
+             browserFlag=true;
+        }
+        //alert(browserInfo);
         var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){

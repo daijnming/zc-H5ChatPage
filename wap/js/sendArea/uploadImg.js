@@ -51,6 +51,11 @@ function uploadImg() {
                     //console.log(etc);
                     if(etc=="gif"){
                         $(".js-allScreen").remove();
+                        listener.trigger("sendArea.createUploadImg",[{
+                            'result' : fileRead,
+                            'date':tp,
+                            'token':token
+                        }])
                         oData.append("base64",fileRead);
                         //上传 
                         onAjaxUploadUpHandler(oData,tp,token)
