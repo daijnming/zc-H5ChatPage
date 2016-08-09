@@ -26,7 +26,7 @@ li {
     width: 100%;
     position: fixed;
     left: 0;
-    -webkit-user-select:auto !important;
+    -webkit-user-select:auto   !important;
     bottom:0px;
     background: #fafbfd;
     z-index: 10;
