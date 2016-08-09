@@ -29,6 +29,7 @@ li {
     bottom:0px;
     background: #fafbfd;
     z-index: 10;
+    overflow:hidden;
 }
 .sendarea {
     position:relative;
@@ -58,7 +59,7 @@ li {
 }
 .textarea {
     background-color: #fff;
-    line-height: 19px;
+    line-height: 20px;
     padding: 7px 5px;
     border-radius: 4px;
     font-size: 14px;
