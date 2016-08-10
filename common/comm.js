@@ -75,17 +75,27 @@ var Comm = {
                 }else{
                   var regExp1 = /((www.)|((https?):\/\/))[a-zA-Z0-9]+((\.(com|cn|org))|(:[0-9]{2,4}))?(:[0-9]{2,4})?([:\/\?\.&\-=a-zA-Z0-9]+)?/g;
                   var regArr = str.match(regExp1);
+                  var ret= regArr;
                   if(regArr&&regArr.length>0){
                     //取出第一项的匹配
                     var indexNo = str.indexOf(regArr[0]);
                     //是否有 http开头
                     var isHttpNo = regArr[0].indexOf('http');
-                    if(isHttpNo>=1){
-                      regArr[0] = '<a href="' + regArr[0] + '" target="_blank">' + regArr[0] + '</a>';
+                    if(isHttpNo>=0){
+                      ret = '<a href="' + regArr[0] + '" target="_blank">' + regArr[0] + '</a>';
                     }else{
-                      regArr[0]='<a href="http://' + regArr[0] + '" target="_blank">' + regArr[0] + '</a>';
+                      ret = '<a href="http://' + regArr[0] + '" target="_blank">' + regArr[0] + '</a>';
                     }
-                  str = str.substring(0,indexNo)+regArr[0];
+                    //拼url
+                    // var _str;
+                    if(indexNo===0){
+                      str = ret + str.substring(regArr[0].length,str.length);
+                    }else{
+                      var _str1 = str.substring(0,indexNo);
+                      var _str2 = _str1+regArr[0];
+                      var _str3 = str.substring(_str2.length,str.length);
+                      str = _str1 + ret + _str3;
+                    }
                   }
                 }
                 return str+' ';

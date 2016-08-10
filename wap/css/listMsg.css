@@ -61,6 +61,11 @@ p, ul, li {
     left: 50px;
     color:#999;
     font-size: 12px;
+    display: block;
+    word-break: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 200px;
 }
 .chatMsgList .leftMsg .header {
     float: left;
@@ -266,7 +271,6 @@ p, ul, li {
     text-align: center;
     color: #676e6f;
     margin: 10px 0 10px 0;
-    font-size: 0.8em;
     padding: 5px 0 5px 0;
     width: 100%;
     display: inline-block;
