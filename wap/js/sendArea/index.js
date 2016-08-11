@@ -537,20 +537,20 @@ function TextArea(window) {
         }
         //华为荣耀6
         if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
-            $(".js-wrapper").css("height","249px");
-            $(".js-chatArea").css({"top":"249px","height":"50px"});
+            $(".js-wrapper").css("height","218px");
+            $(".js-chatArea").css({"top":"218px","height":"50px"});
             $(window).scrollTop('1');
         }
         //魅族note2
         if(browserType=="safari"&&browserInfo.indexOf('mz-m2')!=-1){
-            $(".js-wrapper").css("height","358px");
-            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(".js-wrapper").css("height","315px");
+            $(".js-chatArea").css({"top":"315px","height":"50px"});
             $(window).scrollTop('1');
         }
         //魅族mx5
         if(browserType=="safari"&&browserInfo.indexOf('mz-mx5')!=-1){
-            $(".js-wrapper").css("height","358px");
-            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(".js-wrapper").css("height","315px");
+            $(".js-chatArea").css({"top":"315px","height":"50px"});
             $(window).scrollTop('1');
         }
         autoSizePhone();
@@ -725,6 +725,10 @@ function TextArea(window) {
         listener.on("core.statechange",statusHandler);
     })();
     listener.on("core.onload", function(data) {
+        //华为荣耀6的这个浏览器如果不强制刷新一次，输入框就弹不起来
+        if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
+             location.reload();
+        }
         global = data[0];
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
