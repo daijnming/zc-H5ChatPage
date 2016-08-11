@@ -76,7 +76,7 @@ var ListMsgHandler = function() {
     };
     //缺省图片库
     var imgHanlder = {
-        userLogo: 'http://img.sobot.com/console/common/face/user.png'
+      userLogo:'//img.sobot.com/console/common/face/user.png'
     };
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
@@ -220,6 +220,7 @@ var ListMsgHandler = function() {
     };
     //发送消息绑定到页面
     /*
+<<<<<<< HEAD
      *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
      */
     var bindMsg = function(msgType, data) {
@@ -312,6 +313,98 @@ var ListMsgHandler = function() {
                     break;
             }
             updateChatMsg(msgHtml);
+=======
+    *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
+    */
+    var bindMsg = function(msgType,data){
+      // console.log(data);
+      var msgHtml='',
+          userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
+          comf;
+      if(data){
+        switch (msgType) {
+          case 0:
+              var msg = Comm.getNewUrlRegex(data[0]['answer'].trim());
+              //FIXME 机器人与人工客服都要进行消息确认
+              var msgClass = MSGSTATUSCLASS.MSG_LOADING;
+              messageHandler.config.msgSendACK.push(data[0]['dateuid']);//暂存发送消息id
+              comf = $.extend({
+                  userLogo :userLogo,
+                  userMsg : QQFace.analysisRight(msg),
+                  date:data[0]['date'],
+                  msgId:data[0]['dateuid'],
+                  msgLoading:msgClass //消息确认
+              });
+              msgHtml = doT.template(msgTemplate.rightMsg)(comf);
+            break;
+          case 1:
+              //FIXME 接收人工工作台消息
+              var _type=data.type;
+              var _list=data.list;
+              for(var i=0;i<_list.length;i++){
+                var _data = _list[i];
+                //判断类型 robot human
+                if(_type=='robot'){
+                  //FIXME 机器人类型  answerType=4 相关搜索
+                  if(_data.answerType=='4'){
+                    //相关搜索
+                    msgHtml += messageHandler.msg.sugguestionsSearch(_data,false);
+                  }else{
+                    msgHtml +=  messageHandler.msg.onMsgFromCustom('robot',_data);
+                  }
+                }else{
+                  //FIXME 客服类型
+                  switch (_data.type) {
+                    case 202:
+                      //客服发来消息
+                      msgHtml += messageHandler.msg.onMsgFromCustom('human',_data);
+                      break;
+                    case 204:
+                      //会话结束
+                      msgHtml+= messageHandler.msg.sessionCloseHander(_data);
+                      break;
+                    case 205:
+                        //客服正在输入
+                        msgHtml += systemHandler.sys.onSysMsgShow(_data.content,_data.type,sysMsgList,sysMsgManager);
+                      break;
+                  }
+                }
+              }
+            break;
+          case 2:
+          //系统提示 人工，机器 人欢迎语
+              var _type = data.type;
+              var _data = data.data;
+              //判断是否是系统回复
+              if(_type=='system'){
+                msgHtml = systemHandler.sys.onSysMsgShow(_data.content,data.status,sysMsgList,sysMsgManager);
+              }else{
+                //1 机器人  2 客服
+                messageHandler.config.currentState = _type=='robot'?1:2;
+                msgHtml =  messageHandler.msg.onMsgFromCustom(_type,_data);
+              }
+            break;
+          case 3:
+            comf = $.extend({
+              sysData:data,
+              date:+new Date()
+            });
+            msgHtml = doT.template(msgTemplate.sysData)(comf);
+            break;
+          case 4:
+            messageHandler.config.uploadImgToken = data[0]['token'];
+            messageHandler.config.msgSendACK.push(messageHandler.config.uploadImgToken);//暂存发送消息id
+            comf = $.extend({
+               userLogo : userLogo,
+               uploadImg : data[0]['result'],
+               progress:0,
+               msgLoading:MSGSTATUSCLASS.MSG_CLOSE,
+               token:data[0]['token'],
+               date:data[0]['date']
+           });
+            msgHtml = doT.template(msgTemplate.rightImg)(comf);
+            break;
+>>>>>>> 2961a6163d3005c7d601560f31245fcb973d5199
         }
     };
     //更新聊天记录
@@ -340,6 +433,7 @@ var ListMsgHandler = function() {
                 $(this).remove();
             });
         }
+<<<<<<< HEAD
         if (messageHandler.config.currentState === 2) {
             var sign = sysMsgManager[0];
             var $sign = $('#' + sign);
@@ -363,6 +457,23 @@ var ListMsgHandler = function() {
         // },2000);
         // scrollHanlder.scroll.refresh();//刷新
         // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+=======
+      }
+      // console.log(sysMsgManager,messageHandler.config.currentState,1);
+      //FIXME 处理android手机截断聊天内容问题 重新渲染一次
+      if(global.UAInfo.UA=='android'){
+        $(wrapBox).css('font-size','0.99em');
+        setTimeout(function(){
+          $(wrapBox).css('font-size','1em');
+        },200);
+      }
+      scrollHanlder.myRefresh();//刷新
+      // setTimeout(function(){
+      //
+      // },2000);
+      // scrollHanlder.scroll.refresh();//刷新
+      // scrollHanlder.scroll.scrollTo(0,scrollHanlder.scroll.maxScrollY);
+>>>>>>> 2961a6163d3005c7d601560f31245fcb973d5199
     };
     //加欢迎语
     var getHello = function(data) {

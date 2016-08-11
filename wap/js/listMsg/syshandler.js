@@ -125,29 +125,34 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //系统消息显示处理
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
-      //生成时间戳
-      var tp = +new Date();
-      var msgTmp='',
-          msgIndex,//消息下标
-          msgType;//是否是永驻信息提示
-      //是否包含需要处理的系统提示语
-      msgIndex = sysMsgKeyword.indexOf(status);
-      if(msgIndex>=0){
-        sysMsgManager.push(tp);//用于系统提示判断
-        msgType = sysMsgKeyword[msgIndex];
-      }else if(status ==205){
-        msgTmp='input205';
-        var $msgInput = $('.input205').remove();//正在输入class
-      }
-      var comf = $.extend({
-        sysMsg:msg,
-        sysMsgSign:tp,
-        date:tp,
-        msgTmp:msgTmp,
-        msgType:msgType
-      });
-      var msgHtml = doT.template(msgTemplate.sysMsg)(comf);
-      return msgHtml;
+        //生成时间戳
+        var tp = +new Date();
+        var msgTmp='',
+            msgIndex,//消息下标
+            msgType;//是否是永驻信息提示
+        //是否包含需要处理的系统提示语
+        msgIndex = sysMsgKeyword.indexOf(status);
+        if(msgIndex>=0){
+          sysMsgManager.push(tp);//用于系统提示判断
+          msgType = sysMsgKeyword[msgIndex];
+        }else if(status ==205){
+          msgTmp='input205';
+          $('.input205').remove();//移除class
+          if(msg===''){//客服输入为空或敲回车发送消息
+            return '';
+          }
+          msg='客服正在输入';
+        }
+        console.log(msg);
+        var comf = $.extend({
+          sysMsg:msg,
+          sysMsgSign:tp,
+          date:tp,
+          msgTmp:msgTmp,
+          msgType:msgType
+        });
+        var msgHtml = doT.template(msgTemplate.sysMsg)(comf);
+        return msgHtml;
     },
     //正在输入处理
     onBeingInput:function(){

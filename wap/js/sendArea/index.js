@@ -537,20 +537,26 @@ function TextArea(window) {
         }
         //华为荣耀6
         if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
-            $(".js-wrapper").css("height","249px");
-            $(".js-chatArea").css({"top":"249px","height":"50px"});
+            $(".js-wrapper").css("height","218px");
+            $(".js-chatArea").css({"top":"218px","height":"50px"});
             $(window).scrollTop('1');
         }
         //魅族note2
         if(browserType=="safari"&&browserInfo.indexOf('mz-m2')!=-1){
-            $(".js-wrapper").css("height","358px");
-            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(".js-wrapper").css("height","315px");
+            $(".js-chatArea").css({"top":"315px","height":"50px"});
             $(window).scrollTop('1');
         }
         //魅族mx5
         if(browserType=="safari"&&browserInfo.indexOf('mz-mx5')!=-1){
-            $(".js-wrapper").css("height","358px");
-            $(".js-chatArea").css({"top":"358px","height":"50px"});
+            $(".js-wrapper").css("height","315px");
+            $(".js-chatArea").css({"top":"315px","height":"50px"});
+            $(window).scrollTop('1');
+        } 
+        //小米3
+        if(browserType=="miuibrowser"&&browserInfo.indexOf('mi 3')!=-1){
+            $(".js-wrapper").css("height","253px");
+            $(".js-chatArea").css({"top":"253px","height":"50px"});
             $(window).scrollTop('1');
         }
         autoSizePhone();
@@ -716,6 +722,8 @@ function TextArea(window) {
         if($(".sendarea").css("display")!="flex"){
            flexcompatible();
         }
+    
+        
     };
     (function(){
         parseDOM();
@@ -724,7 +732,7 @@ function TextArea(window) {
         //改变当前状态
         listener.on("core.statechange",statusHandler);
     })();
-    listener.on("core.onload", function(data) {
+    listener.on("core.onload", function(data) { 
         global = data[0];
         currentUid=global.apiInit.uid;
         currentCid=global.apiInit.cid;
@@ -736,8 +744,10 @@ function TextArea(window) {
         browserInfo= navigator.userAgent.toLowerCase();
         if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"||browserInfo.indexOf('h60-l03')!=-1||browserInfo.indexOf('mz-m2')!=-1||browserInfo.indexOf('mz-mx5')!=-1){
              browserFlag=true;
-        }
-        //alert(browserInfo);
+        };
+        if(browserType=="miuibrowser"&&browserInfo.indexOf('mi 3')!=-1){
+             browserFlag=true;
+        };
         var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){
