@@ -66,6 +66,7 @@ p, ul, li {
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 200px;
+    white-space: nowrap;
 }
 .chatMsgList .leftMsg .header {
     float: left;
