@@ -2,6 +2,7 @@
  * @author Treagzhao
  */
 var manager = null;
+
 function ModeEntranceFactroy(global) {
     var ROBOT_FIRST = 3,
         HUMAN_FIRST = 4,
@@ -12,11 +13,10 @@ function ModeEntranceFactroy(global) {
     var robotFirst = require('./robotfirst.js');
     var robotOnly = require('./robotonly.js');
     var humanOnly = require('./humanonly.js');
-    if(!!manager) {
+    if (!!manager) {
         return manager;
     }
-    console.log(global.apiConfig.type)
-    switch(global.apiConfig.type) {
+    switch (global.apiConfig.type) {
         case ROBOT_FIRST:
             manager = new robotFirst(global);
             break;

@@ -107,7 +107,6 @@ var RobotFirst = function(global) {
     var queueWait = function(ret, init) {
         var str = "排队中，您在队伍中的第" + ret.count + "个，";
         queueing = true;
-        console.log('queue')
         if (!tempManager) {
             tempManager = socketFactory(ret, global);
             tempManager.start();
