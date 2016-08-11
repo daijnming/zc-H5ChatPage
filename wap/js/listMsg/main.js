@@ -76,7 +76,7 @@ var ListMsgHandler = function() {
     };
     //缺省图片库
     var imgHanlder = {
-      userLogo:'http://img.sobot.com/console/common/face/user.png'
+      userLogo:'//img.sobot.com/console/common/face/user.png'
     };
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
@@ -271,8 +271,8 @@ var ListMsgHandler = function() {
                       msgHtml+= messageHandler.msg.sessionCloseHander(_data);
                       break;
                     case 205:
-                      //客服正在输入
-                      msgHtml += systemHandler.sys.onSysMsgShow(sysPromptLan.L0004,_data.type,sysMsgList,sysMsgManager);
+                        //客服正在输入
+                        msgHtml += systemHandler.sys.onSysMsgShow(_data.content,_data.type,sysMsgList,sysMsgManager);
                       break;
                   }
                 }
@@ -353,7 +353,7 @@ var ListMsgHandler = function() {
       // console.log(sysMsgManager,messageHandler.config.currentState,1);
       //FIXME 处理android手机截断聊天内容问题 重新渲染一次
       if(global.UAInfo.UA=='android'){
-        $(wrapBox).css('font-size','0.9em');
+        $(wrapBox).css('font-size','0.99em');
         setTimeout(function(){
           $(wrapBox).css('font-size','1em');
         },200);

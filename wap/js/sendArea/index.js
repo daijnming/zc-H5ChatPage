@@ -187,7 +187,7 @@ function TextArea(window) {
                 $add.removeClass("activehide");
                 setTimeout(function(){
                     specialModelshideKeyboardHandler();
-                },10)
+                },50)
             }/*else{
                 $textarea.blur();
                 $textarea.focus();
