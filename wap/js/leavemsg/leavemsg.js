@@ -15,16 +15,12 @@
       successLayer,//留言成功弹出层
       closeErrorBar,//关闭提示框
       textAreaWrap,//textarea父元素-div
-      goBack,//留言成功按钮
-      captchaMaskLayer,//极验蒙板
       submit;//提交按钮
 
   //FIXME  普通用户来源：0PC,1微信,2APP,3微博,4WAP,5融云,6呼叫中心
-
   var uSource=1,//source参数  默认为微信
       sysNum,//系统id
       uid,
-      isMsg=0, //默认为0   0没有留过言  1 已经留过言
       back;//顶部返回栏
 
   var host = '';//本地&测试
@@ -32,11 +28,8 @@
 
   //接口
   var api={
-    config: host+'/chat/user/config.action',//初始化参数
-    postMsg:host+'/chat/data/postMsg.action',//提交数据
-    IIsMsg:host+'/chat/data/isMessage.action',//判断留言
-    // IStartCaptcha:host+'/chat/data/startCaptcha.action',//极验初始  暂不使用
-    IPostMsgAfterVerify:host+'/chat/data/postMsgAfterVerify.action'//极验提交数据
+    config: host+'/chat/user/config.action',
+    postMsg:host+'/chat/data/postMsg.action'
   };
 
   var Comm = {
@@ -87,10 +80,6 @@
         })
     });
   };
-  //极验方式保存数据
-  var onSaveByCaptcha = function(){
-    $(".js-mask, .js-popup-captcha-mobile").show();
-  };
   //提交留言
   var onSubmit= function(){
     var emailRegex = /^([a-zA-Z0-9]+([-_\.][a-zA-Z0-9]+)*(?:@(?!-))(?:(?:[a-zA-Z0-9]*)(?:[a-zA-Z0-9](?!-))(?:\.(?!-)))+[a-zA-Z0-9]{2,})$/;
@@ -101,14 +90,9 @@
     }else if(!$emailMsg.val()){
       $(errorBar).addClass('show').find('.js-errorLine').text('请填写问题描述！');
     }else {
-      $(errorBar).removeClass('show');
       $(submit).off('click');
+      $(errorBar).removeClass('show');
       onSave($email.val(),$emailMsg.val());//提交后台保存处理
-      // if(!isMsg){
-      //   $(submit).off('click');
-      //   onSave($email.val(),$emailMsg.val());//提交后台保存处理
-      // }else
-      //   onSaveByCaptcha();//极验方式保存数据
     }
   };
   //判断顶部返回栏
@@ -131,63 +115,26 @@
     e.preventDefault();
     e.stopPropagation();
   };
-
-  //判断是否留言过
-var initMsgConfig = function(){
-  $.ajax({
-      type : "post",
-      url : api.IIsMsg,
-      dataType : "json",
-      data : {
-          uid : uid,
-          msgFlag:1 //0 pc  1 h5
-      },
-      success:function(ret){
-        isMsg = +ret.isMessage; //0 没留  1 已留
-      if(isMsg){
-        ret.resStr = JSON.parse(ret.resStr);
-        initGeetest({
-              gt: ret.resStr.gt,
-              challenge: ret.resStr.challenge,
-              offline: !ret.resStr.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
-          }, handlerPopupMobile);
-        }
-      }
-    });
+  var parseDom=function(){
+    topBack = $('.js-header-back');
+    topTitle = $('.js-header-back .js-title');
+    emailHelper = $('.js-wrap-helper');
+    $email=$('input');//唯一
+    $emailMsg = $('textarea');//唯一
+    submit = $('footer');
+    errorBar = $('.js-showLayer');
+    successLogo = $('.js-success');
+    successLayer = $('.js-submitLayer');//留言成功弹出层
+    closeErrorBar = $('.js-errorIcon');
+    textAreaWrap = $('.js-content-msg');
   };
-  //极验方法
-  var handlerPopupMobile = function (captchaObj) {
-
-        //拖动验证成功后两秒(可自行设置时间)自动发生跳转等行为
-        captchaObj.onSuccess(function () {
-            var validate = captchaObj.getValidate();
-            $.ajax({
-                url: api.IPostMsgAfterVerify, // 进行二次验证 即提交数据
-                type: "post",
-                dataType: "json",
-                data: {
-                    // 二次验证所需的三个值
-                    username: $email.val(),
-                    password: $emailMsg.val(),
-                    msgFlag:1,//0 pc 1 h5
-                    geetest_challenge: validate.geetest_challenge,
-                    geetest_validate: validate.geetest_validate,
-                    geetest_seccode: validate.geetest_seccode
-                },
-                success: function (data) {
-                  if(data&&data.retCode=='000000'){
-                    $(successLayer).addClass('show');
-                  }
-                }
-            });
-        });
-        captchaObj.bindOn(".js-submit");
-        // 将验证码加到id为captcha的元素里
-        captchaObj.appendTo(".js-popup-captcha-mobile");
+  var initPlugsin = function(){
+    topBackHandler();
   };
-  //极验蒙板
-  var onMaskHide = function(){
-    $('.js-mask, .js-popup-captcha-mobile').hide();
+  var bindListener = function(){
+    $(submit).on('click',onSubmit);
+    $(closeErrorBar).on('click',onCloseErrorBar);
+    $(successLayer).on('touchmove',onTouchmove);
   };
   //初始化留言页面
   var initConfig = function(){
@@ -198,6 +145,7 @@ var initMsgConfig = function(){
     back = params.back;
     uid=params.uid;
     color= params.color;
+
     $.ajax({
         type : "post",
         url : api.config,
@@ -213,8 +161,7 @@ var initMsgConfig = function(){
           $(topTitle).text(data.robotName);
           $(topBack).css('background',_color);//顶部返回栏
           $(submit).css('background',_color);//提交按钮
-          $(successLogo).css('background-color',_color);//留言成功图标
-          $(goBack).css('background-color',_color);//留言成功按钮
+          $(successLogo).css('background-color',_color);//留言成功
           var msg = '<div>'+data.msgTxt+'</div>';
           $(emailHelper).find('.js-helper').html(msg);
           //内容提示
@@ -227,36 +174,9 @@ var initMsgConfig = function(){
         })
     });
   };
-  var bindListener = function(){
-    $(submit).on('click',onSubmit);
-    $(closeErrorBar).on('click',onCloseErrorBar);
-    $(successLayer).on('touchmove',onTouchmove);
-    $(captchaMaskLayer).on('click',onMaskHide);
-  };
-  var parseDom=function(){
-    topBack = $('.js-header-back');
-    topTitle = $('.js-header-back .js-title');
-    emailHelper = $('.js-wrap-helper');
-    $email=$('input');//唯一
-    $emailMsg = $('textarea');//唯一
-    submit = $('footer .js-submit');//提交按钮
-    errorBar = $('.js-showLayer');
-    successLogo = $('.js-success');
-    successLayer = $('.js-submitLayer');//留言成功弹出层
-    closeErrorBar = $('.js-errorIcon');
-    textAreaWrap = $('.js-content-msg');
-    goBack = $('.js-submitLayer .js-gobak');
-    captchaMaskLayer = $('.js-mask');
-  };
-
-  var initPlugsin = function(){
-    initConfig();//留言参数初始化
-    // initMsgConfig();//是否已经留言
-    topBackHandler();
-
-  };
   var init = function(){
     parseDom();
+    initConfig();
     initPlugsin();
     bindListener();
   };

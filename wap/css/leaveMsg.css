@@ -4,13 +4,6 @@ body{
   font-family:'Microsoft YaHei';
   font-size: 1.1em;
   background-color: #f2f4f4;
-  moz-user-select: -moz-none;
-  -moz-user-select: none;
-  -o-user-select:none;
-  -khtml-user-select:none;
-  -webkit-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
 }
 .wrap {
   width:90%;
@@ -101,11 +94,9 @@ body{
 .wrap-helper .helper{
   /*height: 100px;*/
   overflow-y: auto;
-  /*line-height: 24px;*/
+  line-height: 24px;
   color: #939799;
   /*padding: 5px;*/
-  font-size: 0.8em;
-  line-height: 1.5em;
 }
 .wrap-content{
   width:100%;
@@ -113,56 +104,40 @@ body{
   margin: 0 auto;
   margin-bottom: 20px;
 }
-.wrap-content .reg-email{
-  width: 95%;
-  height: 40px;
-  border:1px solid #ddd;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: none;
-  display: block;
-  outline: none;
-  text-indent: 10px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  -webkit-appearance: none;
-  font-size: 0.8em;
-}
 .wrap-content .content-emil {
-  width:100%;
+  width:98%;
   margin: 0 auto;
   height: 40px;
-  /*border-radius: 4px;*/
-  /*border:1px solid #ddd;*/
+  border-radius: 4px;
+  border:1px solid #ddd;
   margin-bottom: 20px;
 }
 .wrap-content .content-emil input{
-  width:100%;
+  width:94%;
   display: inline-block;
   margin: 0 auto;
   height: 100%;
   line-height: 100%;
-  /*padding-left: 10px;*/
+  padding-left: 10px;
   border-radius: 4px;
+  border: 0;
+  border-style: none;;
   text-decoration: none;
   outline: none;
-  font-size: 0.8em;
-  /*background: transparent;*/
-  background: #fff;
-  border:1px solid #ddd;
-  text-indent: 10px;
+  font-size: 0.9em;
+  background: transparent;
 }
 .wrap-content .content-msg{
   width: 98%;
   margin: 0 auto;
   height: 100px;
   border-radius: 4px;
-  /*border: 1px solid #ddd;*/
-  border: 0;
+  border: 1px solid #ddd;
 }
 .wrap-content .content-msg textarea{
   display: block;
   margin: 0 auto;
+  border: 0;
   resize: none;
   outline: none;
   border-radius: 4px;
@@ -170,13 +145,9 @@ body{
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
-  width: 95%;
+  width: 93%;
   height: 80%;
-  font-size: 0.8em;
-  line-height: 1.5em;
-  border: 1px solid #ddd;
-  background: #fff;
-  -webkit-appearance: none;
+  font-size: 0.9em;
 }
 footer{
   width:100%;
@@ -192,10 +163,6 @@ footer button{
   border: 0;
   outline: none;
   background: transparent;
-  width: 100%;
-  height: 40px;
-  border-radius: 4px;
-  line-height: 40px;
 }
 .showLayer{
   position: fixed;
@@ -236,18 +203,6 @@ footer button{
   margin: 0 auto;
   text-align: center;
   margin-top: 50px;
-}
-.submitLayer .goback{
-  display: block;
-  width: 200px;
-  height: 40px;
-  border-radius: 4px;
-  border: 0;
-  margin: 0 auto;
-  color:#fff;
-  font-size: 15px;
-  text-decoration: none;
-  line-height: 40px;
 }
 .submitLayer .submitLayerWrap:last-child span{
   line-height: 30px;
@@ -295,29 +250,3 @@ footer button{
   transform:rotate(-45deg);
   border:1px solid #999;
 }
-#mask {
-          display: none;
-          position: fixed;
-          text-align: center;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          overflow: auto;
-      }
-
-      /* 可自行设计实现captcha的位置大小 */
-      .popup-mobile {
-          position: relative;
-      }
-
-      #popup-captcha-mobile {
-          position: fixed;
-          display: none;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          -webkit-transform: translate(-50%, -50%);
-          z-index: 9999;
-      }
