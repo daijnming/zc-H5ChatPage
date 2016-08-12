@@ -518,9 +518,15 @@ function TextArea(window) {
        if(browserFlag==true){
             $(".js-textarea").css("max-height","20px");
         }
+        //iphone6+下的safri浏览器和qq浏览器
         if(browserType=="safari"&&phoneType=="iphone-6+"){
             $(".js-wrapper").css("height","288px");
             $(".js-chatArea").css({"top":"288px","height":"50px"});
+            $(window).scrollTop('1'); 
+        }
+        if(browserType=="mqqbrowser"&&phoneType=="iphone-6+"){
+            $(".js-wrapper").css("height","283px");
+            $(".js-chatArea").css({"top":"283px","height":"50px"});
             $(window).scrollTop('1'); 
         }
          //iphone6
@@ -742,12 +748,18 @@ function TextArea(window) {
         browserType=global.browser.browser;
         phoneType=global.UAInfo.iphoneVersion;
         browserInfo= navigator.userAgent.toLowerCase();
+        //safari浏览器
         if(browserType=="safari"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"||browserInfo.indexOf('h60-l03')!=-1||browserInfo.indexOf('mz-m2')!=-1||browserInfo.indexOf('mz-mx5')!=-1){
              browserFlag=true;
         };
+        //小米浏览器
         if(browserType=="miuibrowser"&&browserInfo.indexOf('mi 3')!=-1){
              browserFlag=true;
         };
+        //qq浏览器
+        if(browserType=="mqqbrowser"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+            browserFlag=true;
+        }
         var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){
