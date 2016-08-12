@@ -9,7 +9,7 @@ var socketFactory = function(ret, global) {
     var Rolling = require('../socket/rolling.js');
     var url = ret['wslink.default'];
 
-    if (window.WebSocket && url.indexOf("ws:") >= 0) {
+    if (window.WebSocket && (url.indexOf("ws:") >= 0 || url.indexOf("wss:") >= 0)) {
         manager = new WebSocket(ret.puid, ret['wslink.default'], global);
     } else {
         manager = new Rolling(ret.puid, ret['wslink.default'], global);
