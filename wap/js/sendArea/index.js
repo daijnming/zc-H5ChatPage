@@ -90,6 +90,14 @@ function TextArea(window) {
         },500)
     };
     var showSendBtnHandler = function(evt) {
+        //回车发送
+        $textarea.on('keyup', function(evt) {
+            if (evt.keyCode == "13") {
+                //回车执行发送
+                onbtnSendHandler(evt);
+                return false;
+            }
+        });
         //最大输入长度1024
         var str = $textarea.text();
         str=str.trim();
@@ -178,27 +186,22 @@ function TextArea(window) {
         //清空待发送框
         $textarea.html("");
         //发送前是什么状态，发送后就是什么状态
-        //获取document上获取焦点的id
-        if(focusStatus==true){
+        //获取document上获取焦点的id,当点击回车发送的时候不让它执行blur事件，否则出现兼容问题
+        if(focusStatus==true&&evt.keyCode != "13"){
             $textarea.blur();
-            $textarea.focus();
+            $textarea.focus(); 
             //输入框遮挡兼容处理
             if(browserFlag==true){
                 $add.removeClass("activehide");
                 setTimeout(function(){
                     specialModelshideKeyboardHandler();
                 },50)
-            }/*else{
-                $textarea.blur();
-                $textarea.focus();
-            }*/
+            }
         }else{
-            $add.removeClass("activehide")
-        }
+            $add.removeClass("activehide");
+        }  
         $sendBtn.addClass("activehide");
-
         autoSizePhone();
- 
     };
     var sendedKeepFocus=function(){
 
@@ -232,7 +235,7 @@ function TextArea(window) {
                     $qqFaceTip.removeClass("activehide")
                 }
                 autoSizePhone();
-            },400)
+            },500)
         }
         focusStatus=false;
     };
@@ -264,7 +267,7 @@ function TextArea(window) {
                     }
                 }
                 autoSizePhone();
-            },400)
+            },500)
         }
         focusStatus=false;
     };
@@ -518,7 +521,7 @@ function TextArea(window) {
        if(browserFlag==true){
             $(".js-textarea").css("max-height","20px");
         }
-        //iphone6+下的safri浏览器和qq浏览器
+        //iphone6+下的safri浏览器和qq浏览器和微信浏览器
         if(browserType=="safari"&&phoneType=="iphone-6+"){
             $(".js-wrapper").css("height","288px");
             $(".js-chatArea").css({"top":"288px","height":"50px"});
@@ -527,7 +530,16 @@ function TextArea(window) {
         if(browserType=="mqqbrowser"&&phoneType=="iphone-6+"){
             $(".js-wrapper").css("height","283px");
             $(".js-chatArea").css({"top":"283px","height":"50px"});
-            $(window).scrollTop('1'); 
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
+        }
+        if(browserType=="micromessenger"&&phoneType=="iphone-6+"){
+            $(".js-wrapper").css("height","286px");
+            $(".js-chatArea").css({"top":"286px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
         }
          //iphone6
         if(browserType=="safari"&&phoneType=="iphone-6"){
@@ -535,11 +547,39 @@ function TextArea(window) {
             $(".js-chatArea").css({"top":"229px","height":"50px"});
             $(window).scrollTop('1');
         }
+        if(browserType=="mqqbrowser"&&phoneType=="iphone-6"){
+            $(".js-wrapper").css("height","229px");
+            $(".js-chatArea").css({"top":"229px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
+        }
+        if(browserType=="micromessenger"&&phoneType=="iphone-6"){
+            $(".js-wrapper").css("height","229px");
+            $(".js-chatArea").css({"top":"229px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50) 
+        }
         //iphone5
         if(browserType=="safari"&&phoneType=="iphone-5"){
             $(".js-wrapper").css("height","129px");
             $(".js-chatArea").css({"top":"129px","height":"50px"});
             $(window).scrollTop('1');
+        }
+        if(browserType=="mqqbrowser"&&phoneType=="iphone-5"){
+            $(".js-wrapper").css("height","129px");
+            $(".js-chatArea").css({"top":"129px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
+        }
+        if(browserType=="micromessenger"&&phoneType=="iphone-5"){
+            $(".js-wrapper").css("height","129px");
+            $(".js-chatArea").css({"top":"129px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
         }
         //华为荣耀6
         if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
@@ -705,6 +745,7 @@ function TextArea(window) {
                 inputUPHandler(evt);
             },50);
         });
+        
     };
     var onEmotionClickHandler = function() {
        listener.trigger('sendArea.faceShow');
@@ -760,6 +801,11 @@ function TextArea(window) {
         if(browserType=="mqqbrowser"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
             browserFlag=true;
         }
+        //微信浏览器
+        if(browserType=="micromessenger"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+            browserFlag=true;
+        }
+        //alert(browserType);
         var msgflag=global.apiConfig.msgflag;
         //为1移除留言按钮
         if(msgflag==1){
