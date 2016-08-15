@@ -141,14 +141,16 @@ var initMsgConfig = function(){
           msgFlag:'1' //0 pc  1 h5
       },
       success:function(ret){
-        isMsg = +ret.isMessage; //0 没留  1 已留
+      isMsg = +ret.isMessage; //0 没留  1 已留
       if(isMsg){
-        ret.resStr = JSON.parse(ret.resStr);
-        initGeetest({
-              gt: ret.resStr.gt,
-              challenge: ret.resStr.challenge,
-              offline: !ret.resStr.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
-          }, handlerPopupMobile);
+          if(ret.resStr){
+            ret.resStr = JSON.parse(ret.resStr);
+            initGeetest({
+                  gt: ret.resStr.gt,
+                  challenge: ret.resStr.challenge,
+                  offline: !ret.resStr.success // 表示用户后台检测极验服务器是否宕机，一般不需要关注
+              }, handlerPopupMobile);
+          }
         }
       }
     });

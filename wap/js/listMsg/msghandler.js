@@ -151,10 +151,11 @@ var SysmsgHandler = function(global,msgBind,myScroll){
                 'answer' : _msg,
                 'uid' : global.apiInit.uid,
                 'cid' : global.apiInit.cid,
-                'currentStatus':'robot',
+                'currentStatus':sys.config.currentState==1?'robot':'human',
                 'requestType':'question',
                 'token':'',
-                'dateuid' : global.apiInit.uid + +new Date()
+                'dateuid' : global.apiInit.uid + +new Date(),
+                'sendAgain':false//是否重发
             }]);
         }
     },
@@ -328,7 +329,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
              'answer' :answer,
              'uid' : global.apiInit.uid,
              'cid' : global.apiInit.cid,
-            'dateuid':msgId,
+             'dateuid':msgId,
              'currentStatus':sys.config.currentState==1?'robot':'human',
              'date': +new Date(),
              'token':msgId,
