@@ -91,7 +91,7 @@ function TextArea(window) {
     };
     var showSendBtnHandler = function(evt) {
         //回车发送
-        $textarea.on('keyup', function(evt) {
+        $textarea.on('keydown', function(evt) {
             if (evt.keyCode == "13") {
                 //回车执行发送
                 onbtnSendHandler(evt);
@@ -161,14 +161,8 @@ function TextArea(window) {
             //过滤表情
             //ZC_Face.analysisRight(str);
             //xss
-            var s = "";
-            s = str.replace(/&/g, "&amp;");
-            s = s.replace(/</g, "&lt;");
-            s = s.replace(/>/g, "&gt;");
-            s = s.replace(/ /g, "&nbsp;");
-            s = s.replace(/\'/g, "&#39;");
-            s = s.replace(/\"/g, "&quot;");
-            s = s.replace(/\n/g, "<br>");
+            var $dom = $('<div></div>').text(str);
+            var s = $dom.html();
             //通过textarea.send事件将用户的数据传到显示台
             var date= currentUid + +new Date();
             listener.trigger('sendArea.send',[{
@@ -187,19 +181,21 @@ function TextArea(window) {
         $textarea.html("");
         //发送前是什么状态，发送后就是什么状态
         //获取document上获取焦点的id,当点击回车发送的时候不让它执行blur事件，否则出现兼容问题
-        if(focusStatus==true&&evt.keyCode != "13"){
-            $textarea.blur();
-            $textarea.focus(); 
-            //输入框遮挡兼容处理
-            if(browserFlag==true){
+        if(evt.keyCode != "13"){
+            if(focusStatus==true){
+                $textarea.blur();
+                $textarea.focus(); 
+                //输入框遮挡兼容处理
+                if(browserFlag==true){
+                    $add.removeClass("activehide");
+                    setTimeout(function(){
+                        specialModelshideKeyboardHandler();
+                    },50)
+                }
+            }else{
                 $add.removeClass("activehide");
-                setTimeout(function(){
-                    specialModelshideKeyboardHandler();
-                },50)
-            }
-        }else{
-            $add.removeClass("activehide");
-        }  
+            }  
+        }
         $sendBtn.addClass("activehide");
         autoSizePhone();
     };
