@@ -371,7 +371,7 @@ function TextArea(window) {
                 isRepeat=false;
             },2000)
         }
-        
+        autoSizePhone();
         focusStatus=false;
     };
     //宽高自适应手机
@@ -537,6 +537,13 @@ function TextArea(window) {
                 $(window).scrollTop('1'); 
             },50)
         }
+        if(browserType=="qq"&&phoneType=="iphone-6+"){
+            $(".js-wrapper").css("height","286px");
+            $(".js-chatArea").css({"top":"286px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
+        }
          //iphone6
         if(browserType=="safari"&&phoneType=="iphone-6"){
             $(".js-wrapper").css("height","229px");
@@ -557,6 +564,13 @@ function TextArea(window) {
                 $(window).scrollTop('1'); 
             },50) 
         }
+        if(browserType=="qq"&&phoneType=="iphone-6"){
+            $(".js-wrapper").css("height","229px");
+            $(".js-chatArea").css({"top":"229px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50) 
+        }
         //iphone5
         if(browserType=="safari"&&phoneType=="iphone-5"){
             $(".js-wrapper").css("height","129px");
@@ -571,6 +585,13 @@ function TextArea(window) {
             },50)
         }
         if(browserType=="micromessenger"&&phoneType=="iphone-5"){
+            $(".js-wrapper").css("height","129px");
+            $(".js-chatArea").css({"top":"129px","height":"50px"});
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
+        }
+        if(browserType=="qq"&&phoneType=="iphone-5"){
             $(".js-wrapper").css("height","129px");
             $(".js-chatArea").css({"top":"129px","height":"50px"});
             setTimeout(function(){
@@ -793,6 +814,10 @@ function TextArea(window) {
         if(browserType=="miuibrowser"&&browserInfo.indexOf('mi 3')!=-1){
              browserFlag=true;
         };
+        //qq浏览器
+        if(browserType=="qq"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
+            browserFlag=true;
+        }
         //qq浏览器
         if(browserType=="mqqbrowser"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
             browserFlag=true;
