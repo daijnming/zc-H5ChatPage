@@ -81,7 +81,6 @@ var ListMsgHandler = function() {
     //展示历史记录 type 用于判断加载第一页数据
     //isFirstData 是否是刚进入页面
     var showHistoryMsg = function(data,isFirstData) {
-      console.log(data);
         var comf,
             sysHtml ='',
             dataLen = data.length,
@@ -402,7 +401,6 @@ var ListMsgHandler = function() {
     var onCoreOnload = function(data) {
         global = data[0];
         // alert(global.UAInfo.UA+":"+global.browser.browser);
-        console.log(global);
         initConfig();//配置参数
         //FIXME bindListener
         fnEvent.on('core.initsession',getHello);//机器人欢迎语 调历史渲染接口

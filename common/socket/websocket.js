@@ -11,6 +11,8 @@ function ZcWebSocket(puid, url, global) {
     var dateUtil = require('../util/date.js');
     var websocket;
     var timer;
+    //被踢下线
+    var kickout = false;
     var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
@@ -69,6 +71,7 @@ function ZcWebSocket(puid, url, global) {
     var systemMessageHandler = function(data) {
         if (data.type == 204) {
             listener.trigger("core.sessionclose", data.status);
+            kickout = (data.status == 6);
             if (data.status == 2 || data.status == 4) {
                 listener.trigger("core.system", {
                     'type': 'system',
@@ -140,13 +143,18 @@ function ZcWebSocket(puid, url, global) {
         }, 5000);
     };
     var onClosed = function() {
-        reConnect();
+        window.localStorage.setItem("websocketerror", +new Date());
+        console.log(kickout);
+        if (!kickout) {
+            reConnect();
+        }
     };
 
     var onOpen = function() {
         timer = setInterval(function() {
             websocket.send("ping");
         }, 5 * 1000);
+        window.localStorage.removeItem("websocketerror")
         var start = {
             "t": ROLE_USER,
             "u": global.apiInit.uid,
