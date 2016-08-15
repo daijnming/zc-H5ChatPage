@@ -164,9 +164,14 @@ var initMsgConfig = function(){
                 type: "post",
                 dataType: "json",
                 data: {
+                    uid:uid,
+                    companyId:sysNum,
+                    source:uSource,
+                    ticketFrom:uSource,
+                    customerSource:uSource,
                     // 二次验证所需的三个值
-                    username: $email.val(),
-                    password: $emailMsg.val(),
+                    customerEmail: $email.val(),
+                    ticketContent: $emailMsg.val(),
                     msgFlag:'1',//0 pc 1 h5
                     geetest_challenge: validate.geetest_challenge,
                     geetest_validate: validate.geetest_validate,
