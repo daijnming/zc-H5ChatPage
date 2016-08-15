@@ -12,7 +12,7 @@ function ZcWebSocket(puid, url, global) {
     var websocket;
     var timer;
     //被踢下线
-    var kickOut = false;
+    var kickout = false;
     var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
@@ -144,6 +144,7 @@ function ZcWebSocket(puid, url, global) {
     };
     var onClosed = function() {
         window.localStorage.setItem("websocketerror", +new Date());
+        console.log(kickout);
         if (!kickout) {
             reConnect();
         }
