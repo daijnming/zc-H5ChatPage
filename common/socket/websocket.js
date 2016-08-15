@@ -12,7 +12,7 @@ function ZcWebSocket(puid, url, global) {
     var websocket;
     var timer;
     //被踢下线
-    var kickOut = false;
+    var kickout = false;
     var connRetryTime = 0;
     var TIMEOUT_DURATION = 5 * 1000;
     var ROLE_USER = 0;
@@ -143,6 +143,8 @@ function ZcWebSocket(puid, url, global) {
         }, 5000);
     };
     var onClosed = function() {
+        window.localStorage.setItem("websocketerror", +new Date());
+        console.log(kickout);
         if (!kickout) {
             reConnect();
         }
@@ -152,6 +154,7 @@ function ZcWebSocket(puid, url, global) {
         timer = setInterval(function() {
             websocket.send("ping");
         }, 5 * 1000);
+        window.localStorage.removeItem("websocketerror")
         var start = {
             "t": ROLE_USER,
             "u": global.apiInit.uid,
