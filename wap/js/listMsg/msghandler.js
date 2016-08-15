@@ -80,6 +80,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       }
       overtimeTask.lastMsgType=1;//最后一条为用户回复
       overtimeTask.overtimeDaley=0;//重置超时提示时间为0
+      sys.msg.msgOvertimeTask();//计时
       if(data[0].sendAgain){
         //消息重发
         var oDiv = $('#userMsg'+data[0].dateuid).parents('div.rightMsg');
@@ -114,6 +115,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
        overtimeTask.lastMsgType=0;//最后一条为客服回复
        overtimeTask.overtimeDaley=0;//重置超时提示时间为0
        sys.config.currentState=2;
+       sys.msg.msgOvertimeTask();//计时
        //用户 客服超时提示语
        if(data&&data.list.length>0){
          for(var i=0,_list=data.list;i<_list.length;i++){
@@ -382,9 +384,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       var tmpHtml = doT.template(msgTemplate.leftMsg)(comf);
       return tmpHtml;
     },
-
-    //超时提示
+    //FIXME 超时提示语在收到对方下条提示语之前，当前只提示一次，直到用户下线为止
     msgOvertimeTask:function(){
+      clearInterval(overtimer);
       //判断最后一条消息来源
       // var userMsg =  global.apiConfig.userTipWord.indexOf('<')<0?global.apiConfig.userTipWord:$(global.apiConfig.userTipWord).html();//用户提示语
       // var adminMsg = global.apiConfig.adminTipWord.indexOf('<')<0?global.apiConfig.adminTipWord:$(global.apiConfig.adminTipWord).html();//客服提示语
@@ -404,7 +406,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           _msg = adminMsg;
           _daley= adminDaley;
         }
+        // console.log(overtimeTask.overtimeDaley);
         if(overtimeTask.overtimeDaley * 1000 >= _daley){
+          clearInterval(overtimer);
           overtimeTask.overtimeDaley=0;//超时时间重置为0
           global.apiConfig.customInfo.data.content=_msg;//超时提示语
           msgBind(2,global.apiConfig.customInfo);
