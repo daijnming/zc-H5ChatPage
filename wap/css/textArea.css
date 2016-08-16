@@ -299,6 +299,15 @@ li {
 .loadingUploadImg{position:absolute;z-index:100;width:120px;height:120px;border-radius:8px;background:rgba(0,0,0,0.5)}
 .loadingUploadImg i{display:inline-block;width:30px;height:30px;margin:36px 46px 21px 46px;background:url(../images/watingUploadImg.gif) no-repeat;background-size:30px 30px;}
 .loadingUploadImg p{color:#fff;font-size:12px;width:100%;text-align:center;}
+.noSliding{height:0px;
+        width:100%;
+        opacity:1;
+        /* background:#000; */
+        position: fixed;
+        left: 0; 
+        bottom: 0px;
+        z-index: 10;
+ }
 /*iphone4/iphone5*/
  @media (min-device-width : 320px){
  .addList{margin:0 10px;}
