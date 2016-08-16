@@ -758,7 +758,6 @@ function TextArea(window) {
                         },200)
                     }
                 }
-                 onbtnSendHandler(evt); 
                 return false;
             }
         });
