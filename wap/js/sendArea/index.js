@@ -35,8 +35,8 @@ function TextArea(window) {
         //isSpeak=false,
         //是否评价过 -1表示用户没有说过话，0表示说过话没有评论过，1表示评论过
         isEvaluated= -1,
-        //0为机器人，1为人工
         isRepeat=false;
+        //0为机器人，1为人工
     var transferFlag=0;
     var browserType="";
     var phoneType="";
@@ -176,11 +176,6 @@ function TextArea(window) {
         //获取document上获取焦点的id,当点击回车发送的时候不让它执行blur事件，否则出现兼容问题
         if(evt.keyCode != "13"){
             if(focusStatus){
-                //处于连发状态
-                //focusFlag=true;
-               /// $textarea.blur();
-               // $textarea.focus();
-                //alert("我来了")
                 //输入框遮挡兼容处理
                 if(browserFlag){
                     $add.removeClass("activehide");
@@ -191,7 +186,9 @@ function TextArea(window) {
             }else{
                 $add.removeClass("activehide");
             }  
-        }
+        }else{
+            $add.removeClass("activehide");
+        } 
         $sendBtn.addClass("activehide");
         autoSizePhone();
     };
@@ -742,22 +739,28 @@ function TextArea(window) {
         //回车发送
         $textarea.on('keydown', function(evt) {
             if (evt.keyCode == "13") {
-                var innerStr=$(".js-textarea").html();
+               /* var innerStr=$(".js-textarea").html();
                 //判断输入框是否为空
                 if(innerStr.length == 0 || /^\s+$/g.test(innerStr)) {
                     $textarea.html("")
                     return false;
-                } else {
-                    //console.log(0)
-                    //回车执行发送
+                } else {*/
+                //人工模式下的回车会执行失焦事件
+                if(transferFlag==1){
+                    $textarea.blur();
+                    focusStatus=false;    
+                }
+                     
+              onbtnSendHandler(evt);
+                    /*//回车执行发送
                     onbtnSendHandler(evt); 
                     //iphone下的uc浏览器不让它执行下面这一句，否则会出现问题
                     if(ucbrowserFlag==false){
                         setTimeout(function(){
                           specialModelshideKeyboardHandler();
                         },200)
-                    }
-                }
+                    }*/
+                //}
                 return false;
             }
         });
