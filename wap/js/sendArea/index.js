@@ -175,13 +175,16 @@ function TextArea(window) {
         //发送前是什么状态，发送后就是什么状态
         //获取document上获取焦点的id,当点击回车发送的时候不让它执行blur事件，否则出现兼容问题
         if(evt.keyCode != "13"){
-            if(focusStatus==true){
-                $textarea.blur();
-                $textarea.focus();
+            if(focusStatus){
+                //处于连发状态
+                //focusFlag=true;
+               /// $textarea.blur();
+               // $textarea.focus();
+                //alert("我来了")
                 //输入框遮挡兼容处理
-                if(browserFlag==true){
+                if(browserFlag){
+                    $add.removeClass("activehide");
                     setTimeout(function(){
-                        $add.removeClass("activehide");
                         specialModelshideKeyboardHandler();
                     },50)
                 }
@@ -196,6 +199,7 @@ function TextArea(window) {
 
     };
     var showChatAddHandler=function(){
+        $textarea.blur();
         //与键盘优化
         if($chatArea.hasClass("showChatAdd")){
             //隐藏
@@ -229,6 +233,7 @@ function TextArea(window) {
         focusStatus=false;
     };
     var showChatEmotionHandler=function(){
+        $textarea.blur();
         //与键盘优化
         if($chatArea.hasClass("showChatEmotion")){
             //隐藏
@@ -261,7 +266,6 @@ function TextArea(window) {
         focusStatus=false;
     };
     var hideChatAreaHandler = function() {   
-        
         //setTimeout(function(){
             $chatArea.removeClass("showChatAdd");
             $chatArea.removeClass("showChatEmotion");
@@ -468,11 +472,7 @@ function TextArea(window) {
     var hideKeyboard=function(data){
         //会话没结束的时候点击屏幕输入框失去焦点
         $textarea.blur();
-       // $(".js-wrapper").css("height","100%");
-       // $(".js-chatArea").css({"top":"auto","height":"262px","bottom":"0"})
         var viewHeight = $(document).height()-$(".sendarea").height();
-        //console.log(data);
-        //console.log(viewHeight);
         //data<viewHeight说明当前文本框处于抬起状态
         if(!sessionEnd&&data<viewHeight){
             $chatArea.removeClass("showChatArea").removeClass("showChatEmotion").removeClass("showChatAdd").addClass("hideChatArea");
@@ -492,7 +492,7 @@ function TextArea(window) {
                     $qqFaceTip.removeClass("activehide");
                 }
             }
-            //inputUPHandler();
+            inputUPHandler();
             focusStatus=false;
             autoSizePhone();
         }
@@ -695,19 +695,19 @@ function TextArea(window) {
 
     var bindLitener = function() {
         //发送按钮
-        $sendBtn.on("click",onbtnSendHandler);
+        $sendBtn.on("tap",onbtnSendHandler);
         //qq表情
-        $emotion.on("click",onEmotionClickHandler);
+        $emotion.on("tap",onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
         // 发送消息
         document.getElementById("js-textarea").addEventListener('input',showSendBtnHandler, false);
         //$textarea.on("keydown",chatAdminshowtextHandler);
         $textarea.on("focus",hideChatAreaHandler); 
         $textarea.on("focus",specialModelshideKeyboardHandler);
-        $add.on("click",showChatAddHandler);
-        $emotion.on("click",showChatEmotionHandler);
+        $add.on("tap",showChatAddHandler);
+        $emotion.on("tap",showChatEmotionHandler);
         //表情、加号切换
-        $tab.on("click",tabChatAreaHandler)
+        $tab.on("tap",tabChatAreaHandler)
         //定位光标
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
@@ -718,13 +718,13 @@ function TextArea(window) {
         listener.on("listMsg.hideKeyboard",hideKeyboard);
         listener.on("listMsg.realScrollBottom",autoSizePhone);
         //转人工
-        $artificial.on("click",artificialHandler);
+        $artificial.on("tap",artificialHandler);
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
-        $newMessage.on("click",newMessage);
+        $newMessage.on("tap",newMessage);
         //评价弹窗
-        $satisfaction.on("click",evaluateHandler);
+        $satisfaction.on("tap",evaluateHandler);
         //禁止滑动输入框
         $chatArea.on('touchmove',noSliding);
         $(".js-noSliding").on('touchmove',noSliding);
@@ -754,7 +754,7 @@ function TextArea(window) {
                     //iphone下的uc浏览器不让它执行下面这一句，否则会出现问题
                     if(ucbrowserFlag==false){
                         setTimeout(function(){
-                           specialModelshideKeyboardHandler();
+                          specialModelshideKeyboardHandler();
                         },200)
                     }
                 }
