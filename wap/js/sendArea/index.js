@@ -355,17 +355,19 @@ function TextArea(window) {
         inputUPHandler();
     };
     var artificialHandler=function(){
-        //isSpeak=false;
-        if(isRepeat==false){
-            isRepeat=true;
-            listener.trigger('sendArea.artificial');
-            //防止快速点击转人工按钮
-            setTimeout(function(){
-                isRepeat=false;
-            },2000)
-        }
-        //autoSizePhone();
-        focusStatus=false;
+            $textarea.blur();
+             //isSpeak=false;
+            if(isRepeat==false){
+                isRepeat=true;
+                listener.trigger('sendArea.artificial');
+                //防止快速点击转人工按钮
+                setTimeout(function(){
+                    isRepeat=false;
+                },2000)
+            }
+            //autoSizePhone();
+            focusStatus=false;
+ 
     };
     //宽高自适应手机
     var autoSizePhone=function(){
@@ -556,10 +558,13 @@ function TextArea(window) {
         }
         //iphone5
         if(phoneType=="iphone-5"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
+             
             $(".js-wrapper").css("height","129px");
             $(".js-chatArea").css({"top":"129px","height":"50px"});
             $(".js-noSliding").css("height","150px");
-            $(window).scrollTop('1');
+            setTimeout(function(){
+                $(window).scrollTop('1'); 
+            },50)
         }
         if(phoneType=="iphone-5"&&browserType=="ucbrowser"){
             $(".js-wrapper").css("height","140px");
@@ -746,12 +751,11 @@ function TextArea(window) {
                     return false;
                 } else {*/
                 //人工模式下的回车会执行失焦事件
-                if(transferFlag==1){
-                    $textarea.blur();
-                    focusStatus=false;    
-                }
-                     
-              onbtnSendHandler(evt);
+            if(transferFlag==1){
+                $textarea.blur();
+                focusStatus=false;    
+            }   
+            onbtnSendHandler(evt);
                     /*//回车执行发送
                     onbtnSendHandler(evt); 
                     //iphone下的uc浏览器不让它执行下面这一句，否则会出现问题
