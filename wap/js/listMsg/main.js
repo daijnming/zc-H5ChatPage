@@ -139,7 +139,8 @@ var ListMsgHandler = function() {
                         msgHtml = doT.template(msgTemplate.rightMsg)(comf);
                     } else {
                         //机器人：1    人工客服：2
-                        if(itemChild.sdkMsg&&itemChild.sdkMsg.answerType=='4'){
+                        // itemChild.sdkMsg.sugguestions = itemChild.sdkMsg.sugguestions || [];
+                        if(itemChild.sdkMsg&&(itemChild.sdkMsg.sugguestions||[]).length>0){
                           //FIXME 相关问题搜索
                           msgHtml = messageHandler.msg.sugguestionsSearch(itemChild.sdkMsg,true);
                         }else{
@@ -252,7 +253,8 @@ var ListMsgHandler = function() {
                 //判断类型 robot human
                 if(_type=='robot'){
                   //FIXME 机器人类型  answerType=4 相关搜索
-                  if(_data.answerType=='4'){
+                  // if(_data.answerType=='4'){
+                  if((_data.answerType||[]).length>0){
                     //相关搜索
                     msgHtml += messageHandler.msg.sugguestionsSearch(_data,false);
                   }else{
