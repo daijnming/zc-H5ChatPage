@@ -1,5 +1,4 @@
 var initConfig = function() {
-
     //引用外部js
     var Comm = require('./comm.js');
     var Promise = require('./util/promise.js');
@@ -286,6 +285,9 @@ var initConfig = function() {
     };
 
     var decodeURL = function(str) {
+        if (!str) {
+            return '';
+        }
         try {
             return decodeURIComponent(str);
         } catch (e) {
@@ -341,7 +343,6 @@ var initConfig = function() {
             });
             return promise;
         }).then(function() {
-            console.log(That.cacheInfo)
             $.ajax({
                 type: "post",
                 url: api.init_url,

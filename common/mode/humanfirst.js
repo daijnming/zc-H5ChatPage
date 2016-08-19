@@ -284,8 +284,8 @@ var HumanFirst = function(global) {
     var transferConnect = function(value, promise, init) {
         var init = !!init;
         var promise = new Promise();
-        transfer(global, promise, queueing).then(function() {
-            transferSuccess(null, null, init);
+        transfer(global, promise, queueing).then(function(groupId) {
+            transferSuccess(groupId, null, init);
         }, function() {
             transferFail(init);
         });
