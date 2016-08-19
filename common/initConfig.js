@@ -1,5 +1,5 @@
 var initConfig = function() {
-
+    alert();
     //引用外部js
     var Comm = require('./comm.js');
     var Promise = require('./util/promise.js');
