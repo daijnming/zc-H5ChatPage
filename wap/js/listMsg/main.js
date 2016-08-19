@@ -254,7 +254,7 @@ var ListMsgHandler = function() {
                 if(_type=='robot'){
                   //FIXME 机器人类型  answerType=4 相关搜索
                   // if(_data.answerType=='4'){
-                  if((_data.answerType||[]).length>0){
+                  if((_data.sugguestions||[]).length>0){
                     //相关搜索
                     msgHtml += messageHandler.msg.sugguestionsSearch(_data,false);
                   }else{
