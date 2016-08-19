@@ -176,23 +176,23 @@ function TextArea(window) {
         //获取document上获取焦点的id,当点击回车发送的时候不让它执行blur事件，否则出现兼容问题
         if(evt.keyCode != "13"){
             if(focusStatus){
-                //输入框遮挡兼容处理
                 $add.removeClass("activehide");
-                if(browserFlag){
-                    setTimeout(function(){
-                        specialModelshideKeyboardHandler();
-                    },50)
-                };
                 //alert(phoneTypeFlag);
                 if(phoneTypeFlag==false){
                     //alert("进来了")
                     //如果不是iphone手机，则手动调键盘
                     setTimeout(function(){
-                        //$textarea.blur();
+                       // $textarea.blur();
                         $textarea.focus();
                     },50)
-                   
                 }
+                //输入框遮挡兼容处理
+                if(browserFlag){
+                    setTimeout(function(){  
+                        specialModelshideKeyboardHandler();
+                    },100)
+                };
+                
             }else{
                 $add.removeClass("activehide");
             }  
@@ -511,7 +511,7 @@ function TextArea(window) {
        
     };
     //特殊机型输入框处理，抬高
-    var specialModelshideKeyboardHandler=function(){
+    var specialModelshideKeyboardHandler=function(){//alert('alalal');
        //输入框遮罩只能输入单行，否则出兼容问题
        if(browserFlag==true){
             $(".js-textarea").css("max-height","20px");
@@ -592,7 +592,7 @@ function TextArea(window) {
              
         }
         //华为荣耀6
-        if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
+        if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){//alert(12);
             $(".js-wrapper").css("height","218px");
             $(".js-chatArea").css({"top":"218px","height":"50px"});
             $(window).scrollTop('1');
@@ -761,28 +761,13 @@ function TextArea(window) {
         //回车发送
         $textarea.on('keydown', function(evt) {
             if (evt.keyCode == "13") {
-               /* var innerStr=$(".js-textarea").html();
-                //判断输入框是否为空
-                if(innerStr.length == 0 || /^\s+$/g.test(innerStr)) {
-                    $textarea.html("")
-                    return false;
-                } else {*/
             //iphone人工模式下的回车会执行失焦事件
             if(transferFlag==1&&browserFlag){
                 $textarea.blur();
                 focusStatus=false;    
             }
             onbtnSendHandler(evt);
-                    /*//回车执行发送
-                    onbtnSendHandler(evt); 
-                    //iphone下的uc浏览器不让它执行下面这一句，否则会出现问题
-                    if(ucbrowserFlag==false){
-                        setTimeout(function(){
-                          specialModelshideKeyboardHandler();
-                        },200)
-                    }*/
-                //}
-                return false;
+            return false;
             }
         });
     };
@@ -791,8 +776,6 @@ function TextArea(window) {
     };
     var initPlugsin = function() {//插件
         //上传图片
-        //uploadFun = uploadImg($uploadBtn,node,core,window);
-        //statusHandler();
         //iphone下用tap事件，输入框不失焦
         eventType =navigator.userAgent.toLowerCase().indexOf("mobile") >=0?'tap':'click';
         phoneTypeFlag =navigator.userAgent.toLowerCase().indexOf("iphone") >=0?true:false;
