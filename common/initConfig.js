@@ -341,7 +341,6 @@ var initConfig = function() {
             });
             return promise;
         }).then(function() {
-            console.log(That.cacheInfo)
             $.ajax({
                 type: "post",
                 url: api.init_url,
