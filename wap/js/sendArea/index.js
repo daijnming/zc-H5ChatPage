@@ -39,9 +39,9 @@ function TextArea(window) {
         //0为机器人，1为人工
     var transferFlag=0;
     var browserType="";
-    var phoneType="";
+    var phoneType="",
+    phoneTypeFlag=false;
     var browserInfo="";
-
     var eventType="";
     //判断当前机型是否为不兼容输入框弹起机型的浏览器,false为兼容，true为不兼容
     var browserFlag=false,
@@ -184,6 +184,16 @@ function TextArea(window) {
                     setTimeout(function(){
                         specialModelshideKeyboardHandler();
                     },50)
+                };
+                //alert(phoneTypeFlag);
+                if(phoneTypeFlag==false){
+                    //alert("进来了")
+                    //如果不是iphone手机，则手动调键盘
+                    //setTimeout(function(){
+                        $textarea.blur();
+                        $textarea.focus();
+                    //},100)
+                   
                 }
             }else{
                 $add.removeClass("activehide");
@@ -515,7 +525,8 @@ function TextArea(window) {
             $(".js-noSliding").css("height","290px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
-            },50)
+            },50);
+           
         }
         if(phoneType=="iphone-6+"&&browserType=="mqqbrowser"){
             $(".js-wrapper").css("height","283px");
@@ -524,6 +535,7 @@ function TextArea(window) {
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
+            
         }
         if(phoneType=="iphone-6+"&&(browserType=="micromessenger"||browserType=="qq")){
             $(".js-wrapper").css("height","286px");
@@ -532,6 +544,7 @@ function TextArea(window) {
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
+           
         }
         if(phoneType=="iphone-6+"&&browserType=="ucbrowser"){
             $(".js-wrapper").css("height","294px");
@@ -540,6 +553,7 @@ function TextArea(window) {
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
+            
         }
          //iphone6
         if(phoneType=="iphone-6"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
@@ -548,7 +562,8 @@ function TextArea(window) {
             $(".js-noSliding").css("height","230px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
-            },50)
+            },50);
+             
         }
         if(phoneType=="iphone-6"&&browserType=="ucbrowser"){
             $(".js-wrapper").css("height","240px");
@@ -556,7 +571,8 @@ function TextArea(window) {
             //$(".js-noSliding").css("height","20px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
-            },50)
+            },50);
+             
         }
         //iphone5
         if(phoneType=="iphone-5"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
@@ -565,7 +581,8 @@ function TextArea(window) {
             $(".js-noSliding").css("height","150px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
-            },50)
+            },50);
+             
         }
         if(phoneType=="iphone-5"&&browserType=="ucbrowser"){
             $(".js-wrapper").css("height","140px");
@@ -574,6 +591,7 @@ function TextArea(window) {
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
+             
         }
         //华为荣耀6
         if(browserType=="safari"&&browserInfo.indexOf('h60-l03')!=-1){
@@ -751,11 +769,11 @@ function TextArea(window) {
                     $textarea.html("")
                     return false;
                 } else {*/
-                //人工模式下的回车会执行失焦事件
-            if(transferFlag==1){
+            //iphone人工模式下的回车会执行失焦事件
+            if(transferFlag==1&&browserFlag){
                 $textarea.blur();
                 focusStatus=false;    
-            }   
+            }
             onbtnSendHandler(evt);
                     /*//回车执行发送
                     onbtnSendHandler(evt); 
@@ -777,8 +795,11 @@ function TextArea(window) {
         //上传图片
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //statusHandler();
-        eventType =navigator.userAgent.indexOf("Mobile") >=0?'tap':'click';
-        //console.log(eventType);
+        //iphone下用tap事件，输入框不失焦
+        eventType =navigator.userAgent.toLowerCase().indexOf("mobile") >=0?'tap':'click';
+        phoneTypeFlag =navigator.userAgent.toLowerCase().indexOf("iphone") >=0?true:false;
+        //alert(phoneTypeFlag);
+        //alert(navigator.userAgent.toLowerCase());
         autoSizePhone();
     };
     var init = function() {
