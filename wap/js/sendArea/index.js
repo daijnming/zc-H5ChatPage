@@ -136,10 +136,8 @@ function TextArea(window) {
             $sendBtn.addClass("activehide")
             hideChatAreaHandler();
             $add.removeClass("activehide")
-            $textarea.blur(); 
-            //$(".js-wrapper").css("height","100%");
-            //$(".js-chatArea").css({"top":"auto","height":"262px","bottom":"0"})
-            $textarea.focus();
+           // $textarea.blur(); 
+           // $textarea.focus();
         }
         if(document.activeElement.id=="js-textarea"){
             focusStatus=true;
@@ -189,10 +187,10 @@ function TextArea(window) {
                 if(phoneTypeFlag==false){
                     //alert("进来了")
                     //如果不是iphone手机，则手动调键盘
-                    //setTimeout(function(){
-                        $textarea.blur();
+                    setTimeout(function(){
+                        //$textarea.blur();
                         $textarea.focus();
-                    //},100)
+                    },50)
                    
                 }
             }else{
