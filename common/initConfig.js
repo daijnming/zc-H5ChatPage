@@ -284,6 +284,15 @@ var initConfig = function() {
         var str = arr.join("");
         return str;
     };
+
+    var decodeURL = function(str) {
+        try {
+            return decodeURIComponent(str);
+        } catch (e) {
+            return '';
+        }
+    }
+
     //promise方法
     var promiseHandler = function() {
         judgeEnviroment().then(function(value, promise) {
@@ -339,24 +348,24 @@ var initConfig = function() {
                 dataType: "json",
                 data: {
                     'ack': 1,
-                    sysNum: decodeURI(That.cacheInfo.sysNum),
-                    source: decodeURI(That.cacheInfo.userInfo.source),
-                    'groupId': That.cacheInfo.urlParams.groupId || '',
-                    partnerId: decodeURI(That.cacheInfo.userInfo.partnerId),
-                    tel: decodeURI(That.cacheInfo.userInfo.tel),
-                    email: decodeURI(That.cacheInfo.userInfo.email),
-                    uname: decodeURI(That.cacheInfo.userInfo.uname),
-                    visitTitle: decodeURI(That.cacheInfo.userInfo.visitTitle),
-                    visitUsrl: decodeURI(That.cacheInfo.userInfo.visitUrl),
-                    face: decodeURI(That.cacheInfo.userInfo.face),
-                    realname: decodeURI(That.cacheInfo.userInfo.realname),
-                    weibo: decodeURI(That.cacheInfo.userInfo.weibo),
-                    weixin: decodeURI(That.cacheInfo.userInfo.weixin),
-                    qq: decodeURI(That.cacheInfo.userInfo.qq),
-                    sex: decodeURI(That.cacheInfo.userInfo.sex),
-                    birthday: decodeURI(That.cacheInfo.userInfo.birthday),
-                    remark: decodeURI(That.cacheInfo.userInfo.remark),
-                    params: decodeURI(That.cacheInfo.userInfo.params)
+                    sysNum: decodeURL(That.cacheInfo.sysNum),
+                    source: decodeURL(That.cacheInfo.userInfo.source),
+                    'groupId': decodeURL(That.cacheInfo.urlParams.groupId) || '',
+                    partnerId: decodeURL(That.cacheInfo.userInfo.partnerId),
+                    tel: decodeURL(That.cacheInfo.userInfo.tel),
+                    email: decodeURL(That.cacheInfo.userInfo.email),
+                    uname: decodeURL(That.cacheInfo.userInfo.uname),
+                    visitTitle: decodeURL(That.cacheInfo.userInfo.visitTitle),
+                    visitUsrl: decodeURL(That.cacheInfo.userInfo.visitUrl),
+                    face: decodeURL(That.cacheInfo.userInfo.face),
+                    realname: decodeURL(That.cacheInfo.userInfo.realname),
+                    weibo: decodeURL(That.cacheInfo.userInfo.weibo),
+                    weixin: decodeURL(That.cacheInfo.userInfo.weixin),
+                    qq: decodeURL(That.cacheInfo.userInfo.qq),
+                    sex: decodeURL(That.cacheInfo.userInfo.sex),
+                    birthday: decodeURL(That.cacheInfo.userInfo.birthday),
+                    remark: decodeURL(That.cacheInfo.userInfo.remark),
+                    params: decodeURL(That.cacheInfo.userInfo.params)
                 },
                 success: function(res) {
                     var data = res.data ? res.data : res;
