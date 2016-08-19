@@ -41,6 +41,8 @@ function TextArea(window) {
     var browserType="";
     var phoneType="";
     var browserInfo="";
+
+    var eventType="";
     //判断当前机型是否为不兼容输入框弹起机型的浏览器,false为兼容，true为不兼容
     var browserFlag=false,
         ucbrowserFlag=false;
@@ -177,8 +179,8 @@ function TextArea(window) {
         if(evt.keyCode != "13"){
             if(focusStatus){
                 //输入框遮挡兼容处理
+                $add.removeClass("activehide");
                 if(browserFlag){
-                    $add.removeClass("activehide");
                     setTimeout(function(){
                         specialModelshideKeyboardHandler();
                     },50)
@@ -558,7 +560,6 @@ function TextArea(window) {
         }
         //iphone5
         if(phoneType=="iphone-5"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
-             
             $(".js-wrapper").css("height","129px");
             $(".js-chatArea").css({"top":"129px","height":"50px"});
             $(".js-noSliding").css("height","150px");
@@ -697,19 +698,19 @@ function TextArea(window) {
 
     var bindLitener = function() {
         //发送按钮
-        $sendBtn.on("tap",onbtnSendHandler);
+        $sendBtn.on(eventType,onbtnSendHandler);
         //qq表情
-        $emotion.on("tap",onEmotionClickHandler);
+        $emotion.on(eventType,onEmotionClickHandler);
         $textarea.on("keyup",showSendBtnHandler);
         // 发送消息
         document.getElementById("js-textarea").addEventListener('input',showSendBtnHandler, false);
         //$textarea.on("keydown",chatAdminshowtextHandler);
         $textarea.on("focus",hideChatAreaHandler); 
         $textarea.on("focus",specialModelshideKeyboardHandler);
-        $add.on("tap",showChatAddHandler);
-        $emotion.on("tap",showChatEmotionHandler);
+        $add.on(eventType,showChatAddHandler);
+        $emotion.on(eventType,showChatEmotionHandler);
         //表情、加号切换
-        $tab.on("tap",tabChatAreaHandler)
+        $tab.on(eventType,tabChatAreaHandler)
         //定位光标
         listener.on("sendArea.gotoxy",gotoxyHandler);
         //模拟退格
@@ -720,13 +721,13 @@ function TextArea(window) {
         listener.on("listMsg.hideKeyboard",hideKeyboard);
         listener.on("listMsg.realScrollBottom",autoSizePhone);
         //转人工
-        $artificial.on("tap",artificialHandler);
+        $artificial.on(eventType,artificialHandler);
         //结束会话
         listener.on("core.sessionclose",endSessionHandler);
         //新会话
-        $newMessage.on("tap",newMessage);
+        $newMessage.on(eventType,newMessage);
         //评价弹窗
-        $satisfaction.on("tap",evaluateHandler);
+        $satisfaction.on(eventType,evaluateHandler);
         //禁止滑动输入框
         $chatArea.on('touchmove',noSliding);
         $(".js-noSliding").on('touchmove',noSliding);
@@ -776,6 +777,8 @@ function TextArea(window) {
         //上传图片
         //uploadFun = uploadImg($uploadBtn,node,core,window);
         //statusHandler();
+        eventType =navigator.userAgent.indexOf("Mobile") >=0?'tap':'click';
+        //console.log(eventType);
         autoSizePhone();
     };
     var init = function() {
