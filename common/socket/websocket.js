@@ -143,7 +143,9 @@ function ZcWebSocket(puid, url, global) {
         }, 5000);
     };
     var onClosed = function() {
-        window.localStorage.setItem("websocketerror", +new Date());
+        if (window.localStorage) {
+            window.localStorage.setItem("websocketerror", +new Date());
+        }
         console.log(kickout);
         if (!kickout) {
             reConnect();
