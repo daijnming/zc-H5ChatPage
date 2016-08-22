@@ -125,7 +125,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //系统消息显示处理
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
-      console.log(msg,status,sysMsgKeyword,sysMsgManager);
+      // console.log(msg,status,sysMsgKeyword,sysMsgManager);
         //生成时间戳
         var tp = +new Date();
         var msgTmp='',
