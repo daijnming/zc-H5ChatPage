@@ -146,7 +146,6 @@ function ZcWebSocket(puid, url, global) {
         if (window.localStorage) {
             window.localStorage.setItem("websocketerror", +new Date());
         }
-        console.log(kickout);
         if (!kickout) {
             reConnect();
         }
@@ -156,7 +155,9 @@ function ZcWebSocket(puid, url, global) {
         timer = setInterval(function() {
             websocket.send("ping");
         }, 5 * 1000);
-        window.localStorage.removeItem("websocketerror")
+        if (window.localStorage) {
+            window.localStorage.removeItem("websocketerror")
+        }
         var start = {
             "t": ROLE_USER,
             "u": global.apiInit.uid,
