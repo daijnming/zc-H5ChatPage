@@ -80,7 +80,9 @@ var SysmsgHandler = function(global,msgBind,myScroll){
       }
       overtimeTask.lastMsgType=1;//最后一条为用户回复
       overtimeTask.overtimeDaley=0;//重置超时提示时间为0
-      sys.msg.msgOvertimeTask();//计时
+      if(sys.config.currentState==2){
+        sys.msg.msgOvertimeTask();//转人工后才计时
+      }
       if(data[0].sendAgain){
         //消息重发
         var oDiv = $('#userMsg'+data[0].dateuid).parents('div.rightMsg');
