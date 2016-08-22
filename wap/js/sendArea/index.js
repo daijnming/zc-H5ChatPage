@@ -347,7 +347,7 @@ function TextArea(window) {
     };
     var onImageUpload = function(data) {
         //通过textarea.send事件将用户的数据传到显示台
-        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'"/>';
+        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'" />';
         listener.trigger('sendArea.send',[{
          'answer' :img,
          'uid' : currentUid,
@@ -832,7 +832,6 @@ function TextArea(window) {
         if(browserType=="miuibrowser"&&browserInfo.indexOf('mi 3')!=-1){
              browserFlag=true;
         };
-        
         /*//qq浏览器
         if(browserType=="qq"&&phoneType=="iphone-5"||phoneType=="iphone-6"||phoneType=="iphone-6+"){
             browserFlag=true;
