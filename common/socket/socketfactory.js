@@ -6,7 +6,7 @@ var TIME_LIMIE = 5 * 1000 * 60;
 var socketFactory = function(ret, global) {
     if (!!manager)
         return manager;
-    var socketError = 0;
+    var socketError = +new Date();
     if (window.localStorage) {
         socketError = +window.localStorage.getItem("websocketerror");
     }
