@@ -224,7 +224,7 @@ var ListMsgHandler = function() {
     *FIXME  msgType 0 发送消息  1 接入消息 2 系统消息  3系统時間 4 上传图片
     */
     var bindMsg = function(msgType,data){
-      // console.log(data);
+      console.log(data);
       var msgHtml='',
           userLogo = global.userInfo.face?global.userInfo.face:imgHanlder.userLogo,
           comf;
