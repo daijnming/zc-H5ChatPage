@@ -32,24 +32,24 @@ function transfer(global, promise, queueing) {
         // $('.group-outer').offset({'width':(W-w)/2,'height':(H-h)/2});
     };
     var init = function() {
+        var groupId = global.urlParams.groupId;
         if (global.apiInit.ustatus !== 0) {
             //存在会话保持
             setTimeout(function() {
-                promise.resolve(null);
+                promise.resolve(groupId);
             }, 0);
         } else if (queueing) {
             //正在排队
             setTimeout(function() {
-                promise.resolve(null);
+                promise.resolve(groupId);
             }, 0);
         } else if (global.apiConfig.groupflag === 0) {
             setTimeout(function() {
-                promise.resolve(null);
+                promise.resolve(groupId);
             }, 0);
         } else if (global.urlParams.groupId && global.urlParams.groupId.length) {
 
             //参数中配置了groupId
-            var groupId = global.urlParams.groupId;
             setTimeout(function() {
                 promise.resolve(groupId);
             }, 0);
