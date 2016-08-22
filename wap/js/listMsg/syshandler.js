@@ -143,7 +143,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           }
           msg='客服正在输入';
         }
-        console.log(msg);
+        // console.log(msg);
         var comf = $.extend({
           sysMsg:msg,
           sysMsgSign:tp,
