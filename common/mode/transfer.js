@@ -32,7 +32,7 @@ function transfer(global, promise, queueing) {
         // $('.group-outer').offset({'width':(W-w)/2,'height':(H-h)/2});
     };
     var init = function() {
-        var groupId = global.urlParams.groupId;
+        var groupId = global.urlParams.groupId || '';
         if (global.apiInit.ustatus !== 0) {
             //存在会话保持
             setTimeout(function() {
