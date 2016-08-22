@@ -347,7 +347,7 @@ function TextArea(window) {
     };
     var onImageUpload = function(data) {
         //通过textarea.send事件将用户的数据传到显示台
-        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'">';
+        var img='<img class="webchat_img_upload uploadedFile" src="'+data[0].answer+'"/>';
         listener.trigger('sendArea.send',[{
          'answer' :img,
          'uid' : currentUid,
@@ -520,7 +520,7 @@ function TextArea(window) {
         if(phoneType=="iphone-6+"&&browserType=="safari"){
             $(".js-wrapper").css("height","288px");
             $(".js-chatArea").css({"top":"288px","height":"50px"});
-            $(".js-noSliding").css("height","290px");
+            //$(".js-noSliding").css("height","290px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50);
@@ -529,7 +529,7 @@ function TextArea(window) {
         if(phoneType=="iphone-6+"&&browserType=="mqqbrowser"){
             $(".js-wrapper").css("height","283px");
             $(".js-chatArea").css({"top":"283px","height":"50px"});
-            $(".js-noSliding").css("height","290px");
+           // $(".js-noSliding").css("height","290px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
@@ -538,7 +538,7 @@ function TextArea(window) {
         if(phoneType=="iphone-6+"&&(browserType=="micromessenger"||browserType=="qq")){
             $(".js-wrapper").css("height","286px");
             $(".js-chatArea").css({"top":"286px","height":"50px"});
-            $(".js-noSliding").css("height","290px");
+            //$(".js-noSliding").css("height","290px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50)
@@ -557,7 +557,7 @@ function TextArea(window) {
         if(phoneType=="iphone-6"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
             $(".js-wrapper").css("height","229px");
             $(".js-chatArea").css({"top":"229px","height":"50px"});
-            $(".js-noSliding").css("height","230px");
+            //$(".js-noSliding").css("height","230px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50);
@@ -576,7 +576,7 @@ function TextArea(window) {
         if(phoneType=="iphone-5"&&(browserType=="safari"||browserType=="mqqbrowser"||browserType=="micromessenger"||browserType=="qq")){
             $(".js-wrapper").css("height","129px");
             $(".js-chatArea").css({"top":"129px","height":"50px"});
-            $(".js-noSliding").css("height","150px");
+            //$(".js-noSliding").css("height","150px");
             setTimeout(function(){
                 $(window).scrollTop('1'); 
             },50);
@@ -675,7 +675,7 @@ function TextArea(window) {
         if(browserFlag==true){
             $(".js-wrapper").css("height","100%");
             $(".js-chatArea").css({"top":"auto","height":"262px","bottom":"0"})
-            $(".js-noSliding").css("height","0");
+            //$(".js-noSliding").css("height","0");
         };
         //$textarea.blur();
         //$(".js-add").removeClass("activehide")
