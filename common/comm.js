@@ -37,7 +37,6 @@ var Comm = {
                 continue;
             }
         }
-        console.log(param);
         return param;
     },
     //传入文本把url筛选出来
