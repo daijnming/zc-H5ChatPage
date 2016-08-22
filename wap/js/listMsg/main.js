@@ -342,7 +342,7 @@ var ListMsgHandler = function() {
           $(this).remove();
         });
       }
-      if(messageHandler.config.currentState===2){
+      if(messageHandler.config.currentState===2&&global.apiInit.ustatus!==0){ // 0 是未建立会话
         var sign = sysMsgManager[0];
         var $sign = $('#'+sign);
         if(!$sign.hasClass('firstEvaluate') && !$sign.hasClass('evaluated')){
