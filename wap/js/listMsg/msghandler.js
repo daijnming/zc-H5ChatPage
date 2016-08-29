@@ -63,7 +63,8 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           customName:global.apiConfig.robotName,
           list:list,
           isHistory:isHistory,
-          stripe:data.stripe
+          stripe:data.stripe,
+          answer:typeof data.answer === 'object'?data.answer.msg:data.answer //因为历史记录和当前会话推送消息体不一样
         });
         var msg = doT.template(msgTemplate.listSugguestionsMsg)(comf);
         return msg;

@@ -28,6 +28,9 @@ var listSugguestionsMsg =
                       '{{=it.customName}}'+
                   '</p>'+
                   '<div class="msgOuter js-msgOuter">'+
+                      '<div style="margin-bottom:10px;">'+
+                          '{{=it.answer}}'+
+                      '</div>'+
                       '<p>'+
                           '{{=it.stripe}}'+
                       '</p>'+
