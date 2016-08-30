@@ -7,6 +7,7 @@
 
   var topBack,//顶部返回栏
       topTitle,//顶部客服昵称
+      $popupMobile,//留言页面
       $email,//邮箱
       $emailMsg,//邮箱提示
       emailHelper,//邮箱帮助
@@ -126,6 +127,7 @@
     $(errorBar).removeClass('show');
   };
   var onTouchmove = function(e){
+      console.log('aa');
     e.preventDefault();
     e.stopPropagation();
   };
@@ -237,6 +239,7 @@ var initMsgConfig = function(){
     // $('footer').delegate('js-submit','click',onSubmit);
     $(closeErrorBar).on('click',onCloseErrorBar);
     $(successLayer).on('touchmove',onTouchmove);
+    // $(document.body).on('touchmove',onTouchmove);
     $(captchaMaskLayer).on('click',onMaskHide);
   };
   var parseDom=function(){
@@ -253,6 +256,7 @@ var initMsgConfig = function(){
     textAreaWrap = $('.js-content-msg');
     goBack = $('.js-submitLayer .js-gobak');
     captchaMaskLayer = $('.js-mask');
+    $popupMobile = $('.js-popup-mobile');
   };
 
   var initPlugsin = function(){
