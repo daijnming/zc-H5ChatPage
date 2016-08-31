@@ -511,7 +511,7 @@ function TextArea(window) {
        
     };
     //特殊机型输入框处理，抬高
-    var specialModelshideKeyboardHandler=function(){//alert('alalal');
+    var specialModelshideKeyboardHandler=function(){//输入框问题参考网址https://github.com/daijnming/contenteditable/issues
        //输入框遮罩只能输入单行，否则出兼容问题
        if(browserFlag==true){
             $(".js-textarea").css("max-height","20px");
