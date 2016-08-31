@@ -471,7 +471,7 @@ function TextArea(window) {
                     //评价
                     evaluate(transferFlag,global);
                 }else{//-1表示用户没有说过话
-                    var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'资询后才能评价服务质量'}}
+                    var evaluateSystem={type:'system',status:'firstEvaluate',data:{content:'咨询后才能评价服务质量'}}
                     listener.trigger('sendArea.sendAreaSystemMsg',evaluateSystem);
                 }
                 focusStatus=false;

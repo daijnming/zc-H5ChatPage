@@ -108,29 +108,27 @@ body{
   line-height: 1.5em;
 }
 .wrap-content{
-  width:100%;
-  /*height: 200px;*/
+  width:90%;
   margin: 0 auto;
   margin-bottom: 20px;
 }
 .wrap-content .reg-email{
-  width: 95%;
-  height: 40px;
-  border:1px solid #ddd;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: none;
-  display: block;
-  outline: none;
-  text-indent: 10px;
-  border-radius: 4px;
-  margin-bottom: 20px;
-  -webkit-appearance: none;
-  font-size: 0.8em;
+    padding: 0;
+    width: 100%;
+    height: 40px;
+    outline: none;
+    border:1px solid #ddd;
+    background: #fff;
+    box-shadow: none;
+    text-indent: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    -webkit-appearance: none;
+    font-size: 0.8em;
 }
 .wrap-content .content-emil {
-  width:100%;
-  margin: 0 auto;
+  width:98%;
+  /*margin: 0 auto;*/
   height: 40px;
   /*border-radius: 4px;*/
   /*border:1px solid #ddd;*/
@@ -142,7 +140,6 @@ body{
   margin: 0 auto;
   height: 100%;
   line-height: 100%;
-  /*padding-left: 10px;*/
   border-radius: 4px;
   text-decoration: none;
   outline: none;
@@ -153,12 +150,11 @@ body{
   text-indent: 10px;
 }
 .wrap-content .content-msg{
-  width: 98%;
-  margin: 0 auto;
+  width: 100%;
   height: 100px;
   border-radius: 4px;
-  /*border: 1px solid #ddd;*/
-  border: 0;
+  border: 1px solid #ddd;
+  background: #fff;
 }
 .wrap-content .content-msg textarea{
   display: block;
@@ -170,21 +166,23 @@ body{
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
-  width: 95%;
-  height: 80%;
+  width: 92%;
+  height: 77%;
   font-size: 0.8em;
   line-height: 1.5em;
-  border: 1px solid #ddd;
+  /*border: 1px solid #ddd;*/
+  border: none;
   background: #fff;
   -webkit-appearance: none;
 }
 footer{
-  width:100%;
+  width:90%;
   height: 40px;
   border-radius: 4px;
   text-align: center;
   line-height: 40px;
   margin-bottom: 20px;
+  margin: 0 auto;
 }
 footer button{
   font-size: 1.1em;

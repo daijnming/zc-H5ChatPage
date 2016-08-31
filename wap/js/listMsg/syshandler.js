@@ -125,6 +125,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
     },
     //系统消息显示处理
     onSysMsgShow:function(msg,status,sysMsgKeyword,sysMsgManager){
+      // console.log(msg,status,sysMsgKeyword,sysMsgManager);
         //生成时间戳
         var tp = +new Date();
         var msgTmp='',
@@ -143,7 +144,7 @@ var SysmsgHandler = function(global,msgBind,myScroll){
           }
           msg='客服正在输入';
         }
-        console.log(msg);
+        // console.log(msg);
         var comf = $.extend({
           sysMsg:msg,
           sysMsgSign:tp,
